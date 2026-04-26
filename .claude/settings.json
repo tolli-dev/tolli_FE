@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm create *)",
+      "Bash(npx create-expo-app *)",
+      "Bash(git rm *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ],
+    "additionalDirectories": [
+      "/Users/hyunjoong/Documents/GitHub/tolli_FE/apps",
+      "/Users/hyunjoong/Documents/GitHub/tolli_FE/apps/web/.git"
+    ]
+  }
+}

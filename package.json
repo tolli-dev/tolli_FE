@@ -4,6 +4,7 @@
   "packageManager": "pnpm@9.0.0",
   "scripts": {
     "web": "pnpm --filter web dev",
+    "web:prod": "pnpm --filter web build && pnpm --filter web start",
     "native": "pnpm --filter native start"
   }
 }

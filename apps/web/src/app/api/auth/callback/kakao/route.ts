@@ -5,17 +5,25 @@ export async function GET(request: NextRequest) {
   const authCode = searchParams.get("code");
 
   if (!authCode) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(
+      new URL("http://192.168.35.166:3000/login", request.url),
+    );
   }
 
   const paramData = new URLSearchParams();
   paramData.append("grant_type", "authorization_code");
-  paramData.append("client_id", `${process.env.KAKAO_REST_API_KEY}`);
-  paramData.append("redirect_uri", `${process.env.KAKAO_REDIRECT_URI}`);
+  paramData.append(
+    "client_id",
+    `${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
+  );
+  paramData.append(
+    "redirect_uri",
+    `${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`,
+  );
   paramData.append("code", authCode);
   paramData.append(
     "client_secret",
-    `${process.env.KAKAO_CLIENT_SECRET_ID_KEY}`,
+    `${process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET_ID_KEY}`,
   );
 
   try {
@@ -33,9 +41,13 @@ export async function GET(request: NextRequest) {
     const tokenData = await tokenResponse.json();
 
     console.log(tokenData);
-    return NextResponse.redirect(new URL("/main", request.url));
+    return NextResponse.redirect(
+      new URL("http://192.168.35.166:3000/main", request.url),
+    );
   } catch (error) {
     console.error("Error", error);
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(
+      new URL("http://192.168.35.166:3000/login", request.url),
+    );
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { fireAuth } from '@/firebase/fireAuth';
 import { useRouter } from 'next/navigation';
 
@@ -29,6 +29,14 @@ export default function Home() {
       <p>uid: {user.uid}</p>
       <p>email: {user.email}</p>
       <p>name: {user.displayName}</p>
+      <button
+        type="button"
+        onClick={() => {
+          signOut(fireAuth);
+        }}
+      >
+        로그아웃
+      </button>
     </div>
   );
 }

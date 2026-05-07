@@ -1,5 +1,8 @@
 {
   "cSpell.words": [
     "kakao"
-  ]
+  ],
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "js/ts.tsdk.path": "node_modules\\typescript\\lib"
 }

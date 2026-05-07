@@ -1,7 +1,7 @@
 export default {
   expo: {
-    name: 'native',
-    slug: 'native',
+    name: 'Tolli',
+    slug: 'Tolli',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/icon.png',

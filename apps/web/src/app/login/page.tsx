@@ -14,7 +14,6 @@ export default function LoginPage() {
         const { type, token } = JSON.parse(e.data);
         if (type === 'AUTH_TOKEN' && token) {
           signInWithGoogleToken(token).then((user) => {
-            console.log('Firebase 로그인 성공:', user.uid, user.email);
             window.location.href = '/';
           });
         }

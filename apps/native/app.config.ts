@@ -5,6 +5,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "native",
   slug: "native",
+  scheme: "tolli",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -31,6 +32,4 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   web: {
     favicon: "./assets/favicon.png",
   },
-
-  plugins: ["./plugins/withPlugin.ts"],
 });

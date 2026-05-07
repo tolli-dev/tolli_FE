@@ -1,27 +1,33 @@
-import { WebView } from "react-native-webview";
-import { StyleSheet, Platform } from "react-native";
-import { useWebViewAuth } from "./src/hooks/useWebViewAuth";
+import { WebView, WebViewMessageEvent } from "react-native-webview";
+import { StyleSheet } from "react-native";
+import { useRef } from "react";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 
 export default function App() {
-  const { onShouldStartLoadWithRequest } = useWebViewAuth();
-  const customUserAgent =
-    Platform.OS === "android"
-      ? "Mozilla/5.0 (Linux; Android 10; SM-G970F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Mobile Safari/537.36"
-      : "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1";
+  const webviewRef = useRef<WebView | null>(null);
+
+  const onMessage = async (event: WebViewMessageEvent) => {
+    if (!webviewRef.current) return;
+    const data = JSON.parse(event.nativeEvent.data);
+
+    if (data.type === "KAKAO_LOGIN") {
+      const returnUrl = Linking.createURL("");
+
+      const result = await WebBrowser.openAuthSessionAsync(data.url, returnUrl);
+
+      if (result.type === "success") {
+        webviewRef.current?.reload();
+      }
+    }
+  };
 
   return (
     <WebView
+      ref={webviewRef}
       source={{ uri: "http://192.168.35.166:3000" }}
       style={styles.container}
-      onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-      originWhitelist={[
-        "http://*",
-        "https://",
-        "file://*",
-        "sms://*",
-        "intent://*",
-      ]}
-      userAgent={customUserAgent}
+      onMessage={onMessage}
     />
   );
 }

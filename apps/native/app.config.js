@@ -15,6 +15,7 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.company.tolli',
+      usesAppleSignIn: true,
     },
     android: {
       package: 'com.company.tolli',

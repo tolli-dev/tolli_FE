@@ -22,7 +22,7 @@ export default function Home() {
   if (!user) return null;
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <p>uid: {user.uid}</p>
       <p>email: {user.email}</p>
       <p>name: {user.displayName}</p>

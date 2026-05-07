@@ -25,11 +25,11 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen">
       <button
         type="button"
         onClick={requestGoogleLogin}
-        className="mt-40 w-50 h-10 bg-amber-600 border-2 rounded cursor-pointer"
+        className="w-50 h-10 bg-amber-600 border-2 rounded cursor-pointer"
       >
         구글로 로그인하기
       </button>

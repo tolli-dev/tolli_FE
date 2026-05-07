@@ -1,4 +1,4 @@
-"use Client";
+"use client";
 import { useEffect, useState } from "react";
 
 export function useIsReactNativeWebview() {

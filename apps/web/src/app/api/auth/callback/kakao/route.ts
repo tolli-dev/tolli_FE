@@ -1,13 +1,14 @@
+import { IP_URL } from "@/constants/url";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const authCode = searchParams.get("code");
+  const cookieStore = await cookies();
 
   if (!authCode) {
-    return NextResponse.redirect(
-      new URL("http://192.168.35.166:3000/login", request.url),
-    );
+    return NextResponse.redirect(new URL(`${IP_URL}/login`, request.url));
   }
 
   const paramData = new URLSearchParams();
@@ -40,14 +41,18 @@ export async function GET(request: NextRequest) {
 
     const tokenData = await tokenResponse.json();
 
-    console.log(tokenData);
+    cookieStore.set("token", tokenData, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
+
     return NextResponse.redirect(
-      new URL("http://192.168.35.166:3000/main", request.url),
+      new URL(`${IP_URL}/api/auth/success`, request.url),
     );
   } catch (error) {
     console.error("Error", error);
-    return NextResponse.redirect(
-      new URL("http://192.168.35.166:3000/login", request.url),
-    );
+    return NextResponse.redirect(new URL(`${IP_URL}/login`, request.url));
   }
 }

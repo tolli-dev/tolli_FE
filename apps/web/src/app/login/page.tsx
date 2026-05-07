@@ -1,3 +1,5 @@
+"use client";
+
 import { useIsReactNativeWebview } from "../hooks/useIsReactNativeWebview ";
 
 export default function page() {

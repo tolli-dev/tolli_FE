@@ -3,8 +3,11 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { fireAuth } from '@/firebase/fireAuth';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
   const [user, setUser] = useState<{
     uid: string;
     email: string | null;
@@ -14,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(fireAuth, (u) => {
       if (u) setUser({ uid: u.uid, email: u.email, displayName: u.displayName });
-      else window.location.href = '/login';
+      else router.push('/login');
     });
     return () => unsubscribe();
   }, []);

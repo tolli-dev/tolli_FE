@@ -2,19 +2,22 @@
 
 import { useEffect } from 'react';
 import { signInWithGoogleToken } from '@/firebase/fireAuth';
+import { useRouter } from 'next/navigation';
 
 const requestGoogleLogin = () => {
   window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GOOGLE_LOGIN' }));
 };
 
 export default function LoginPage() {
+  const router = useRouter();
+
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       try {
         const { type, token } = JSON.parse(e.data);
         if (type === 'AUTH_TOKEN' && token) {
           signInWithGoogleToken(token).then((user) => {
-            window.location.href = '/';
+            router.push('/');
           });
         }
       } catch {}

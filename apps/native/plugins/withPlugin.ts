@@ -1,5 +1,5 @@
 import { ConfigPlugin } from "expo/config-plugins";
-import withAndroidPlugin from "./wthAndroidPlugin";
+import withAndroidPlugin from "./withAndroidPlugin";
 import withIosPlugin from "./withIosPlugin";
 
 const withPlugin: ConfigPlugin = (config) => {

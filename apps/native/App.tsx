@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <WebView
-      source={{ uri: "http://192.168.35.166:3000" }}
+      source={{ uri: "http://192.168.3.185:3000" }}
       style={styles.container}
       onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
     />

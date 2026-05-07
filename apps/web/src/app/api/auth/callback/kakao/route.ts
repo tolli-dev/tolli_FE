@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
 
   if (!authCode) {
     return NextResponse.redirect(
-      new URL("http://192.168.3.185:3000/login", request.url),
+      new URL("http://192.168.35.166:3000/login", request.url),
     );
   }
 
@@ -42,12 +42,12 @@ export async function GET(request: NextRequest) {
 
     console.log(tokenData);
     return NextResponse.redirect(
-      new URL("http://192.168.3.185:3000/main", request.url),
+      new URL("http://192.168.35.166:3000/main", request.url),
     );
   } catch (error) {
     console.error("Error", error);
     return NextResponse.redirect(
-      new URL("http://192.168.3.185:3000/login", request.url),
+      new URL("http://192.168.35.166:3000/login", request.url),
     );
   }
 }

@@ -17,10 +17,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "com.tolli.native",
+    bundleIdentifier: "com.tolli.app",
   },
   android: {
-    package: "com.tolli.native",
+    package: "com.tolli.app",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#ffffff",

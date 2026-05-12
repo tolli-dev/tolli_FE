@@ -1,8 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { signInWithAppleToken, signInWithGoogleToken } from '@/firebase/fireAuth';
-import { useRouter } from 'next/navigation';
+import { useEffect } from "react";
+import {
+  signInWithAppleToken,
+  signInWithGoogleToken,
+} from "@/firebase/fireAuth";
+import { useRouter } from "next/navigation";
 import { useIsReactNativeWebview } from "../hooks/useIsReactNativeWebview ";
 
 export default function LoginPage() {
@@ -17,42 +20,46 @@ export default function LoginPage() {
         type: "KAKAO_LOGIN",
         url: KAKAO_AUTH_URL,
       });
-      window?.ReactNativeWebView.postMessage(message);
+      window?.ReactNativeWebView?.postMessage(message);
     } else {
       window.location.href = KAKAO_AUTH_URL;
     }
   };
 
   const requestGoogleLogin = () => {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GOOGLE_LOGIN' }));
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "GOOGLE_LOGIN" }),
+    );
   };
 
   const requestAppleLogin = () => {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'APPLE_LOGIN' }));
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "APPLE_LOGIN" }),
+    );
   };
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       try {
         const { type, token } = JSON.parse(e.data);
-        if (type === 'GOOGLE_TOKEN' && token) {
+        if (type === "GOOGLE_TOKEN" && token) {
           signInWithGoogleToken(token).then((user) => {
-            router.push('/');
+            router.push("/");
           });
         }
-        if (type === 'APPLE_TOKEN' && token) {
+        if (type === "APPLE_TOKEN" && token) {
           signInWithAppleToken(token).then((user) => {
-            router.push('/');
+            router.push("/");
           });
         }
       } catch {}
     };
 
-    window.addEventListener('message', handleMessage);
-    document.addEventListener('message', handleMessage as EventListener);
+    window.addEventListener("message", handleMessage);
+    document.addEventListener("message", handleMessage as EventListener);
     return () => {
-      window.removeEventListener('message', handleMessage);
-      document.removeEventListener('message', handleMessage as EventListener);
+      window.removeEventListener("message", handleMessage);
+      document.removeEventListener("message", handleMessage as EventListener);
     };
   }, []);
 
@@ -72,7 +79,7 @@ export default function LoginPage() {
       >
         애플로 로그인하기
       </button>
-            <button onClick={handleKakaoLogin}>카카오톡으로 시작하기</button>
+      <button onClick={handleKakaoLogin}>카카오톡으로 시작하기</button>
     </div>
   );
 }

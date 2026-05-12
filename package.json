@@ -4,6 +4,11 @@
   "packageManager": "pnpm@9.0.0",
   "scripts": {
     "web": "pnpm --filter web dev",
-    "native": "pnpm --filter native start"
+    "web:prod": "pnpm --filter web build && pnpm --filter web start",
+    "native": "pnpm --filter native start",
+    "ios": "pnpm --filter native ios",
+    "android": "pnpm --filter native android",
+    "ios:device": "pnpm --filter native ios:device",
+    "android:device": "pnpm --filter native android:device"
   }
 }

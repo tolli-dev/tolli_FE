@@ -1,14 +1,41 @@
-import { WebView, WebViewMessageEvent } from "react-native-webview";
-import { StyleSheet } from "react-native";
-import { useRef } from "react";
+import { useRef } from 'react';
+import { StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
+import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
+import { signInWithGoogle } from './auth/googleSignIn';
+import { signInWithApple } from './auth/appleSignIn';
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 
-export default function App() {
-  const webviewRef = useRef<WebView | null>(null);
+GoogleSignin.configure({
+  webClientId: Constants.expoConfig?.extra?.googleWebClientId,
+  iosClientId: Constants.expoConfig?.extra?.googleIosClientId,
+});
 
-  const onMessage = async (event: WebViewMessageEvent) => {
-    if (!webviewRef.current) return;
+export default function App() {
+  const webviewRef = useRef<WebViewType>(null);
+
+  const postToken = (type: string, token: string) => {
+    webviewRef.current?.postMessage(JSON.stringify({ type, token }));
+  };
+    
+  const handleMessage = async (e: WebViewMessageEvent) => {
+    try {
+      const { type } = JSON.parse(e.nativeEvent.data);
+
+      if (type === 'GOOGLE_LOGIN') {
+        const idToken = await signInWithGoogle();
+        if (idToken) postToken('GOOGLE_TOKEN', idToken);
+      }
+
+      if (type === 'APPLE_LOGIN') {
+        const idToken = await signInWithApple();
+        if (idToken) postToken('APPLE_TOKEN', idToken);
+      }
+      
+          if (!webviewRef.current) return;
     const data = JSON.parse(event.nativeEvent.data);
 
     if (data.type === "KAKAO_LOGIN") {
@@ -19,15 +46,21 @@ export default function App() {
       if (result.type === "success") {
         webviewRef.current?.reload();
       }
+    } catch (error: any) {
+      if (error.code === 'SIGN_IN_CANCELLED' || error.code === 'ERR_REQUEST_CANCELED') return;
+      console.error('[handleMessage] error:', error);
+
+export default function App() {
+
     }
   };
 
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: "http://192.168.35.166:3000" }}
+      source={{ uri: 'http://192.168.1.178:3000' }}
       style={styles.container}
-      onMessage={onMessage}
+      onMessage={handleMessage}
     />
   );
 }
@@ -35,8 +68,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

@@ -4,15 +4,21 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "android": "expo run:android",
+    "ios:device": "expo run:ios --device",
+    "android:device": "expo run:android --device"
   },
   "dependencies": {
-    "expo": "~54.0.34",
-    "expo-linking": "^55.0.15",
+    "@react-native-google-signin/google-signin": "^16.1.2",
+    "expo": "~54.0.33",
+    "expo-apple-authentication": "~8.0.8",
+    "expo-auth-session": "~7.0.11",
+    "expo-constants": "~18.0.13",
+    "expo-crypto": "~15.0.9",
+    "expo-linking": "~8.0.12",
     "expo-status-bar": "~3.0.9",
-    "expo-web-browser": "^55.0.15",
+    "expo-web-browser": "~15.0.11",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-webview": "^13.15.0"

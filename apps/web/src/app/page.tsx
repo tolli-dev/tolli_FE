@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { fireAuth } from '@/firebase/fireAuth';
 import { useRouter } from 'next/navigation';
-import LoginPage from "./login/page";
+import LoginPage from './login/page';
 
 export default function Home() {
   const router = useRouter();
@@ -38,8 +38,9 @@ export default function Home() {
       >
         로그아웃
       </button>
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <LoginPage />
+      <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+        <LoginPage />
+      </div>
     </div>
   );
 }

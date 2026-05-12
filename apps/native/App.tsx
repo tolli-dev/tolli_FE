@@ -6,8 +6,8 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
 import { signInWithGoogle } from './auth/googleSignIn';
 import { signInWithApple } from './auth/appleSignIn';
-import * as Linking from "expo-linking";
-import * as WebBrowser from "expo-web-browser";
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -20,38 +20,33 @@ export default function App() {
   const postToken = (type: string, token: string) => {
     webviewRef.current?.postMessage(JSON.stringify({ type, token }));
   };
-    
-  const handleMessage = async (e: WebViewMessageEvent) => {
-    try {
-      const { type } = JSON.parse(e.nativeEvent.data);
 
-      if (type === 'GOOGLE_LOGIN') {
+  const handleMessage = async (e: WebViewMessageEvent) => {
+    if (!webviewRef.current) return;
+
+    try {
+      const data = JSON.parse(e.nativeEvent.data);
+
+      if (data.type === 'GOOGLE_LOGIN') {
         const idToken = await signInWithGoogle();
         if (idToken) postToken('GOOGLE_TOKEN', idToken);
       }
 
-      if (type === 'APPLE_LOGIN') {
+      if (data.type === 'APPLE_LOGIN') {
         const idToken = await signInWithApple();
         if (idToken) postToken('APPLE_TOKEN', idToken);
       }
-      
-          if (!webviewRef.current) return;
-    const data = JSON.parse(event.nativeEvent.data);
 
-    if (data.type === "KAKAO_LOGIN") {
-      const returnUrl = Linking.createURL("");
-
-      const result = await WebBrowser.openAuthSessionAsync(data.url, returnUrl);
-
-      if (result.type === "success") {
-        webviewRef.current?.reload();
+      if (data.type === 'KAKAO_LOGIN') {
+        const returnUrl = Linking.createURL('');
+        const result = await WebBrowser.openAuthSessionAsync(data.url, returnUrl);
+        if (result.type === 'success') {
+          webviewRef.current?.reload();
+        }
       }
     } catch (error: any) {
       if (error.code === 'SIGN_IN_CANCELLED' || error.code === 'ERR_REQUEST_CANCELED') return;
       console.error('[handleMessage] error:', error);
-
-export default function App() {
-
     }
   };
 

@@ -4,7 +4,9 @@ import { useEffect } from 'react';
 import { signInWithAppleToken, signInWithGoogleToken } from '@/firebase/fireAuth';
 import { useRouter } from 'next/navigation';
 import { useIsReactNativeWebview } from "../hooks/useIsReactNativeWebview ";
-        
+
+export default function LoginPage() {
+  const router = useRouter();
   const isWebView = useIsReactNativeWebview();
 
   const handleKakaoLogin = () => {
@@ -21,16 +23,13 @@ import { useIsReactNativeWebview } from "../hooks/useIsReactNativeWebview ";
     }
   };
 
-const requestGoogleLogin = () => {
-  window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GOOGLE_LOGIN' }));
-};
+  const requestGoogleLogin = () => {
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GOOGLE_LOGIN' }));
+  };
 
-const requestAppleLogin = () => {
-  window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'APPLE_LOGIN' }));
-};
-
-export default function LoginPage() {
-  const router = useRouter();
+  const requestAppleLogin = () => {
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'APPLE_LOGIN' }));
+  };
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {

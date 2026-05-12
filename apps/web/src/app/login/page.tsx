@@ -33,7 +33,11 @@ export default function LoginPage() {
     };
 
     window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+    document.addEventListener('message', handleMessage as EventListener);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      document.removeEventListener('message', handleMessage as EventListener);
+    };
   }, []);
 
   return (

@@ -57,6 +57,12 @@ export default function App() {
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"
+      scalesPageToFit={false}
+      bounces={false}
+      overScrollMode="never"
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      allowsLinkPreview={false}
     />
   );
 }

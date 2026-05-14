@@ -66,6 +66,12 @@ export default function App() {
       source={{ uri: " http://192.168.35.166:3000" }}
       style={styles.container}
       onMessage={handleMessage}
+      scalesPageToFit={false}
+      bounces={false}
+      overScrollMode="never"
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      allowsLinkPreview={false}
     />
   );
 }

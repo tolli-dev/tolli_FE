@@ -11,7 +11,7 @@ export default function KakaoLoginSuccessPage() {
       if (window.ReactNativeWebView) {
         window.location.href = "tolli://";
       } else {
-        router.push(`${IP_URL}/main`);
+        router.push(`${IP_URL}/onBoarding/afterLogin/step1`);
       }
     }
   }, [router]);

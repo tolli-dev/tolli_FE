@@ -35,7 +35,7 @@ export default function Page() {
   };
 
   return (
-    <section className="flex flex-col w-full min-h-[100dvh] justify-between items-center px-[2.688rem] py-[5.313rem]">
+    <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
       <div className="flex flex-col items-center w-full mt-[clamp(1rem,4dvh,10.25rem)]">
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem]">
           <h1 className="text-h1 text-primary-50">당신의 tolli,</h1>

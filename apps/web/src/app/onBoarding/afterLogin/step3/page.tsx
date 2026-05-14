@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <section className="flex flex-col w-full min-h-[100dvh] justify-between items-center px-[2.688rem] py-[5.313rem]">
+    <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
       <div className="flex flex-row justify-center items-center gap-[1.125rem] mt-[clamp(1.5rem,5dvh,3rem)]">
         <div className="w-[0.438rem] h-[0.438rem] rounded-full bg-primary-50"></div>
         <div className="w-[0.438rem] h-[0.438rem] rounded-full bg-primary-50"></div>

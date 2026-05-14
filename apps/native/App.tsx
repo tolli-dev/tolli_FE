@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform, StatusBar } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -53,9 +53,10 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: 'http://192.168.1.178:3000' }}
+      source={{ uri: 'http://192.168.1.178:3000/onboarding' }}
       style={styles.container}
       onMessage={handleMessage}
+      contentInsetAdjustmentBehavior="never"
     />
   );
 }
@@ -63,5 +64,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });

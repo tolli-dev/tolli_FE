@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next"; // Viewport 타입 추가
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -14,6 +14,14 @@ export const metadata: Metadata = {
   description: "성경 암송 앱",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,7 +29,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${pretendard.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+      <body
+        className="
+          min-h-full flex flex-col
+          pt-[env(safe-area-inset-top)]
+          pb-[env(safe-area-inset-bottom)]
+          pl-[env(safe-area-inset-left)]
+          pr-[env(safe-area-inset-right)]
+        "
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

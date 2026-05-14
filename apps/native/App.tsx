@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform, StatusBar } from "react-native";
 import { WebView } from "react-native-webview";
 import type {
   WebView as WebViewType,
@@ -63,7 +63,7 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: " http://192.168.35.166:3000" }}
+      source={{ uri: "http://172.25.32.1:3000" }}
       style={styles.container}
       onMessage={handleMessage}
       scalesPageToFit={false}
@@ -72,6 +72,7 @@ export default function App() {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       allowsLinkPreview={false}
+      contentInsetAdjustmentBehavior="never"
     />
   );
 }
@@ -79,5 +80,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

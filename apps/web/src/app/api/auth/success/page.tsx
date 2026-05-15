@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { IP_URL } from "@/constants/url";
 
 export default function KakaoLoginSuccessPage() {
   const router = useRouter();

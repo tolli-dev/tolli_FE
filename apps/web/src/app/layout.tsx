@@ -1,17 +1,29 @@
-import type { Metadata, Viewport } from "next"; // Viewport 타입 추가
-import localFont from "next/font/local";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next';
+import localFont from 'next/font/local';
+import { Noto_Sans_KR } from 'next/font/google';
+import './globals.css';
+
+const notoSansKR = Noto_Sans_KR({
+  subsets: ['latin'],
+  variable: '--font-noto-sans-kr',
+  display: 'swap',
+  weight: ['400', '700'],
+});
 
 const pretendard = localFont({
-  src: "../../../../node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2",
-  variable: "--font-pretendard",
-  display: "swap",
-  weight: "100 900",
+  src: '../../../../node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2',
+  variable: '--font-pretendard',
+  display: 'swap',
+  weight: '100 900',
 });
 
 export const metadata: Metadata = {
-  title: "tolli",
-  description: "성경 암송 앱",
+  title: 'tolli',
+  description: '성경 암송 앱',
+};
+
+export const viewport = {
+  viewportFit: 'cover',
 };
 
 export const viewport: Viewport = {
@@ -28,16 +40,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${pretendard.variable} h-full antialiased`}>
+    <html lang="ko" className={`${pretendard.variable} ${notoSansKR.variable} h-full antialiased`}>
       <body
-        className="
-          min-h-full flex flex-col
-          pt-[env(safe-area-inset-top)]
-          pb-[env(safe-area-inset-bottom)]
-          pl-[env(safe-area-inset-left)]
-          pr-[env(safe-area-inset-right)]
-        "
-        suppressHydrationWarning
+        className="h-full"
+        style={{
+          paddingTop: 'env(safe-area-inset-top)',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+          paddingLeft: 'env(safe-area-inset-left)',
+          paddingRight: 'env(safe-area-inset-right)',
+        }}
       >
         {children}
       </body>

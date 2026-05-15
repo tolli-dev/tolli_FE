@@ -1,16 +1,14 @@
-import { useRef } from "react";
-import { StyleSheet, Platform, StatusBar } from "react-native";
-import { WebView } from "react-native-webview";
-import type {
-  WebView as WebViewType,
-  WebViewMessageEvent,
-} from "react-native-webview";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import Constants from "expo-constants";
-import { signInWithGoogle } from "./auth/googleSignIn";
-import { signInWithApple } from "./auth/appleSignIn";
-import * as Linking from "expo-linking";
-import * as WebBrowser from "expo-web-browser";
+import { useRef } from 'react';
+import { StyleSheet, Platform, StatusBar } from 'react-native';
+import { WebView } from 'react-native-webview';
+import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
+import { signInWithGoogle } from './auth/googleSignIn';
+import { signInWithApple } from './auth/appleSignIn';
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
+import { IP_URL } from '../web/src/constants/url';
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -64,10 +62,11 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: "http://192.168.1.177:3000" }}
+      source={{ uri: `${IP_URL}/onboarding` }}
       style={styles.container}
       onMessage={handleMessage}
-      onShouldStartLoadWithRequest={(request) => {
+      contentInsetAdjustmentBehavior="never"
+        onShouldStartLoadWithRequest={(request) => {
         const { url } = request;
 
         // http, https 등 일반적인 웹 이동은 허용
@@ -94,7 +93,6 @@ export default function App() {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       allowsLinkPreview={false}
-      contentInsetAdjustmentBehavior="never"
     />
   );
 }
@@ -102,6 +100,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });

@@ -1,4 +1,4 @@
-import StepIndicator from '@/components/onboarding/StepIndicator';
+import StepIndicator from '@/app/onboarding/_components/StepIndicator';
 
 export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
   return (

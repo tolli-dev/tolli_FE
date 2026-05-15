@@ -8,7 +8,7 @@ export default function Page() {
       <div className="flex flex-row justify-center items-center gap-[1.125rem] mt-[clamp(1.5rem,5dvh,3rem)]">
         <div className="w-[0.438rem] h-[0.438rem] rounded-full bg-primary-50"></div>
         <div className="w-[0.438rem] h-[0.438rem] rounded-full bg-primary-50"></div>
-        <div className="w-[0.438rem] h-[0.438rem] rounded-full bg-surface-100"></div>
+        <div className="w-[0.438rem] h-[0.438rem] rounded-full bg-primary-50"></div>
       </div>
 
       <div className="flex flex-col items-center flex-1 w-full mt-[clamp(1.5rem,6dvh,3.813rem)] mb-[clamp(1.5rem,3dvh,6.063rem)]">

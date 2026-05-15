@@ -25,6 +25,10 @@ body {
   background-color: var(--color-bg);
   color: var(--color-surface-50);
   font-family: var(--font-sans);
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
 }
 
 /* H1 — Semibold, 28/40, -7% */

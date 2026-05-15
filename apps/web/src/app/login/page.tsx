@@ -37,12 +37,12 @@ export default function LoginPage() {
         const { type, token } = JSON.parse(e.data);
         if (type === 'GOOGLE_TOKEN' && token) {
           signInWithGoogleToken(token).then((user) => {
-            router.push('/');
+            router.push('/terms');
           });
         }
         if (type === 'APPLE_TOKEN' && token) {
           signInWithAppleToken(token).then((user) => {
-            router.push('/');
+            router.push('/terms');
           });
         }
       } catch {}

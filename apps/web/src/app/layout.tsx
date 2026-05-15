@@ -22,16 +22,12 @@ export const metadata: Metadata = {
   description: '성경 암송 앱',
 };
 
-export const viewport = {
-  viewportFit: 'cover',
-};
-
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover",
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({

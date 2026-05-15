@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import FullHappyTolli from "../../../../../../public/images/onBoarding/fullHappyTolli.svg";
-import { useParams } from "next/navigation";
-import Link from "next/link";
+import Image from 'next/image';
+import FullHappyTolli from '../../../../../public/images/onBoarding/fullHappyTolli.svg';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Page() {
   const params = useParams<{ nickname: string }>();
-  const decodedNickname = params.nickname
-    ? decodeURIComponent(params.nickname)
-    : "";
+  const decodedNickname = params.nickname ? decodeURIComponent(params.nickname) : '';
 
   return (
     <section className="relative overflow-hidden flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
@@ -29,19 +27,11 @@ export default function Page() {
             [clip-path:polygon(40%_0%,_60%_0%,_180%_80%,_-80%_80%)] 
             pointer-events-none -z-10 -my-[5.313rem]"
         />
-        <Image
-          src={FullHappyTolli}
-          fill
-          alt="hungryTolli"
-          className="object-contain"
-        />
+        <Image src={FullHappyTolli} fill alt="hungryTolli" className="object-contain" />
       </div>
 
       <div className="flex flex-col items-center w-full gap-[1rem]">
-        <Link
-          href="/onBoarding/afterLogin/setAlarm"
-          className="flex flex-col items-center w-full"
-        >
+        <Link href="/afterLogin/setAlarm" className="flex flex-col items-center w-full">
           <button
             type="button"
             className="

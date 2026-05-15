@@ -1,5 +1,5 @@
-import Image from "next/image";
-import TimeTolly from "../../../../../public/images/onBoarding/timeTolli.svg";
+import Image from 'next/image';
+import TimeTolly from '../../../../public/images/onBoarding/timeTolli.svg';
 
 export default function Page() {
   return (
@@ -11,25 +11,15 @@ export default function Page() {
             <h1 className="text-h1 text-primary-50">톨리가 알려드릴게요!</h1>
           </div>
           <div className="flex flex-col items-center justify-center gap-[0.125rem]">
-            <h2 className="text-h2 text-surface-200">
-              매일 정해진 시간에 조용히 알려드려요.
-            </h2>
-            <h2 className="text-h2 text-surface-200">
-              tolli가 배고프면 찾아가요.
-            </h2>
+            <h2 className="text-h2 text-surface-200">매일 정해진 시간에 조용히 알려드려요.</h2>
+            <h2 className="text-h2 text-surface-200">tolli가 배고프면 찾아가요.</h2>
           </div>
         </div>
 
         <div className="relative w-full max-w-[16.125rem] aspect-square">
-          <Image
-            src={TimeTolly}
-            fill
-            alt="timeTolli"
-            className="object-contain"
-          />
+          <Image src={TimeTolly} fill alt="timeTolli" className="object-contain" />
         </div>
       </div>
-
       <div className="flex flex-col items-center w-full gap-[0.563rem]">
         <button
           type="button"

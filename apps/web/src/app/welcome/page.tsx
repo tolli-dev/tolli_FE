@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation';
 export default function WelcomePage() {
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     router.push('/');
-  //   }, 3000);
-  //   return () => clearTimeout(timer);
-  // }, [router]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push('/afterLogin/step1');
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [router]);
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center w-full h-full">

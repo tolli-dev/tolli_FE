@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { signInWithAppleToken, signInWithGoogleToken } from '@/firebase/fireAuth';
 import { useRouter } from 'next/navigation';
-import { useIsReactNativeWebview } from "../hooks/useIsReactNativeWebview ";
+import { useIsReactNativeWebview } from '../hooks/useIsReactNativeWebview ';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function LoginPage() {
 
     if (isWebView) {
       const message = JSON.stringify({
-        type: "KAKAO_LOGIN",
+        type: 'KAKAO_LOGIN',
         url: KAKAO_AUTH_URL,
       });
       window?.ReactNativeWebView.postMessage(message);
@@ -61,7 +61,7 @@ export default function LoginPage() {
       <button
         type="button"
         onClick={requestGoogleLogin}
-        className="w-50 h-10 bg-amber-600 border-2 rounded cursor-pointer"
+        className="w-50 h-1 border-2 rounded cursor-pointer"
       >
         구글로 로그인하기
       </button>
@@ -72,7 +72,7 @@ export default function LoginPage() {
       >
         애플로 로그인하기
       </button>
-            <button onClick={handleKakaoLogin}>카카오톡으로 시작하기</button>
+      <button onClick={handleKakaoLogin}>카카오톡으로 시작하기</button>
     </div>
   );
 }

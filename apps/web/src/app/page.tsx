@@ -38,9 +38,6 @@ export default function Home() {
       >
         로그아웃
       </button>
-      <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-        <LoginPage />
-      </div>
     </div>
   );
 }

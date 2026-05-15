@@ -12,7 +12,7 @@ export default function OnboardingActions({ isLastStep, onNext, onSkip }: Onboar
       <button
         type="button"
         onClick={onNext}
-        className="w-full py-3.25 rounded-2xl bg-primary-200 text-surface-50 text-btn-lg"
+        className="w-full py-3.25 rounded-2xl bg-[#CCB5F0] text-surface-50 text-btn-lg"
       >
         {isLastStep ? '시작하기' : '다음'}
       </button>

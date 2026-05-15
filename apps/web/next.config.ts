@@ -1,7 +1,10 @@
 import type { NextConfig } from 'next';
+import { IP_URL } from './src/constants/url';
+
+const ip = new URL(IP_URL).hostname;
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ['192.168.35.166', '192.168.3.185', '192.168.1.178', '192.168.0.7'],
+  allowedDevOrigins: [ip],
 };
 
 export default nextConfig;

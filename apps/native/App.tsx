@@ -8,6 +8,7 @@ import { signInWithGoogle } from './auth/googleSignIn';
 import { signInWithApple } from './auth/appleSignIn';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
+import { IP_URL } from '../web/src/constants/url';
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -53,7 +54,7 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: 'http://192.168.1.178:3000/onboarding' }}
+      source={{ uri: `${IP_URL}/onboarding` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"

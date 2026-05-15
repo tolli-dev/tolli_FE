@@ -47,10 +47,12 @@ export async function GET(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
       path: "/",
     });
-
     return NextResponse.redirect(
-      new URL(`${IP_URL}/api/auth/success`, request.url),
+      new URL(`${IP_URL}/onBoarding/afterLogin/step1`, request.url),
     );
+    // return NextResponse.redirect(
+    //   new URL(`${IP_URL}/api/auth/success`, request.url),
+    // );
   } catch (error) {
     console.error("Error", error);
     return NextResponse.redirect(new URL(`${IP_URL}/login`, request.url));

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
@@ -24,6 +24,14 @@ export const metadata: Metadata = {
 
 export const viewport = {
   viewportFit: 'cover',
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

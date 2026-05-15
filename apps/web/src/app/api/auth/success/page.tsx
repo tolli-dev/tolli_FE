@@ -7,11 +7,17 @@ export default function KakaoLoginSuccessPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (window.ReactNativeWebView) {
+      // router.push(`${IP_URL}/onBoarding/afterLogin/step1`);
+      window.ReactNativeWebView?.postMessage(
+        JSON.stringify({ type: "LOGIN_SUCCESS" }),
+      );
+      setTimeout(() => {
         window.location.href = "tolli://";
-      } else {
-        router.push('/terms');
-      }
+      }, 300);
+      // window.location.href = "tolli://";
+      // router.push(`${IP_URL}/onBoarding/afterLogin/step1`);
+      // if (window.ReactNativeWebView) {
+      //   window.location.href = "tolli://";
     }
   }, [router]);
 

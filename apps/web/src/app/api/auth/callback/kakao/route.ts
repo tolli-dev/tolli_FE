@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       path: "/",
     });
     return NextResponse.redirect(
-      new URL(`${IP_URL}/onBoarding/afterLogin/step1`, request.url),
+      new URL(`${IP_URL}/afterLogin/step1`, request.url),
     );
     // return NextResponse.redirect(
     //   new URL(`${IP_URL}/api/auth/success`, request.url),

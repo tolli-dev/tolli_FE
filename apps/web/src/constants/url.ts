@@ -1,1 +1,1 @@
-export const IP_URL = "http://192.168.25.33:3000";
+export const IP_URL = "http://192.168.35.166:3000";

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-google-signin/google-signin": "^16.1.2",
+    "@react-native-seoul/kakao-login": "^5.4.2",
     "expo": "~54.0.33",
     "expo-apple-authentication": "~8.0.8",
     "expo-auth-session": "~7.0.11",

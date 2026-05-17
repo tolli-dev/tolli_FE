@@ -41,8 +41,8 @@ export default function App() {
       }
 
       if (data.type === "KAKAO_LOGIN") {
-        const idToken: KakaoOAuthToken = await login();
-        if (idToken) postToken("KAKAO_TOKEN", idToken.accessToken);
+        const token: KakaoOAuthToken = await login();
+        if (token) postToken("KAKAO_TOKEN", token.accessToken);
       }
     } catch (error: any) {
       if (

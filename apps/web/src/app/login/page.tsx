@@ -1,17 +1,20 @@
 "use client";
 
-import { useEffect } from 'react';
-import { signInWithAppleToken, signInWithGoogleToken } from '@/firebase/fireAuth';
-import { useRouter } from 'next/navigation';
-import { useIsReactNativeWebview } from '../hooks/useIsReactNativeWebview ';
+import { useEffect } from "react";
+import {
+  signInWithAppleToken,
+  signInWithGoogleToken,
+} from "@/firebase/fireAuth";
+import { useRouter } from "next/navigation";
+import { useIsReactNativeWebview } from "../hooks/useIsReactNativeWebview ";
 
 export default function LoginPage() {
   const router = useRouter();
   // const isWebView = useIsReactNativeWebview();
 
-  const handleKakaoLogin = () => {
-    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
-    window.location.href = KAKAO_AUTH_URL;
+  const requestKakaoLogin = () => {
+    // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
+    // window.location.href = KAKAO_AUTH_URL;
     // if (isWebView) {
     //   const message = JSON.stringify({
     //     type: "KAKAO_LOGIN",
@@ -21,6 +24,9 @@ export default function LoginPage() {
     // } else {
     //   window.location.href = KAKAO_AUTH_URL;
     // }
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "KAKAO_LOGIN" }),
+    );
   };
 
   const requestGoogleLogin = () => {
@@ -41,13 +47,17 @@ export default function LoginPage() {
         const { type, token } = JSON.parse(e.data);
         if (type === "GOOGLE_TOKEN" && token) {
           signInWithGoogleToken(token).then((user) => {
-            router.push('/terms');
+            router.push("/terms");
           });
         }
         if (type === "APPLE_TOKEN" && token) {
           signInWithAppleToken(token).then((user) => {
-            router.push('/terms');
+            router.push("/terms");
           });
+        }
+        if (type === "KAKAO_TOKEN" && token) {
+          const accessToken = token;
+          router.push("/terms");
         }
       } catch {}
     };
@@ -71,12 +81,16 @@ export default function LoginPage() {
         </p>
       </div>
       <div className="flex-1" />
-      <img src={'/tolli-logo.svg'} alt="tolli" className="w-46.5 object-contain" />
+      <img
+        src={"/tolli-logo.svg"}
+        alt="tolli"
+        className="w-46.5 object-contain"
+      />
       <div className="flex-1" />
       <div className="flex flex-col justify-center px-10.75 items-center gap-2.75 w-full">
         <button
           type="button"
-          onClick={handleKakaoLogin}
+          onClick={requestKakaoLogin}
           className="w-full h-13.5 flex items-center justify-center gap-3 bg-[#FEE500] rounded-[20px]"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -85,7 +99,9 @@ export default function LoginPage() {
               fill="#000000"
             />
           </svg>
-          <span className="text-[#000000] text-[14px] font-medium">카카오로 로그인</span>
+          <span className="text-[#000000] text-[14px] font-medium">
+            카카오로 로그인
+          </span>
         </button>
 
         <button
@@ -124,7 +140,9 @@ export default function LoginPage() {
           <svg width="18" height="20" viewBox="0 0 814 1000" fill="white">
             <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105.7-57.8-155.5-127.4C46 790.7 0 663.2 0 541.8c0-207.3 136-316.5 270-316.5 69.3 0 126.9 45.4 170.3 45.4 41.3 0 107.6-48.1 185.5-48.1 29.9 0 108.9 2.6 168.3 75.4zm-234.2-180.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z" />
           </svg>
-          <span className="text-white text-[14px] font-medium">Sign in with Apple</span>
+          <span className="text-white text-[14px] font-medium">
+            Sign in with Apple
+          </span>
         </button>
       </div>
     </div>

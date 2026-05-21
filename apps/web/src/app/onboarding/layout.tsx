@@ -1,4 +1,4 @@
-import StepIndicator from "@/app/onBoarding/_components/StepIndicator";
+import StepIndicator from "@/app/onboarding/_components/StepIndicator";
 
 export default function OnboardingLayout({
   children,

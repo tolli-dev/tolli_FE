@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
 export default function OnboardingIndex() {
-  redirect('/onboarding/1');
+  redirect("/onBoarding/1");
 }

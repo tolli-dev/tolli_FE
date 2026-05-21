@@ -1,14 +1,16 @@
-import { useRef } from 'react';
-import { StyleSheet, Platform, StatusBar } from 'react-native';
-import { WebView } from 'react-native-webview';
-import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import Constants from 'expo-constants';
-import { signInWithGoogle } from './auth/googleSignIn';
-import { signInWithApple } from './auth/appleSignIn';
-import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
-import { IP_URL } from '../web/src/constants/url';
+import { useRef } from "react";
+import { StyleSheet, Platform, StatusBar } from "react-native";
+import { WebView } from "react-native-webview";
+import type {
+  WebView as WebViewType,
+  WebViewMessageEvent,
+} from "react-native-webview";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Constants from "expo-constants";
+import { signInWithGoogle } from "./auth/googleSignIn";
+import { signInWithApple } from "./auth/appleSignIn";
+import { IP_URL } from "../web/src/constants/url";
+import { KakaoOAuthToken, login } from "@react-native-seoul/kakao-login";
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -28,58 +30,37 @@ export default function App() {
     try {
       const data = JSON.parse(e.nativeEvent.data);
 
-      if (data.type === 'GOOGLE_LOGIN') {
+      if (data.type === "GOOGLE_LOGIN") {
         const idToken = await signInWithGoogle();
-        if (idToken) postToken('GOOGLE_TOKEN', idToken);
+        if (idToken) postToken("GOOGLE_TOKEN", idToken);
       }
 
-      if (data.type === 'APPLE_LOGIN') {
+      if (data.type === "APPLE_LOGIN") {
         const idToken = await signInWithApple();
-        if (idToken) postToken('APPLE_TOKEN', idToken);
+        if (idToken) postToken("APPLE_TOKEN", idToken);
       }
 
-      // if (data.type === "KAKAO_LOGIN") {
-      //   const returnUrl = Linking.createURL("");
-      //   const result = await WebBrowser.openAuthSessionAsync(
-      //     data.url,
-      //     returnUrl,
-      //   );
-      //   if (result.type === "success") {
-      //     webviewRef.current?.reload();
-      //   }
-      // }
+      if (data.type === "KAKAO_LOGIN") {
+        const token: KakaoOAuthToken = await login();
+        if (token) postToken("KAKAO_TOKEN", token.accessToken);
+      }
     } catch (error: any) {
-      if (error.code === 'SIGN_IN_CANCELLED' || error.code === 'ERR_REQUEST_CANCELED') return;
-      console.error('[handleMessage] error:', error);
+      if (
+        error.code === "SIGN_IN_CANCELLED" ||
+        error.code === "ERR_REQUEST_CANCELED"
+      )
+        return;
+      console.error("[handleMessage] error:", error);
     }
   };
 
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/onboarding` }}
+      source={{ uri: `${IP_URL}/login` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"
-      onShouldStartLoadWithRequest={(request) => {
-        const { url } = request;
-
-        // http, https 등 일반적인 웹 이동은 허용
-        if (
-          url.startsWith('http://') ||
-          url.startsWith('https://') ||
-          url.startsWith('about:blank')
-        ) {
-          return true;
-        }
-
-        // intent:// 나 kakaotalk:// 같은 외부 앱 스킴이 들어오면 외부 앱 열기 시도
-        Linking.openURL(url).catch(() => {
-          console.log('해당 앱(카카오톡)이 설치되어 있지 않거나 열 수 없습니다.');
-        });
-
-        return false; // 웹뷰 내부에서는 알 수 없는 스킴 이동 방지
-      }}
       scalesPageToFit={false}
       bounces={false}
       overScrollMode="never"
@@ -93,6 +74,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

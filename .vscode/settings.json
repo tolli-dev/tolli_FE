@@ -3,6 +3,6 @@
     "kakao"
   ],
   "java.compile.nullAnalysis.mode": "automatic",
-  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.configuration.updateBuildConfiguration": "automatic",
   "js/ts.tsdk.path": "node_modules\\typescript\\lib"
 }

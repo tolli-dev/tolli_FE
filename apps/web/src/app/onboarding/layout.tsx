@@ -1,10 +1,6 @@
-import StepIndicator from "@/app/onBoarding/_components/StepIndicator";
+import StepIndicator from '@/app/onboarding/_components/StepIndicator';
 
-export default function OnboardingLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-full justify-center items-start">
       <StepIndicator />

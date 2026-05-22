@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --liquid-glass-filters: url(#liquid-glass-button) brightness(150%);
+  --btn-content-bg: hsl(0 100% 100% / 15%);
+  --btn-filters: blur(4px) brightness(150%);
+}
+
 @theme inline {
   --font-sans:
     var(--font-pretendard), "Pretendard Variable", Pretendard, -apple-system,
@@ -23,11 +29,31 @@
   --color-surface-500: #303030;
 
   --color-bg: #1b1b1b;
+  --color-dashboard-article-bg: #c8c8c8;
+  --color-dashboard-blocked-button: #656565;
 }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-surface-50);
+  font-family: var(--font-sans);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+body:has(.dashboard-layout) {
+  background: linear-gradient(to bottom, #e4e4e4 4%, #e6e6e6 66%, #ccb5f0 100%);
+}
+
+body:has(.dashboard-layout.is-done) {
+  background: linear-gradient(to bottom, #ccb5f0 0%, #e4e4e4 59%, #4d455a 100%);
+}
+
+body:has(.dashboard-layout) {
+  color: black;
   font-family: var(--font-sans);
   -webkit-user-select: none;
   user-select: none;
@@ -119,4 +145,44 @@ body {
   font-weight: 500;
   line-height: 2rem;
   letter-spacing: -0.02em;
+}
+
+/* dashboard 제목 - Semibold, 28/40, -7%*/
+.text-dashboard-h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  letter-spacing: -0.07em;
+}
+
+/* dashboard article 글 - light, 15/23 -2% */
+.text-dashboard-article-p {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.4375rem;
+  letter-spacing: -0.02em;
+}
+
+/* dashboard button - SemiBold 16/32 -2% */
+.text-dashboard-btn {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
+}
+
+/* dashboard article h3 - SemiBold 16/20 0%*/
+.text-dashboard-article-h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: 0em;
+}
+
+/* dashboard article span - Medium 12/20 3%*/
+.text-dashboard-article-span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0em;
 }

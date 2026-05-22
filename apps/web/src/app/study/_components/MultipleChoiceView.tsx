@@ -19,6 +19,7 @@ export default function MultipleChoiceView({
   verseId,
 }: MultipleChoiceViewProps) {
   const router = useRouter();
+  const [started, setStarted] = useState(step !== 2);
   const [answers, setAnswers] = useState<Record<number, string>>({});
 
   const answeredCount = Object.keys(answers).length;
@@ -55,16 +56,26 @@ export default function MultipleChoiceView({
           answeredIndices={stepMaskData.maskedIndices.filter((i) => !!answers[i])}
         />
       </div>
-      <div className="flex flex-col gap-4 px-11.25">
-        {choices.map((choice) => (
+      <div className="flex flex-col gap-4 px-11.25 min-h-50 justify-end">
+        {!started ? (
           <button
-            key={choice}
-            onClick={() => handleChoiceSelect(choice)}
-            className="py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em]"
+            onClick={() => setStarted(true)}
+            className="mt-auto py-1.75 mx-auto w-32 rounded-[20px] border border-[#CCB5F0] text-[1rem] text-[#FFFFFF] font-bold tracking-[0.03em]"
+            style={{ marginTop: 0, marginBottom: 'auto' }}
           >
-            {choice}
+            시작하기
           </button>
-        ))}
+        ) : (
+          choices.map((choice) => (
+            <button
+              key={choice}
+              onClick={() => handleChoiceSelect(choice)}
+              className="py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em]"
+            >
+              {choice}
+            </button>
+          ))
+        )}
       </div>
     </section>
   );

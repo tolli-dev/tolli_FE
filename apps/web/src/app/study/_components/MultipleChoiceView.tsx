@@ -52,6 +52,7 @@ export default function MultipleChoiceView({
         <MaskedVerse
           words={verse.words}
           maskedIndices={stepMaskData.maskedIndices.filter((i) => !answers[i])}
+          answeredIndices={stepMaskData.maskedIndices.filter((i) => !!answers[i])}
         />
       </div>
       <div className="flex flex-col gap-4 px-11.25">

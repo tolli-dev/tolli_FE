@@ -44,21 +44,22 @@ export default function MultipleChoiceView({
   }, [allAnswered, router, verseId, step]);
 
   return (
-    <section className="flex flex-col flex-1 px-4 py-6 gap-6">
-      <p className="text-center text-sm text-surface-300">{verse.reference}</p>
-
-      <MaskedVerse
-        words={verse.words}
-        maskedIndices={stepMaskData.maskedIndices.filter((i) => !answers[i])}
-        activeIndex={currentMaskedWordIndex}
-      />
-
-      <div className="flex flex-col gap-2">
+    <section className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 justify-center gap-17 px-17">
+        <p className="text-center text-[1rem] font-medium leading-5 tracking-[0.03em] text-[#CCB5F0]">
+          {verse.reference}
+        </p>
+        <MaskedVerse
+          words={verse.words}
+          maskedIndices={stepMaskData.maskedIndices.filter((i) => !answers[i])}
+        />
+      </div>
+      <div className="flex flex-col gap-4 px-11.25">
         {choices.map((choice) => (
           <button
             key={choice}
             onClick={() => handleChoiceSelect(choice)}
-            className="w-full py-3 rounded-xl bg-surface-500 text-primary-75"
+            className="py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em]"
           >
             {choice}
           </button>

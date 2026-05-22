@@ -8,7 +8,7 @@ export default function Page() {
   const router = useRouter();
 
   const requestAlarm = () => {
-    router.push("/main/dashboard");
+    router.push("/dashboard");
   };
 
   return (

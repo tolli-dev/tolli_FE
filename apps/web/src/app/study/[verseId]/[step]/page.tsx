@@ -1,5 +1,6 @@
 import { MOCK_STUDY_SESSION } from "../../_components/types";
 import MultipleChoiceView from "../../_components/MultipleChoiceView";
+import ReadVerse from "../../_components/ReadVerse";
 
 interface StudyPageProps {
   params: Promise<{ verseId: string; step: string }>;
@@ -16,8 +17,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
 
   switch (currentStep) {
     case 0:
-      // TODO: 지오
-      return <div>Step 0: 말씀 읽기 (구현 예정)</div>;
+      return <ReadVerse verse={session.verse} />;
 
     case 1:
       // TODO: 지오

@@ -186,3 +186,52 @@ body:has(.dashboard-layout) {
   line-height: 1.25rem;
   letter-spacing: 0em;
 }
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.loading-screen {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-screen::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 55%,
+    #687aff 70%,
+    #ccb5f0 80%,
+    #687aff 90%,
+    transparent 95%
+  );
+  animation: loading-rotate 3s linear infinite;
+  z-index: 0;
+}
+
+.loading-screen::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: #1b1b1b;
+  z-index: 1;
+}
+
+@keyframes loading-rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* step loading p - semibold 26/34 0% */
+.text-step-loading-p {
+  font-size: clamp(1.25rem, 6vw, 1.625rem);
+  font-weight: 600;
+  line-height: clamp(1.75rem, 7.5vw, 2.125rem);
+  letter-spacing: 0em;
+}

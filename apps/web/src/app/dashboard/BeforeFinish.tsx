@@ -4,8 +4,17 @@ import hungry_tolli from "../../../public/images/onBoarding/hungryTolli_1.svg";
 import NoiseOverlay from "./_components/NoiseOverlay";
 import Link from "next/link";
 import GrainBorder from "./_components/_GrainBorder";
+import LiquidGlassButton from "./_components/LiquidGlassButton";
+import { NavBar } from "./_components/_NavBar";
+import { useRouter } from "next/navigation";
 
 export default function BeforeFinish() {
+  const router = useRouter();
+
+  const getTodayMission = () => {
+    router.push("/study/30/0");
+  };
+
   return (
     <>
       <header
@@ -61,27 +70,22 @@ export default function BeforeFinish() {
           </p>
         </article>
 
-        <Link
-          href="/afterLogin/setNickName"
-          className="w-full max-w-[clamp(16rem,80vw,20rem)]"
-        >
-          <button
-            className="
+        <button
+          className="
               w-full
               h-[clamp(2.75rem,11vw,3.25rem)]
               text-dashboard-btn text-primary-75
               bg-surface-500
               rounded-[clamp(2.5rem,15vw,3.75rem)]
             "
-          >
-            오늘의 양식 받기
-          </button>
-        </Link>
+          onClick={getTodayMission}
+        >
+          오늘의 양식 받기
+        </button>
       </main>
 
       <footer>
-        <nav>말씀</nav>
-        <nav>즐겨찾기</nav>
+        <NavBar />
       </footer>
     </>
   );

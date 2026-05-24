@@ -15,10 +15,16 @@ export default function RecordIntroPage() {
   }, [router, verseId]);
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center">
-      <p className="text-[1.5rem] font-semibold text-[#D7D2DF] text-center">
-        마지막 단계!{'\n'}이제 녹음하러 가볼까요?
-      </p>
+    <div className="fixed inset-0 flex flex-col bg-[#DEDEDE]">
+      <div className="flex-1" />
+      <div className="flex flex-col items-center">
+        <p className="text-[1.5rem] leading-8.5 font-semibold text-[#1B1B1B] text-center mb-13.5">
+          마지막 단계!
+          <br /> 이제 직접 입으로 말씀을
+          <br /> 외쳐보세요!
+        </p>
+        <img src="/TolliLastStep.svg" alt="tolli" className="w-full" />
+      </div>
     </div>
   );
 }

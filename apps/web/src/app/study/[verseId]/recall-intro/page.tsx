@@ -28,12 +28,12 @@ export default function RecallIntroPage() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     router.push(`/study/${verseId}/6`);
-  //   }, 3000);
-  //   return () => clearTimeout(timer);
-  // }, [router, verseId]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push(`/study/${verseId}/6`);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [router, verseId]);
 
   return (
     <div className="relative flex flex-col flex-1 h-full items-center justify-center gap-11.25">

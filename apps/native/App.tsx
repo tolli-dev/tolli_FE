@@ -58,7 +58,7 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/study/30/recall-intro` }}
+      source={{ uri: `${IP_URL}/study/30/6` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"

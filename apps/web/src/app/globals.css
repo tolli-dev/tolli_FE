@@ -44,6 +44,10 @@ body {
   touch-action: pan-y;
 }
 
+body:has(.afterLogin-greeting) {
+  padding-bottom: 0 !important;
+}
+
 body:has(.dashboard-layout) {
   background: linear-gradient(to bottom, #e4e4e4 4%, #e6e6e6 66%, #ccb5f0 100%);
 }

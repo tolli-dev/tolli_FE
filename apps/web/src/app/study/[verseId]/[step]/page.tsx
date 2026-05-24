@@ -1,5 +1,6 @@
 import { MOCK_STUDY_SESSION } from '../../_components/types';
-import MultipleChoiceView from '../../_components/MultipleChoiceView';
+import MultipleChoiceView from '../../_components/step2-5/MultipleChoiceView';
+import ConsonantTypingView from '../../_components/step6/ConsonantTypingView';
 
 interface StudyPageProps {
   params: Promise<{ verseId: string; step: string }>;
@@ -38,8 +39,11 @@ export default async function StudyPage({ params }: StudyPageProps) {
       );
 
     case 6:
+      return <ConsonantTypingView verse={session.verse} verseId={verseId} />;
+
+    case 7:
       // TODO: 나중에
-      return <div>Step 6: 자음 타이핑 (구현 예정)</div>;
+      return <div>Step 7: STT (구현 예정)</div>;
 
     default:
       return null;

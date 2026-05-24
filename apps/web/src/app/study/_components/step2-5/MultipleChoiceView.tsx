@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Verse, StepMaskData } from './types';
+import { Verse, StepMaskData } from '../types';
 import MaskedVerse from './MaskedVerse';
 
 interface MultipleChoiceViewProps {

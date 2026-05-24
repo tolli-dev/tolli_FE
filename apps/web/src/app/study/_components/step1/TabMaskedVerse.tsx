@@ -1,17 +1,27 @@
-import { Word } from "../types";
-import { Dispatch, SetStateAction } from "react";
+import { Word, WordMeaningData } from "../types";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 interface Props {
-  words: Word[];
+  meanings: WordMeaningData[];
   tabbedWords: boolean[];
   setTabbedWords: Dispatch<SetStateAction<boolean[]>>;
 }
 
 export default function TabMaskedVerse({
-  words,
+  meanings,
   tabbedWords,
   setTabbedWords,
 }: Props) {
+  /*
+  const indexToMeaning = new Map<number, WordMeaningData>();
+
+  meaning?.forEach((wordMeaning) => {
+    wordMeaning.meaningIndices.forEach((index) =>
+      indexToMeaning.set(index, wordMeaning),
+    );
+  });
+  */
+
   const handleTabWords = (index: number) => {
     setTabbedWords((prev) => {
       const updatedWords = [...prev];
@@ -22,7 +32,9 @@ export default function TabMaskedVerse({
 
   return (
     <div className="flex flex-wrap justify-center">
-      {words.map((word, index) => {
+      {meanings.map((word, index) => {
+        // const wordMeaning = indexToMeaning.get(word.index);
+
         if (!tabbedWords[index] || tabbedWords[index]) {
           return (
             <span
@@ -57,7 +69,13 @@ export default function TabMaskedVerse({
                 </span>
               )}
               {tabbedWords[index] && (
-                <span className="absolute inset-0 flex items-center justify-center text-[#D7D2DF]">
+                <span
+                  key={word.index}
+                  className="absolute inset-0 flex items-center justify-center text-[#D7D2DF]"
+                  style={{
+                    textDecoration: word.meaning ? "underline" : "none",
+                  }}
+                >
                   {word.text}
                 </span>
               )}

@@ -1,19 +1,21 @@
 "use client";
 
-import { Verse } from "../types";
+import { Verse, WordMeaningData } from "../types";
 import { useState } from "react";
 import Link from "next/link";
 import TabMaskedVerse from "./TabMaskedVerse";
 
 export default function TabVerse({
   verse,
+  meanings,
   verseId,
 }: {
   verse: Verse;
+  meanings: WordMeaningData[];
   verseId: string;
 }) {
   const [tabbedWords, setTabbedWords] = useState(
-    Array(verse.words.length).fill(false),
+    Array(meanings.length).fill(false),
   );
 
   const checkAllWordsAreTabbed = tabbedWords.every((value) => value);
@@ -25,7 +27,7 @@ export default function TabVerse({
           {verse.reference}
         </p>
         <TabMaskedVerse
-          words={verse.words}
+          meanings={meanings}
           tabbedWords={tabbedWords}
           setTabbedWords={setTabbedWords}
         />

@@ -21,7 +21,13 @@ export default async function StudyPage({ params }: StudyPageProps) {
       return <ReadVerse verse={session.verse} verseId={verseId} />;
 
     case 1:
-      return <TabVerse verse={session.verse} verseId={verseId} />;
+      return (
+        <TabVerse
+          verse={session.verse}
+          meanings={session.wordMeanings}
+          verseId={verseId}
+        />
+      );
 
     case 2:
     case 3:

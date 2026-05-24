@@ -1,12 +1,83 @@
-const CHOSUNGS = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
-const JUNGSUNGS = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
-const JONGSUNGS = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const CHOSUNGS = [
+  'ㄱ',
+  'ㄲ',
+  'ㄴ',
+  'ㄷ',
+  'ㄸ',
+  'ㄹ',
+  'ㅁ',
+  'ㅂ',
+  'ㅃ',
+  'ㅅ',
+  'ㅆ',
+  'ㅇ',
+  'ㅈ',
+  'ㅉ',
+  'ㅊ',
+  'ㅋ',
+  'ㅌ',
+  'ㅍ',
+  'ㅎ',
+];
+const JUNGSUNGS = [
+  'ㅏ',
+  'ㅐ',
+  'ㅑ',
+  'ㅒ',
+  'ㅓ',
+  'ㅔ',
+  'ㅕ',
+  'ㅖ',
+  'ㅗ',
+  'ㅘ',
+  'ㅙ',
+  'ㅚ',
+  'ㅛ',
+  'ㅜ',
+  'ㅝ',
+  'ㅞ',
+  'ㅟ',
+  'ㅠ',
+  'ㅡ',
+  'ㅢ',
+  'ㅣ',
+];
+const JONGSUNGS = [
+  '',
+  'ㄱ',
+  'ㄲ',
+  'ㄳ',
+  'ㄴ',
+  'ㄵ',
+  'ㄶ',
+  'ㄷ',
+  'ㄹ',
+  'ㄺ',
+  'ㄻ',
+  'ㄼ',
+  'ㄽ',
+  'ㄾ',
+  'ㄿ',
+  'ㅀ',
+  'ㅁ',
+  'ㅂ',
+  'ㅄ',
+  'ㅅ',
+  'ㅆ',
+  'ㅇ',
+  'ㅈ',
+  'ㅊ',
+  'ㅋ',
+  'ㅌ',
+  'ㅍ',
+  'ㅎ',
+];
 
-const HANGUL_START = 0xAC00;
+const HANGUL_START = 0xac00;
 
 export function isHangulChar(char: string): boolean {
   const code = char.charCodeAt(0);
-  return code >= HANGUL_START && code <= 0xD7A3;
+  return code >= HANGUL_START && code <= 0xd7a3;
 }
 
 export function getChosung(char: string): string {
@@ -34,6 +105,19 @@ export function decomposeHangul(char: string): [string, string, string] {
 
 export function isVowel(key: string): boolean {
   return JUNGSUNGS.includes(key);
+}
+
+const COMPOUND_VOWEL_MAP: Record<string, string[]> = {
+  ㅗ: ['ㅘ', 'ㅙ', 'ㅚ'],
+  ㅜ: ['ㅝ', 'ㅞ', 'ㅟ'],
+  ㅡ: ['ㅢ'],
+};
+
+export function resolveVowel(inputVowel: string, expectedJung: string): string {
+  if (inputVowel === expectedJung) return inputVowel;
+  const candidates = COMPOUND_VOWEL_MAP[inputVowel];
+  if (candidates?.includes(expectedJung)) return expectedJung;
+  return inputVowel;
 }
 
 export function toChosung(text: string): string {

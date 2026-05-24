@@ -14,11 +14,15 @@ export default function TabVerse({
   meanings: WordMeaningData[];
   verseId: string;
 }) {
-  const [tabbedWords, setTabbedWords] = useState(
+  const [tabbedWords, setTabbedWords] = useState<boolean[]>(
+    Array(meanings.length).fill(false),
+  );
+  const [watchMeaning, setWatchMeaning] = useState<boolean[]>(
     Array(meanings.length).fill(false),
   );
 
   const checkAllWordsAreTabbed = tabbedWords.every((value) => value);
+  const checkAllWordsAreRead = watchMeaning.every((value) => value);
 
   return (
     <section className="flex flex-col flex-1">
@@ -29,12 +33,25 @@ export default function TabVerse({
         <TabMaskedVerse
           meanings={meanings}
           tabbedWords={tabbedWords}
+          watchMeaning={watchMeaning}
           setTabbedWords={setTabbedWords}
+          setWatchMeaning={setWatchMeaning}
         />
-        <p className="text-center mt-[clamp(1rem,4vw,1.25rem)] font-light text-[clamp(0.8rem,3.5vw,0.875rem)] leading-5 tracking-[0.03em] text-[#CCB5F0]">
-          블록을 탭해서 말씀을 꺼내보세요.
-        </p>
-        {checkAllWordsAreTabbed && (
+
+        <>
+          {!checkAllWordsAreTabbed && (
+            <p className="text-center mt-[clamp(1rem,4vw,1.25rem)] font-light text-[clamp(0.8rem,3.5vw,0.875rem)] leading-5 tracking-[0.03em] text-[#CCB5F0]">
+              블록을 탭해서 말씀을 꺼내보세요.
+            </p>
+          )}
+          {checkAllWordsAreTabbed && !checkAllWordsAreRead && (
+            <p className="text-center mt-[clamp(1rem,4vw,1.25rem)] font-light text-[clamp(0.8rem,3.5vw,0.875rem)] leading-5 tracking-[0.03em] text-[#CCB5F0]">
+              밑줄친 단어를 눌러보세요.
+            </p>
+          )}
+        </>
+
+        {checkAllWordsAreTabbed && checkAllWordsAreRead && (
           <Link href={`/study/${verseId}/2`} className="mt-auto mx-auto">
             <button
               className="mt-auto py-1.75 mx-auto w-32 rounded-[20px] border border-[#CCB5F0] text-[1rem] text-[#FFFFFF] font-bold tracking-[0.03em]"

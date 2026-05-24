@@ -66,7 +66,7 @@ export const MOCK_STUDY_SESSION: StudySession = {
     },
     { index: 7, text: "세상을" },
     { index: 8, text: "이긴" },
-    { index: 9, text: "이김은", meaning: "승리 (勝利)" },
+    { index: 9, text: "이김", meaning: "승리 (勝利)" },
     {
       index: 10,
       text: "이것이니",
@@ -75,7 +75,7 @@ export const MOCK_STUDY_SESSION: StudySession = {
     { index: 11, text: "우리의" },
     {
       index: 12,
-      text: "믿음이니라",
+      text: "믿음",
       meaning: "예수 그리스도를 향한 신앙, 하나님을 향한 신뢰",
     },
   ],

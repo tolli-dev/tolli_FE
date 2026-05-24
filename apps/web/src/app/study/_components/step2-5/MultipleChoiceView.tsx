@@ -36,7 +36,14 @@ export default function MultipleChoiceView({
 
   const allAnswered = stepMaskData.maskedIndices.every((i) => answers[i]);
 
-  const choices = stepMaskData.choices[currentMaskedWordIndex] ?? [];
+  const correctText = verse.words.find((w) => w.index === currentMaskedWordIndex)?.text ?? '';
+  const pool = verse.words
+    .filter((w) => w.index !== currentMaskedWordIndex && w.text !== correctText)
+    .map((w) => w.text);
+  const uniquePool = [...new Set(pool)];
+  const shuffledPool = [...uniquePool].sort(() => Math.random() - 0.5);
+  const distractors = shuffledPool.slice(0, 2);
+  const choices = [correctText, ...distractors].sort(() => Math.random() - 0.5);
 
   useEffect(() => {
     if (allAnswered) {

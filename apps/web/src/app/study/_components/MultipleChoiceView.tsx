@@ -40,7 +40,11 @@ export default function MultipleChoiceView({
 
   useEffect(() => {
     if (allAnswered) {
-      router.push(`/study/${verseId}/${step + 1}`);
+      if (step === 5) {
+        router.push(`/study/${verseId}/recall-intro`);
+      } else {
+        router.push(`/study/${verseId}/${step + 1}`);
+      }
     }
   }, [allAnswered, router, verseId, step]);
 
@@ -50,11 +54,15 @@ export default function MultipleChoiceView({
         <p className="text-center text-[1rem] font-medium leading-5 tracking-[0.03em] text-[#CCB5F0]">
           {verse.reference}
         </p>
-        <MaskedVerse
-          words={verse.words}
-          maskedIndices={stepMaskData.maskedIndices.filter((i) => !answers[i])}
-          answeredIndices={stepMaskData.maskedIndices.filter((i) => !!answers[i])}
-        />
+        {!started ? (
+          <MaskedVerse words={verse.words} />
+        ) : (
+          <MaskedVerse
+            words={verse.words}
+            maskedIndices={stepMaskData.maskedIndices.filter((i) => !answers[i])}
+            answeredIndices={stepMaskData.maskedIndices.filter((i) => !!answers[i])}
+          />
+        )}
       </div>
       <div className="flex flex-col gap-4 px-11.25 min-h-50 justify-end">
         {!started ? (

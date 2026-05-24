@@ -2,11 +2,11 @@ import { Word } from './types';
 
 interface MaskedVerseProps {
   words: Word[];
-  maskedIndices: number[];
-  answeredIndices: number[];
+  maskedIndices?: number[];
+  answeredIndices?: number[];
 }
 
-export default function MaskedVerse({ words, maskedIndices, answeredIndices }: MaskedVerseProps) {
+export default function MaskedVerse({ words, maskedIndices = [], answeredIndices = [] }: MaskedVerseProps) {
   return (
     <div className="flex flex-wrap justify-center">
       {words.map((word) => {

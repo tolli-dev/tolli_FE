@@ -18,6 +18,9 @@ apps/native/ios/
 .env.local
 .env.*.local
 
+# IDE
+.idea/
+
 # misc
 .DS_Store
 *.pem

@@ -62,6 +62,53 @@ body:has(.dashboard-layout) {
   touch-action: pan-y;
 }
 
+body:has(.loading-screen) {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* step dashboard loading 그라데이션 */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.loading-screen {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-screen::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 55%,
+    #ccb5f0 7%,
+    #000000 39%,
+    #ccb5f0 99%,
+    transparent 95%
+  );
+  animation: loading-rotate 3s linear infinite;
+  z-index: 0;
+}
+
+.loading-screen::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: #1b1b1b;
+  z-index: 1;
+}
+
+@keyframes loading-rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
 /* H1 — Semibold, 28/40, -7% */
 .text-h1 {
   font-size: 1.75rem;
@@ -185,47 +232,6 @@ body:has(.dashboard-layout) {
   font-weight: 500;
   line-height: 1.25rem;
   letter-spacing: 0em;
-}
-
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.loading-screen {
-  position: relative;
-  overflow: hidden;
-}
-
-.loading-screen::before {
-  content: "";
-  position: absolute;
-  inset: -100%;
-  background: conic-gradient(
-    from var(--angle),
-    transparent 55%,
-    #687aff 70%,
-    #ccb5f0 80%,
-    #687aff 90%,
-    transparent 95%
-  );
-  animation: loading-rotate 3s linear infinite;
-  z-index: 0;
-}
-
-.loading-screen::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  background: #1b1b1b;
-  z-index: 1;
-}
-
-@keyframes loading-rotate {
-  to {
-    --angle: 360deg;
-  }
 }
 
 /* step loading p - semibold 26/34 0% */

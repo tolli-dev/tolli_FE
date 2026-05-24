@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { StyleSheet, Platform, StatusBar } from 'react-native';
+import { StyleSheet, Platform, StatusBar, NativeModules } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -41,6 +41,14 @@ export default function App() {
         const token: KakaoOAuthToken = await login();
         if (token) postToken('KAKAO_TOKEN', token.accessToken);
       }
+
+      if (data.type === 'WEB_READY') {
+        const radius = await NativeModules.CornerRadiusModule.getCornerRadius();
+        const cssRadius = Platform.OS === 'android' ? Math.round(radius * 0.5) : radius;
+        webviewRef.current?.postMessage(
+          JSON.stringify({ type: 'DEVICE_CORNER_RADIUS', value: cssRadius }),
+        );
+      }
     } catch (error: any) {
       if (error.code === 'SIGN_IN_CANCELLED' || error.code === 'ERR_REQUEST_CANCELED') return;
       console.error('[handleMessage] error:', error);
@@ -50,7 +58,7 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/study/30/2` }}
+      source={{ uri: `${IP_URL}/study/30/recall-intro` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"

@@ -210,8 +210,6 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
             );
           })}
         </div>
-
-
       </div>
 
       {!allDone && (

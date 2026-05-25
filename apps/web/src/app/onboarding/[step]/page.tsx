@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import OnboardingSlide from "@/app/onBoarding/_components/OnboardingSlide";
-import OnboardingActions from "@/app/onBoarding/_components/OnboardingActions";
-import LearningSteps from "@/app/onBoarding/_components/LearningSteps";
+import OnboardingSlide from "@/app/onboarding/_components/OnboardingSlide";
+import OnboardingActions from "@/app/onboarding/_components/OnboardingActions";
+import LearningSteps from "@/app/onboarding/_components/LearningSteps";
 
 const STEPS = [
   {

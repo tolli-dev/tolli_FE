@@ -51,20 +51,20 @@ export default function App() {
       }
     } catch (error: any) {
       if (
-        error.code === "SIGN_IN_CANCELLED" ||
-        error.code === "ERR_REQUEST_CANCELED" ||
-        error.code === "E_CANCELLED_OPERATION" ||
+        error.code === 'SIGN_IN_CANCELLED' ||
+        error.code === 'ERR_REQUEST_CANCELED' ||
+        error.code === 'E_CANCELLED_OPERATION' ||
         /user cancelled/i.test(error.message)
       )
         return;
-      console.error("[handleMessage] error:", error);
+      console.error('[handleMessage] error:', error);
     }
   };
 
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/study/30/2` }}
+      source={{ uri: `${IP_URL}/dashboard` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"

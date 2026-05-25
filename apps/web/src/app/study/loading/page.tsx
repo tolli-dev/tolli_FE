@@ -1,37 +1,69 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import ReadingBookTolli from "../../../../public/images/readingBookTolli.svg";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 
-export default function Loading() {
+export default function RecallIntroPage() {
   const router = useRouter();
+  const { verseId } = useParams<{ verseId: string }>();
+  const [cornerRadius, setCornerRadius] = useState(0);
 
-  // 백엔드에서 데이터를 다 불러오면 step 미션 페이지로 이동하기
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      try {
+        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        if (data.type === 'DEVICE_CORNER_RADIUS') {
+          setCornerRadius(data.value ?? 0);
+        }
+      } catch {}
+    };
+    window.addEventListener('message', handler);
+    document.addEventListener('message', handler as unknown as EventListener);
+
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'WEB_READY' }));
+
+    return () => {
+      window.removeEventListener('message', handler);
+      document.removeEventListener('message', handler as unknown as EventListener);
+    };
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/study/30/0");
-    }, 5000);
-
+      router.push(`/study/${verseId}/6`);
+    }, 3000);
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [router, verseId]);
 
   return (
-    <div className="loading-screen flex flex-col h-full ">
-      <div className="flex flex-col flex-1 w-full">
-        <section className="relative z-[2] flex flex-col flex-1 items-center justify-center">
-          <div className="flex flex-col items-center mb-[clamp(1rem,4vw,1.5rem)]">
-            <p className="text-step-loading-p text-[#CCB5F0]">두근두근</p>
-            <p className="text-step-loading-p text-[#CCB5F0]">오늘의 말씀은?</p>
-          </div>
-          <Image
-            src={ReadingBookTolli}
-            alt="reading book tolli"
-            className="w-[clamp(12rem,55vw,17rem)] h-[clamp(12rem,55vw,17rem)]"
-          />
-        </section>
-      </div>
+    <div className="relative flex flex-col flex-1 h-full items-center justify-center gap-11.25">
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          borderRadius: `${cornerRadius}px`,
+          padding: '3px',
+          background: 'conic-gradient(from var(--angle), white, #CCB5F0, white)',
+          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+          animation: 'border-spin 3s linear infinite',
+        }}
+      />
+      <p className="text-[1.5rem] leading-8.5 font-medium text-[#CCB5F0] text-center">
+        두근두근 <br /> 오늘의 말씀은?
+      </p>
+      <img src="/tolli1.svg" alt="Tolli" className="w-57 h-57 object-contain" />
+      <style>{`
+        @property --angle {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+        @keyframes border-spin {
+          from { --angle: 0deg; }
+          to { --angle: 360deg; }
+        }
+      `}</style>
     </div>
   );
 }

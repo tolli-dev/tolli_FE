@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --liquid-glass-filters: url(#liquid-glass-button) brightness(150%);
@@ -8,8 +8,8 @@
 
 @theme inline {
   --font-sans:
-    var(--font-pretendard), "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, sans-serif;
+    var(--font-pretendard), 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, sans-serif;
 
   /* Primary */
   --color-primary-50: #cfc4f4;
@@ -64,53 +64,6 @@ body:has(.dashboard-layout) {
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: pan-y;
-}
-
-body:has(.loading-screen) {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* step dashboard loading 그라데이션 */
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.loading-screen {
-  position: relative;
-  overflow: hidden;
-}
-
-.loading-screen::before {
-  content: "";
-  position: absolute;
-  inset: -100%;
-  background: conic-gradient(
-    from var(--angle),
-    transparent 55%,
-    #ccb5f0 7%,
-    #000000 39%,
-    #ccb5f0 99%,
-    transparent 95%
-  );
-  animation: loading-rotate 3s linear infinite;
-  z-index: 0;
-}
-
-.loading-screen::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  background: #1b1b1b;
-  z-index: 1;
-}
-
-@keyframes loading-rotate {
-  to {
-    --angle: 360deg;
-  }
 }
 
 /* H1 — Semibold, 28/40, -7% */

@@ -1,7 +1,9 @@
-import { MOCK_STUDY_SESSION } from "../../_components/types";
-import MultipleChoiceView from "../../_components/MultipleChoiceView";
+import { MOCK_STUDY_SESSION } from '../../_components/types';
+import MultipleChoiceView from '../../_components/step2-5/MultipleChoiceView';
+import ConsonantTypingView from '../../_components/step6/ConsonantTypingView';
 import ReadVerse from "../../_components/step0/ReadVerse";
 import TabVerse from "../../_components/step1/TabVerse";
+
 
 interface StudyPageProps {
   params: Promise<{ verseId: string; step: string }>;
@@ -19,7 +21,6 @@ export default async function StudyPage({ params }: StudyPageProps) {
   switch (currentStep) {
     case 0:
       return <ReadVerse verse={session.verse} verseId={verseId} />;
-
     case 1:
       return (
         <TabVerse
@@ -28,7 +29,6 @@ export default async function StudyPage({ params }: StudyPageProps) {
           verseId={verseId}
         />
       );
-
     case 2:
     case 3:
     case 4:
@@ -44,8 +44,11 @@ export default async function StudyPage({ params }: StudyPageProps) {
       );
 
     case 6:
+      return <ConsonantTypingView verse={session.verse} verseId={verseId} />;
+
+    case 7:
       // TODO: 나중에
-      return <div>Step 6: 자음 타이핑 (구현 예정)</div>;
+      return <div>Step 7: STT (구현 예정)</div>;
 
     default:
       return null;

@@ -16,7 +16,7 @@ export default function StudyHeader({ currentStep }: StudyHeaderProps) {
   };
 
   const handleClose = () => {
-    router.push('/dashboard');
+    router.push("/dashboard");
   };
 
   return (

@@ -50,8 +50,14 @@ export default function App() {
         );
       }
     } catch (error: any) {
-      if (error.code === 'SIGN_IN_CANCELLED' || error.code === 'ERR_REQUEST_CANCELED') return;
-      console.error('[handleMessage] error:', error);
+      if (
+        error.code === "SIGN_IN_CANCELLED" ||
+        error.code === "ERR_REQUEST_CANCELED" ||
+        error.code === "E_CANCELLED_OPERATION" ||
+        /user cancelled/i.test(error.message)
+      )
+        return;
+      console.error("[handleMessage] error:", error);
     }
   };
 

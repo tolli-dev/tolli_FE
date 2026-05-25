@@ -2,17 +2,17 @@ import { Icon } from "@iconify/react";
 import Image from "next/image";
 import hungry_tolli from "../../../public/images/onBoarding/hungryTolli_1.svg";
 import NoiseOverlay from "./_components/NoiseOverlay";
-import Link from "next/link";
 import GrainBorder from "./_components/_GrainBorder";
-import LiquidGlassButton from "./_components/LiquidGlassButton";
-import { NavBar } from "./_components/_NavBar";
 import { useRouter } from "next/navigation";
+import SwipeNav from "./_components/SwipeNav";
 
 export default function BeforeFinish() {
   const router = useRouter();
 
   const getTodayMission = () => {
-    router.push("/study/30/0");
+    // 버튼 클릭 시, 해당 유저가 오늘 할 미션에 대한 데이터를 받는 동안,
+    // loading 화면을 띄운다.
+    router.push("/study/loading");
   };
 
   return (
@@ -84,8 +84,14 @@ export default function BeforeFinish() {
         </button>
       </main>
 
-      <footer>
-        <NavBar />
+      <footer
+        className="
+          w-full flex justify-center items-center
+          pt-[clamp(1rem,4vw,1.5rem)]
+          pb-[max(env(safe-area-inset-bottom),0.5rem)]
+        "
+      >
+        <SwipeNav />
       </footer>
     </>
   );

@@ -5,7 +5,7 @@ import BeforeFinish from "./BeforeFinish";
 import AfterFinish from "./AfterFinish";
 
 export default function DashBoard() {
-  const [done, setDone] = useState(true);
+  const [done, setDone] = useState(false);
 
   return (
     <section

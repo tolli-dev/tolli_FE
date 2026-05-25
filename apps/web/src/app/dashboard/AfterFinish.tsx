@@ -2,8 +2,8 @@ import { Icon } from "@iconify/react";
 import Image from "next/image";
 import FullHappyTolli from "../../../public/images/onBoarding/fullHappyTolli.svg";
 import NoiseOverlay from "./_components/NoiseOverlay";
-import Link from "next/link";
 import GrainBorder from "./_components/_GrainBorder";
+import SwipeNav from "./_components/SwipeNav";
 
 export default function AfterFinish() {
   return (
@@ -93,9 +93,14 @@ export default function AfterFinish() {
         </button>
       </main>
 
-      <footer>
-        <nav>말씀</nav>
-        <nav>즐겨찾기</nav>
+      <footer
+        className="
+                w-full flex justify-center items-center
+                pt-[clamp(1rem,4vw,1.5rem)]
+                pb-[max(env(safe-area-inset-bottom),0.5rem)]
+              "
+      >
+        <SwipeNav />
       </footer>
     </>
   );

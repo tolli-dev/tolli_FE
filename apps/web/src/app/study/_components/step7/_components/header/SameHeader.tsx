@@ -1,4 +1,4 @@
-export default function Header({
+export default function SameHeader({
   instruction1,
   instruction2,
 }: {

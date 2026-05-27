@@ -1,6 +1,6 @@
 import DiffHeader from "../header/DiffHeader";
 import RecordBarContainer from "../center/RecordBarContainer";
-import RecordButton from "../RecordButton";
+import RecordButton from "../button/RecordButton";
 import RecordCircle from "../RecordCircle";
 import ActiveSoundBar from "../../../../../../../public/images/activeSoundBar.svg";
 
@@ -18,7 +18,7 @@ export default function RecordingScreen({ onEnd }: { onEnd: () => void }) {
           description="00:12"
         />
         <RecordButton
-          recordIcon="fluent:mic-record-28-filled"
+          icon="fluent:mic-record-28-filled"
           description="녹음 완료"
           handleRecord={onEnd}
         />

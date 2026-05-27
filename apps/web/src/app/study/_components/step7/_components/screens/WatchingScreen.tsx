@@ -1,6 +1,6 @@
 import DiffHeader from "../header/DiffHeader";
 import WatchingVerseContainer from "../center/WatchingVerseContainer";
-import RecordButton from "../RecordButton";
+import RecordButton from "../button/RecordButton";
 
 export default function WatchingScreen({ onStart }: { onStart: () => void }) {
   return (
@@ -12,7 +12,7 @@ export default function WatchingScreen({ onStart }: { onStart: () => void }) {
       <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
         <WatchingVerseContainer />
         <RecordButton
-          recordIcon="fluent:mic-record-28-filled"
+          icon="fluent:mic-record-28-filled"
           description="녹음 시작"
           handleRecord={onStart}
         />

@@ -1,6 +1,6 @@
 import SameHeader from "../header/SameHeader";
 import RecordBarContainer from "../center/RecordBarContainer";
-import RecordButton from "../RecordButton";
+import RecordButton from "../button/RecordButton";
 import SoundBar from "../../../../../../../public/images/soundBar.svg";
 
 export default function IdleScreen({ onStart }: { onStart: () => void }) {
@@ -13,7 +13,7 @@ export default function IdleScreen({ onStart }: { onStart: () => void }) {
       <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
         <RecordBarContainer soundBar={SoundBar} description="" />
         <RecordButton
-          recordIcon="fluent:mic-record-28-filled"
+          icon="fluent:mic-record-28-filled"
           description="녹음 시작"
           handleRecord={onStart}
         />

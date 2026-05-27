@@ -1,6 +1,6 @@
 import SameHeader from "../header/SameHeader";
 import RecordBarContainer from "../center/RecordBarContainer";
-import RecordButton from "../RecordButton";
+import RecordButton from "../button/RecordButton";
 import ActiveSoundBar from "../../../../../../../public/images/activeSoundBar.svg";
 
 export default function ListeningScreen({ onStart }: { onStart: () => void }) {
@@ -16,7 +16,7 @@ export default function ListeningScreen({ onStart }: { onStart: () => void }) {
           description="정확히 외우지 못해도 괜찮아요"
         />
         <RecordButton
-          recordIcon="fluent:mic-record-28-filled"
+          icon="fluent:mic-record-28-filled"
           description="녹음 시작"
           handleRecord={onStart}
         />

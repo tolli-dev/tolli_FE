@@ -1,13 +1,14 @@
 "use client";
 
 import SameHeader from "./_components/header/SameHeader";
-import CenterContainer from "./_components/center/CenterContainer";
+import DiffHeader from "./_components/header/DiffHeader";
+import RecordBarContainer from "./_components/center/RecordBarContainer";
+import WatchingVerseContainer from "./_components/center/WatchingVerseContainer";
 import RecordButton from "./_components/RecordButton";
 import FooterButton from "./_components/FooterButton";
 import SoundBar from "../../../../../public/images/soundBar.svg";
 import ActiveSoundBar from "../../../../../public/images/activeSoundBar.svg";
 import { useState } from "react";
-import DiffHeader from "./_components/header/DiffHeader";
 
 export default function Stt() {
   const [listeningVerse, setListeningVerse] = useState(false);
@@ -33,7 +34,7 @@ export default function Stt() {
   };
 
   return (
-    <section className="flex flex-col w-full h-full overflow-hidden pt-8.75 pb-13 px-10.5">
+    <section className="flex flex-col w-full h-full overflow-hidden pt-8.75 pb-4 px-10.5">
       {!listeningVerse && !watchingVerse && !writingVerse && (
         <>
           <SameHeader
@@ -42,7 +43,7 @@ export default function Stt() {
           />
 
           <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
-            <CenterContainer soundBar={SoundBar} description="" />
+            <RecordBarContainer soundBar={SoundBar} description="" />
             <RecordButton />
           </main>
         </>
@@ -55,7 +56,7 @@ export default function Stt() {
             instruction2="준비 되셨나요?"
           />
           <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
-            <CenterContainer
+            <RecordBarContainer
               soundBar={ActiveSoundBar}
               description="정확히 외우지 못해도 괜찮아요"
             />
@@ -71,10 +72,7 @@ export default function Stt() {
             instruction2="준비 되셨나요?"
           />
           <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
-            <CenterContainer
-              soundBar={ActiveSoundBar}
-              description="정확히 외우지 못해도 괜찮아요"
-            />
+            <WatchingVerseContainer />
             <RecordButton />
           </main>
         </>

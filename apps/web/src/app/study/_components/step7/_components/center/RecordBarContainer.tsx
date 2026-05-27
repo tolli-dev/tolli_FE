@@ -1,7 +1,7 @@
 import Image from "next/image";
 import StandingTolli from "../../../../../../../public/images/onBoarding/standingTolli_1.svg";
 
-export default function CenterContainer({
+export default function RecordBarContainer({
   description,
   soundBar,
 }: {

@@ -1,88 +1,37 @@
 "use client";
 
-import SameHeader from "./_components/header/SameHeader";
-import DiffHeader from "./_components/header/DiffHeader";
-import RecordBarContainer from "./_components/center/RecordBarContainer";
-import WatchingVerseContainer from "./_components/center/WatchingVerseContainer";
-import RecordButton from "./_components/RecordButton";
-import FooterButton from "./_components/FooterButton";
-import SoundBar from "../../../../../public/images/soundBar.svg";
-import ActiveSoundBar from "../../../../../public/images/activeSoundBar.svg";
 import { useState } from "react";
+import { Step7Phase } from "./_types";
+import IdleScreen from "./_components/screens/IdleScreen";
+import ListeningScreen from "./_components/screens/ListeningScreen";
+import WatchingScreen from "./_components/screens/WatchingScreen";
+import RecordingScreen from "./_components/screens/RecordingScreen";
+import FooterButton from "./_components/FooterButton";
 
 export default function Stt() {
-  const [listeningVerse, setListeningVerse] = useState(false);
-  const [watchingVerse, setWatchingVerse] = useState(false);
-  const [writingVerse, setWritingVerse] = useState(false);
+  const [phase, setPhase] = useState<Step7Phase>("idle");
 
-  const handleListeningVerse = () => {
-    setListeningVerse(true);
-    setWatchingVerse(false);
-    setWritingVerse(false);
-  };
-
-  const handleWatchingVerse = () => {
-    setListeningVerse(false);
-    setWatchingVerse(true);
-    setWritingVerse(false);
-  };
-
-  const handleWritingVerse = () => {
-    setListeningVerse(true);
-    setWatchingVerse(false);
-    setWritingVerse(false);
+  const renderScreen = () => {
+    switch (phase) {
+      case "idle":
+        return <IdleScreen onStart={() => setPhase("recording")} />;
+      case "listening":
+        return <ListeningScreen onStart={() => setPhase("recording")} />;
+      case "watching":
+        return <WatchingScreen onStart={() => setPhase("recording")} />;
+      case "recording":
+        return <RecordingScreen onEnd={() => setPhase("idle")} />;
+    }
   };
 
   return (
     <section className="flex flex-col w-full h-full overflow-hidden pt-8.75 pb-4 px-10.5">
-      {!listeningVerse && !watchingVerse && !writingVerse && (
-        <>
-          <SameHeader
-            instruction1="말씀을 잠시 보여드릴게요!"
-            instruction2="2초 후 자동 사라집니다"
-          />
-
-          <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
-            <RecordBarContainer soundBar={SoundBar} description="" />
-            <RecordButton />
-          </main>
-        </>
-      )}
-
-      {listeningVerse && !watchingVerse && !writingVerse && (
-        <>
-          <SameHeader
-            instruction1="말씀을 들려드릴게요"
-            instruction2="준비 되셨나요?"
-          />
-          <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
-            <RecordBarContainer
-              soundBar={ActiveSoundBar}
-              description="정확히 외우지 못해도 괜찮아요"
-            />
-            <RecordButton />
-          </main>
-        </>
-      )}
-
-      {!listeningVerse && watchingVerse && !writingVerse && (
-        <>
-          <DiffHeader
-            instruction1="말씀을 들려드릴게요"
-            instruction2="준비 되셨나요?"
-          />
-          <main className="flex flex-col flex-1 min-h-0 justify-center gap-6.5 w-full">
-            <WatchingVerseContainer />
-            <RecordButton />
-          </main>
-        </>
-      )}
-
+      {renderScreen()}
       <footer className="grid grid-cols-3 gap-4 shrink-0">
         <FooterButton
-          handleListeningVerse={handleListeningVerse}
-          handleWatchingVerse={handleWatchingVerse}
-          handleWritingVerse={handleWritingVerse}
+          handleListeningVerse={() => setPhase("listening")}
+          handleWatchingVerse={() => setPhase("watching")}
+          handleWritingVerse={() => setPhase("listening")}
         />
       </footer>
     </section>

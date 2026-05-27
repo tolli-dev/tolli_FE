@@ -1,0 +1,1 @@
+export type Step7Phase = "idle" | "listening" | "watching" | "recording";

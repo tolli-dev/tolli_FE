@@ -3,9 +3,11 @@ import StandingTolli from "../../../../../../../public/images/onBoarding/standin
 
 export default function RecordBarContainer({
   description,
+  recordIcon: RecordIcon,
   soundBar,
 }: {
   description: string;
+  recordIcon?: () => JSX.Element;
   soundBar: string;
 }) {
   return (
@@ -26,9 +28,12 @@ export default function RecordBarContainer({
             />
           </div>
           <div className="flex-1 flex items-end">
-            <p className="font-normal text-[0.8125rem] leading-7.75 text-[#B0B0B0]">
-              {description}
-            </p>
+            <div className="flex flex-row items-center gap-2">
+              {RecordIcon && <RecordIcon />}
+              <p className="font-normal text-[0.8125rem] leading-7.75 text-[#B0B0B0]">
+                {description}
+              </p>
+            </div>
           </div>
         </div>
       </div>

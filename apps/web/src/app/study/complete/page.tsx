@@ -5,9 +5,11 @@ import Image from "next/image";
 import FullTolli from "../../../../public/images/onBoarding/fullTolli.svg";
 import ActiveSoundBar from "../../../../public/images/activeSoundBar.svg";
 import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
 
 export default function CompleteStep() {
   const [components, setComponents] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const time = setTimeout(() => {
@@ -17,7 +19,10 @@ export default function CompleteStep() {
   }, []);
 
   return (
-    <div className="grid grid-rows-3 min-h-screen pt-[clamp(1.5rem,11vw,2.6875rem)] pb-[clamp(1.25rem,9.5vw,2.3125rem)] px-[clamp(1rem,6.5vw,1.5625rem)]">
+    <div
+      onClick={() => router.push("/study/bookmark")}
+      className="grid grid-rows-3 min-h-screen pt-[clamp(1.5rem,11vw,2.6875rem)] pb-[clamp(1.25rem,9.5vw,2.3125rem)] px-[clamp(1rem,6.5vw,1.5625rem)]"
+    >
       <div className="flex items-center justify-center text-center">
         {components && (
           <div className="flex flex-col gap-[clamp(0.875rem,5.5vw,1.375rem)]">

@@ -16,11 +16,7 @@ export default function WritingContainer({
   const [verse, setVerse] = useState("");
 
   const handleWritingVerse = (value: string) => {
-    if (verse.length >= 100) {
-      setVerse((prev) => prev);
-      return;
-    }
-    setVerse(value);
+    if (value.length <= MAX_LENGTH) setVerse(value);
   };
 
   return (

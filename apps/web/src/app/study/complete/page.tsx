@@ -81,7 +81,7 @@ export default function CompleteStep() {
         </div>
       </div>
 
-      <div className="flex items-end justify-center text-center">
+      <div className="flex items-end justify-center text-center mb-[clamp(0.5rem,3vw,0.75rem)]">
         {components && (
           <div className="flex flex-1 min-h-0 justify-center gap-[clamp(1rem,6vw,1.625rem)] w-full">
             <div className="flex h-full w-full items-center rounded-full bg-linear-to-tr from-[#CCB5F0] to-[#75688A] p-0.5">

@@ -1,9 +1,9 @@
-import { MOCK_STUDY_SESSION } from '../../_components/types';
-import MultipleChoiceView from '../../_components/step2-5/MultipleChoiceView';
-import ConsonantTypingView from '../../_components/step6/ConsonantTypingView';
+import { MOCK_STUDY_SESSION } from "../../_components/types";
+import MultipleChoiceView from "../../_components/step2-5/MultipleChoiceView";
+import ConsonantTypingView from "../../_components/step6/ConsonantTypingView";
 import ReadVerse from "../../_components/step0/ReadVerse";
 import TabVerse from "../../_components/step1/TabVerse";
-
+import Stt from "../../_components/step7/Stt";
 
 interface StudyPageProps {
   params: Promise<{ verseId: string; step: string }>;
@@ -47,8 +47,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
       return <ConsonantTypingView verse={session.verse} verseId={verseId} />;
 
     case 7:
-      // TODO: 나중에
-      return <div>Step 7: STT (구현 예정)</div>;
+      return <Stt />;
 
     default:
       return null;

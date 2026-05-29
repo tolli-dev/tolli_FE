@@ -1,5 +1,4 @@
 mutation CreateUser(
-  $firebaseUid: String!
   $nickname: String!
   $termsAgreedAt: Timestamp!
   $privacyAgreedAt: Timestamp!
@@ -8,7 +7,7 @@ mutation CreateUser(
 ) @auth(level: USER) {
   user_insert(
     data: {
-      firebaseUid: $firebaseUid
+      id_expr: "auth.uid"
       nickname: $nickname
       termsAgreedAt: $termsAgreedAt
       privacyAgreedAt: $privacyAgreedAt
@@ -18,14 +17,14 @@ mutation CreateUser(
   )
 }
 
-mutation CreateStudyCompletion($userId: UUID!, $verseId: Int!) @auth(level: USER) {
-  studyCompletion_insert(data: { userId: $userId, verseId: $verseId })
+mutation CreateStudyCompletion($verseId: Int!) @auth(level: USER) {
+  studyCompletion_insert(data: { userId_expr: "auth.uid", verseId: $verseId })
 }
 
-mutation AddBookmark($userId: UUID!, $verseId: Int!) @auth(level: USER) {
-  bookmark_insert(data: { userId: $userId, verseId: $verseId })
+mutation AddBookmark($verseId: Int!) @auth(level: USER) {
+  bookmark_insert(data: { userId_expr: "auth.uid", verseId: $verseId })
 }
 
-mutation DeleteBookmark($userId: UUID!, $verseId: Int!) @auth(level: USER) {
-  bookmark_delete(key: { userId: $userId, verseId: $verseId })
+mutation DeleteBookmark($verseId: Int!) @auth(level: USER) {
+  bookmark_delete(key: { userId_expr: "auth.uid", verseId: $verseId })
 }

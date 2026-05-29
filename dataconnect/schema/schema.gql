@@ -1,6 +1,5 @@
 type User @table(name: "users") {
-  id: UUID! @default(expr: "uuidV4()")
-  firebaseUid: String! @col(name: "firebase_uid", dataType: "varchar(128)") @unique
+  id: String! @col(name: "id", dataType: "varchar(128)") @default(expr: "auth.uid")
   nickname: String! @col(dataType: "varchar(20)")
   termsAgreedAt: Timestamp! @col(name: "terms_agreed_at")
   privacyAgreedAt: Timestamp! @col(name: "privacy_agreed_at")
@@ -10,8 +9,7 @@ type User @table(name: "users") {
 }
 
 type Verse @table(name: "verses") {
-  id: Int!
-  number: Int!
+  id: Int! @col(name: "id")
   reference: String! @col(dataType: "varchar(100)")
   fullText: String! @col(name: "full_text")
   words: Any! @col(dataType: "jsonb")
@@ -27,8 +25,7 @@ type StudyCompletion @table(name: "study_completions") {
   completedAt: Timestamp! @default(expr: "request.time") @col(name: "completed_at")
 }
 
-type Bookmark @table(name: "bookmarks") {
-  id: UUID! @default(expr: "uuidV4()")
+type Bookmark @table(name: "bookmarks", key: ["user", "verse"]) {
   user: User!
   verse: Verse!
   createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")

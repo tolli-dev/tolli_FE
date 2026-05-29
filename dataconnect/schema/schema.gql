@@ -19,3 +19,10 @@ type Verse @table(name: "verses") {
   maskedStep3: [Int!]! @col(name: "masked_step3")
   maskedStep4: [Int!]! @col(name: "masked_step4")
 }
+
+type StudyCompletion @table(name: "study_completions") {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User!
+  verse: Verse!
+  completedAt: Timestamp! @default(expr: "request.time") @col(name: "completed_at")
+}

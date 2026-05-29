@@ -8,3 +8,14 @@ type User @table(name: "users") {
   emailMarketingAgreedAt: Timestamp @col(name: "email_marketing_agreed_at")
   createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
 }
+
+type Verse @table(name: "verses") {
+  id: Int!
+  number: Int!
+  reference: String! @col(dataType: "varchar(100)")
+  fullText: String! @col(name: "full_text")
+  words: Any! @col(dataType: "jsonb")
+  maskedStep2: [Int!]! @col(name: "masked_step2")
+  maskedStep3: [Int!]! @col(name: "masked_step3")
+  maskedStep4: [Int!]! @col(name: "masked_step4")
+}

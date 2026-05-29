@@ -24,7 +24,7 @@ export default function Stt() {
       case "watching":
         return <WatchingScreen onStart={() => setPhase("recording")} />;
       case "recording":
-        return <RecordingScreen onEnd={() => setPhase("idle")} />;
+        return <RecordingScreen />;
       case "writing":
         return <WritingScreen onEnd={() => router.push("/study/complete")} />;
     }

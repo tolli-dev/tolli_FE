@@ -4,7 +4,13 @@ import RecordButton from "../button/RecordButton";
 import RecordCircle from "../RecordCircle";
 import ActiveSoundBar from "../../../../../../../public/images/activeSoundBar.svg";
 
-export default function RecordingScreen({ onEnd }: { onEnd: () => void }) {
+export default function RecordingScreen() {
+  const handleRecord = () => {
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "ANDROID_RECORD" }),
+    );
+  };
+
   return (
     <>
       <DiffHeader
@@ -20,7 +26,7 @@ export default function RecordingScreen({ onEnd }: { onEnd: () => void }) {
         <RecordButton
           icon="fluent:mic-record-28-filled"
           description="녹음 완료"
-          handleRecord={onEnd}
+          handleRecord={handleRecord}
         />
       </main>
     </>

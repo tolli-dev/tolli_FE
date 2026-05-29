@@ -1,4 +1,4 @@
-query GetVerse($id: Int!) @auth(level: USER) {
+query GetVerse($id: Int!) @auth(level: PUBLIC) {
   verse(id: $id) {
     id
     reference

@@ -100,6 +100,12 @@ importers:
         specifier: ^5
         version: 5.9.3
 
+  dataconnect-generated/js/default-connector:
+    dependencies:
+      firebase:
+        specifier: ^12.11.0
+        version: 12.12.1
+
 packages:
 
   '@0no-co/graphql.web@1.2.0':

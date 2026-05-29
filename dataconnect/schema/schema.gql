@@ -4,7 +4,7 @@ type User @table(name: "users") {
   nickname: String! @col(dataType: "varchar(20)")
   termsAgreedAt: Timestamp! @col(name: "terms_agreed_at")
   privacyAgreedAt: Timestamp! @col(name: "privacy_agreed_at")
-  emailMarketingAgreed: Boolean! @default(expr: "false") @col(name: "email_marketing_agreed")
+  emailMarketingAgreed: Boolean! @default(value: false) @col(name: "email_marketing_agreed")
   emailMarketingAgreedAt: Timestamp @col(name: "email_marketing_agreed_at")
   createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
 }

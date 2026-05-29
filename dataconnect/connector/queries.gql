@@ -11,16 +11,16 @@ query GetVerse($id: Int!) @auth(level: USER) {
   }
 }
 
-query GetMyCurrentVerse @auth(level: USER) {
-  studyCompletions(where: { userId: { eq: $uid } }, orderBy: { completedAt: DESC }, limit: 1) {
+query GetMyCurrentVerse($userId: UUID!) @auth(level: USER) {
+  studyCompletions(where: { userId: { eq: $userId } }, orderBy: { completedAt: DESC }, limit: 1) {
     verse {
       number
     }
   }
 }
 
-query GetMyBookmarks @auth(level: USER) {
-  bookmarks(where: { userId: { eq: $uid } }) {
+query GetMyBookmarks($userId: UUID!) @auth(level: USER) {
+  bookmarks(where: { userId: { eq: $userId } }) {
     id
     verse {
       id
@@ -32,8 +32,8 @@ query GetMyBookmarks @auth(level: USER) {
   }
 }
 
-query GetMyCompletions @auth(level: USER) {
-  studyCompletions(where: { userId: { eq: $uid } }) {
+query GetMyCompletions($userId: UUID!) @auth(level: USER) {
+  studyCompletions(where: { userId: { eq: $userId } }) {
     id
     verse {
       id

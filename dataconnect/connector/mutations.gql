@@ -18,14 +18,14 @@ mutation CreateUser(
   )
 }
 
-mutation CreateStudyCompletion($verseId: Int!) @auth(level: USER) {
-  studyCompletion_insert(data: { userId: $uid, verseId: $verseId })
+mutation CreateStudyCompletion($userId: UUID!, $verseId: Int!) @auth(level: USER) {
+  studyCompletion_insert(data: { userId: $userId, verseId: $verseId })
 }
 
-mutation AddBookmark($verseId: Int!) @auth(level: USER) {
-  bookmark_insert(data: { userId: $uid, verseId: $verseId })
+mutation AddBookmark($userId: UUID!, $verseId: Int!) @auth(level: USER) {
+  bookmark_insert(data: { userId: $userId, verseId: $verseId })
 }
 
-mutation DeleteBookmark($verseId: Int!) @auth(level: USER) {
-  bookmark_delete(key: { userId: $uid, verseId: $verseId })
+mutation DeleteBookmark($userId: UUID!, $verseId: Int!) @auth(level: USER) {
+  bookmark_delete(key: { userId: $userId, verseId: $verseId })
 }

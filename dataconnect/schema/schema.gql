@@ -26,3 +26,10 @@ type StudyCompletion @table(name: "study_completions") {
   verse: Verse!
   completedAt: Timestamp! @default(expr: "request.time") @col(name: "completed_at")
 }
+
+type Bookmark @table(name: "bookmarks") {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User!
+  verse: Verse!
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+}

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { StyleSheet, Platform, StatusBar, NativeModules } from "react-native";
 import { WebView } from "react-native-webview";
 import type {
@@ -11,6 +11,7 @@ import { signInWithGoogle } from "./auth/googleSignIn";
 import { signInWithApple } from "./auth/appleSignIn";
 import { IP_URL } from "../web/src/constants/url";
 import { KakaoOAuthToken, login } from "@react-native-seoul/kakao-login";
+import { checkFirstLaunch, markFirstLaunchDone } from "./utils/checkFirstLaunch";
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -19,6 +20,13 @@ GoogleSignin.configure({
 
 export default function App() {
   const webviewRef = useRef<WebViewType>(null);
+  const [initialUri, setInitialUri] = useState<string | null>(null);
+
+  useEffect(() => {
+    checkFirstLaunch().then((isFirst) => {
+      setInitialUri(isFirst ? `${IP_URL}/onboarding/1` : `${IP_URL}/login`);
+    });
+  }, []);
 
   const postToken = (type: string, token: string) => {
     webviewRef.current?.postMessage(JSON.stringify({ type, token }));
@@ -53,6 +61,10 @@ export default function App() {
           JSON.stringify({ type: "DEVICE_CORNER_RADIUS", value: cssRadius }),
         );
       }
+
+      if (data.type === "ONBOARDING_COMPLETE") {
+        await markFirstLaunchDone();
+      }
     } catch (error: any) {
       if (
         error.code === "SIGN_IN_CANCELLED" ||
@@ -65,10 +77,12 @@ export default function App() {
     }
   };
 
+  if (!initialUri) return null;
+
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/study/30/7` }}
+      source={{ uri: initialUri }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"

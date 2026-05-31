@@ -39,3 +39,9 @@ query GetMyCompletions @auth(level: USER) {
     completedAt
   }
 }
+
+query GetMe @auth(level: USER) {
+  user(id_expr: "auth.uid") {
+    nickname
+  }
+}

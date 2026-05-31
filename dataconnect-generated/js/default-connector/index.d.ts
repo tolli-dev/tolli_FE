@@ -52,6 +52,16 @@ export interface DeleteBookmarkVariables {
   verseId: number;
 }
 
+export interface DeleteUserData {
+  user_delete?: User_Key | null;
+}
+
+export interface GetMeData {
+  user?: {
+    nickname: string;
+  };
+}
+
 export interface GetMyBookmarksData {
   bookmarks: ({
     verse: {
@@ -103,6 +113,14 @@ export interface StudyCompletion_Key {
   __typename?: 'StudyCompletion_Key';
 }
 
+export interface UpdateNicknameData {
+  user_update?: User_Key | null;
+}
+
+export interface UpdateNicknameVariables {
+  nickname: string;
+}
+
 export interface User_Key {
   id: string;
   __typename?: 'User_Key';
@@ -112,6 +130,66 @@ export interface Verse_Key {
   id: number;
   __typename?: 'Verse_Key';
 }
+
+interface GetVerseRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetVerseVariables): QueryRef<GetVerseData, GetVerseVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetVerseVariables): QueryRef<GetVerseData, GetVerseVariables>;
+  operationName: string;
+}
+export const getVerseRef: GetVerseRef;
+
+export function getVerse(vars: GetVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetVerseData, GetVerseVariables>;
+export function getVerse(dc: DataConnect, vars: GetVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetVerseData, GetVerseVariables>;
+
+interface GetMyCurrentVerseRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetMyCurrentVerseData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<GetMyCurrentVerseData, undefined>;
+  operationName: string;
+}
+export const getMyCurrentVerseRef: GetMyCurrentVerseRef;
+
+export function getMyCurrentVerse(options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
+export function getMyCurrentVerse(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
+
+interface GetMyBookmarksRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetMyBookmarksData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<GetMyBookmarksData, undefined>;
+  operationName: string;
+}
+export const getMyBookmarksRef: GetMyBookmarksRef;
+
+export function getMyBookmarks(options?: ExecuteQueryOptions): QueryPromise<GetMyBookmarksData, undefined>;
+export function getMyBookmarks(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyBookmarksData, undefined>;
+
+interface GetMyCompletionsRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetMyCompletionsData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<GetMyCompletionsData, undefined>;
+  operationName: string;
+}
+export const getMyCompletionsRef: GetMyCompletionsRef;
+
+export function getMyCompletions(options?: ExecuteQueryOptions): QueryPromise<GetMyCompletionsData, undefined>;
+export function getMyCompletions(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCompletionsData, undefined>;
+
+interface GetMeRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetMeData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<GetMeData, undefined>;
+  operationName: string;
+}
+export const getMeRef: GetMeRef;
+
+export function getMe(options?: ExecuteQueryOptions): QueryPromise<GetMeData, undefined>;
+export function getMe(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMeData, undefined>;
 
 interface CreateUserRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -161,51 +239,27 @@ export const deleteBookmarkRef: DeleteBookmarkRef;
 export function deleteBookmark(vars: DeleteBookmarkVariables): MutationPromise<DeleteBookmarkData, DeleteBookmarkVariables>;
 export function deleteBookmark(dc: DataConnect, vars: DeleteBookmarkVariables): MutationPromise<DeleteBookmarkData, DeleteBookmarkVariables>;
 
-interface GetVerseRef {
+interface UpdateNicknameRef {
   /* Allow users to create refs without passing in DataConnect */
-  (vars: GetVerseVariables): QueryRef<GetVerseData, GetVerseVariables>;
+  (vars: UpdateNicknameVariables): MutationRef<UpdateNicknameData, UpdateNicknameVariables>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetVerseVariables): QueryRef<GetVerseData, GetVerseVariables>;
+  (dc: DataConnect, vars: UpdateNicknameVariables): MutationRef<UpdateNicknameData, UpdateNicknameVariables>;
   operationName: string;
 }
-export const getVerseRef: GetVerseRef;
+export const updateNicknameRef: UpdateNicknameRef;
 
-export function getVerse(vars: GetVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetVerseData, GetVerseVariables>;
-export function getVerse(dc: DataConnect, vars: GetVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetVerseData, GetVerseVariables>;
+export function updateNickname(vars: UpdateNicknameVariables): MutationPromise<UpdateNicknameData, UpdateNicknameVariables>;
+export function updateNickname(dc: DataConnect, vars: UpdateNicknameVariables): MutationPromise<UpdateNicknameData, UpdateNicknameVariables>;
 
-interface GetMyCurrentVerseRef {
+interface DeleteUserRef {
   /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetMyCurrentVerseData, undefined>;
+  (): MutationRef<DeleteUserData, undefined>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<GetMyCurrentVerseData, undefined>;
+  (dc: DataConnect): MutationRef<DeleteUserData, undefined>;
   operationName: string;
 }
-export const getMyCurrentVerseRef: GetMyCurrentVerseRef;
+export const deleteUserRef: DeleteUserRef;
 
-export function getMyCurrentVerse(options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
-export function getMyCurrentVerse(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
-
-interface GetMyBookmarksRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetMyBookmarksData, undefined>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<GetMyBookmarksData, undefined>;
-  operationName: string;
-}
-export const getMyBookmarksRef: GetMyBookmarksRef;
-
-export function getMyBookmarks(options?: ExecuteQueryOptions): QueryPromise<GetMyBookmarksData, undefined>;
-export function getMyBookmarks(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyBookmarksData, undefined>;
-
-interface GetMyCompletionsRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetMyCompletionsData, undefined>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<GetMyCompletionsData, undefined>;
-  operationName: string;
-}
-export const getMyCompletionsRef: GetMyCompletionsRef;
-
-export function getMyCompletions(options?: ExecuteQueryOptions): QueryPromise<GetMyCompletionsData, undefined>;
-export function getMyCompletions(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCompletionsData, undefined>;
+export function deleteUser(): MutationPromise<DeleteUserData, undefined>;
+export function deleteUser(dc: DataConnect): MutationPromise<DeleteUserData, undefined>;
 

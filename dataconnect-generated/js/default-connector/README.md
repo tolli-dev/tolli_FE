@@ -12,11 +12,14 @@ This README will guide you through the process of using the generated JavaScript
   - [*GetMyCurrentVerse*](#getmycurrentverse)
   - [*GetMyBookmarks*](#getmybookmarks)
   - [*GetMyCompletions*](#getmycompletions)
+  - [*GetMe*](#getme)
 - [**Mutations**](#mutations)
   - [*CreateUser*](#createuser)
   - [*CreateStudyCompletion*](#createstudycompletion)
   - [*AddBookmark*](#addbookmark)
   - [*DeleteBookmark*](#deletebookmark)
+  - [*UpdateNickname*](#updatenickname)
+  - [*DeleteUser*](#deleteuser)
 
 # Accessing the connector
 A connector is a collection of Queries and Mutations. One SDK is generated for each connector - this SDK is generated for the connector `default`. You can find more information about connectors in the [Data Connect documentation](https://firebase.google.com/docs/data-connect#how-does).
@@ -468,6 +471,99 @@ console.log(data.studyCompletions);
 executeQuery(ref).then((response) => {
   const data = response.data;
   console.log(data.studyCompletions);
+});
+```
+
+## GetMe
+You can execute the `GetMe` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [default-connector/index.d.ts](./index.d.ts):
+```typescript
+getMe(options?: ExecuteQueryOptions): QueryPromise<GetMeData, undefined>;
+
+interface GetMeRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetMeData, undefined>;
+}
+export const getMeRef: GetMeRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+getMe(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMeData, undefined>;
+
+interface GetMeRef {
+  ...
+  (dc: DataConnect): QueryRef<GetMeData, undefined>;
+}
+export const getMeRef: GetMeRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the getMeRef:
+```typescript
+const name = getMeRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `GetMe` query has no variables.
+### Return Type
+Recall that executing the `GetMe` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `GetMeData`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface GetMeData {
+  user?: {
+    nickname: string;
+  };
+}
+```
+### Using `GetMe`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, getMe } from '@firebasegen/default-connector';
+
+
+// Call the `getMe()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await getMe();
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await getMe(dataConnect);
+
+console.log(data.user);
+
+// Or, you can use the `Promise` API.
+getMe().then((response) => {
+  const data = response.data;
+  console.log(data.user);
+});
+```
+
+### Using `GetMe`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, getMeRef } from '@firebasegen/default-connector';
+
+
+// Call the `getMeRef()` function to get a reference to the query.
+const ref = getMeRef();
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = getMeRef(dataConnect);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.user);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.user);
 });
 ```
 
@@ -931,6 +1027,206 @@ console.log(data.bookmark_delete);
 executeMutation(ref).then((response) => {
   const data = response.data;
   console.log(data.bookmark_delete);
+});
+```
+
+## UpdateNickname
+You can execute the `UpdateNickname` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [default-connector/index.d.ts](./index.d.ts):
+```typescript
+updateNickname(vars: UpdateNicknameVariables): MutationPromise<UpdateNicknameData, UpdateNicknameVariables>;
+
+interface UpdateNicknameRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateNicknameVariables): MutationRef<UpdateNicknameData, UpdateNicknameVariables>;
+}
+export const updateNicknameRef: UpdateNicknameRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+updateNickname(dc: DataConnect, vars: UpdateNicknameVariables): MutationPromise<UpdateNicknameData, UpdateNicknameVariables>;
+
+interface UpdateNicknameRef {
+  ...
+  (dc: DataConnect, vars: UpdateNicknameVariables): MutationRef<UpdateNicknameData, UpdateNicknameVariables>;
+}
+export const updateNicknameRef: UpdateNicknameRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the updateNicknameRef:
+```typescript
+const name = updateNicknameRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `UpdateNickname` mutation requires an argument of type `UpdateNicknameVariables`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface UpdateNicknameVariables {
+  nickname: string;
+}
+```
+### Return Type
+Recall that executing the `UpdateNickname` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `UpdateNicknameData`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface UpdateNicknameData {
+  user_update?: User_Key | null;
+}
+```
+### Using `UpdateNickname`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, updateNickname, UpdateNicknameVariables } from '@firebasegen/default-connector';
+
+// The `UpdateNickname` mutation requires an argument of type `UpdateNicknameVariables`:
+const updateNicknameVars: UpdateNicknameVariables = {
+  nickname: ..., 
+};
+
+// Call the `updateNickname()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await updateNickname(updateNicknameVars);
+// Variables can be defined inline as well.
+const { data } = await updateNickname({ nickname: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await updateNickname(dataConnect, updateNicknameVars);
+
+console.log(data.user_update);
+
+// Or, you can use the `Promise` API.
+updateNickname(updateNicknameVars).then((response) => {
+  const data = response.data;
+  console.log(data.user_update);
+});
+```
+
+### Using `UpdateNickname`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, updateNicknameRef, UpdateNicknameVariables } from '@firebasegen/default-connector';
+
+// The `UpdateNickname` mutation requires an argument of type `UpdateNicknameVariables`:
+const updateNicknameVars: UpdateNicknameVariables = {
+  nickname: ..., 
+};
+
+// Call the `updateNicknameRef()` function to get a reference to the mutation.
+const ref = updateNicknameRef(updateNicknameVars);
+// Variables can be defined inline as well.
+const ref = updateNicknameRef({ nickname: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = updateNicknameRef(dataConnect, updateNicknameVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.user_update);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.user_update);
+});
+```
+
+## DeleteUser
+You can execute the `DeleteUser` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [default-connector/index.d.ts](./index.d.ts):
+```typescript
+deleteUser(): MutationPromise<DeleteUserData, undefined>;
+
+interface DeleteUserRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (): MutationRef<DeleteUserData, undefined>;
+}
+export const deleteUserRef: DeleteUserRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+deleteUser(dc: DataConnect): MutationPromise<DeleteUserData, undefined>;
+
+interface DeleteUserRef {
+  ...
+  (dc: DataConnect): MutationRef<DeleteUserData, undefined>;
+}
+export const deleteUserRef: DeleteUserRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the deleteUserRef:
+```typescript
+const name = deleteUserRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `DeleteUser` mutation has no variables.
+### Return Type
+Recall that executing the `DeleteUser` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `DeleteUserData`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface DeleteUserData {
+  user_delete?: User_Key | null;
+}
+```
+### Using `DeleteUser`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, deleteUser } from '@firebasegen/default-connector';
+
+
+// Call the `deleteUser()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await deleteUser();
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await deleteUser(dataConnect);
+
+console.log(data.user_delete);
+
+// Or, you can use the `Promise` API.
+deleteUser().then((response) => {
+  const data = response.data;
+  console.log(data.user_delete);
+});
+```
+
+### Using `DeleteUser`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, deleteUserRef } from '@firebasegen/default-connector';
+
+
+// Call the `deleteUserRef()` function to get a reference to the mutation.
+const ref = deleteUserRef();
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = deleteUserRef(dataConnect);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.user_delete);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.user_delete);
 });
 ```
 

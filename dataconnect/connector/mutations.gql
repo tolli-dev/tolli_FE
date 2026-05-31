@@ -28,3 +28,11 @@ mutation AddBookmark($verseId: Int!) @auth(level: USER) {
 mutation DeleteBookmark($verseId: Int!) @auth(level: USER) {
   bookmark_delete(key: { userId_expr: "auth.uid", verseId: $verseId })
 }
+
+mutation UpdateNickname($nickname: String!) @auth(level: USER) {
+  user_update(id_expr: "auth.uid", data: { nickname: $nickname })
+}
+
+mutation DeleteUser @auth(level: USER) {
+  user_delete(id_expr: "auth.uid")
+}

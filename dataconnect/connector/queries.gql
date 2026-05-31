@@ -1,0 +1,41 @@
+query GetVerse($id: Int!) @auth(level: PUBLIC) {
+  verse(id: $id) {
+    id
+    reference
+    fullText
+    words
+    maskedStep2
+    maskedStep3
+    maskedStep4
+  }
+}
+
+query GetMyCurrentVerse @auth(level: USER) {
+  studyCompletions(where: { userId: { eq_expr: "auth.uid" } }, orderBy: { completedAt: DESC }, limit: 1) {
+    verse {
+      id
+    }
+  }
+}
+
+query GetMyBookmarks @auth(level: USER) {
+  bookmarks(where: { userId: { eq_expr: "auth.uid" } }) {
+    verse {
+      id
+      reference
+      fullText
+    }
+    createdAt
+  }
+}
+
+query GetMyCompletions @auth(level: USER) {
+  studyCompletions(where: { userId: { eq_expr: "auth.uid" } }) {
+    id
+    verse {
+      id
+      reference
+    }
+    completedAt
+  }
+}

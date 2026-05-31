@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "tolli-fe"
+location: "asia-northeast3"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "tolli-ea4f6-instance"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]

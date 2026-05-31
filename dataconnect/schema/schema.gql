@@ -1,0 +1,32 @@
+type User @table(name: "users") {
+  id: String! @col(name: "id", dataType: "varchar(128)") @default(expr: "auth.uid")
+  nickname: String! @col(dataType: "varchar(20)")
+  termsAgreedAt: Timestamp! @col(name: "terms_agreed_at")
+  privacyAgreedAt: Timestamp! @col(name: "privacy_agreed_at")
+  emailMarketingAgreed: Boolean! @default(value: false) @col(name: "email_marketing_agreed")
+  emailMarketingAgreedAt: Timestamp @col(name: "email_marketing_agreed_at")
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+}
+
+type Verse @table(name: "verses") {
+  id: Int! @col(name: "id")
+  reference: String! @col(dataType: "varchar(100)")
+  fullText: String! @col(name: "full_text")
+  words: Any! @col(dataType: "jsonb")
+  maskedStep2: [Int!]! @col(name: "masked_step2")
+  maskedStep3: [Int!]! @col(name: "masked_step3")
+  maskedStep4: [Int!]! @col(name: "masked_step4")
+}
+
+type StudyCompletion @table(name: "study_completions") {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User!
+  verse: Verse!
+  completedAt: Timestamp! @default(expr: "request.time") @col(name: "completed_at")
+}
+
+type Bookmark @table(name: "bookmarks", key: ["user", "verse"]) {
+  user: User!
+  verse: Verse!
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+}

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import {
   signInWithAppleToken,
   signInWithGoogleToken,
+  signInWithKakaoToken,
 } from "@/firebase/fireAuth";
 import { useRouter } from "next/navigation";
 
@@ -43,8 +44,9 @@ export default function LoginPage() {
           });
         }
         if (type === "KAKAO_TOKEN" && token) {
-          const accessToken = token;
-          router.push("/terms");
+          signInWithKakaoToken(token).then(() => {
+            router.push("/terms");
+          });
         }
       } catch {}
     };

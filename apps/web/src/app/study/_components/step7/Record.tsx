@@ -51,7 +51,7 @@ export default function Record() {
         />
       </header>
 
-      <main className="flex flex-col flex-1 justify-center gap-[57px] w-full mb-[15px]">
+      <main className="flex flex-col flex-1 justify-center gap-[14.18vw] w-full mb-[3.73vw]">
         {phase === "idle" && (
           <RecordBarContainer
             showVerse={showVerse}
@@ -69,23 +69,23 @@ export default function Record() {
 
         <button
           onClick={handleViewVerse}
-          className="flex flex-col w-[72.19px] h-[68px] items-center justify-center gap-[8px]"
+          className="flex flex-col w-[17.96vw] h-[16.92vw] items-center justify-center gap-[1.99vw]"
         >
           <div
-            className={`w-[57px] h-[37px] rounded-[18.5px] ${
+            className={`w-[14.18vw] h-[9.20vw] rounded-[4.60vw] ${
               showVerse
                 ? "bg-[#B09ECC]"
                 : " border-1 border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20"
             }`}
           >
-            <div className="flex flex-col items-center justify-center w-full px-[17px] py-[7px] bg-[#787878]/20 rounded-[18.5px]">
+            <div className="flex flex-col items-center justify-center w-full px-[4.23vw] py-[1.74vw] bg-[#787878]/20 rounded-[4.60vw]">
               <Icon
                 icon="famicons:eye"
-                className={`${showVerse ? "text-[#1B1B1B]" : "text-[#FFFFFF]"} w-[23px] h-auto`}
+                className={`${showVerse ? "text-[#1B1B1B]" : "text-[#FFFFFF]"} w-[5.72vw] h-auto`}
               />
             </div>
           </div>
-          <span className="font-regular text-[12px] leading-[22.8px] text-[#CECECE]">
+          <span className="font-regular text-[2.99vw] leading-[5.67vw] text-[#CECECE]">
             구절 잠깐 보기
           </span>
         </button>

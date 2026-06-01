@@ -12,7 +12,7 @@ export default function RecordComplete({
   const router = useRouter();
 
   const stopRecording = () => {
-    router.push("/complete");
+    router.push("/bookmark");
   };
 
   return (
@@ -24,14 +24,14 @@ export default function RecordComplete({
         />
       </header>
 
-      <main className="flex flex-col flex-1 items-center justify-center gap-[22px] w-full mb-[91px]">
+      <main className="flex flex-col flex-1 items-center justify-center gap-[5.47vw] w-full mb-[22.64vw]">
         <CompleteContainer />
-        <p className="font-semibold text-[16px] leading-[34px] text-[#B0B0B0]">
+        <p className="font-semibold text-[3.98vw] leading-[8.46vw] text-[#B0B0B0]">
           한 번 더 해보고 싶다면 다시 녹음할 수 있어요
         </p>
       </main>
 
-      <footer className="grid grid-cols-2 gap-[11px]">
+      <footer className="grid grid-cols-2 gap-[2.74vw]">
         <RetryRecordingButton
           icon="stash:arrow-retry"
           description="다시 녹음"

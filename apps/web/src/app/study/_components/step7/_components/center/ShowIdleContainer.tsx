@@ -17,9 +17,9 @@ export default function ShowPhaseContainer({
         <Image
           src={StandingTolli}
           alt="standing tolli"
-          className="w-[130px] h-auto drop-shadow-[0.25rem_0.6875rem_1.5rem_rgba(255,255,255,0.25)]"
+          className="w-[32.34vw] h-auto drop-shadow-[0.25rem_0.6875rem_1.5rem_rgba(255,255,255,0.25)]"
         />
-        <Image src={soundBar} alt={`${soundBar}`} className="w-[77px] h-auto" />
+        <Image src={soundBar} alt={`${soundBar}`} className="w-[19.15vw] h-auto" />
       </div>
       <div className="flex-1 flex items-end">
         <div className="flex flex-row items-center gap-2">

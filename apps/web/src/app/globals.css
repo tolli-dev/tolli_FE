@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --liquid-glass-filters: url(#liquid-glass-button) brightness(150%);
@@ -8,8 +8,8 @@
 
 @theme inline {
   --font-sans:
-    var(--font-pretendard), 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
-    system-ui, sans-serif;
+    var(--font-pretendard), "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, sans-serif;
 
   /* Primary */
   --color-primary-50: #cfc4f4;
@@ -64,6 +64,20 @@ body:has(.dashboard-layout) {
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: pan-y;
+}
+
+body:has(.listenVerse-layout) {
+  color: black;
+  font-family: var(--font-sans);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+body:has(.listenVerse-layout) {
+  background: linear-gradient(to bottom, #ccb5f0 0%, #ffffff 100%);
 }
 
 /* H1 — Semibold, 28/40, -7% */

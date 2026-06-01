@@ -1,6 +1,6 @@
 import Image from "next/image";
-import ReadingBookTolli from "../../../../public/tolli1.svg";
-import SetBookmarkButton from "../_components/step7/_components/button/SetBookmarkButton";
+import ReadingBookTolli from "../../../../../public/tolli1.svg";
+import SetBookmarkButton from "./SetBookmarkButton";
 
 export default function Bookmark() {
   return (

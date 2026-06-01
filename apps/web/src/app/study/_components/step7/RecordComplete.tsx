@@ -12,7 +12,7 @@ export default function RecordComplete({
   const router = useRouter();
 
   const stopRecording = () => {
-    router.push("/bookmark");
+    router.push("/study/complete");
   };
 
   return (

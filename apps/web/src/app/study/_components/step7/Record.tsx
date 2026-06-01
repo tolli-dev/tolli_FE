@@ -9,6 +9,7 @@ import RecordButton from "./_components/button/RecordButton";
 import { useState } from "react";
 import { Step7Phase } from "./_types";
 import { Icon } from "@iconify/react";
+import RecordComplete from "./RecordComplete";
 
 export default function Record() {
   const [phase, setPhase] = useState<Step7Phase>("idle");
@@ -22,7 +23,7 @@ export default function Record() {
   };
 
   const stopRecording = () => {
-    setPhase("idle");
+    setPhase("complete");
   };
 
   const handleViewVerse = () => {
@@ -33,16 +34,24 @@ export default function Record() {
     return;
   };
 
+  function retryRecording() {
+    setPhase("idle");
+  }
+
+  if (phase === "complete") {
+    return <RecordComplete retryRecording={retryRecording} />;
+  }
+
   return (
     <section className="flex flex-col w-full h-full overflow-hidden pt-8.75 pb-4 px-10.5">
       <header>
         <DiffHeader
-          instruction1="직접 소리 내어 말해보세요"
-          instruction2="구절 잠깐 보기 힌트가 있어요"
+          instruction1="좋아요, 말씀을 소리 내어 말했어요"
+          instruction2="잘했어요! 한 걸음 더 성장했어요"
         />
       </header>
 
-      <main className="flex flex-col flex-1 h-[430px] justify-center gap-[57px] w-full mb-[15px]">
+      <main className="flex flex-col flex-1 justify-center gap-[57px] w-full mb-[15px]">
         {phase === "idle" && (
           <RecordBarContainer
             showVerse={showVerse}

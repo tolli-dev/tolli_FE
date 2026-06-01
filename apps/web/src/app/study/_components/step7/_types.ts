@@ -1,1 +1,1 @@
-export type Step7Phase = "idle" | "recording";
+export type Step7Phase = "idle" | "recording" | "complete";

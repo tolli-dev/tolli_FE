@@ -7,6 +7,8 @@ import {
   signInWithKakaoToken,
 } from "@/firebase/fireAuth";
 import { useRouter } from "next/navigation";
+import { getMe } from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,24 +31,27 @@ export default function LoginPage() {
     );
   };
 
+  const redirectAfterLogin = async () => {
+    const result = await getMe(dataConnect);
+    if (result.data.user) {
+      router.push("/dashboard");
+    } else {
+      router.push("/terms");
+    }
+  };
+
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       try {
         const { type, token } = JSON.parse(e.data);
         if (type === "GOOGLE_TOKEN" && token) {
-          signInWithGoogleToken(token).then((user) => {
-            router.push("/terms");
-          });
+          signInWithGoogleToken(token).then(() => redirectAfterLogin());
         }
         if (type === "APPLE_TOKEN" && token) {
-          signInWithAppleToken(token).then((user) => {
-            router.push("/terms");
-          });
+          signInWithAppleToken(token).then(() => redirectAfterLogin());
         }
         if (type === "KAKAO_TOKEN" && token) {
-          signInWithKakaoToken(token).then(() => {
-            router.push("/terms");
-          });
+          signInWithKakaoToken(token).then(() => redirectAfterLogin());
         }
       } catch {}
     };

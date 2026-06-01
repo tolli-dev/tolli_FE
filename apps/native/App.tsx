@@ -1,17 +1,14 @@
-import { useRef, useState, useEffect } from "react";
-import { StyleSheet, Platform, StatusBar, NativeModules } from "react-native";
-import { WebView } from "react-native-webview";
-import type {
-  WebView as WebViewType,
-  WebViewMessageEvent,
-} from "react-native-webview";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import Constants from "expo-constants";
-import { signInWithGoogle } from "./auth/googleSignIn";
-import { signInWithApple } from "./auth/appleSignIn";
-import { IP_URL } from "../web/src/constants/url";
-import { KakaoOAuthToken, login } from "@react-native-seoul/kakao-login";
-import { checkFirstLaunch, markFirstLaunchDone } from "./utils/checkFirstLaunch";
+import { useRef, useState, useEffect } from 'react';
+import { StyleSheet, Platform, StatusBar, NativeModules } from 'react-native';
+import { WebView } from 'react-native-webview';
+import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
+import { signInWithGoogle } from './auth/googleSignIn';
+import { signInWithApple } from './auth/appleSignIn';
+import { IP_URL } from '../web/src/constants/url';
+import { KakaoOAuthToken, login } from '@react-native-seoul/kakao-login';
+import { checkFirstLaunch, markFirstLaunchDone } from './utils/checkFirstLaunch';
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -24,7 +21,7 @@ export default function App() {
 
   useEffect(() => {
     checkFirstLaunch().then((isFirst) => {
-      setInitialUri(isFirst ? `${IP_URL}/onboarding/1` : `${IP_URL}/login`);
+      setInitialUri(isFirst ? `${IP_URL}/onboarding/1` : `${IP_URL}/afterLogin/setAlarm`);
     });
   }, []);
 
@@ -38,42 +35,41 @@ export default function App() {
     try {
       const data = JSON.parse(e.nativeEvent.data);
 
-      if (data.type === "GOOGLE_LOGIN") {
+      if (data.type === 'GOOGLE_LOGIN') {
         const idToken = await signInWithGoogle();
-        if (idToken) postToken("GOOGLE_TOKEN", idToken);
+        if (idToken) postToken('GOOGLE_TOKEN', idToken);
       }
 
-      if (data.type === "APPLE_LOGIN") {
+      if (data.type === 'APPLE_LOGIN') {
         const idToken = await signInWithApple();
-        if (idToken) postToken("APPLE_TOKEN", idToken);
+        if (idToken) postToken('APPLE_TOKEN', idToken);
       }
 
-      if (data.type === "KAKAO_LOGIN") {
+      if (data.type === 'KAKAO_LOGIN') {
         const token: KakaoOAuthToken = await login();
-        if (token) postToken("KAKAO_TOKEN", token.accessToken);
+        if (token) postToken('KAKAO_TOKEN', token.accessToken);
       }
 
-      if (data.type === "WEB_READY") {
+      if (data.type === 'WEB_READY') {
         const radius = await NativeModules.CornerRadiusModule.getCornerRadius();
-        const cssRadius =
-          Platform.OS === "android" ? Math.round(radius * 0.5) : radius;
+        const cssRadius = Platform.OS === 'android' ? Math.round(radius * 0.5) : radius;
         webviewRef.current?.postMessage(
-          JSON.stringify({ type: "DEVICE_CORNER_RADIUS", value: cssRadius }),
+          JSON.stringify({ type: 'DEVICE_CORNER_RADIUS', value: cssRadius }),
         );
       }
 
-      if (data.type === "ONBOARDING_COMPLETE") {
+      if (data.type === 'ONBOARDING_COMPLETE') {
         await markFirstLaunchDone();
       }
     } catch (error: any) {
       if (
-        error.code === "SIGN_IN_CANCELLED" ||
-        error.code === "ERR_REQUEST_CANCELED" ||
-        error.code === "E_CANCELLED_OPERATION" ||
+        error.code === 'SIGN_IN_CANCELLED' ||
+        error.code === 'ERR_REQUEST_CANCELED' ||
+        error.code === 'E_CANCELLED_OPERATION' ||
         /user cancelled/i.test(error.message)
       )
         return;
-      console.error("[handleMessage] error:", error);
+      console.error('[handleMessage] error:', error);
     }
   };
 
@@ -99,6 +95,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });

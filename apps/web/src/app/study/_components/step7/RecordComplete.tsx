@@ -12,7 +12,7 @@ export default function RecordComplete({
   const router = useRouter();
 
   const stopRecording = () => {
-    router.push("/study/complete");
+    router.push("/study/completeRecording");
   };
 
   return (

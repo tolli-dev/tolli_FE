@@ -1,5 +1,5 @@
 import DiffHeader from "../header/DiffHeader";
-import WatchingVerseContainer from "../center/WatchingVerseContainer";
+import WatchingVerseContainer from "../center/ShowVerseContainer";
 import RecordButton from "../button/RecordButton";
 
 export default function WatchingScreen({ onStart }: { onStart: () => void }) {

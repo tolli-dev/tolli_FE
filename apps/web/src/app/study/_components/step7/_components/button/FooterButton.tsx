@@ -5,7 +5,6 @@ interface Props {
   phase: Step7Phase;
   handleListeningVerse: () => void;
   handleWatchingVerse: () => void;
-  handleWritingVerse: () => void;
   handleRecordingVerse: () => void;
 }
 
@@ -13,7 +12,6 @@ export default function FooterButton({
   phase,
   handleListeningVerse,
   handleWatchingVerse,
-  handleWritingVerse,
   handleRecordingVerse,
 }: Props) {
   const listeningColorClass =
@@ -49,38 +47,6 @@ export default function FooterButton({
           구절 잠깐 보기
         </span>
       </button>
-      {phase !== "writing" && (
-        <>
-          <button
-            onClick={handleWritingVerse}
-            className="flex flex-col items-center justify-center gap-1.2"
-          >
-            <Icon
-              icon="material-symbols:keyboard-outline-rounded"
-              className="size-5 text-[#CECECE]"
-            />
-            <span className="font-normal text-[0.75rem] leading-[1.425rem] text-[#CECECE]">
-              글로 적기
-            </span>
-          </button>
-        </>
-      )}
-      {phase === "writing" && (
-        <>
-          <button
-            onClick={handleRecordingVerse}
-            className="flex flex-col items-center justify-center gap-1.2"
-          >
-            <Icon
-              icon="fluent:mic-record-28-filled"
-              className="size-5 text-[#CECECE]"
-            />
-            <span className="font-normal text-[0.75rem] leading-[1.425rem] text-[#CECECE]">
-              녹음 하기
-            </span>
-          </button>
-        </>
-      )}
     </>
   );
 }

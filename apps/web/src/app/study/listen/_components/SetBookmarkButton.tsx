@@ -1,13 +1,16 @@
 export default function SetBookmarkButton({
   text,
   color,
+  handleClick,
 }: {
   text: string;
   color: string;
+  handleClick: () => void;
 }) {
   return (
     <div className="w-full">
       <button
+        onClick={handleClick}
         style={{ backgroundColor: color }}
         className="
           w-full rounded-[clamp(0.875rem,5vw,1.25rem)]

@@ -153,13 +153,12 @@ export default function SetAlarmTimePage() {
   }, []);
 
   const handleConfirm = () => {
-    // TODO: 실제 시간 알림으로 전환 시 아래 블록으로 교체 (seconds 제거)
-    // const hour24 = period === '오전' ? hourIndex + 1 : (hourIndex === 12 ? 12 : hourIndex + 12);
-    // window.ReactNativeWebView?.postMessage(
-    //   JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', hour: hour24, minute: minuteIndex })
-    // );
+    const hour24 = period === '오전' ? hourIndex + 1 : (hourIndex === 12 ? 12 : hourIndex + 12);
     window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', seconds: 60, repeats: true }),
+      JSON.stringify({ type: 'SAVE_ALARM_TIME', hour: hour24, minute: minuteIndex }),
+    );
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', hour: hour24, minute: minuteIndex }),
     );
     router.push('/dashboard');
   };

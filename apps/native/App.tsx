@@ -10,6 +10,7 @@ import { signInWithApple } from './auth/appleSignIn';
 import { IP_URL } from '../web/src/constants/url';
 import { KakaoOAuthToken, login } from '@react-native-seoul/kakao-login';
 import { checkFirstLaunch, markFirstLaunchDone } from './utils/checkFirstLaunch';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -31,7 +32,7 @@ export default function App() {
 
   useEffect(() => {
     checkFirstLaunch().then((isFirst) => {
-      setInitialUri(isFirst ? `${IP_URL}/onboarding/1` : `${IP_URL}/afterLogin/setAlarm`);
+      setInitialUri(isFirst ? `${IP_URL}/onboarding/1` : `${IP_URL}/dashboard`);
     });
   }, []);
 
@@ -76,16 +77,40 @@ export default function App() {
         await Notifications.requestPermissionsAsync();
       }
 
+      if (data.type === 'QUERY_NOTIFICATION_STATUS') {
+        const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+        webviewRef.current?.postMessage(
+          JSON.stringify({ type: 'NOTIFICATION_STATUS', enabled: scheduled.length > 0 }),
+        );
+      }
+
+      if (data.type === 'CANCEL_NOTIFICATION') {
+        await Notifications.cancelAllScheduledNotificationsAsync();
+      }
+
+      if (data.type === 'SAVE_ALARM_TIME') {
+        await AsyncStorage.setItem('alarmTime', JSON.stringify({ hour: data.hour, minute: data.minute }));
+      }
+
+      if (data.type === 'GET_ALARM_TIME') {
+        const stored = await AsyncStorage.getItem('alarmTime');
+        webviewRef.current?.postMessage(
+          JSON.stringify({ type: 'ALARM_TIME', ...(stored ? JSON.parse(stored) : { hour: null, minute: null }) }),
+        );
+      }
+
       if (data.type === 'SCHEDULE_NOTIFICATION') {
         await Notifications.cancelAllScheduledNotificationsAsync();
-        // TODO: 실제 시간 기반 알림 전환 시 아래 trigger로 교체
-        // trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour: data.hour, minute: data.minute }
         await Notifications.scheduleNotificationAsync({
           content: {
             title: '오늘의 말씀 🕊️',
             body: '말씀으로 하루를 시작해요!',
           },
-          trigger: { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds: 60, repeats: true },
+          trigger: {
+            type: Notifications.SchedulableTriggerInputTypes.DAILY,
+            hour: data.hour,
+            minute: data.minute,
+          },
         });
       }
     } catch (error: any) {

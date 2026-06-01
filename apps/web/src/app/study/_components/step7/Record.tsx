@@ -51,11 +51,17 @@ export default function Record() {
           onClick={handleViewVerse}
           className="flex flex-col w-[72.19px] h-[68px] items-center justify-center gap-[8px]"
         >
-          <div className="w-[57px] h-[37px] rounded-[18.5px] border-1 border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20">
+          <div
+            className={`w-[57px] h-[37px] rounded-[18.5px] ${
+              showVerse
+                ? "bg-[#B09ECC]"
+                : " border-1 border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20"
+            }`}
+          >
             <div className="flex flex-col items-center justify-center w-full px-[17px] py-[7px] bg-[#787878]/20rounded-[18.5px]">
               <Icon
                 icon="famicons:eye"
-                className="text-[#FFFFFF] w-[23px] h-auto"
+                className={`${showVerse ? "text-[#1B1B1B]" : "text-[#FFFFFF]"} w-[23px] h-auto`}
               />
             </div>
           </div>

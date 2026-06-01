@@ -11,6 +11,12 @@ import { signInWithGoogle } from "./auth/googleSignIn";
 import { signInWithApple } from "./auth/appleSignIn";
 import { IP_URL } from "../web/src/constants/url";
 import { KakaoOAuthToken, login } from "@react-native-seoul/kakao-login";
+import {
+  androidMicrophonePermission,
+  startAndroidSTT,
+  useAndroidSpeechBridge,
+  stopAndroidRecord,
+} from "./speech/useAndroidSpeech";
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -19,6 +25,8 @@ GoogleSignin.configure({
 
 export default function App() {
   const webviewRef = useRef<WebViewType>(null);
+
+  useAndroidSpeechBridge(webviewRef);
 
   const postToken = (type: string, token: string) => {
     webviewRef.current?.postMessage(JSON.stringify({ type, token }));
@@ -29,6 +37,15 @@ export default function App() {
 
     try {
       const data = JSON.parse(e.nativeEvent.data);
+
+      if (data.type === "ANDROID_RECORD") {
+        const microphonePermission = await androidMicrophonePermission();
+        if (microphonePermission) await startAndroidSTT();
+      }
+
+      if (data.type === "ANDROID_STOP_RECORD") {
+        stopAndroidRecord();
+      }
 
       if (data.type === "GOOGLE_LOGIN") {
         const idToken = await signInWithGoogle();

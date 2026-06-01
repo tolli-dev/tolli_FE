@@ -153,13 +153,13 @@ export default function SetAlarmTimePage() {
   }, []);
 
   const handleConfirm = () => {
-    // TODO: 실제 시간 알림으로 전환 시 아래 블록으로 교체
-    // const hour24 = period === '오전' ? hourIndex + 1 : hourIndex + 13;
+    // TODO: 실제 시간 알림으로 전환 시 아래 블록으로 교체 (seconds 제거)
+    // const hour24 = period === '오전' ? hourIndex + 1 : (hourIndex === 12 ? 12 : hourIndex + 12);
     // window.ReactNativeWebView?.postMessage(
-    //   JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', hour: hour24 % 24, minute: minuteIndex })
+    //   JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', hour: hour24, minute: minuteIndex })
     // );
     window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', seconds: 5 }),
+      JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', seconds: 60, repeats: true }),
     );
     router.push('/dashboard');
   };
@@ -210,7 +210,7 @@ export default function SetAlarmTimePage() {
           <h1 className="text-h1 text-[#CCB5F0]">톨리가 매일 알려줄게요!</h1>
           <p className="font-light text-[0.75rem] leading-5 text-[#CECECE] mt-px">알림 설정하기</p>
         </div>
-        <div className="relative w-[4.125rem] h-[4.125rem] shrink-0">
+        <div className="relative w-16.5 h-16.5 shrink-0">
           <Image src={TimeTolly} fill alt="timeTolli" className="object-contain" />
         </div>
       </div>

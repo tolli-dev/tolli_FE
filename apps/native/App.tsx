@@ -4,11 +4,21 @@ import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 import { signInWithGoogle } from './auth/googleSignIn';
 import { signInWithApple } from './auth/appleSignIn';
 import { IP_URL } from '../web/src/constants/url';
 import { KakaoOAuthToken, login } from '@react-native-seoul/kakao-login';
 import { checkFirstLaunch, markFirstLaunchDone } from './utils/checkFirstLaunch';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -60,6 +70,23 @@ export default function App() {
 
       if (data.type === 'ONBOARDING_COMPLETE') {
         await markFirstLaunchDone();
+      }
+
+      if (data.type === 'REQUEST_NOTIFICATION_PERMISSION') {
+        await Notifications.requestPermissionsAsync();
+      }
+
+      if (data.type === 'SCHEDULE_NOTIFICATION') {
+        await Notifications.cancelAllScheduledNotificationsAsync();
+        // TODO: 실제 시간 기반 알림 전환 시 아래 trigger로 교체
+        // trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour: data.hour, minute: data.minute }
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: '오늘의 말씀 🕊️',
+            body: '말씀으로 하루를 시작해요!',
+          },
+          trigger: { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds: 60, repeats: true },
+        });
       }
     } catch (error: any) {
       if (

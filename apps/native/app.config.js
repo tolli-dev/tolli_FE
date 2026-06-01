@@ -38,6 +38,19 @@ export default {
           googleServicesFile: './android/app/google-services.json',
         },
       ],
+      [
+        'expo-notifications',
+        {
+          iosPermissions: ['Alert', 'Sound', 'Badge'],
+          android: {
+            defaultChannel: {
+              name: 'default',
+              importance: 'HIGH',
+              sound: true,
+            },
+          },
+        },
+      ],
     ],
     extra: {
       googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,

@@ -13,6 +13,17 @@ import { Icon } from "@iconify/react";
 export default function Record() {
   const [phase, setPhase] = useState<Step7Phase>("idle");
   const [showVerse, setShowVerse] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  const startRecording = () => {
+    setPhase("recording");
+    setDisabled(true);
+    setTimeout(() => setDisabled(false), 5000);
+  };
+
+  const stopRecording = () => {
+    setPhase("idle");
+  };
 
   const handleViewVerse = () => {
     setShowVerse(true);
@@ -58,7 +69,7 @@ export default function Record() {
                 : " border-1 border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20"
             }`}
           >
-            <div className="flex flex-col items-center justify-center w-full px-[17px] py-[7px] bg-[#787878]/20rounded-[18.5px]">
+            <div className="flex flex-col items-center justify-center w-full px-[17px] py-[7px] bg-[#787878]/20 rounded-[18.5px]">
               <Icon
                 icon="famicons:eye"
                 className={`${showVerse ? "text-[#1B1B1B]" : "text-[#FFFFFF]"} w-[23px] h-auto`}
@@ -72,18 +83,19 @@ export default function Record() {
       </main>
 
       <footer className="flex justify-center w-full min-h-[48px]">
-        {(phase === "idle" || phase === "watching") && (
+        {phase === "idle" && (
           <RecordButton
             icon="fluent:mic-record-28-filled"
             description="녹음 시작"
-            handleRecord={() => setPhase("recording")}
+            handleRecord={startRecording}
           />
         )}
         {phase === "recording" && (
           <RecordButton
             icon="line-md:square-filled"
             description="녹음 완료"
-            handleRecord={() => setPhase("idle")}
+            handleRecord={stopRecording}
+            disabled={disabled}
           />
         )}
       </footer>

@@ -1,1 +1,1 @@
-export type Step7Phase = "idle" | "listening" | "watching" | "recording";
+export type Step7Phase = "idle" | "recording";

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import IndividualStorage from "./IndividualStorage";
@@ -21,6 +22,18 @@ interface Props {
 
 export default function StorageView({ done, completedVerses }: Props) {
   const router = useRouter();
+  const [searchVerse, setSearchVerse] = useState("");
+
+  const handleSearch = (value: string) => {
+    setSearchVerse(value);
+  };
+
+  const filteredData = completedVerses.filter((item) => {
+    return (
+      item.verse.reference.includes(searchVerse) ||
+      item.verse.fullText.includes(searchVerse)
+    );
+  });
 
   return (
     <section
@@ -45,6 +58,7 @@ export default function StorageView({ done, completedVerses }: Props) {
               className="pointer-events-none absolute left-[12px] top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[#B2B2B2]"
             />
             <input
+              onChange={(e) => handleSearch(e.target.value)}
               type="search"
               aria-label="말씀 찾기"
               title="말씀 찾기"
@@ -73,7 +87,7 @@ export default function StorageView({ done, completedVerses }: Props) {
         </h2>
       </div>
 
-      {completedVerses.length === 0 && (
+      {!searchVerse && completedVerses.length === 0 && (
         <main className="w-full flex-1 flex flex-col items-center justify-center">
           <div className="text-center">
             <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
@@ -83,10 +97,30 @@ export default function StorageView({ done, completedVerses }: Props) {
         </main>
       )}
 
-      {completedVerses.length !== 0 && (
+      {!searchVerse && completedVerses.length !== 0 && (
         <main className="w-full flex-1 min-h-0 flex flex-col items-center">
           <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
             {completedVerses.map((value) => (
+              <IndividualStorage key={value.id} value={value} />
+            ))}
+          </div>
+        </main>
+      )}
+
+      {searchVerse && filteredData.length === 0 && (
+        <main className="w-full flex-1 flex flex-col items-center justify-center">
+          <div className="text-center">
+            <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
+              검색 결과를 찾을 수 없습니다
+            </p>
+          </div>
+        </main>
+      )}
+
+      {searchVerse && filteredData.length !== 0 && (
+        <main className="w-full flex-1 min-h-0 flex flex-col items-center">
+          <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
+            {filteredData.map((value) => (
               <IndividualStorage key={value.id} value={value} />
             ))}
           </div>

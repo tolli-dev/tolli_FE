@@ -23,7 +23,7 @@ export default function IndividualBookmark({ value }: Props) {
       <h3 className="font-semibold text-[clamp(0.875rem,4vw,1rem)] leading-[1.25] text-[#171717] mb-[clamp(0.5rem,2.5vw,0.6875rem)]">
         {value.verse.reference}
       </h3>
-      <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
+      <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535] break-keep">
         {value.verse.fullText}
       </p>
     </article>

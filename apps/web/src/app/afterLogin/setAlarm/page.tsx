@@ -15,6 +15,7 @@ export default function Page() {
   };
 
   const skipAlarm = () => {
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
     router.push('/dashboard');
   };
 

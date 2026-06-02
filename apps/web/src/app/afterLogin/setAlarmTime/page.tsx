@@ -160,10 +160,12 @@ export default function SetAlarmTimePage() {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', hour: hour24, minute: minuteIndex }),
     );
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
     router.push('/dashboard');
   };
 
   const handleSkip = () => {
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
     router.push('/dashboard');
   };
 

@@ -21,7 +21,9 @@ type MenuKey = 'profile' | 'notification' | 'account' | 'feedback' | 'terms' | n
 type SubItem =
   | { type: 'link'; label: string; href: string }
   | { type: 'toggle'; label: string; key: string }
-  | { type: 'external'; label: string; url: string };
+  | { type: 'external'; label: string; url: string }
+  | { type: 'modal'; label: string; modal: 'logout' | 'withdraw' }
+  | { type: 'rename'; label: string };
 
 type MenuItem = {
   key: Exclude<MenuKey, null>;
@@ -35,7 +37,7 @@ const MENU_ITEMS: MenuItem[] = [
     key: 'profile',
     label: '프로필 편집',
     icon: '/icons/dropdown/profile.svg',
-    subItems: [{ type: 'link', label: '이름 변경', href: '/settings/profile' }],
+    subItems: [{ type: 'rename', label: '이름 변경' }],
   },
   {
     key: 'notification',
@@ -51,8 +53,8 @@ const MENU_ITEMS: MenuItem[] = [
     label: '계정관리',
     icon: '/icons/dropdown/account.svg',
     subItems: [
-      { type: 'link', label: '로그아웃', href: '/logout' },
-      { type: 'link', label: '회원 탈퇴', href: '/settings/withdraw' },
+      { type: 'modal', label: '로그아웃', modal: 'logout' },
+      { type: 'modal', label: '회원 탈퇴', modal: 'withdraw' },
     ],
   },
   {
@@ -65,8 +67,8 @@ const MENU_ITEMS: MenuItem[] = [
     label: '약관',
     icon: '/icons/dropdown/terms.svg',
     subItems: [
-      { type: 'link', label: '이용약관', href: '/terms/service' },
-      { type: 'link', label: '개인정보 처리방침', href: '/terms/privacy' },
+      { type: 'external', label: '이용약관', url: 'https://polite-swift-c6b.notion.site/tolli-3724b4ce693880cd8ee8e17d36cd0353?pvs=143' },
+      { type: 'external', label: '개인정보 처리방침', url: 'https://polite-swift-c6b.notion.site/tolli-3724b4ce69388037a658f35884348c2a?pvs=143' },
     ],
   },
 ];
@@ -75,9 +77,11 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   nickname?: string;
+  onModal?: (type: 'logout' | 'withdraw') => void;
+  onRename?: () => void;
 };
 
-export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Props) {
+export default function ProfileDropdown({ isOpen, onClose, nickname = '', onModal, onRename }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const menuListRef = useRef<HTMLDivElement>(null);
   const menuRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -136,15 +140,16 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Prop
 
   const handleMenuClick = (item: MenuItem) => {
     if (item.key === 'feedback') {
-      window.open('https://forms.gle/feedback', '_blank');
+      window.ReactNativeWebView?.postMessage(
+        JSON.stringify({ type: 'OPEN_EXTERNAL_URL', url: 'https://walla.my/survey/2kZYBBzNVfjI4RYMcFJ3' })
+      );
       onClose();
       return;
     }
     if (!item.subItems) return;
 
     const btn = menuRefs.current[item.key];
-    const list = menuListRef.current;
-    if (btn && list) {
+    if (btn) {
       const top = btn.offsetTop + btn.offsetHeight;
       setSubPanelTops((prev) => ({ ...prev, [item.key]: top }));
     }
@@ -157,8 +162,15 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Prop
       router.push(subItem.href);
       onClose();
     } else if (subItem.type === 'external') {
-      window.open(subItem.url, '_blank');
+      window.ReactNativeWebView?.postMessage(
+        JSON.stringify({ type: 'OPEN_EXTERNAL_URL', url: subItem.url })
+      );
       onClose();
+    } else if (subItem.type === 'modal') {
+      onModal?.(subItem.modal);
+    } else if (subItem.type === 'rename') {
+      onClose();
+      onRename?.();
     }
   };
 
@@ -178,7 +190,6 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Prop
           WebkitBackdropFilter: 'blur(12px)',
         }}
       >
-        {/* 닉네임 헤더 */}
         <div className="flex items-center gap-3 px-1 py-3">
           <div
             className="w-[2.063rem] h-[2.063rem] rounded-full flex items-center justify-center shrink-0 overflow-hidden"
@@ -189,7 +200,6 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Prop
           <span className="text-white font-light text-[1rem] tracking-[-0.02em]">{nickname}</span>
         </div>
 
-        {/* 메뉴 목록 */}
         <div ref={menuListRef} className="relative flex flex-col">
           {MENU_ITEMS.map((item) => {
             const isExpanded = expandedKey === item.key;
@@ -197,9 +207,7 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Prop
             return (
               <div key={item.key}>
                 <button
-                  ref={(el) => {
-                    menuRefs.current[item.key] = el;
-                  }}
+                  ref={(el) => { menuRefs.current[item.key] = el; }}
                   onClick={() => handleMenuClick(item)}
                   className="w-full flex items-center justify-between px-2 py-3"
                 >
@@ -242,7 +250,7 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Prop
                     </button>
 
                     <div className="flex flex-col mt-1">
-                      {item.subItems.map((subItem, idx) => (
+                      {item.subItems.map((subItem) => (
                         <div key={subItem.label}>
                           {subItem.type === 'toggle' ? (
                             <div className="flex items-center justify-between px-1 py-3">
@@ -270,7 +278,6 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '' }: Prop
                                   boxShadow: notificationEnabled
                                     ? 'inset 0 0 0 1px rgba(204,181,240,0.6)'
                                     : 'inset 0 0 0 1px rgba(255,255,255,0.15)',
-
                                   backdropFilter: 'blur(4px)',
                                 }}
                               >

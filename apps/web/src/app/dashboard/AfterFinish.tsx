@@ -82,12 +82,13 @@ export default function AfterFinish() {
 
         <button
           className="
-              w-full pointer-events-none
-              h-[clamp(2.75rem,11vw,3.25rem)]
-              text-dashboard-btn text-primary-75
-              bg-dashboard-blocked-button
-              rounded-[clamp(2.5rem,15vw,3.75rem)]
-            "
+            w-full pointer-events-none
+            font-semibold tracking-[-2%]
+            text-[clamp(0.875rem,4.1vw,1rem)]
+            leading-[clamp(1.75rem,8.2vw,2rem)]
+            h-[clamp(2.75rem,11vw,3.25rem)]
+          text-[#1E1E1E] bg-[#CCB5F0]
+            rounded-[clamp(2.5rem,15vw,3.75rem)]"
         >
           오늘의 양식 완료
         </button>

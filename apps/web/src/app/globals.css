@@ -53,7 +53,13 @@ body:has(.dashboard-layout) {
 }
 
 body:has(.dashboard-layout.is-done) {
-  background: linear-gradient(to bottom, #ccb5f0 0%, #e4e4e4 59%, #4d455a 100%);
+  background: linear-gradient(
+    to bottom,
+    #ccb5f0 0%,
+    #e4e4e4 26%,
+    #e6e6e6 85%,
+    #ffffff 100%
+  );
 }
 
 body:has(.dashboard-layout) {

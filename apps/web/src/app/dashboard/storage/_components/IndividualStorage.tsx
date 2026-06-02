@@ -1,3 +1,7 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 interface Props {
   value: {
     id: string;
@@ -11,6 +15,12 @@ interface Props {
 }
 
 export default function IndividualStorage({ value }: Props) {
+  const router = useRouter();
+
+  const handleRetryStep = () => {
+    router.push("/study/30/0");
+  };
+
   return (
     <article className="w-full shrink-0 flex flex-col border border-[#CCB5F0] bg-[#C8C8C8]/20 rounded-[clamp(1rem,4.5vw,1.25rem)] py-[clamp(1rem,4.5vw,1.375rem)] px-[clamp(1.125rem,5vw,1.5625rem)]">
       <span className="flex justify-end -mt-[6px] -mb-[6px]">
@@ -29,6 +39,7 @@ export default function IndividualStorage({ value }: Props) {
       </p>
       <div className="flex justify-end">
         <button
+          onClick={handleRetryStep}
           className="
             w-fit rounded-full
             bg-[#6F6F6F] px-[clamp(0.875rem,4.5vw,1.1875rem)] py-[clamp(0.25rem,1.5vw,0.3125rem)]

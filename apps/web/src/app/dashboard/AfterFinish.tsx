@@ -1,29 +1,14 @@
-import { Icon } from "@iconify/react";
 import Image from "next/image";
 import FullHappyTolli from "../../../public/images/onBoarding/fullHappyTolli.svg";
 import NoiseOverlay from "./_components/NoiseOverlay";
 import GrainBorder from "./_components/_GrainBorder";
+import DashboardHeader from "./_components/DashboardHeader";
 import SwipeNav from "./_components/SwipeNav";
 
 export default function AfterFinish() {
   return (
     <>
-      <header
-        className="
-          flex flex-row justify-end items-center w-full
-          gap-[clamp(1.5rem,7vw,2.5rem)]
-          mb-[clamp(0.5rem,2vw,0.75rem)]
-        "
-      >
-        <Icon
-          icon="tabler:archive-filled"
-          className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
-        />
-        <Icon
-          icon="iconamoon:profile-fill"
-          className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
-        />
-      </header>
+      <DashboardHeader nickname="몽디" />
 
       <main className="flex flex-1 flex-col items-center w-full">
         <div className="flex flex-col w-full">

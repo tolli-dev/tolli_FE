@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createUser } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
+import { fireAuth } from '@/firebase/fireAuth';
 
 const getValidationResult = (name: string) => {
   const blankRegex = /\s/g;
@@ -46,6 +47,15 @@ export default function Page() {
     sessionStorage.removeItem('privacyAgreedAt');
     sessionStorage.removeItem('emailMarketingAgreed');
     sessionStorage.removeItem('emailMarketingAgreedAt');
+
+    const idToken = await fireAuth.currentUser?.getIdToken();
+    if (idToken) {
+      await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken }),
+      });
+    }
 
     router.push(`/afterLogin/greeting/${name}`);
   };

@@ -14,6 +14,13 @@ export default function ListenVerse() {
     setHome(true);
   };
 
+  const handleBookmarkModal = () => {
+    // 현재 공부 내용이 이미 학습 db에 있으면 즐겨찾기 모달을 띄우지 않고 바로 홈으로 가는 페이지로 가기
+    // 첫 공부 내용이면 즐겨찾기 모달 띄우기
+    // api 연동하면서 하면 좋을 것 같음
+    SetBookmarkModal(true);
+  };
+
   return (
     <section
       className="listenVerse-layout flex flex-col w-full h-full items-center overflow-hidden
@@ -85,7 +92,7 @@ export default function ListenVerse() {
 
       <button
         type="button"
-        onClick={() => SetBookmarkModal(true)}
+        onClick={handleBookmarkModal}
         aria-label="홈으로 이동"
         className={`w-full shrink-0 bg-[#CCB5F0] flex items-center justify-center
           py-[clamp(0.625rem,3.3vw,0.8125rem)] rounded-[clamp(1rem,5vw,1.25rem)]

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import SwipeNav from "./_components/SwipeNav";
 import BeforeFinish from "./BeforeFinish";
@@ -8,8 +9,13 @@ import AfterFinish from "./AfterFinish";
 import Bookmark from "./Bookmark";
 
 export default function DashBoard() {
-  const [done, setDone] = useState(true);
+  const router = useRouter();
+  const [done, setDone] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleAccessToStorage = () => {
+    router.push(`/dashboard/storage?isDone=${done}`);
+  };
 
   return (
     <section
@@ -28,6 +34,7 @@ export default function DashBoard() {
               "
       >
         <Icon
+          onClick={handleAccessToStorage}
           icon="tabler:archive-filled"
           className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
         />

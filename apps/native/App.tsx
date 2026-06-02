@@ -68,7 +68,7 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/study/30/7` }}
+      source={{ uri: `${IP_URL}/dashboard/` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"

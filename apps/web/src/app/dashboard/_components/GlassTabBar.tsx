@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 const SWIPE_THRESHOLD = 20;
 
 export default function GlassTabBar({ tabs, activeIndex, onChange }: Props) {
+  const router = useRouter();
   const startX = useRef<number | null>(null);
   const moved = useRef(false);
 

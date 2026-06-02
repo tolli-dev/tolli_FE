@@ -4,8 +4,10 @@ export default function MainDashBoardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col h-full justify-center items-start">
-      <div className="flex flex-col flex-1 w-full h-full">{children}</div>
+    <div className="flex flex-col h-dvh overflow-hidden justify-center items-start">
+      <div className="flex flex-col flex-1 w-full h-full min-h-0">
+        {children}
+      </div>
     </div>
   );
 }

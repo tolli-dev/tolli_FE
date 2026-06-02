@@ -86,6 +86,20 @@ body:has(.listenVerse-layout) {
   background: linear-gradient(to bottom, #ccb5f0 0%, #ffffff 100%);
 }
 
+.bookmarks::-webkit-scrollbar {
+  width: 7px;
+}
+
+.bookmarks::-webkit-scrollbar-thumb {
+  height: 30%;
+  background: #b282ff66;
+  border-radius: 10px;
+}
+
+.bookmarks::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 /* H1 — Semibold, 28/40, -7% */
 .text-h1 {
   font-size: 1.75rem;

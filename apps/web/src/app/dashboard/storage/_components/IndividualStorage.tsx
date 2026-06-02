@@ -24,15 +24,15 @@ export default function IndividualStorage({ value }: Props) {
       <h3 className="font-semibold text-[clamp(0.875rem,4vw,1rem)] leading-[1.25] text-[#171717] mb-[clamp(0.5rem,2.5vw,0.6875rem)]">
         {value.verse.reference}
       </h3>
-      <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535] mb-[12px] break-keep">
+      <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535] mb-[clamp(0.5rem,3vw,0.75rem)] break-keep">
         {value.verse.fullText}
       </p>
       <div className="flex justify-end">
         <button
           className="
-            w-fit 
-            bg-[#6F6F6F] rounded-[20px] px-[19px] py-[5px]
-            font-medium text-[12px] leading-[23px] tracking-[-2%] text-[#CCB5F0]"
+            w-fit rounded-full
+            bg-[#6F6F6F] px-[clamp(0.875rem,4.5vw,1.1875rem)] py-[clamp(0.25rem,1.5vw,0.3125rem)]
+            font-medium text-[clamp(0.6875rem,3vw,0.75rem)] leading-[1.4] tracking-[-2%] text-[#CCB5F0]"
         >
           다시 떠올리기
         </button>

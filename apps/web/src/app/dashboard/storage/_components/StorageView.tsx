@@ -55,7 +55,7 @@ export default function StorageView({ done, completedVerses }: Props) {
             <Icon
               aria-hidden
               icon="tabler:search"
-              className="pointer-events-none absolute left-[12px] top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[#B2B2B2]"
+              className="pointer-events-none absolute left-[0.75rem] top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[#B2B2B2]"
             />
             <input
               onChange={(e) => handleSearch(e.target.value)}
@@ -65,7 +65,7 @@ export default function StorageView({ done, completedVerses }: Props) {
               className="
                 w-full h-[clamp(1.875rem,8vw,2.25rem)] rounded-full 
                 border border-[#B2B2B2] bg-transparent 
-                pl-[34px] pr-[14px] text-[clamp(0.75rem,3.5vw,0.875rem)] text-[#353535] 
+                pl-[2.125rem] pr-[0.875rem] text-[clamp(0.75rem,3.5vw,0.875rem)] text-[#353535] 
                 placeholder:text-[#B2B2B2] focus:outline-none focus:border-[#CCB5F0]"
             />
           </div>

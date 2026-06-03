@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 
-const BAR_COUNT = 12; // 막대 개수
+const BAR_COUNT = 6; // 막대 개수
 const MIN_FREQ = 40; // 목소리 하한 (성인 남성 저음)
 const MAX_FREQ = 1500; // 목소리 상한 (여성 + 주요 포먼트)
 const SENSITIVITY = 1.2; // 민감도 (클수록 작은 소리에도 막대가 큼)

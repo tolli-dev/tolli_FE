@@ -26,4 +26,23 @@ export function useRecord() {
 
     setIsRecording(true);
   }, []);
+
+  const stop = useCallback(async (): Promise<Blob> => {
+    const recorder = mediaRecorderRef.current;
+
+    const blob = await new Promise<Blob>((resolve) => {
+      if (!recorder) return resolve(new Blob());
+      recorder.onstop = () =>
+        resolve(new Blob(chunksRef.current, { type: recorder.mimeType }));
+      recorder.stop();
+    });
+
+    if (timerRef.current) clearInterval(timerRef.current);
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+
+    setIsRecording(false);
+    return blob;
+  }, []);
+
+  return { elapsed, isRecording, start, stop };
 }

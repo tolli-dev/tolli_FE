@@ -18,6 +18,7 @@ export default function Record() {
   const [showVerse, setShowVerse] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { elapsed, start, stop, levels } = useRecord();
+  const [needSettings, setNeedSettings] = useState(false);
 
   // start()를 통해 녹음 기능을 시작한다.
   // 그와 더해 관련 상태를 변화시킨다.
@@ -27,14 +28,8 @@ export default function Record() {
       setPhase("recording");
       setDisabled(true);
       setTimeout(() => setDisabled(false), 5000);
-    } catch (e) {
-      const err = e as { name?: string; message?: string };
-      console.log(
-        "[beginRecording] start failed:",
-        err?.name,
-        "-",
-        err?.message,
-      );
+    } catch (e: any) {
+      if (e?.name === "NotAllowedError") setNeedSettings(true);
       // 나중에 vercel 배포 후에 수정 필요
       setPhase("idle");
     }
@@ -46,9 +41,16 @@ export default function Record() {
       // RN이 보낸 JSON 문자열만 처리 (HMR/DevTools 등 객체 메시지는 무시)
       if (typeof e.data !== "string") return;
       try {
-        const { type, granted } = JSON.parse(e.data);
+        const { type, status } = JSON.parse(e.data);
         if (type === "RECORD_PERMISSION") {
-          if (granted) beginRecording();
+          if (status === "granted") {
+            setNeedSettings(false);
+            beginRecording();
+          } else if (status === "denied") {
+            setNeedSettings(true);
+          } else {
+            setNeedSettings(true);
+          }
           // 거부되면 거부 메시지 안내 처리
         }
       } catch {
@@ -98,6 +100,12 @@ export default function Record() {
     return <RecordComplete retryRecording={retryRecording} />;
   }
 
+  const openAppSettings = () => {
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "OPEN_APP_SETTINGS" }),
+    );
+  };
+
   return (
     <section className="flex flex-col w-full h-full overflow-hidden pt-8.75 pb-4 px-10.5">
       <header>
@@ -132,7 +140,7 @@ export default function Record() {
             className={`w-[14.18vw] h-[9.20vw] rounded-[4.60vw] ${
               showVerse
                 ? "bg-[#B09ECC]"
-                : " border-1 border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20"
+                : "border-1 border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20"
             }`}
           >
             <div className="flex flex-col items-center justify-center w-full px-[4.23vw] py-[1.74vw] bg-[#787878]/20 rounded-[4.60vw]">
@@ -165,6 +173,46 @@ export default function Record() {
           />
         )}
       </footer>
+      {needSettings && (
+        <div
+          onClick={() => setNeedSettings(false)}
+          className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 bg-[#000000]/60"
+        >
+          <div className="flex items-center justify-center min-h-screen w-full px-[clamp(0.875rem,5vw,1.25rem)]">
+            <div className="w-full max-w-90 rounded-[clamp(1rem,6vw,1.5rem)] bg-linear-to-br from-white/30 via-white/15 to-white/20 p-px">
+              <div className="flex flex-col items-center justify-center w-full py-[clamp(1rem,6vw,1.5rem)] px-[clamp(1rem,6vw,1.5rem)] bg-bg rounded-[clamp(1rem,6vw,1.5rem)]">
+                <p className="font-semibold text-[clamp(1rem,4.75vw,1.1875rem)] leading-[clamp(1.5rem,7.75vw,1.9375rem)] text-[#CCB5F0] mb-[clamp(0.75rem,4.5vw,1.125rem)]">
+                  마이크 권한이 꺼져 있어요. 녹음하려면 설정에서 허용해주세요.
+                </p>
+                <div className="flex flex-col w-full gap-[clamp(0.375rem,2vw,0.5rem)]">
+                  <button
+                    onClick={openAppSettings}
+                    className="
+                    w-full rounded-[clamp(0.875rem,5vw,1.25rem)]
+                    py-[clamp(0.5rem,3vw,0.75rem)]
+                    font-semibold text-bg bg-[#CCB5F0]
+                    text-[clamp(0.8125rem,3.75vw,0.9375rem)]
+                    leading-[clamp(1.25rem,6.25vw,1.5625rem)]"
+                  >
+                    설정 열기
+                  </button>
+                  <button
+                    onClick={() => setNeedSettings(false)}
+                    className="
+                    w-full rounded-[clamp(0.875rem,5vw,1.25rem)]
+                    py-[clamp(0.5rem,3vw,0.75rem)]
+                    font-semibold text-bg bg-[#D9D9D9]
+                    text-[clamp(0.8125rem,3.75vw,0.9375rem)]
+                    leading-[clamp(1.25rem,6.25vw,1.5625rem)]"
+                  >
+                    닫기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

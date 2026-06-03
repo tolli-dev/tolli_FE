@@ -5,6 +5,7 @@ import {
   StatusBar,
   NativeModules,
   PermissionsAndroid,
+  Linking,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import type {
@@ -65,17 +66,28 @@ export default function App() {
           const result = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
           );
+          let status: "granted" | "denied" | "blocked";
+
+          if (result === PermissionsAndroid.RESULTS.GRANTED) status = "granted";
+          else if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN)
+            status = "blocked";
+          else status = "denied";
+
           webviewRef.current?.postMessage(
             JSON.stringify({
               type: "RECORD_PERMISSION",
-              granted: result === "granted",
+              status,
             }),
           );
         } else {
           webviewRef.current?.postMessage(
-            JSON.stringify({ type: "RECORD_PERMISSION", granted: true }),
+            JSON.stringify({ type: "RECORD_PERMISSION", status: "granted" }),
           );
         }
+      }
+
+      if (data.type === "OPEN_APP_SETTINGS") {
+        Linking.openSettings();
       }
     } catch (error: any) {
       if (

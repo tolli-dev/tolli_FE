@@ -6,11 +6,13 @@ export default function RecordBarContainer({
   description,
   recordIcon: RecordIcon,
   soundBar,
+  levels,
 }: {
   showVerse: boolean;
   description?: string;
   recordIcon?: () => JSX.Element;
   soundBar: string;
+  levels?: number[];
 }) {
   return (
     <>
@@ -22,6 +24,7 @@ export default function RecordBarContainer({
               description={description}
               recordIcon={RecordIcon}
               soundBar={soundBar}
+              levels={levels}
             />
           )}
         </div>

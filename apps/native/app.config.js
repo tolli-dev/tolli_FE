@@ -43,6 +43,22 @@ export default {
           googleServicesFile: "./android/app/google-services.json",
         },
       ],
+      [
+        "@react-native-seoul/kakao-login",
+        {
+          kakaoAppKey: process.env.KAKAO_APP_KEY,
+        },
+      ],
+      [
+        "expo-build-properties",
+        {
+          android: {
+            extraMavenRepos: [
+              "https://devrepo.kakao.com/nexus/content/groups/public/",
+            ],
+          },
+        },
+      ],
     ],
     extra: {
       googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,

@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Platform,
   StatusBar,
-  NativeModules,
   PermissionsAndroid,
   Linking,
 } from "react-native";
@@ -18,6 +17,7 @@ import { signInWithGoogle } from "./auth/googleSignIn";
 import { signInWithApple } from "./auth/appleSignIn";
 import { IP_URL } from "../web/src/constants/url";
 import { KakaoOAuthToken, login } from "@react-native-seoul/kakao-login";
+import { getCornerRadius } from "./modules/corner-radius";
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
@@ -53,7 +53,7 @@ export default function App() {
       }
 
       if (data.type === "WEB_READY") {
-        const radius = await NativeModules.CornerRadiusModule.getCornerRadius();
+        const radius = await getCornerRadius();
         const cssRadius =
           Platform.OS === "android" ? Math.round(radius * 0.3) : radius;
         webviewRef.current?.postMessage(
@@ -104,7 +104,7 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/study/30/7` }}
+      source={{ uri: `${IP_URL}/study/loading` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"

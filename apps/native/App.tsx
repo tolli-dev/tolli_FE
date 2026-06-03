@@ -1,5 +1,11 @@
 import { useRef } from "react";
-import { StyleSheet, Platform, StatusBar, NativeModules } from "react-native";
+import {
+  StyleSheet,
+  Platform,
+  StatusBar,
+  NativeModules,
+  PermissionsAndroid,
+} from "react-native";
 import { WebView } from "react-native-webview";
 import type {
   WebView as WebViewType,
@@ -48,10 +54,28 @@ export default function App() {
       if (data.type === "WEB_READY") {
         const radius = await NativeModules.CornerRadiusModule.getCornerRadius();
         const cssRadius =
-          Platform.OS === "android" ? Math.round(radius * 0.5) : radius;
+          Platform.OS === "android" ? Math.round(radius * 0.3) : radius;
         webviewRef.current?.postMessage(
           JSON.stringify({ type: "DEVICE_CORNER_RADIUS", value: cssRadius }),
         );
+      }
+
+      if (data.type === "RECORD_READY") {
+        if (Platform.OS === "android") {
+          const result = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          );
+          webviewRef.current?.postMessage(
+            JSON.stringify({
+              type: "RECORD_PERMISSION",
+              granted: result === "granted",
+            }),
+          );
+        } else {
+          webviewRef.current?.postMessage(
+            JSON.stringify({ type: "RECORD_PERMISSION", granted: true }),
+          );
+        }
       }
     } catch (error: any) {
       if (
@@ -68,7 +92,7 @@ export default function App() {
   return (
     <WebView
       ref={webviewRef}
-      source={{ uri: `${IP_URL}/study/30/7` }}
+      source={{ uri: `${IP_URL}/study/loading` }}
       style={styles.container}
       onMessage={handleMessage}
       contentInsetAdjustmentBehavior="never"
@@ -78,6 +102,8 @@ export default function App() {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       allowsLinkPreview={false}
+      // 마이크 WebView 레이어 권한
+      mediaCapturePermissionGrantType="grant"
     />
   );
 }

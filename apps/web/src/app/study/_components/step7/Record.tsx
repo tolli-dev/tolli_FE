@@ -17,6 +17,10 @@ export default function Record() {
   const [disabled, setDisabled] = useState(false);
 
   const startRecording = () => {
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "RECORD_READY" }),
+    );
+
     setPhase("recording");
     setDisabled(true);
     setTimeout(() => setDisabled(false), 5000);

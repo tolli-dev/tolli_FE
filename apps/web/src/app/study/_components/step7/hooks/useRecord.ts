@@ -44,5 +44,5 @@ export function useRecord() {
     return blob;
   }, []);
 
-  return { elapsed, isRecording, start, stop };
+  return { elapsed, start, stop };
 }

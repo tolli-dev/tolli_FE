@@ -6,27 +6,62 @@ import RecordCircle from "./_components/RecordCircle";
 import ActiveSoundBar from "../../../../../public/images/activeSoundBar.svg";
 import NotActiveSoundbar from "../../../../../public/images/NotActiveSoundbar.svg";
 import RecordButton from "./_components/button/RecordButton";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Step7Phase } from "./_types";
 import { Icon } from "@iconify/react";
 import RecordComplete from "./RecordComplete";
+import { useRecord } from "./hooks/useRecord";
+import { formatTime } from "./_utils/formatTime";
 
 export default function Record() {
   const [phase, setPhase] = useState<Step7Phase>("idle");
   const [showVerse, setShowVerse] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const { elapsed, start, stop } = useRecord();
 
+  // start()를 통해 녹음 기능을 시작한다.
+  // 그와 더해 관련 상태를 변화시킨다.
+  const beginRecording = useCallback(async () => {
+    try {
+      await start();
+      setPhase("recording");
+      setDisabled(true);
+      setTimeout(() => setDisabled(false), 5000);
+    } catch {
+      setPhase("idle");
+    }
+  }, [start]);
+
+  // startRecording() 응답 결과가 마이크 권한 허용이면 녹음 로직 시작
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      try {
+        const { type, granted } = JSON.parse(e.data);
+        if (type === "RECORD_PERMISSION") {
+          if (granted) beginRecording();
+          // 거부되면 거부 메시지 안내 처리
+        }
+      } catch {}
+    };
+
+    window.addEventListener("message", handleMessage);
+    document.addEventListener("message", handleMessage as EventListener);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+      document.removeEventListener("message", handleMessage as EventListener);
+    };
+  }, [beginRecording]);
+
+  // 녹음 시작하기 누르면 RN으로 마이크 권한 요청 전송함
   const startRecording = () => {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "RECORD_READY" }),
     );
-
-    setPhase("recording");
-    setDisabled(true);
-    setTimeout(() => setDisabled(false), 5000);
   };
 
-  const stopRecording = () => {
+  // 녹음 중단되면 멈춘다.
+  const stopRecording = async () => {
+    await stop();
     setPhase("complete");
   };
 
@@ -67,7 +102,7 @@ export default function Record() {
             showVerse={showVerse}
             soundBar={ActiveSoundBar}
             recordIcon={RecordCircle}
-            description="00:12"
+            description={formatTime(elapsed)}
           />
         )}
 

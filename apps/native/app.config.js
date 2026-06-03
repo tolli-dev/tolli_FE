@@ -26,10 +26,7 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
-      permissions: [
-        android.permissions.RECORD_AUDIO,
-        android.permissions.MODIFY_AUDIO_SETTINGS,
-      ],
+      permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
     },

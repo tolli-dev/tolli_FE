@@ -27,8 +27,10 @@ export default function Record() {
       setPhase("recording");
       setDisabled(true);
       setTimeout(() => setDisabled(false), 5000);
-    } catch {
-      setPhase("idle");
+    } catch (e) {
+      console.log("[beginRecording] start failed:", e);
+      // 나중에 vercel 배포 후에 수정 필요
+      setPhase("recording");
     }
   }, [start]);
 
@@ -41,7 +43,9 @@ export default function Record() {
           if (granted) beginRecording();
           // 거부되면 거부 메시지 안내 처리
         }
-      } catch {}
+      } catch {
+        console.log("error");
+      }
     };
 
     window.addEventListener("message", handleMessage);

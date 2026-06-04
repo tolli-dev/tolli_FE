@@ -5,6 +5,9 @@ import Image from 'next/image';
 import Form from 'next/form';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createUser } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
+import { fireAuth } from '@/firebase/fireAuth';
 
 const getValidationResult = (name: string) => {
   const blankRegex = /\s/g;
@@ -24,11 +27,37 @@ export default function Page() {
   const { state, message } = getValidationResult(name);
   const router = useRouter();
 
-  const handleSubmit = () => {
-    console.log('서버로 닉네임 전송');
-    if (state) {
-      router.push(`/afterLogin/greeting/${name}`);
+  const handleSubmit = async () => {
+    if (!state) return;
+
+    const termsAgreedAt = sessionStorage.getItem('termsAgreedAt') ?? '';
+    const privacyAgreedAt = sessionStorage.getItem('privacyAgreedAt') ?? '';
+    const emailMarketingAgreed = sessionStorage.getItem('emailMarketingAgreed') === 'true';
+    const emailMarketingAgreedAt = sessionStorage.getItem('emailMarketingAgreedAt') || null;
+
+    await createUser(dataConnect, {
+      nickname: name,
+      termsAgreedAt,
+      privacyAgreedAt,
+      emailMarketingAgreed,
+      emailMarketingAgreedAt,
+    });
+
+    sessionStorage.removeItem('termsAgreedAt');
+    sessionStorage.removeItem('privacyAgreedAt');
+    sessionStorage.removeItem('emailMarketingAgreed');
+    sessionStorage.removeItem('emailMarketingAgreedAt');
+
+    const idToken = await fireAuth.currentUser?.getIdToken();
+    if (idToken) {
+      await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken }),
+      });
     }
+
+    router.push(`/afterLogin/greeting/${name}`);
   };
 
   return (

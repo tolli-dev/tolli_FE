@@ -2,14 +2,19 @@ import Image from "next/image";
 import FullHappyTolli from "../../../public/images/onBoarding/fullHappyTolli.svg";
 import NoiseOverlay from "./_components/NoiseOverlay";
 import GrainBorder from "./_components/_GrainBorder";
+import DashboardHeader from "./_components/DashboardHeader";
+import SwipeNav from "./_components/SwipeNav";
 
 export default function AfterFinish() {
   return (
-    <main className="flex flex-1 flex-col items-center w-full">
-      <div className="flex flex-col w-full">
-        <h1 className="text-dashboard-h1">몽디님,</h1>
-        <h1 className="text-dashboard-h1">안녕하세요!</h1>
-      </div>
+    <>
+      <DashboardHeader nickname="몽디" />
+      
+       <main className="flex flex-1 flex-col items-center w-full">
+        <div className="flex flex-col w-full">
+          <h1 className="text-dashboard-h1">몽디님,</h1>
+          <h1 className="text-dashboard-h1">안녕하세요!</h1>
+        </div>
 
       <Image
         src={FullHappyTolli}

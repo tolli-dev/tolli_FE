@@ -47,6 +47,11 @@ export default function TermsPage() {
   };
 
   const handleNext = () => {
+    const agreedAt = new Date().toISOString();
+    sessionStorage.setItem('termsAgreedAt', agreedAt);
+    sessionStorage.setItem('privacyAgreedAt', agreedAt);
+    sessionStorage.setItem('emailMarketingAgreed', String(checked.marketing));
+    sessionStorage.setItem('emailMarketingAgreedAt', checked.marketing ? agreedAt : '');
     router.push('/welcome');
   };
 

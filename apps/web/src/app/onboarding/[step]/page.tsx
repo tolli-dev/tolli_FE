@@ -37,8 +37,15 @@ export default function OnboardingStepPage() {
   const current = STEPS[step - 1];
   const isLastStep = step === TOTAL_STEPS;
 
+  const notifyOnboardingComplete = () => {
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: 'ONBOARDING_COMPLETE' })
+    );
+  };
+
   const handleNext = () => {
     if (isLastStep) {
+      notifyOnboardingComplete();
       router.push('/login');
     } else {
       router.push(`/onboarding/${step + 1}`);
@@ -46,6 +53,7 @@ export default function OnboardingStepPage() {
   };
 
   const handleSkip = () => {
+    notifyOnboardingComplete();
     router.push('/login');
   };
 

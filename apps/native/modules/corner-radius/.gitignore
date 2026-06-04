@@ -1,0 +1,5 @@
+# Native build artifacts
+android/build/
+android/.cxx/
+ios/build/
+ios/Pods/

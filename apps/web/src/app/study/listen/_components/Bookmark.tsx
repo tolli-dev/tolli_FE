@@ -1,8 +1,19 @@
 import Image from "next/image";
-import ReadingBookTolli from "../../../../public/tolli1.svg";
-import SetBookmarkButton from "../_components/step7/_components/button/SetBookmarkButton";
+import ReadingBookTolli from "../../../../../public/tolli1.svg";
+import SetBookmarkButton from "./SetBookmarkButton";
+import { useRouter } from "next/navigation";
 
 export default function Bookmark() {
+  const router = useRouter();
+
+  const handleYes = () => {
+    router.push("/study/completeListening?type=yes");
+  };
+
+  const handleNo = () => {
+    router.push("/study/completeListening?type=no");
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen w-full px-[clamp(0.875rem,5vw,1.25rem)]">
       <div className="w-full max-w-90 rounded-[clamp(1rem,6vw,1.5rem)] bg-linear-to-br from-white/30 via-white/15 to-white/20 p-px">
@@ -28,8 +39,16 @@ export default function Bookmark() {
             </p>
           </div>
           <div className="flex flex-col w-full gap-[clamp(0.375rem,2vw,0.5rem)]">
-            <SetBookmarkButton text="네!" color="#CCB5F0" />
-            <SetBookmarkButton text="다음에 할게요!" color="#D9D9D9" />
+            <SetBookmarkButton
+              text="네!"
+              color="#CCB5F0"
+              handleClick={handleYes}
+            />
+            <SetBookmarkButton
+              text="다음에 할게요!"
+              color="#D9D9D9"
+              handleClick={handleNo}
+            />
           </div>
         </div>
       </div>

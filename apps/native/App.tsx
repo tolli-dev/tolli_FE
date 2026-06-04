@@ -1,12 +1,20 @@
+import {
+  StyleSheet,
+  Platform,
+  StatusBar,
+  PermissionsAndroid,
+  Linking,
+} from "react-native";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Constants from "expo-constants";
+import { signInWithGoogle } from "./auth/googleSignIn";
+import { signInWithApple } from "./auth/appleSignIn";
+import { IP_URL } from "../web/src/constants/url";
+import { getCornerRadius } from "./modules/corner-radius";
 import { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Platform, StatusBar, NativeModules, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import { signInWithGoogle } from './auth/googleSignIn';
-import { signInWithApple } from './auth/appleSignIn';
 import { IP_URL } from '../web/src/constants/url';
 import { KakaoOAuthToken, login, getProfile as getKakaoProfile } from '@react-native-seoul/kakao-login';
 import { checkFirstLaunch, markFirstLaunchDone } from './utils/checkFirstLaunch';
@@ -70,13 +78,42 @@ export default function App() {
         }
       }
 
-      if (data.type === 'WEB_READY') {
-        const radius = await NativeModules.CornerRadiusModule.getCornerRadius();
-        const cssRadius = Platform.OS === 'android' ? Math.round(radius * 0.5) : radius;
+      if (data.type === "WEB_READY") {
+        const radius = await getCornerRadius();
+        const cssRadius =
+          Platform.OS === "android" ? Math.round(radius * 0.3) : radius;
         webviewRef.current?.postMessage(
           JSON.stringify({ type: 'DEVICE_CORNER_RADIUS', value: cssRadius }),
         );
       }
+
+      if (data.type === "RECORD_READY") {
+        if (Platform.OS === "android") {
+          const result = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          );
+          let status: "granted" | "denied" | "blocked";
+
+          if (result === PermissionsAndroid.RESULTS.GRANTED) status = "granted";
+          else if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN)
+            status = "blocked";
+          else status = "denied";
+
+          webviewRef.current?.postMessage(
+            JSON.stringify({
+              type: "RECORD_PERMISSION",
+              status,
+            }),
+          );
+        } else {
+          webviewRef.current?.postMessage(
+            JSON.stringify({ type: "RECORD_PERMISSION", status: "granted" }),
+          );
+        }
+      }
+
+      if (data.type === "OPEN_APP_SETTINGS") {
+        Linking.openSettings();
 
       if (data.type === 'ONBOARDING_COMPLETE') {
         await markFirstLaunchDone();
@@ -162,6 +199,8 @@ export default function App() {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       allowsLinkPreview={false}
+      // 마이크 WebView 레이어 권한
+      mediaCapturePermissionGrantType="grant"
     />
   );
 }

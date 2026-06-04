@@ -1,22 +1,19 @@
-import {
-  StyleSheet,
-  Platform,
-  StatusBar,
-  PermissionsAndroid,
-  Linking,
-} from "react-native";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import Constants from "expo-constants";
-import { signInWithGoogle } from "./auth/googleSignIn";
-import { signInWithApple } from "./auth/appleSignIn";
-import { IP_URL } from "../web/src/constants/url";
-import { getCornerRadius } from "./modules/corner-radius";
+import { StyleSheet, Platform, StatusBar, PermissionsAndroid, Linking } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
+import { signInWithGoogle } from './auth/googleSignIn';
+import { signInWithApple } from './auth/appleSignIn';
+import { getCornerRadius } from './modules/corner-radius';
 import { useRef, useState, useEffect } from 'react';
 import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
 import * as Notifications from 'expo-notifications';
 import { IP_URL } from '../web/src/constants/url';
-import { KakaoOAuthToken, login, getProfile as getKakaoProfile } from '@react-native-seoul/kakao-login';
+import {
+  KakaoOAuthToken,
+  login,
+  getProfile as getKakaoProfile,
+} from '@react-native-seoul/kakao-login';
 import { checkFirstLaunch, markFirstLaunchDone } from './utils/checkFirstLaunch';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -78,42 +75,41 @@ export default function App() {
         }
       }
 
-      if (data.type === "WEB_READY") {
+      if (data.type === 'WEB_READY') {
         const radius = await getCornerRadius();
-        const cssRadius =
-          Platform.OS === "android" ? Math.round(radius * 0.3) : radius;
+        const cssRadius = Platform.OS === 'android' ? Math.round(radius * 0.3) : radius;
         webviewRef.current?.postMessage(
           JSON.stringify({ type: 'DEVICE_CORNER_RADIUS', value: cssRadius }),
         );
       }
 
-      if (data.type === "RECORD_READY") {
-        if (Platform.OS === "android") {
+      if (data.type === 'RECORD_READY') {
+        if (Platform.OS === 'android') {
           const result = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
           );
-          let status: "granted" | "denied" | "blocked";
+          let status: 'granted' | 'denied' | 'blocked';
 
-          if (result === PermissionsAndroid.RESULTS.GRANTED) status = "granted";
-          else if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN)
-            status = "blocked";
-          else status = "denied";
+          if (result === PermissionsAndroid.RESULTS.GRANTED) status = 'granted';
+          else if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) status = 'blocked';
+          else status = 'denied';
 
           webviewRef.current?.postMessage(
             JSON.stringify({
-              type: "RECORD_PERMISSION",
+              type: 'RECORD_PERMISSION',
               status,
             }),
           );
         } else {
           webviewRef.current?.postMessage(
-            JSON.stringify({ type: "RECORD_PERMISSION", status: "granted" }),
+            JSON.stringify({ type: 'RECORD_PERMISSION', status: 'granted' }),
           );
         }
       }
 
-      if (data.type === "OPEN_APP_SETTINGS") {
+      if (data.type === 'OPEN_APP_SETTINGS') {
         Linking.openSettings();
+      }
 
       if (data.type === 'ONBOARDING_COMPLETE') {
         await markFirstLaunchDone();
@@ -142,19 +138,24 @@ export default function App() {
         await Notifications.cancelAllScheduledNotificationsAsync();
       }
 
-
       if (data.type === 'OPEN_EXTERNAL_URL') {
         await Linking.openURL(data.url);
       }
 
       if (data.type === 'SAVE_ALARM_TIME') {
-        await AsyncStorage.setItem('alarmTime', JSON.stringify({ hour: data.hour, minute: data.minute }));
+        await AsyncStorage.setItem(
+          'alarmTime',
+          JSON.stringify({ hour: data.hour, minute: data.minute }),
+        );
       }
 
       if (data.type === 'GET_ALARM_TIME') {
         const stored = await AsyncStorage.getItem('alarmTime');
         webviewRef.current?.postMessage(
-          JSON.stringify({ type: 'ALARM_TIME', ...(stored ? JSON.parse(stored) : { hour: null, minute: null }) }),
+          JSON.stringify({
+            type: 'ALARM_TIME',
+            ...(stored ? JSON.parse(stored) : { hour: null, minute: null }),
+          }),
         );
       }
 

@@ -17,14 +17,19 @@ type ModalType = 'logout' | 'withdraw' | 'rename' | null;
 
 type Props = {
   nickname?: string;
+  done?: boolean;
 };
 
-export default function DashboardHeader({ nickname }: Props) {
+export default function DashboardHeader({ nickname, done = false }: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [modal, setModal] = useState<ModalType>(null);
   const [renameValue, setRenameValue] = useState(nickname ?? '');
   const [renameError, setRenameError] = useState(false);
   const router = useRouter();
+
+  const handleAccessToStorage = () => {
+    router.push(`/dashboard/storage?isDone=${done}`);
+  };
 
   const handleLogout = async () => {
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_OUT' }));
@@ -173,6 +178,7 @@ export default function DashboardHeader({ nickname }: Props) {
         "
       >
         <Icon
+          onClick={handleAccessToStorage}
           icon="tabler:archive-filled"
           className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
         />

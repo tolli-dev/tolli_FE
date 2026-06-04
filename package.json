@@ -2,6 +2,11 @@
   "name": "tolli",
   "private": true,
   "packageManager": "pnpm@9.0.0",
+  "pnpm": {
+    "overrides": {
+      "firebase": "12.13.0"
+    }
+  },
   "scripts": {
     "web": "pnpm --filter web dev",
     "web:prod": "pnpm --filter web build && pnpm --filter web start",

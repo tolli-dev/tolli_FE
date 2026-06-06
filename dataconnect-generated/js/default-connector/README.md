@@ -230,6 +230,8 @@ export interface GetMyCurrentVerseData {
   todayCompletion: ({
     verse: {
       id: number;
+      reference: string;
+      fullText: string;
     } & Verse_Key;
   })[];
     lastCompletion: ({

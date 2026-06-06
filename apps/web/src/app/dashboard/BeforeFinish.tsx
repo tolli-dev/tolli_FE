@@ -6,7 +6,7 @@ import NoiseOverlay from './_components/NoiseOverlay';
 import GrainBorder from './_components/_GrainBorder';
 import { useRouter } from 'next/navigation';
 
-export default function BeforeFinish() {
+export default function BeforeFinish({ nickname }: { nickname: string }) {
   const router = useRouter();
 
   const getTodayMission = () => {
@@ -18,7 +18,7 @@ export default function BeforeFinish() {
   return (
     <main className="flex flex-1 flex-col items-center w-full">
         <div className="flex flex-col w-full">
-          <h1 className="text-dashboard-h1">몽디님,</h1>
+          <h1 className="text-dashboard-h1">{nickname}님,</h1>
           <h1 className="text-dashboard-h1">안녕하세요!</h1>
         </div>
 

@@ -3,7 +3,9 @@ import FullHappyTolli from '../../../public/images/onBoarding/fullHappyTolli.svg
 import NoiseOverlay from './_components/NoiseOverlay';
 import GrainBorder from './_components/_GrainBorder';
 
-export default function AfterFinish() {
+type TodayVerse = { id: number; reference: string; fullText: string } | null;
+
+export default function AfterFinish({ todayVerse }: { todayVerse: TodayVerse }) {
   return (
     <main className="flex flex-1 flex-col items-center w-full">
         <div className="flex flex-col w-full">
@@ -47,12 +49,11 @@ export default function AfterFinish() {
           </h3>
 
           <div className="mb-[clamp(0.375rem,2vw,0.625rem)]">
-            <p className="relative z-10 text-dashboard-article-p">여호와는 나의 목자시니</p>
-            <p className="relative z-10 text-dashboard-article-p">내가 부족함이 없으리로다</p>
+            <p className="relative z-10 text-dashboard-article-p">{todayVerse?.fullText}</p>
           </div>
 
           <div className="relative z-10 w-full flex justify-end">
-            <span className="text-dashboard-article-span">시편 23:1</span>
+            <span className="text-dashboard-article-span">{todayVerse?.reference}</span>
           </div>
         </article>
 

@@ -19,7 +19,6 @@ export default function MultipleChoiceView({
   verseId,
 }: MultipleChoiceViewProps) {
   const router = useRouter();
-  const [started, setStarted] = useState(step !== 2);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [wrongChoice, setWrongChoice] = useState<string | null>(null);
 
@@ -69,26 +68,14 @@ export default function MultipleChoiceView({
         <p className="text-center text-[clamp(1rem,4.5vw,1.25rem)] font-medium leading-6 tracking-[0.03em] text-[#CCB5F0]">
           {verse.reference}
         </p>
-        {!started ? (
-          <MaskedVerse words={verse.words} />
-        ) : (
-          <MaskedVerse
-            words={verse.words}
-            maskedIndices={stepMaskData.maskedIndices.filter((i) => !answers[i])}
-            answeredIndices={stepMaskData.maskedIndices.filter((i) => !!answers[i])}
-          />
-        )}
+        <MaskedVerse
+          words={verse.words}
+          maskedIndices={stepMaskData.maskedIndices.filter((i) => !answers[i])}
+          answeredIndices={stepMaskData.maskedIndices.filter((i) => !!answers[i])}
+        />
       </div>
       <div className="flex flex-col gap-4 px-11.25 min-h-50 mt-auto justify-end" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
-        {!started ? (
-          <button
-            onClick={() => setStarted(true)}
-            className="mt-auto py-1.75 mx-auto w-32 rounded-[20px] border border-[#CCB5F0] text-[1rem] text-[#FFFFFF] font-bold tracking-[0.03em]"
-            style={{ marginTop: 0, marginBottom: 'auto' }}
-          >
-            시작하기
-          </button>
-        ) : !allAnswered ? (
+        {!allAnswered ? (
           choices.map((choice) => (
             <button
               key={choice}

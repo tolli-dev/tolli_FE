@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
-export default function RecallIntroPage() {
+export default function Step2IntroPage() {
   const router = useRouter();
   const { verseId } = useParams<{ verseId: string }>();
   const [cornerRadius, setCornerRadius] = useState(0);
@@ -30,7 +30,7 @@ export default function RecallIntroPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push(`/study/${verseId}/6`);
+      router.push(`/study/${verseId}/2`);
     }, 3000);
     return () => clearTimeout(timer);
   }, [router, verseId]);
@@ -51,7 +51,7 @@ export default function RecallIntroPage() {
         }}
       />
       <p className="text-[1.5rem] leading-8.5 font-medium text-[#1A1A1A] text-center">
-        이제, 기억의 조각을 <br /> 맞춰보겠습니다.
+        굿! 이제 빈칸을 <br /> 맞춰주세요
       </p>
       <img src="/tolli1.svg" alt="Tolli" className="w-57 h-57 object-contain" />
       <style>{`

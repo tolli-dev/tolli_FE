@@ -17,7 +17,7 @@ export default function MaskedVerse({ words, maskedIndices = [], answeredIndices
           return (
             <span
               key={word.index}
-              className="relative px-1 text-[1.5rem] leading-11.5 select-none"
+              className="relative px-1 text-[clamp(1.5rem,6vw,2rem)] leading-[clamp(2.5rem,9vw,3.5rem)] select-none"
               style={{ color: 'transparent' }}
             >
               {word.text}
@@ -34,7 +34,7 @@ export default function MaskedVerse({ words, maskedIndices = [], answeredIndices
                   }}
                 >
                   <span
-                    className="whitespace-nowrap text-[1.5rem] leading-none"
+                    className="whitespace-nowrap text-[clamp(1.5rem,6vw,2rem)] leading-none"
                     style={{
                       color: 'rgba(204,181,240,0.9)',
                       filter: 'blur(6px)',
@@ -55,7 +55,7 @@ export default function MaskedVerse({ words, maskedIndices = [], answeredIndices
         }
 
         return (
-          <span key={word.index} className="px-1 text-[1.5rem] text-[#D7D2DF] leading-11.5">
+          <span key={word.index} className="px-1 text-[clamp(1.5rem,6vw,2rem)] text-[#D7D2DF] leading-[clamp(2.5rem,9vw,3.5rem)]">
             {word.text}
           </span>
         );

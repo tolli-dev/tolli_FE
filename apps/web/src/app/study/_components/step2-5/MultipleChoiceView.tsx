@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Verse, StepMaskData } from '../types';
 import MaskedVerse from './MaskedVerse';
@@ -21,6 +21,7 @@ export default function MultipleChoiceView({
   const router = useRouter();
   const [started, setStarted] = useState(step !== 2);
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [wrongChoice, setWrongChoice] = useState<string | null>(null);
 
   const answeredCount = Object.keys(answers).length;
   const currentMaskedWordIndex = stepMaskData.maskedIndices[answeredCount];
@@ -30,20 +31,25 @@ export default function MultipleChoiceView({
     const isCorrect = choice === correctText;
 
     if (isCorrect) {
+      setWrongChoice(null);
       setAnswers((prev) => ({ ...prev, [currentMaskedWordIndex]: choice }));
+    } else {
+      setWrongChoice(choice);
     }
   };
 
   const allAnswered = stepMaskData.maskedIndices.every((i) => answers[i]);
 
-  const correctText = verse.words.find((w) => w.index === currentMaskedWordIndex)?.text ?? '';
-  const pool = verse.words
-    .filter((w) => w.index !== currentMaskedWordIndex && w.text !== correctText)
-    .map((w) => w.text);
-  const uniquePool = [...new Set(pool)];
-  const shuffledPool = [...uniquePool].sort(() => Math.random() - 0.5);
-  const distractors = shuffledPool.slice(0, 2);
-  const choices = [correctText, ...distractors].sort(() => Math.random() - 0.5);
+  const choices = useMemo(() => {
+    const correctText = verse.words.find((w) => w.index === currentMaskedWordIndex)?.text ?? '';
+    const pool = verse.words
+      .filter((w) => w.index !== currentMaskedWordIndex && w.text !== correctText)
+      .map((w) => w.text);
+    const uniquePool = [...new Set(pool)];
+    const shuffledPool = [...uniquePool].sort(() => Math.random() - 0.5);
+    const distractors = shuffledPool.slice(0, 2);
+    return [correctText, ...distractors].sort(() => Math.random() - 0.5);
+  }, [answeredCount, verse]);
 
   useEffect(() => {
     if (allAnswered) {
@@ -57,8 +63,8 @@ export default function MultipleChoiceView({
 
   return (
     <section className="flex flex-col flex-1">
-      <div className="flex flex-col flex-1 justify-center gap-17 px-17">
-        <p className="text-center text-[1rem] font-medium leading-5 tracking-[0.03em] text-[#CCB5F0]">
+      <div className="flex flex-col mt-[clamp(5rem,20vh,10rem)] gap-[clamp(2rem,8vw,4.25rem)] px-[clamp(1.5rem,9vw,4.25rem)]">
+        <p className="text-center text-[clamp(1rem,4.5vw,1.25rem)] font-medium leading-6 tracking-[0.03em] text-[#CCB5F0]">
           {verse.reference}
         </p>
         {!started ? (
@@ -71,7 +77,7 @@ export default function MultipleChoiceView({
           />
         )}
       </div>
-      <div className="flex flex-col gap-4 px-11.25 min-h-50 justify-end">
+      <div className="flex flex-col gap-4 px-11.25 min-h-50 mt-auto justify-end">
         {!started ? (
           <button
             onClick={() => setStarted(true)}
@@ -80,17 +86,18 @@ export default function MultipleChoiceView({
           >
             시작하기
           </button>
-        ) : (
+        ) : !allAnswered ? (
           choices.map((choice) => (
             <button
               key={choice}
               onClick={() => handleChoiceSelect(choice)}
               className="py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em]"
+              style={wrongChoice === choice ? { border: '0.5px solid #FF0000' } : undefined}
             >
               {choice}
             </button>
           ))
-        )}
+        ) : null}
       </div>
     </section>
   );

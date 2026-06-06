@@ -46,23 +46,13 @@ interface State {
   allDone: boolean;
 }
 
-type Action = { type: 'KEY'; key: string; targets: TypingTarget[] } | { type: 'DELETE' };
+type Action = { type: 'KEY'; key: string; targets: TypingTarget[] };
 
 // 입력 상태 전이: 모음 입력 시 초성 자동완성 + 받침 자동완성, 틀린 입력은 막음
 function reducer(state: State, action: Action): State {
   if (state.allDone) return state;
 
   const { targetIdx, typedChars, cho, completedIds } = state;
-
-  if (action.type === 'DELETE') {
-    if (cho) return { ...state, cho: '' };
-    if (typedChars.length > 0) {
-      const prev = typedChars[typedChars.length - 1];
-      const [prevCho] = isHangulChar(prev) ? decomposeHangul(prev) : [prev, '', ''];
-      return { ...state, typedChars: typedChars.slice(0, -1), cho: prevCho };
-    }
-    return state;
-  }
 
   const { key, targets } = action;
   const target = targets[targetIdx];
@@ -158,11 +148,6 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
     allDone: false,
   });
 
-  const [keyboardMode, setKeyboardMode] = useReducer(
-    (_: 'hangul' | 'number', next: 'hangul' | 'number') => next,
-    'hangul',
-  );
-
   const { targetIdx, typedChars, cho, completedIds, allDone } = state;
 
   useEffect(() => {
@@ -175,10 +160,10 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
   return (
     <section className="flex flex-col flex-1">
       <div
-        className="flex flex-col flex-1 justify-center gap-17 px-17"
+        className="flex flex-col mt-[clamp(5rem,20vh,10rem)] justify-center gap-[clamp(2rem,8vw,4.25rem)] px-[clamp(1.5rem,9vw,4.25rem)]"
         style={{ paddingBottom: '13rem' }}
       >
-        <p className="text-center text-[1rem] font-medium leading-5 tracking-[0.03em]">
+        <p className="text-center text-[clamp(1rem,4.5vw,1.25rem)] font-medium leading-6 tracking-[0.03em]">
           {renderWordChars(
             bookName,
             targetIdx === 0 ? typedChars : bookName.split(''),
@@ -197,7 +182,7 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
             const isCurrent = !allDone && targetIdx === wi + 1;
 
             return (
-              <span key={word.index} className="px-1 text-[1.5rem] leading-11.5">
+              <span key={word.index} className="px-1 text-[clamp(1.5rem,6vw,2rem)] leading-[clamp(2.5rem,9vw,3.5rem)]">
                 {renderWordChars(
                   word.text,
                   isCurrent ? typedChars : isCompleted || allDone ? word.text.split('') : [],
@@ -215,10 +200,6 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
       {!allDone && (
         <HangulKeyboard
           onKey={(key) => dispatch({ type: 'KEY', key, targets })}
-          onDelete={() => dispatch({ type: 'DELETE' })}
-          onSpace={() => {}}
-          mode={keyboardMode}
-          onModeChange={setKeyboardMode}
         />
       )}
     </section>

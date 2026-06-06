@@ -14,23 +14,8 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { getVerse, getMyCurrentVerse, getMyBookmarks, getMyCompletions, getMe, createUser, createStudyCompletion, addBookmark, deleteBookmark, updateNickname } from '@firebasegen/default-connector';
+import { createUser, createStudyCompletion, addBookmark, deleteBookmark, updateNickname, deleteUser, getVerse, getMyCurrentVerse, getMyBookmarks, getMyCompletions } from '@firebasegen/default-connector';
 
-
-// Operation GetVerse:  For variables, look at type GetVerseVars in ../index.d.ts
-const { data } = await GetVerse(dataConnect, getVerseVars);
-
-// Operation GetMyCurrentVerse: 
-const { data } = await GetMyCurrentVerse(dataConnect);
-
-// Operation GetMyBookmarks: 
-const { data } = await GetMyBookmarks(dataConnect);
-
-// Operation GetMyCompletions: 
-const { data } = await GetMyCompletions(dataConnect);
-
-// Operation GetMe: 
-const { data } = await GetMe(dataConnect);
 
 // Operation CreateUser:  For variables, look at type CreateUserVars in ../index.d.ts
 const { data } = await CreateUser(dataConnect, createUserVars);
@@ -46,6 +31,21 @@ const { data } = await DeleteBookmark(dataConnect, deleteBookmarkVars);
 
 // Operation UpdateNickname:  For variables, look at type UpdateNicknameVars in ../index.d.ts
 const { data } = await UpdateNickname(dataConnect, updateNicknameVars);
+
+// Operation DeleteUser: 
+const { data } = await DeleteUser(dataConnect);
+
+// Operation GetVerse:  For variables, look at type GetVerseVars in ../index.d.ts
+const { data } = await GetVerse(dataConnect, getVerseVars);
+
+// Operation GetMyCurrentVerse:  For variables, look at type GetMyCurrentVerseVars in ../index.d.ts
+const { data } = await GetMyCurrentVerse(dataConnect, getMyCurrentVerseVars);
+
+// Operation GetMyBookmarks: 
+const { data } = await GetMyBookmarks(dataConnect);
+
+// Operation GetMyCompletions: 
+const { data } = await GetMyCompletions(dataConnect);
 
 
 ```

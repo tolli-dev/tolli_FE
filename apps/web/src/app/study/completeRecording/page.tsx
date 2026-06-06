@@ -8,7 +8,7 @@ import CircleLoading from "./_components/CircleLoading";
 import Header from "./_components/Header";
 import Star1 from "../../../../public/images/star1.svg";
 import Star2 from "../../../../public/images/star2.svg";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function CompleteStep() {
   const router = useRouter();
@@ -21,8 +21,10 @@ export default function CompleteStep() {
     return () => clearTimeout(time);
   }, []);
 
+  const verseId = useSearchParams().get("verseId");
+
   const handleRouter = () => {
-    router.push("/study/listen");
+    router.push(`/study/listen?verseId=${verseId}`);
   };
 
   return (

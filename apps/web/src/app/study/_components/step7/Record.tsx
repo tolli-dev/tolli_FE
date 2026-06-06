@@ -13,7 +13,7 @@ import RecordComplete from "./RecordComplete";
 import { useRecord } from "./hooks/useRecord";
 import { formatTime } from "./_utils/formatTime";
 
-export default function Record() {
+export default function Record({ verseId }: { verseId: number }) {
   const [phase, setPhase] = useState<Step7Phase>("idle");
   const [showVerse, setShowVerse] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -97,7 +97,7 @@ export default function Record() {
   }
 
   if (phase === "complete") {
-    return <RecordComplete retryRecording={retryRecording} />;
+    return <RecordComplete retryRecording={retryRecording} verseId={verseId} />;
   }
 
   const openAppSettings = () => {

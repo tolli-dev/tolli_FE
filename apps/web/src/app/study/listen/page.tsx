@@ -1,13 +1,39 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Icon } from "@iconify/react";
-import Bookmark from "./_components/Bookmark";
+import { useState, useEffect } from 'react';
+import { Icon } from '@iconify/react';
+import { useSearchParams } from 'next/navigation';
+import { getVerse, getTodayCompletionCount } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
+import Bookmark from './_components/Bookmark';
 
 export default function ListenVerse() {
   const [played, setPlayed] = useState(false);
   const [home, setHome] = useState(false);
-  const [bookmarkModal, SetBookmarkModal] = useState(false);
+  const [bookmarkModal, setBookmarkModal] = useState(false);
+  const [verseText, setVerseText] = useState('');
+  const [reference, setReference] = useState('');
+  const [todayCount, setTodayCount] = useState(0);
+
+  const verseId = Number(useSearchParams().get('verseId'));
+
+  useEffect(() => {
+    if (!verseId) return;
+    getVerse(dataConnect, { id: verseId }).then((result) => {
+      const verse = result.data.verse;
+      if (!verse) return;
+      setVerseText(verse.fullText);
+      setReference(verse.reference);
+    });
+  }, [verseId]);
+
+  useEffect(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    getTodayCompletionCount(dataConnect, { today: today.toISOString() }).then((result) => {
+      setTodayCount(result.data.studyCompletions.length);
+    });
+  }, []);
 
   const handleButton = () => {
     setPlayed((prev) => !prev);
@@ -15,10 +41,7 @@ export default function ListenVerse() {
   };
 
   const handleBookmarkModal = () => {
-    // 현재 공부 내용이 이미 학습 db에 있으면 즐겨찾기 모달을 띄우지 않고 바로 홈으로 가는 페이지로 가기
-    // 첫 공부 내용이면 즐겨찾기 모달 띄우기
-    // api 연동하면서 하면 좋을 것 같음
-    SetBookmarkModal(true);
+    setBookmarkModal(true);
   };
 
   return (
@@ -40,8 +63,7 @@ export default function ListenVerse() {
             className="text-[#383838] text-[clamp(1rem,5.25vw,1.3125rem)]"
           />
           <h4 className="text-[#202020] font-medium text-[clamp(0.8125rem,4vw,1rem)]">
-            오늘 <span className="text-[#383838]">128</span>명이 함께 읽고
-            있어요
+            오늘 <span className="text-[#383838]">{todayCount}</span>명이 함께 읽고 있어요
           </h4>
         </div>
       </div>
@@ -51,23 +73,22 @@ export default function ListenVerse() {
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-[clamp(2.5rem,12.8vw,3.125rem)]"
           style={{
-            padding: "3px",
-            background: "linear-gradient(to bottom left, #7A7A7A, #917DB0)",
-            WebkitMask:
-              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            WebkitMaskComposite: "xor",
-            mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            maskComposite: "exclude",
+            padding: '3px',
+            background: 'linear-gradient(to bottom left, #7A7A7A, #917DB0)',
+            WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            WebkitMaskComposite: 'xor',
+            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            maskComposite: 'exclude',
           }}
         />
         <div className="flex flex-col w-full h-full px-[clamp(2.5rem,14.9vw,3.625rem)] py-[clamp(1.5rem,8.5vw,2.0625rem)]">
           <div className="flex flex-1 min-h-0 items-center justify-center">
             <p className="text-[clamp(1.0625rem,5.1vw,1.25rem)] leading-[clamp(1.625rem,7.9vw,1.9375rem)] tracking-[-2%] text-[#1B1B1B] text-center break-keep">
-              여호와는 네게 복을 주시고 너를 지키시기를 원하며
+              {verseText}
             </p>
           </div>
           <p className="shrink-0 text-[clamp(0.875rem,4.1vw,1rem)] leading-[clamp(1.125rem,5.1vw,1.25rem)] tracking-[3%] text-[#282828] text-center">
-            민수기 6:24
+            {reference}
           </p>
         </div>
       </div>
@@ -75,7 +96,7 @@ export default function ListenVerse() {
       <button
         type="button"
         onClick={handleButton}
-        aria-label={played ? "일시정지" : "재생"}
+        aria-label={played ? '일시정지' : '재생'}
         className="relative flex shrink-0 items-center justify-center rounded-full bg-[#CCB5F0]
         w-[clamp(3.5rem,16.9vw,4.125rem)] h-[clamp(3.5rem,16.9vw,4.125rem)]
         mb-[clamp(1rem,6vw,2.625rem)]"
@@ -97,14 +118,14 @@ export default function ListenVerse() {
         className={`w-full shrink-0 bg-[#CCB5F0] flex items-center justify-center
           py-[clamp(0.625rem,3.3vw,0.8125rem)] rounded-[clamp(1rem,5vw,1.25rem)]
           text-[clamp(0.875rem,4vw,1rem)]
-          ${home ? "" : "invisible pointer-events-none"}`}
+          ${home ? '' : 'invisible pointer-events-none'}`}
       >
         홈으로
       </button>
 
       {bookmarkModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 bg-[#000000]/60">
-          <Bookmark />
+          <Bookmark verseId={verseId} />
         </div>
       )}
     </section>

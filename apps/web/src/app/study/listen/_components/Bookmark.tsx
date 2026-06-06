@@ -2,11 +2,14 @@ import Image from "next/image";
 import ReadingBookTolli from "../../../../../public/tolli1.svg";
 import SetBookmarkButton from "./SetBookmarkButton";
 import { useRouter } from "next/navigation";
+import { addBookmark } from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
 
-export default function Bookmark() {
+export default function Bookmark({ verseId }: { verseId: number }) {
   const router = useRouter();
 
-  const handleYes = () => {
+  const handleYes = async () => {
+    await addBookmark(dataConnect, { verseId });
     router.push("/study/completeListening?type=yes");
   };
 

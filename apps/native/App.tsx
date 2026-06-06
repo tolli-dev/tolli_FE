@@ -200,6 +200,8 @@ export default function App() {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       allowsLinkPreview={false}
+      mixedContentMode="always"
+      domStorageEnabled={true}
       // 마이크 WebView 레이어 권한
       mediaCapturePermissionGrantType="grant"
     />

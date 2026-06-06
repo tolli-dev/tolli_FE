@@ -2,6 +2,12 @@
   "name": "tolli",
   "private": true,
   "packageManager": "pnpm@9.0.0",
+  "pnpm": {
+    "overrides": {
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
+    }
+  },
   "scripts": {
     "web": "pnpm --filter web dev",
     "web:prod": "pnpm --filter web build && pnpm --filter web start",

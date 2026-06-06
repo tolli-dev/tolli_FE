@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { useSearchParams } from 'next/navigation';
 import { getVerse, getTodayCompletionCount } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
 import Bookmark from './_components/Bookmark';
 
-export default function ListenVerse() {
+function ListenVerseInner() {
   const [played, setPlayed] = useState(false);
   const [home, setHome] = useState(false);
   const [bookmarkModal, setBookmarkModal] = useState(false);
@@ -129,5 +129,13 @@ export default function ListenVerse() {
         </div>
       )}
     </section>
+  );
+}
+
+export default function ListenVerse() {
+  return (
+    <Suspense>
+      <ListenVerseInner />
+    </Suspense>
   );
 }

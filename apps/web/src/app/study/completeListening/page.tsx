@@ -1,11 +1,11 @@
 "use client";
 
+import { Suspense, useEffect } from "react";
 import Image from "next/image";
 import ReadingBookTolli from "../../../../public/images/readingBookTolli.svg";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
 
-export default function CompleteListening() {
+function CompleteListeningInner() {
   const router = useRouter();
 
   useEffect(() => {
@@ -31,5 +31,13 @@ export default function CompleteListening() {
         className="w-[clamp(4.5rem,25vw,6.125rem)] h-auto"
       />
     </div>
+  );
+}
+
+export default function CompleteListening() {
+  return (
+    <Suspense>
+      <CompleteListeningInner />
+    </Suspense>
   );
 }

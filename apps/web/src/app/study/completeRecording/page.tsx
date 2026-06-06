@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import FullTolli from "../../../../public/images/onBoarding/fullTolli.svg";
 import EatingTolli from "../../../../public/images/onBoarding/eatingTolli.svg";
@@ -10,7 +10,7 @@ import Star1 from "../../../../public/images/star1.svg";
 import Star2 from "../../../../public/images/star2.svg";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function CompleteStep() {
+function CompleteStepInner() {
   const router = useRouter();
   const [component, setComponent] = useState(false);
 
@@ -76,5 +76,13 @@ export default function CompleteStep() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CompleteStep() {
+  return (
+    <Suspense>
+      <CompleteStepInner />
+    </Suspense>
   );
 }

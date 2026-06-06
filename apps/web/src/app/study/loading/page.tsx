@@ -40,7 +40,10 @@ export default function StudyLoadingPage() {
   }, []);
 
   useEffect(() => {
-    getTodayVerseId().then((verseId) => {
+    Promise.all([
+      getTodayVerseId(),
+      new Promise<void>((resolve) => setTimeout(resolve, 3000)),
+    ]).then(([verseId]) => {
       router.push(`/study/${verseId}/0`);
     });
   }, [router]);

@@ -57,9 +57,10 @@ export default function DashBoard() {
 
       <footer
         className="
-          w-full flex justify-center items-center
-          pt-[clamp(1rem,4vw,1.5rem)]
-          pb-[max(env(safe-area-inset-bottom),0.5rem)]
+          fixed bottom-0 left-0 right-0
+          flex justify-center items-center
+          pb-[max(calc(env(safe-area-inset-bottom)+1rem),1rem)]
+          pt-4
         "
       >
         <SwipeNav activeIndex={activeIndex} setActiveIndex={setActiveIndex} />

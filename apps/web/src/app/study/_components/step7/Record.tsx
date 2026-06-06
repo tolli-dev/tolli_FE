@@ -12,6 +12,8 @@ import { Icon } from "@iconify/react";
 import RecordComplete from "./RecordComplete";
 import { useRecord } from "./hooks/useRecord";
 import { formatTime } from "./_utils/formatTime";
+import { getVerse } from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
 
 export default function Record({ verseId }: { verseId: number }) {
   const [phase, setPhase] = useState<Step7Phase>("idle");
@@ -19,6 +21,17 @@ export default function Record({ verseId }: { verseId: number }) {
   const [disabled, setDisabled] = useState(false);
   const { elapsed, start, stop, levels } = useRecord();
   const [needSettings, setNeedSettings] = useState(false);
+  const [fullText, setFullText] = useState('');
+  const [reference, setReference] = useState('');
+
+  useEffect(() => {
+    getVerse(dataConnect, { id: verseId }).then((result) => {
+      const verse = result.data.verse;
+      if (!verse) return;
+      setFullText(verse.fullText);
+      setReference(verse.reference);
+    });
+  }, [verseId]);
 
   // start()를 통해 녹음 기능을 시작한다.
   // 그와 더해 관련 상태를 변화시킨다.
@@ -120,6 +133,8 @@ export default function Record({ verseId }: { verseId: number }) {
           <RecordBarContainer
             showVerse={showVerse}
             soundBar={NotActiveSoundbar}
+            fullText={fullText}
+            reference={reference}
           />
         )}
         {phase === "recording" && (
@@ -129,6 +144,8 @@ export default function Record({ verseId }: { verseId: number }) {
             recordIcon={RecordCircle}
             description={formatTime(elapsed)}
             levels={levels}
+            fullText={fullText}
+            reference={reference}
           />
         )}
 

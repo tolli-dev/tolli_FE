@@ -46,13 +46,14 @@ export default {
       [
         "@react-native-seoul/kakao-login",
         {
-          kakaoAppKey: process.env.KAKAO_APP_KEY,
+          kakaoAppKey: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY,
         },
       ],
       [
         "expo-build-properties",
         {
           android: {
+            kotlinVersion: "2.1.0",
             extraMavenRepos: [
               "https://devrepo.kakao.com/nexus/content/groups/public/",
             ],

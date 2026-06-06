@@ -52,13 +52,15 @@ export default function MultipleChoiceView({
   }, [answeredCount, verse]);
 
   useEffect(() => {
-    if (allAnswered) {
+    if (!allAnswered) return;
+    const timer = setTimeout(() => {
       if (step === 5) {
         router.push(`/study/${verseId}/recall-intro`);
       } else {
         router.push(`/study/${verseId}/${step + 1}`);
       }
-    }
+    }, 300);
+    return () => clearTimeout(timer);
   }, [allAnswered, router, verseId, step]);
 
   return (
@@ -77,7 +79,7 @@ export default function MultipleChoiceView({
           />
         )}
       </div>
-      <div className="flex flex-col gap-4 px-11.25 min-h-50 mt-auto justify-end">
+      <div className="flex flex-col gap-4 px-11.25 min-h-50 mt-auto justify-end" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
         {!started ? (
           <button
             onClick={() => setStarted(true)}
@@ -92,7 +94,7 @@ export default function MultipleChoiceView({
               key={choice}
               onClick={() => handleChoiceSelect(choice)}
               className="py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em]"
-              style={wrongChoice === choice ? { border: '0.5px solid #FF0000' } : undefined}
+              style={wrongChoice === choice ? { border: '1px solid #FF0000' } : undefined}
             >
               {choice}
             </button>

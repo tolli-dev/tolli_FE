@@ -3,18 +3,14 @@
 import { useRouter } from "next/navigation";
 
 interface Props {
-  value: {
-    id: string;
-    completedAt: string;
-    verse: {
-      id: number;
-      reference: string;
-      fullText: string;
-    };
+  verse: {
+    id: number;
+    reference: string;
+    fullText: string;
   };
 }
 
-export default function IndividualStorage({ value }: Props) {
+export default function IndividualStorage({ verse }: Props) {
   const router = useRouter();
 
   const handleRetryStep = () => {
@@ -32,10 +28,10 @@ export default function IndividualStorage({ value }: Props) {
         </svg>
       </span>
       <h3 className="font-semibold text-[clamp(0.875rem,4vw,1rem)] leading-[1.25] text-[#171717] mb-[clamp(0.5rem,2.5vw,0.6875rem)]">
-        {value.verse.reference}
+        {verse.reference}
       </h3>
       <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535] mb-[clamp(0.5rem,3vw,0.75rem)] break-keep">
-        {value.verse.fullText}
+        {verse.fullText}
       </p>
       <div className="flex justify-end">
         <button

@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import IndividualStorage from "./IndividualStorage";
+import { dataConnect } from "@/lib/dataconnect";
+import { getMyCompletions, getVerse } from "@firebasegen/default-connector";
 
 interface CompletedVerse {
-  id: string;
-  completedAt: string;
   verse: {
     id: number;
     reference: string;
@@ -17,18 +17,38 @@ interface CompletedVerse {
 
 interface Props {
   done: boolean;
-  completedVerses: CompletedVerse[];
 }
 
-export default function StorageView({ done, completedVerses }: Props) {
+export default function StorageView({ done }: Props) {
   const router = useRouter();
   const [searchVerse, setSearchVerse] = useState("");
+  const [myCompletions, setMyCompletions] = useState<CompletedVerse[]>([]);
+
+  useEffect(() => {
+    const getMyStorage = async () => {
+      const { data } = await getMyCompletions(dataConnect);
+      const verse = await Promise.all(
+        data.studyCompletions.map(async (value) => {
+          const { data } = await getVerse(dataConnect, { id: value.verse.id });
+          return {
+            verse: {
+              id: data.verse?.id ?? value.verse.id,
+              reference: data.verse?.reference ?? value.verse.reference,
+              fullText: data.verse?.fullText ?? "",
+            },
+          };
+        }),
+      );
+      setMyCompletions(verse);
+    };
+    getMyStorage();
+  }, []);
 
   const handleSearch = (value: string) => {
     setSearchVerse(value);
   };
 
-  const filteredData = completedVerses.filter((item) => {
+  const filteredData = myCompletions.filter((item) => {
     return (
       item.verse.reference.includes(searchVerse) ||
       item.verse.fullText.includes(searchVerse)
@@ -87,7 +107,7 @@ export default function StorageView({ done, completedVerses }: Props) {
         </h2>
       </div>
 
-      {!searchVerse && completedVerses.length === 0 && (
+      {!searchVerse && myCompletions.length === 0 && (
         <main className="w-full flex-1 flex flex-col items-center justify-center">
           <div className="text-center">
             <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
@@ -97,11 +117,11 @@ export default function StorageView({ done, completedVerses }: Props) {
         </main>
       )}
 
-      {!searchVerse && completedVerses.length !== 0 && (
+      {!searchVerse && myCompletions.length !== 0 && (
         <main className="w-full flex-1 min-h-0 flex flex-col items-center">
           <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
-            {completedVerses.map((value) => (
-              <IndividualStorage key={value.id} value={value} />
+            {myCompletions.map((value) => (
+              <IndividualStorage key={value.verse.id} verse={value.verse} />
             ))}
           </div>
         </main>
@@ -121,7 +141,7 @@ export default function StorageView({ done, completedVerses }: Props) {
         <main className="w-full flex-1 min-h-0 flex flex-col items-center">
           <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
             {filteredData.map((value) => (
-              <IndividualStorage key={value.id} value={value} />
+              <IndividualStorage key={value.verse.id} verse={value.verse} />
             ))}
           </div>
         </main>

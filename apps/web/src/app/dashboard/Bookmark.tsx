@@ -19,7 +19,6 @@ interface BookMarks {
 
 export default function Bookmark() {
   const [bookmarks, setBookmarks] = useState<BookMarks[]>();
-  const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const getBookmarks = async () => {
@@ -29,7 +28,7 @@ export default function Bookmark() {
       setBookmarks(data.bookmarks);
     };
     getBookmarks();
-  }, []);
+  }, [bookmarks]);
 
   if (!bookmarks) return null;
 

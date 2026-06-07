@@ -67,7 +67,7 @@ export default function TermsPage() {
 
       <div className="flex-1" />
       <div className="flex justify-center">
-        <Image src="/tolli-terms.webp" alt="tolli" width={700} height={700} className="w-43.75 object-contain" />
+        <Image src="/tolli-terms.webp" alt="tolli" width={700} height={700} className="w-43.75 object-contain" priority />
       </div>
       <div className="flex-1" />
 

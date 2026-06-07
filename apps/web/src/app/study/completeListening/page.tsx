@@ -27,6 +27,7 @@ function CompleteListeningInner() {
         src={ReadingBookTolli}
         alt="책 읽는 톨리"
         className="w-[clamp(4.5rem,25vw,6.125rem)] h-auto"
+        priority
       />
     </div>
   );

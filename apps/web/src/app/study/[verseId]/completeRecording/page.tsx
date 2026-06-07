@@ -17,6 +17,18 @@ export default function CompleteStep() {
   const { verseId } = useParams<{ verseId: string }>();
 
   useEffect(() => {
+    const preloads = [Star1.src, Star2.src, FullTolli.src].map((src) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+      return link;
+    });
+    return () => { preloads.forEach((l) => document.head.removeChild(l)); };
+  }, []);
+
+  useEffect(() => {
     const time = setTimeout(() => {
       setComponent(true);
     }, 3000);
@@ -61,6 +73,7 @@ export default function CompleteStep() {
               src={EatingTolli}
               alt="eating tolli"
               fill
+              priority
               className="
                 object-contain z-10 scale-[1.0]
                 translate-x-[90px]"
@@ -71,6 +84,7 @@ export default function CompleteStep() {
               src={FullTolli}
               alt="full tolli"
               fill
+              priority
               className="
                 object-contain z-10 scale-[1.2]
                 translate-x-[10px]"

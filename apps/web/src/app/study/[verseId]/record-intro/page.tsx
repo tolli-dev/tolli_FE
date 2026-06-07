@@ -57,7 +57,7 @@ export default function RecordIntroPage() {
           <br /> 외쳐보세요!
         </p>
       </div>
-      <Image src="/TolliLastStep.webp" alt="tolli" width={1080} height={1080} className="w-full h-auto" />
+      <Image src="/TolliLastStep.webp" alt="tolli" width={1080} height={1080} className="w-full h-auto" priority />
       <style>{`
         @property --angle {
           syntax: '<angle>';

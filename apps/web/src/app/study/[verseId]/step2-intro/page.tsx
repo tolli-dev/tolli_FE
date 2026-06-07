@@ -57,7 +57,7 @@ export default function Step2IntroPage() {
       <p className="text-[1.5rem] leading-8.5 font-medium text-[#1A1A1A] text-center">
         굿! <br /> 이제 빈칸을 맞춰주세요
       </p>
-      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" />
+      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" priority />
       <style>{`
         @property --angle {
           syntax: '<angle>';

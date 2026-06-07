@@ -54,7 +54,7 @@ export default function RecallIntroPage() {
       <p className="text-[1.5rem] leading-8.5 font-medium text-[#1A1A1A] text-center">
         이제, 기억의 조각을 <br /> 맞춰보겠습니다.
       </p>
-      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" />
+      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" priority />
       <style>{`
         @property --angle {
           syntax: '<angle>';

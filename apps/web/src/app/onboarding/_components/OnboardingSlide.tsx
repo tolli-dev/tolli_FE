@@ -7,6 +7,7 @@ interface OnboardingSlideProps {
   image: string;
   imageSize: string;
   extra?: ReactNode;
+  priority?: boolean;
 }
 
 export default function OnboardingSlide({
@@ -15,6 +16,7 @@ export default function OnboardingSlide({
   image,
   imageSize,
   extra,
+  priority = false,
 }: OnboardingSlideProps) {
   return (
     <div className="flex flex-col flex-1 items-start px-6">
@@ -24,7 +26,7 @@ export default function OnboardingSlide({
       <div className="flex flex-col w-full justify-center items-center">
         {extra && <div className="w-full">{extra}</div>}
         <div className="relative" style={{ width: imageSize, height: imageSize }}>
-          <Image src={image} alt="" fill className="object-contain" />
+          <Image src={image} alt="" fill className="object-contain" priority={priority} />
         </div>
       </div>
       <div className="flex-1" />

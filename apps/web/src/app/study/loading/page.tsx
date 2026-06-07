@@ -66,7 +66,7 @@ export default function StudyLoadingPage() {
       <p className="text-[clamp(1.125rem,5.5vw,1.5rem)] leading-[clamp(2rem,8.5vw,2.125rem)] font-medium text-[#CCB5F0] text-center">
         두근두근 <br /> 오늘의 말씀은?
       </p>
-      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" />
+      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" priority />
       <style>{`
         @property --angle {
           syntax: '<angle>';

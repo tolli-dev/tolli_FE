@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import OnboardingSlide from '@/app/onboarding/_components/OnboardingSlide';
 import OnboardingActions from '@/app/onboarding/_components/OnboardingActions';
@@ -35,7 +36,18 @@ export default function OnboardingStepPage() {
   const step = Number(params.step);
 
   const current = STEPS[step - 1];
+  const next = STEPS[step]; // undefined on last step
   const isLastStep = step === TOTAL_STEPS;
+
+  useEffect(() => {
+    if (!next) return;
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = next.image;
+    document.head.appendChild(link);
+    return () => { document.head.removeChild(link); };
+  }, [next]);
 
   const notifyOnboardingComplete = () => {
     window.ReactNativeWebView?.postMessage(
@@ -70,6 +82,7 @@ export default function OnboardingStepPage() {
         image={current.image}
         imageSize={current.imageSize}
         extra={current.extra}
+        priority
       />
       <OnboardingActions isLastStep={isLastStep} onNext={handleNext} onSkip={handleSkip} />
     </>

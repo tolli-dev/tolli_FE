@@ -14,6 +14,8 @@ function CompleteStepInner() {
   const router = useRouter();
   const [component, setComponent] = useState(false);
 
+  const verseId = useSearchParams().get("verseId");
+
   useEffect(() => {
     const time = setTimeout(() => {
       setComponent(true);
@@ -21,15 +23,16 @@ function CompleteStepInner() {
     return () => clearTimeout(time);
   }, []);
 
-  const verseId = useSearchParams().get("verseId");
-
-  const handleRouter = () => {
-    router.push(`/study/listen?verseId=${verseId}`);
-  };
+  useEffect(() => {
+    if (!component) return;
+    const time = setTimeout(() => {
+      router.push(`/study/listen?verseId=${verseId}`);
+    }, 3000);
+    return () => clearTimeout(time);
+  }, [component, router, verseId]);
 
   return (
     <div
-      onClick={handleRouter}
       className="grid grid-rows-3 h-full pt-[clamp(1.5rem,11vw,2.6875rem)] pb-[clamp(1.25rem,9.5vw,2.3125rem)] px-[clamp(1rem,6.5vw,1.5625rem)]"
     >
       <div className="flex items-center justify-center text-center">

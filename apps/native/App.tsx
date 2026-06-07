@@ -202,8 +202,18 @@ export default function App() {
       allowsLinkPreview={false}
       mixedContentMode="always"
       domStorageEnabled={true}
+      mediaPlaybackRequiresUserAction={false}
+      allowsInlineMediaPlayback={true}
       // 마이크 WebView 레이어 권한
       mediaCapturePermissionGrantType="grant"
+      onLoadEnd={() => {
+        webviewRef.current?.injectJavaScript(`
+          (function() {
+            if (window.__startBGM) window.__startBGM();
+          })();
+          true;
+        `);
+      }}
     />
   );
 }

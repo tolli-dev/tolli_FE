@@ -52,7 +52,7 @@ export default function DashBoard() {
       <DashboardHeader nickname={nickname} done={done} />
 
       {activeIndex === 0 &&
-        (done ? <AfterFinish todayVerse={todayVerse} /> : <BeforeFinish nickname={nickname} />)}
+        (done ? <AfterFinish todayVerse={todayVerse} nickname={nickname} /> : <BeforeFinish nickname={nickname} />)}
       {activeIndex === 1 && <Bookmark />}
 
       <footer

@@ -5,11 +5,11 @@ import GrainBorder from './_components/_GrainBorder';
 
 type TodayVerse = { id: number; reference: string; fullText: string } | null;
 
-export default function AfterFinish({ todayVerse }: { todayVerse: TodayVerse }) {
+export default function AfterFinish({ todayVerse, nickname }: { todayVerse: TodayVerse; nickname: string }) {
   return (
     <main className="flex flex-1 flex-col items-center w-full">
         <div className="flex flex-col w-full">
-          <h1 className="text-dashboard-h1">몽디님,</h1>
+          <h1 className="text-dashboard-h1">{nickname}님,</h1>
           <h1 className="text-dashboard-h1">안녕하세요!</h1>
         </div>
 

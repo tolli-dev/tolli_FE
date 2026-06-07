@@ -37,7 +37,10 @@ export default function Step2IntroPage() {
 
   return (
     <div className="relative flex flex-col flex-1 h-full items-center justify-center gap-11.25">
-      <div className="fixed inset-0 -z-10" style={{ background: 'linear-gradient(180deg, #CCB5F0 0%, #FFFFFF 100%)' }} />
+      <div
+        className="fixed inset-0 -z-10"
+        style={{ background: 'linear-gradient(180deg, #CCB5F0 0%, #FFFFFF 100%)' }}
+      />
       <div
         className="fixed inset-0 pointer-events-none"
         style={{
@@ -51,7 +54,7 @@ export default function Step2IntroPage() {
         }}
       />
       <p className="text-[1.5rem] leading-8.5 font-medium text-[#1A1A1A] text-center">
-        굿! 이제 빈칸을 <br /> 맞춰주세요
+        굿! <br /> 이제 빈칸을 맞춰주세요
       </p>
       <img src="/tolli1.svg" alt="Tolli" className="w-57 h-57 object-contain" />
       <style>{`

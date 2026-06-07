@@ -14,6 +14,8 @@ function ListenVerseInner() {
   const [verseText, setVerseText] = useState('');
   const [reference, setReference] = useState('');
   const [todayCount, setTodayCount] = useState(0);
+  const verseAudioRef = useState(() => typeof Audio !== 'undefined' ? new Audio() : null)[0];
+  const bgmAudioRef = useState(() => typeof Audio !== 'undefined' ? new Audio('/verse-audio/bgm.mp3') : null)[0];
 
   const verseId = Number(useSearchParams().get('verseId'));
 
@@ -35,9 +37,42 @@ function ListenVerseInner() {
     });
   }, []);
 
+  useEffect(() => {
+    if (!bgmAudioRef) return;
+    bgmAudioRef.loop = true;
+    bgmAudioRef.volume = 0.7;
+
+    // injectJavaScript는 네이티브 WebView 컨텍스트에서 실행되므로 autoplay 정책 우회됨
+    (window as any).__startBGM = () => {
+      bgmAudioRef.play().catch(() => {});
+    };
+
+    // 웹 브라우저 직접 접근 시 폴백
+    bgmAudioRef.play().catch(() => {});
+
+    return () => {
+      bgmAudioRef.pause();
+      verseAudioRef?.pause();
+      delete (window as any).__startBGM;
+    };
+  }, []);
+
   const handleButton = () => {
-    setPlayed((prev) => !prev);
-    setHome(true);
+    if (!verseAudioRef) return;
+
+    if (played) {
+      verseAudioRef.pause();
+      setPlayed(false);
+    } else {
+      verseAudioRef.src = `/verse-audio/verses/${verseId}.mp3`;
+      verseAudioRef.play();
+      setPlayed(true);
+      setHome(true);
+
+      verseAudioRef.onended = () => {
+        setPlayed(false);
+      };
+    }
   };
 
   const handleBookmarkModal = () => {

@@ -54,6 +54,15 @@ export default function GlassTabBar({ tabs, activeIndex, onChange }: Props) {
     const x = e.clientX - rect.left;
     const segmentWidth = rect.width / tabs.length;
     const targetIndex = Math.min(Math.floor(x / segmentWidth), tabs.length - 1);
+
+    if (targetIndex === activeIndex) return;
+
+    if (targetIndex > activeIndex) {
+      playSound("/sounds/네비게이션 오른쪽 스와이프.mp3");
+    } else {
+      playSound("/sounds/네비게이션 왼쪽 스와이프.mp3");
+    }
+
     onChange(targetIndex);
   };
 

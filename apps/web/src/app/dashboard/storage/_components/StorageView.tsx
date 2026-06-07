@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import IndividualStorage from "./IndividualStorage";
+import { QueryFetchPolicy } from "firebase/data-connect";
 import { dataConnect } from "@/lib/dataconnect";
 import {
   getMyBookmarks,
@@ -32,24 +33,27 @@ export default function StorageView({ done }: Props) {
   useEffect(() => {
     const getMyStorage = async () => {
       const { data } = await getMyCompletions(dataConnect);
-      const verse = await Promise.all(
-        data.studyCompletions.map(async (value) => {
-          const { data } = await getVerse(dataConnect, { id: value.verse.id });
-          return {
-            verse: {
-              id: data.verse?.id ?? value.verse.id,
-              reference: data.verse?.reference ?? value.verse.reference,
-              fullText: data.verse?.fullText ?? "",
-            },
-          };
+      const [verses, { data: bookmarksData }] = await Promise.all([
+        Promise.all(
+          data.studyCompletions.map(async (value) => {
+            const { data: verseData } = await getVerse(dataConnect, {
+              id: value.verse.id,
+            });
+            return {
+              verse: {
+                id: verseData.verse?.id ?? value.verse.id,
+                reference: verseData.verse?.reference ?? value.verse.reference,
+                fullText: verseData.verse?.fullText ?? "",
+              },
+            };
+          }),
+        ),
+        getMyBookmarks(dataConnect, {
+          fetchPolicy: QueryFetchPolicy.SERVER_ONLY,
         }),
-      );
-      setMyCompletions(verse);
-
-      const { data: bookmarksData } = await getMyBookmarks(dataConnect);
-      setBookmarkedIds(
-        new Set(bookmarksData.bookmarks.map((item) => item.verse.id)),
-      );
+      ]);
+      setBookmarkedIds(new Set(bookmarksData.bookmarks.map((b) => b.verse.id)));
+      setMyCompletions(verses);
     };
     getMyStorage();
   }, []);

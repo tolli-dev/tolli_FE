@@ -167,7 +167,7 @@ export default function Record({ verseId }: { verseId: number }) {
               />
             </div>
           </div>
-          <span className="font-regular text-[2.99vw] leading-[5.67vw] text-[#CECECE]">
+          <span className="font-regular text-[2.99vw] leading-[5.67vw] text-[#CECECE] whitespace-nowrap">
             구절 잠깐 보기
           </span>
         </button>

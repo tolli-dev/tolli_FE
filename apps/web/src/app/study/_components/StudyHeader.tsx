@@ -28,7 +28,7 @@ export default function StudyHeader({ currentStep }: StudyHeaderProps) {
             className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] text-center">
+            <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] text-center whitespace-nowrap">
               지금 나가면 진행이 저장되지 않아요
             </h2>
             <div className="flex flex-col w-full gap-3 mt-2">

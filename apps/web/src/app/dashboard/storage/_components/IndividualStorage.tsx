@@ -16,10 +16,34 @@ interface Props {
   bookmarkedIds: Set<number>;
 }
 
+function extractErrorMessage(error: DataConnectError): string {
+  const fallback = "북마크 추가에 실패했습니다.";
+  let list: { message?: string }[] | undefined;
+
+  const response = (error as { response?: { errors?: { message?: string }[] } })
+    .response;
+  if (Array.isArray(response?.errors)) {
+    list = response.errors;
+  } else {
+    try {
+      const parsed = JSON.parse(error.message);
+      if (Array.isArray(parsed)) list = parsed;
+    } catch {}
+  }
+
+  const raw =
+    list?.find((e) => e?.message && e.message !== "(aborted)")?.message ??
+    error.message ??
+    fallback;
+
+  return raw.replace(/\s*\(aborted\)\s*$/i, "").trim() || fallback;
+}
+
 export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   const router = useRouter();
   const isBookmarked = bookmarkedIds.has(verse.id);
   const [bookmark, setBookmark] = useState(isBookmarked);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleRetryStep = () => {
     router.push(`/study/loading?verseId=${verse.id}`);
@@ -38,10 +62,9 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
       setBookmark(true);
     } catch (error) {
       if (error instanceof DataConnectError) {
-        const message = error.message ?? "북마크 추가에 실패했습니다.";
-        alert(message);
+        setErrorMessage(extractErrorMessage(error));
       } else {
-        alert("문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        setErrorMessage("문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
       }
     }
   };
@@ -97,6 +120,33 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
           다시 떠올리기
         </button>
       </div>
+
+      {errorMessage && (
+        <div
+          onClick={() => setErrorMessage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000]/60 px-[clamp(0.875rem,5vw,1.25rem)]"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-90 rounded-[clamp(1rem,6vw,1.5rem)] bg-linear-to-br from-white/30 via-white/15 to-white/20 p-px"
+          >
+            <div className="flex flex-col items-center justify-center w-full py-[clamp(1rem,6vw,1.5rem)] px-[clamp(1rem,6vw,1.5rem)] bg-bg rounded-[clamp(1rem,6vw,1.5rem)]">
+              <p className="text-center font-semibold text-[clamp(1rem,4.75vw,1.1875rem)] leading-[clamp(1.5rem,7.75vw,1.9375rem)] text-[#CCB5F0] mb-[clamp(0.75rem,4.5vw,1.125rem)] break-keep">
+                {errorMessage}
+              </p>
+              <div className="flex flex-col w-full gap-[clamp(0.375rem,2vw,0.5rem)]">
+                <button
+                  type="button"
+                  onClick={() => setErrorMessage(null)}
+                  className="w-full rounded-[clamp(0.875rem,5vw,1.25rem)] py-[clamp(0.5rem,3vw,0.75rem)] font-semibold text-bg bg-[#CCB5F0] text-[clamp(0.8125rem,3.75vw,0.9375rem)] leading-[clamp(1.25rem,6.25vw,1.5625rem)]"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </article>
   );
 }

@@ -321,7 +321,7 @@ export interface GetMyBookmarksData {
       reference: string;
       fullText: string;
     } & Verse_Key;
-      createdAt: TimestampString;
+    createdAt: TimestampString;
   })[];
 }
 ```
@@ -419,7 +419,7 @@ export interface GetMyCompletionsData {
       id: number;
       reference: string;
     } & Verse_Key;
-      completedAt: TimestampString;
+    completedAt: TimestampString;
   } & StudyCompletion_Key)[];
 }
 ```
@@ -855,6 +855,11 @@ Recall that executing the `AddBookmark` mutation returns a `MutationPromise` tha
 The `data` property is an object of type `AddBookmarkData`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
 ```typescript
 export interface AddBookmarkData {
+  query?: {
+    bookmarks: ({
+      __typename?: string | null;
+    })[];
+  };
   bookmark_insert: Bookmark_Key;
 }
 ```
@@ -879,11 +884,13 @@ const { data } = await addBookmark({ verseId: ..., });
 const dataConnect = getDataConnect(connectorConfig);
 const { data } = await addBookmark(dataConnect, addBookmarkVars);
 
+console.log(data.query);
 console.log(data.bookmark_insert);
 
 // Or, you can use the `Promise` API.
 addBookmark(addBookmarkVars).then((response) => {
   const data = response.data;
+  console.log(data.query);
   console.log(data.bookmark_insert);
 });
 ```
@@ -912,11 +919,13 @@ const ref = addBookmarkRef(dataConnect, addBookmarkVars);
 // You can use the `await` keyword to wait for the promise to resolve.
 const { data } = await executeMutation(ref);
 
+console.log(data.query);
 console.log(data.bookmark_insert);
 
 // Or, you can use the `Promise` API.
 executeMutation(ref).then((response) => {
   const data = response.data;
+  console.log(data.query);
   console.log(data.bookmark_insert);
 });
 ```

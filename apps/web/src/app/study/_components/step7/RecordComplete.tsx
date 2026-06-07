@@ -1,7 +1,7 @@
 import CompleteContainer from "./_components/center/CompleteContainer";
 import DiffHeader from "./_components/header/DiffHeader";
 import RecordButton from "./_components/button/RecordButton";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import RetryRecordingButton from "./_components/button/RetryRecordingButton";
 
 export default function RecordComplete({
@@ -10,9 +10,10 @@ export default function RecordComplete({
   retryRecording: () => void;
 }) {
   const router = useRouter();
+  const { verseId } = useParams();
 
   const stopRecording = () => {
-    router.push("/study/completeRecording");
+    router.push(`/study/${verseId}/completeRecording`);
   };
 
   return (

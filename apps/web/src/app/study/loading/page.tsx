@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RecallIntroPage() {
   const router = useRouter();
-  const { verseId } = useParams<{ verseId: string }>();
+  const verseId = useSearchParams().get("verseId");
   const [cornerRadius, setCornerRadius] = useState(0);
 
   useEffect(() => {

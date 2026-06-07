@@ -21,7 +21,7 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   const [bookmark, setBookmark] = useState(isBookmarked);
 
   const handleRetryStep = () => {
-    router.push("/study/30/0");
+    router.push(`/study/loading?verseId=${verse.id}`);
   };
 
   const handleDeleteBookmark = async (verseId: number) => {

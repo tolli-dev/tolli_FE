@@ -77,7 +77,7 @@ export default function App() {
 
       if (data.type === 'WEB_READY') {
         const radius = await getCornerRadius();
-        const cssRadius = Platform.OS === 'android' ? Math.round(radius * 0.3) : radius;
+        const cssRadius = Math.round(radius);
         webviewRef.current?.postMessage(
           JSON.stringify({ type: 'DEVICE_CORNER_RADIUS', value: cssRadius }),
         );

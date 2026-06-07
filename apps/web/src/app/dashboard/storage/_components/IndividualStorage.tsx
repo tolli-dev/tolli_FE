@@ -5,6 +5,7 @@ import { dataConnect } from "@/lib/dataconnect";
 import { deleteBookmark, addBookmark } from "@firebasegen/default-connector";
 import { useState } from "react";
 import { DataConnectError } from "firebase/data-connect";
+import { playSound } from "@/lib/sound";
 
 interface Props {
   verse: {
@@ -33,6 +34,7 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
     try {
       await addBookmark(dataConnect, { verseId: verseId });
 
+      playSound("/sounds/어디론가 추가되었을때.mp3");
       setBookmark(true);
     } catch (error) {
       if (error instanceof DataConnectError) {

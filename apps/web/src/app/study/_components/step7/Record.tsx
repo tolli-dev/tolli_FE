@@ -12,6 +12,7 @@ import { Icon } from "@iconify/react";
 import RecordComplete from "./RecordComplete";
 import { useRecord } from "./hooks/useRecord";
 import { formatTime } from "./_utils/formatTime";
+import { playSound } from "@/lib/sound";
 
 export default function Record() {
   const [phase, setPhase] = useState<Step7Phase>("idle");
@@ -85,6 +86,7 @@ export default function Record() {
   };
 
   const handleViewVerse = () => {
+    playSound("/sounds/말씀 잠깐 보기 힌트일때 카드 공개_비공개 후보.mp3");
     setShowVerse(true);
     setTimeout(() => {
       setShowVerse(false);

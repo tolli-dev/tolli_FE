@@ -2,11 +2,13 @@ import Image from "next/image";
 import ReadingBookTolli from "../../../../../../public/tolli1.svg";
 import SetBookmarkButton from "./SetBookmarkButton";
 import { useRouter } from "next/navigation";
+import { playSound } from "@/lib/sound";
 
 export default function Bookmark() {
   const router = useRouter();
 
   const handleYes = () => {
+    playSound("/sounds/어디론가 추가되었을때.mp3");
     router.push("/study/completeListening?type=yes");
   };
 

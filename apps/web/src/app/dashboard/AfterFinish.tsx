@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import FullHappyTolli from '../../../public/images/onBoarding/fullHappyTolli.svg';
+import FullHappyTolli from '../../../public/images/onBoarding/fullHappyTolli.webp';
 import NoiseOverlay from './_components/NoiseOverlay';
 import GrainBorder from './_components/_GrainBorder';
 

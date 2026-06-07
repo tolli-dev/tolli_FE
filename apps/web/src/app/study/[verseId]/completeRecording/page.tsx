@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import FullTolli from "../../../../../public/images/onBoarding/fullTolli.svg";
-import EatingTolli from "../../../../../public/images/onBoarding/eatingTolli.svg";
+import FullTolli from "../../../../../public/images/onBoarding/fullTolli.webp";
+import EatingTolli from "../../../../../public/images/onBoarding/eatingTolli.webp";
 import CircleLoading from "./_components/CircleLoading";
 import Header from "./_components/Header";
-import Star1 from "../../../../../public/images/star1.svg";
-import Star2 from "../../../../../public/images/star2.svg";
+import Star1 from "../../../../../public/images/star1.webp";
+import Star2 from "../../../../../public/images/star2.webp";
 import { useRouter, useParams } from "next/navigation";
 
 export default function CompleteStep() {

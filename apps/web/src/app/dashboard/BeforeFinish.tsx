@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import hungry_tolli from '../../../public/images/onBoarding/hungryTolli_1.svg';
+import hungry_tolli from '../../../public/images/onBoarding/hungryTolli_1.webp';
 import NoiseOverlay from './_components/NoiseOverlay';
 import GrainBorder from './_components/_GrainBorder';
 import { useRouter } from 'next/navigation';

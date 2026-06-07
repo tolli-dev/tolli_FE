@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import Image from 'next/image';
 
 interface OnboardingSlideProps {
   title: string;
@@ -22,7 +23,9 @@ export default function OnboardingSlide({
       <div className=" flex-1" />
       <div className="flex flex-col w-full justify-center items-center">
         {extra && <div className="w-full">{extra}</div>}
-        <img src={image} alt="" style={{ width: imageSize }} className="object-contain" />
+        <div className="relative" style={{ width: imageSize, height: imageSize }}>
+          <Image src={image} alt="" fill className="object-contain" />
+        </div>
       </div>
       <div className="flex-1" />
     </div>

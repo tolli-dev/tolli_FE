@@ -1,4 +1,4 @@
-import HungryTolli from "../../../../../public/images/onBoarding/hungryTolli_1.svg";
+import HungryTolli from "../../../../../public/images/onBoarding/hungryTolli_1.webp";
 import Image from "next/image";
 import Link from "next/link";
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import Image from 'next/image';
 
 export default function RecallIntroPage() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function RecallIntroPage() {
       <p className="text-[1.5rem] leading-8.5 font-medium text-[#1A1A1A] text-center">
         이제, 기억의 조각을 <br /> 맞춰보겠습니다.
       </p>
-      <img src="/tolli1.svg" alt="Tolli" className="w-57 h-57 object-contain" />
+      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" />
       <style>{`
         @property --angle {
           syntax: '<angle>';

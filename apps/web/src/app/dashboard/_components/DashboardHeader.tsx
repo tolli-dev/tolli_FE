@@ -9,7 +9,7 @@ import { updateNickname, deleteUser } from '@firebasegen/default-connector';
 import { fireAuth } from '@/firebase/fireAuth';
 import { dataConnect } from '@/lib/dataconnect';
 import ProfileDropdown from './ProfileDropdown';
-import standingTolli from '../../../../public/tolli1.svg';
+import standingTolli from '../../../../public/tolli1.webp';
 
 const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{1,8}$/;
 

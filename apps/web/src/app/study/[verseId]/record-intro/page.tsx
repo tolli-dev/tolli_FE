@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import Image from 'next/image';
 
 export default function RecordIntroPage() {
   const router = useRouter();
@@ -23,7 +24,9 @@ export default function RecordIntroPage() {
           <br /> 이제 직접 입으로 말씀을
           <br /> 외쳐보세요!
         </p>
-        <img src="/TolliLastStep.svg" alt="tolli" className="w-full" />
+        <div className="relative w-full aspect-square">
+          <Image src="/TolliLastStep.webp" alt="tolli" fill className="object-contain" />
+        </div>
       </div>
     </div>
   );

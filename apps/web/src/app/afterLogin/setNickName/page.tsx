@@ -1,6 +1,6 @@
 'use client';
 
-import StandingTolli_1 from '../../../../public/images/onBoarding/standingTolli_1.svg';
+import StandingTolli_1 from '../../../../public/images/onBoarding/standingTolli_1.webp';
 import Image from 'next/image';
 import Form from 'next/form';
 import { useState } from 'react';

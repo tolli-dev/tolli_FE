@@ -1,4 +1,4 @@
-import EatingTolli from "../../../../public/images/onBoarding/eatingTolli.svg";
+import EatingTolli from "../../../../public/images/onBoarding/eatingTolli.webp";
 import Image from "next/image";
 import Link from "next/link";
 

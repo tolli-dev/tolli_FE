@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 export default function Header({
   comment1,
@@ -10,8 +10,8 @@ export default function Header({
   comment1: string;
   comment2: string;
   comment3?: string;
-  star1?: string;
-  star2?: string;
+  star1?: StaticImageData | string;
+  star2?: StaticImageData | string;
 }) {
   return (
     <div className="flex flex-col gap-[clamp(0.875rem,5.5vw,1.375rem)]">

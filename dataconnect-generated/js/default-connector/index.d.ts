@@ -11,7 +11,12 @@ export type DateString = string;
 
 
 export interface AddBookmarkData {
-  bookmark_insert: Bookmark_Key;
+  query?: {
+    bookmarks: ({
+      __typename?: string | null;
+    })[];
+  };
+    bookmark_insert: Bookmark_Key;
 }
 
 export interface AddBookmarkVariables {

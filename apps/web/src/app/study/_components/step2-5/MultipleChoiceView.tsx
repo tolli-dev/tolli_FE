@@ -74,19 +74,17 @@ export default function MultipleChoiceView({
           answeredIndices={stepMaskData.maskedIndices.filter((i) => !!answers[i])}
         />
       </div>
-      <div className="flex flex-col gap-4 px-11.25 min-h-50 mt-auto justify-end" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
-        {!allAnswered ? (
+      <div className="flex flex-col gap-4 px-11.25 h-50 mt-auto justify-end" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
+        {!allAnswered &&
           choices.map((choice) => (
             <button
               key={choice}
               onClick={() => handleChoiceSelect(choice)}
-              className="py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em]"
-              style={wrongChoice === choice ? { border: '1px solid #FF0000' } : undefined}
+              className={`py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em] ring-1 ring-inset ${wrongChoice === choice ? 'ring-[#FF0000]' : 'ring-transparent'}`}
             >
               {choice}
             </button>
-          ))
-        ) : null}
+          ))}
       </div>
     </section>
   );

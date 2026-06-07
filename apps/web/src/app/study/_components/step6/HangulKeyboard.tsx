@@ -16,8 +16,8 @@ export default function HangulKeyboard({ onKey }: HangulKeyboardProps) {
 
   return (
     <div
-      className="fixed bottom-0 inset-x-0 bg-surface-500 px-3 pt-2 flex flex-col gap-2"
-      style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
+      className="fixed inset-x-0 bg-surface-500 px-3 pt-2 pb-8 flex flex-col gap-2"
+      style={{ bottom: 'env(safe-area-inset-bottom)' }}
     >
       {VOWEL_ROWS.map((row, rowIdx) => (
         <div key={rowIdx} className="flex justify-center gap-2">

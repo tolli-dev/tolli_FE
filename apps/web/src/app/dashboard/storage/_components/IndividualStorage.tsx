@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { dataConnect } from "@/lib/dataconnect";
 import { deleteBookmark, addBookmark } from "@firebasegen/default-connector";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
+import { DataConnectError } from "firebase/data-connect";
 
 interface Props {
   verse: {
@@ -29,8 +30,18 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   };
 
   const handleAddBookmark = async (verseId: number) => {
-    await addBookmark(dataConnect, { verseId: verseId });
-    setBookmark(true);
+    try {
+      await addBookmark(dataConnect, { verseId: verseId });
+
+      setBookmark(true);
+    } catch (error) {
+      if (error instanceof DataConnectError) {
+        const message = error.message ?? "북마크 추가에 실패했습니다.";
+        alert(message);
+      } else {
+        alert("문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      }
+    }
   };
 
   return (

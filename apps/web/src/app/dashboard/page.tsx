@@ -10,6 +10,7 @@ import DashboardHeader from './_components/DashboardHeader';
 import BeforeFinish from './BeforeFinish';
 import AfterFinish from './AfterFinish';
 import Bookmark from './Bookmark';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 type TodayVerse = { id: number; reference: string; fullText: string } | null;
 
@@ -18,6 +19,7 @@ export default function DashBoard() {
   const [nickname, setNickname] = useState('');
   const [done, setDone] = useState(false);
   const [todayVerse, setTodayVerse] = useState<TodayVerse>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
@@ -34,6 +36,7 @@ export default function DashBoard() {
         const verse = verseResult.data.todayCompletion[0]?.verse ?? null;
         setTodayVerse(verse);
         setDone(verse !== null);
+        setLoading(false);
       });
     });
 
@@ -51,7 +54,8 @@ export default function DashBoard() {
     >
       <DashboardHeader nickname={nickname} done={done} />
 
-      {activeIndex === 0 &&
+      {loading && <LoadingSpinner />}
+      {activeIndex === 0 && !loading &&
         (done ? <AfterFinish todayVerse={todayVerse} nickname={nickname} /> : <BeforeFinish nickname={nickname} />)}
       {activeIndex === 1 && <Bookmark />}
 

@@ -77,7 +77,7 @@ export default function LoginPage() {
       <div className="flex-1" />
       <img src={'/tolli-logo.svg'} alt="tolli" className="w-46.5 object-contain" />
       <div className="flex-1" />
-      <div className="flex flex-col justify-center px-10.75 items-center gap-2.75 w-full">
+      <div className="flex flex-col justify-center px-10.75 items-center gap-2.75 w-full" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
         <button
           type="button"
           onClick={requestKakaoLogin}

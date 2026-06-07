@@ -153,7 +153,8 @@ export default function SetAlarmTimePage() {
   }, []);
 
   const handleConfirm = () => {
-    const hour24 = period === '오전' ? hourIndex + 1 : (hourIndex === 12 ? 12 : hourIndex + 12);
+    const hour12 = hourIndex + 1;
+    const hour24 = period === '오전' ? (hour12 === 12 ? 0 : hour12) : (hour12 === 12 ? 12 : hour12 + 12);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: 'SAVE_ALARM_TIME', hour: hour24, minute: minuteIndex }),
     );

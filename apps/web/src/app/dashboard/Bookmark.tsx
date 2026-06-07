@@ -1,58 +1,38 @@
-import IndividualBookmark from "./_components/IndividaulBookmark";
+"use client";
 
-const bookmarks = [
-  {
-    verse: {
-      id: 1,
-      reference: "요한일서 5:4",
-      fullText:
-        "대저 하나님께로서 난 자마다 세상을 이기느니라 세상을 이긴 이김은 이것이니 우리의 믿음이니라",
-    },
-    createdAt: "2026-05-30T00:00:00Z",
-  },
-  {
-    verse: {
-      id: 2,
-      reference: "시편 23:1",
-      fullText: "여호와는 나의 목자시니 내가 부족함이 없으리로다",
-    },
-    createdAt: "2026-05-31T00:00:00Z",
-  },
-  {
-    verse: {
-      id: 3,
-      reference: "베드로전서 5:7",
-      fullText:
-        "너희 염려를 다 주께 맡겨 버리라 이는 저가 너희를 권고하심이니라",
-    },
-    createdAt: "2026-06-01T00:00:00Z",
-  },
-  {
-    verse: {
-      id: 4,
-      reference: "히브리서 13:8",
-      fullText: "예수 그리스도는 어제나 오늘이나 영원토록 동일하시니라",
-    },
-    createdAt: "2026-06-02T00:00:00Z",
-  },
-  {
-    verse: {
-      id: 5,
-      reference: "벤지 13:8",
-      fullText: "벤지는 좋은 형이다. 그러므로 말을 잘 들어야한다.",
-    },
-    createdAt: "2026-06-03T00:00:00Z",
-  },
-  {
-    verse: {
-      id: 6,
-      reference: "장주형 01:01",
-      fullText: "벤지와 하는 개발을 가장 우선시 할 것이다.",
-    },
-    createdAt: "2026-06-04T00:00:00Z",
-  },
-];
+import { useState, useEffect } from "react";
+import IndividualBookmark from "./_components/IndividaulBookmark";
+import {
+  getMyBookmarks,
+  GetMyBookmarksData,
+} from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
+
+interface BookMarks {
+  verse: {
+    id: number;
+    reference: string;
+    fullText: string;
+  };
+  createdAt: string;
+}
+
 export default function Bookmark() {
+  const [bookmarks, setBookmarks] = useState<BookMarks[]>();
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const getBookmarks = async () => {
+      const { data } = await getMyBookmarks(dataConnect, {
+        fetchPolicy: "SERVER_ONLY",
+      });
+      setBookmarks(data.bookmarks);
+    };
+    getBookmarks();
+  }, []);
+
+  if (!bookmarks) return null;
+
   return (
     <div className="flex flex-1 flex-col items-center w-full min-h-0">
       <header className="flex flex-col w-full shrink-0 mb-[clamp(0.625rem,3vw,0.9375rem)]">

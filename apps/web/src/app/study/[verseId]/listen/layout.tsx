@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import LeftEar from "../../../../public/images/leftEar.svg";
-import RightEar from "../../../../public/images/rightEar.svg";
+import LeftEar from "../../../../../public/images/leftEar.svg";
+import RightEar from "../../../../../public/images/rightEar.svg";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [cornerRadius, setCornerRadius] = useState(0);
@@ -41,12 +41,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           borderRadius: `${cornerRadius}px`,
           padding: "5px",
           background:
-            "conic-gradient(from var(--angle), #000 1%, #CCB5F0 25%, #000 39%, #CCB5F0 71%, #000 95%)",
+            "conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)",
           WebkitMask:
             "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMaskComposite: "xor",
           maskComposite: "exclude",
-          animation: "border-spin 3s linear infinite",
+          animation: "border-spin 6s linear infinite",
         }}
       />
       <Image

@@ -54,15 +54,15 @@ export default function StudyLoadingPage() {
         className="fixed inset-0 pointer-events-none"
         style={{
           borderRadius: `${cornerRadius}px`,
-          padding: '3px',
-          background: 'conic-gradient(from var(--angle), white, #CCB5F0, white)',
+          padding: '5px',
+          background: 'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
           WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
-          animation: 'border-spin 3s linear infinite',
+          animation: 'border-spin 6s linear infinite',
         }}
       />
-      <p className="text-[1.5rem] leading-8.5 font-medium text-[#CCB5F0] text-center">
+      <p className="text-[clamp(1.125rem,5.5vw,1.5rem)] leading-[clamp(2rem,8.5vw,2.125rem)] font-medium text-[#CCB5F0] text-center">
         두근두근 <br /> 오늘의 말씀은?
       </p>
       <img src="/tolli1.svg" alt="Tolli" className="w-57 h-57 object-contain" />

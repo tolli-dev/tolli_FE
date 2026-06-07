@@ -1,20 +1,20 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import FullTolli from "../../../../public/images/onBoarding/fullTolli.svg";
-import EatingTolli from "../../../../public/images/onBoarding/eatingTolli.svg";
+import FullTolli from "../../../../../public/images/onBoarding/fullTolli.svg";
+import EatingTolli from "../../../../../public/images/onBoarding/eatingTolli.svg";
 import CircleLoading from "./_components/CircleLoading";
 import Header from "./_components/Header";
-import Star1 from "../../../../public/images/star1.svg";
-import Star2 from "../../../../public/images/star2.svg";
-import { useRouter, useSearchParams } from "next/navigation";
+import Star1 from "../../../../../public/images/star1.svg";
+import Star2 from "../../../../../public/images/star2.svg";
+import { useRouter, useParams } from "next/navigation";
 
-function CompleteStepInner() {
+export default function CompleteStep() {
   const router = useRouter();
   const [component, setComponent] = useState(false);
 
-  const verseId = useSearchParams().get("verseId");
+  const { verseId } = useParams<{ verseId: string }>();
 
   useEffect(() => {
     const time = setTimeout(() => {
@@ -26,7 +26,7 @@ function CompleteStepInner() {
   useEffect(() => {
     if (!component) return;
     const time = setTimeout(() => {
-      router.push(`/study/listen?verseId=${verseId}`);
+      router.push(`/study/${verseId}/listen`);
     }, 3000);
     return () => clearTimeout(time);
   }, [component, router, verseId]);
@@ -79,13 +79,5 @@ function CompleteStepInner() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function CompleteStep() {
-  return (
-    <Suspense>
-      <CompleteStepInner />
-    </Suspense>
   );
 }

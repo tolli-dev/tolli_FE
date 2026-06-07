@@ -17,7 +17,7 @@ export default function RecordComplete({
 
   const stopRecording = async () => {
     await createStudyCompletion(dataConnect, { verseId });
-    router.push(`/study/completeRecording?verseId=${verseId}`);
+    router.push(`/study/${verseId}/completeRecording`);
   };
 
   return (

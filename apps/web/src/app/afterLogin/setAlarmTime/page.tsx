@@ -176,12 +176,12 @@ export default function SetAlarmTimePage() {
         className="fixed inset-0 pointer-events-none"
         style={{
           borderRadius: `${cornerRadius}px`,
-          padding: '3px',
-          background: 'conic-gradient(from var(--angle), white, #CCB5F0, white)',
+          padding: '5px',
+          background: 'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
           WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
-          animation: 'border-spin 3s linear infinite',
+          animation: 'border-spin 6s linear infinite',
         }}
       />
 

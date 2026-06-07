@@ -3,14 +3,12 @@
 import { Suspense, useEffect } from "react";
 import Image from "next/image";
 import ReadingBookTolli from "../../../../public/images/readingBookTolli.svg";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 function CompleteListeningInner() {
-  const router = useRouter();
-
   useEffect(() => {
     const timeout = setTimeout(() => {
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     }, 5000);
 
     return () => clearTimeout(timeout);

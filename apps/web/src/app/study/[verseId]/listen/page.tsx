@@ -1,13 +1,13 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { getVerse, getTodayCompletionCount } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
 import Bookmark from './_components/Bookmark';
 
-function ListenVerseInner() {
+export default function ListenVerse() {
   const [played, setPlayed] = useState(false);
   const [home, setHome] = useState(false);
   const [bookmarkModal, setBookmarkModal] = useState(false);
@@ -17,7 +17,8 @@ function ListenVerseInner() {
   const verseAudioRef = useState(() => typeof Audio !== 'undefined' ? new Audio() : null)[0];
   const bgmAudioRef = useState(() => typeof Audio !== 'undefined' ? new Audio('/verse-audio/bgm.mp3') : null)[0];
 
-  const verseId = Number(useSearchParams().get('verseId'));
+  const { verseId: verseIdParam } = useParams<{ verseId: string }>();
+  const verseId = Number(verseIdParam);
 
   useEffect(() => {
     if (!verseId) return;
@@ -97,7 +98,7 @@ function ListenVerseInner() {
             icon="fluent:people-20-filled"
             className="text-[#383838] text-[clamp(1rem,5.25vw,1.3125rem)]"
           />
-          <h4 className="text-[#202020] font-medium text-[clamp(0.8125rem,4vw,1rem)]">
+          <h4 className="text-[#202020] font-medium text-[clamp(0.8125rem,4vw,1rem)] whitespace-nowrap">
             오늘 <span className="text-[#383838]">{todayCount}</span>명이 함께 읽고 있어요
           </h4>
         </div>
@@ -164,13 +165,5 @@ function ListenVerseInner() {
         </div>
       )}
     </section>
-  );
-}
-
-export default function ListenVerse() {
-  return (
-    <Suspense>
-      <ListenVerseInner />
-    </Suspense>
   );
 }

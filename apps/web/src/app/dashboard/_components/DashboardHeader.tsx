@@ -76,7 +76,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       {(modal === 'logout' || modal === 'withdraw') && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/92">
           <div className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]">
-            <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0]">
+            <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] whitespace-nowrap">
               {modal === 'logout' ? '로그아웃 할까요?' : '회원 탈퇴 할까요?'}
             </h2>
             <div className="relative w-32 h-32">
@@ -145,7 +145,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
                 />
               </div>
               {renameError && (
-                <span className="text-[#FF6B6B] text-[0.75rem] px-2">
+                <span className="text-[#FF6B6B] text-[0.75rem] px-2 whitespace-nowrap">
                   한글, 영문, 숫자 1~8자로 입력해주세요
                 </span>
               )}

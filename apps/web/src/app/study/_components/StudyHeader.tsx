@@ -1,6 +1,8 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { useSoundEffect } from "@/app/hooks/useSoundEffect";
+import { playSound } from "@/lib/sound";
 
 const TOTAL_STEPS = 7;
 
@@ -9,6 +11,7 @@ interface StudyHeaderProps {
 }
 
 export default function StudyHeader({ currentStep }: StudyHeaderProps) {
+  const play = useSoundEffect("/sounds/나가기 버튼 눌렀을때 후보1.mp3");
   const router = useRouter();
 
   const handleBack = () => {
@@ -16,6 +19,7 @@ export default function StudyHeader({ currentStep }: StudyHeaderProps) {
   };
 
   const handleClose = () => {
+    playSound("/sounds/끄기 소리.mp3");
     router.push("/dashboard");
   };
 

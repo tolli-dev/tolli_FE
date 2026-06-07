@@ -5,7 +5,11 @@ import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import IndividualStorage from "./IndividualStorage";
 import { dataConnect } from "@/lib/dataconnect";
-import { getMyCompletions, getVerse } from "@firebasegen/default-connector";
+import {
+  getMyBookmarks,
+  getMyCompletions,
+  getVerse,
+} from "@firebasegen/default-connector";
 
 interface CompletedVerse {
   verse: {
@@ -23,6 +27,7 @@ export default function StorageView({ done }: Props) {
   const router = useRouter();
   const [searchVerse, setSearchVerse] = useState("");
   const [myCompletions, setMyCompletions] = useState<CompletedVerse[]>([]);
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const getMyStorage = async () => {
@@ -40,6 +45,11 @@ export default function StorageView({ done }: Props) {
         }),
       );
       setMyCompletions(verse);
+
+      const { data: bookmarksData } = await getMyBookmarks(dataConnect);
+      setBookmarkedIds(
+        new Set(bookmarksData.bookmarks.map((item) => item.verse.id)),
+      );
     };
     getMyStorage();
   }, []);
@@ -121,7 +131,11 @@ export default function StorageView({ done }: Props) {
         <main className="w-full flex-1 min-h-0 flex flex-col items-center">
           <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
             {myCompletions.map((value) => (
-              <IndividualStorage key={value.verse.id} verse={value.verse} />
+              <IndividualStorage
+                key={value.verse.id}
+                bookmarkedIds={bookmarkedIds}
+                verse={value.verse}
+              />
             ))}
           </div>
         </main>
@@ -141,7 +155,11 @@ export default function StorageView({ done }: Props) {
         <main className="w-full flex-1 min-h-0 flex flex-col items-center">
           <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
             {filteredData.map((value) => (
-              <IndividualStorage key={value.verse.id} verse={value.verse} />
+              <IndividualStorage
+                key={value.verse.id}
+                bookmarkedIds={bookmarkedIds}
+                verse={value.verse}
+              />
             ))}
           </div>
         </main>

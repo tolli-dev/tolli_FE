@@ -65,6 +65,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
     }
     await updateNickname(dataConnect, { nickname: renameValue });
     setModal(null);
+    window.location.href = "/dashboard";
   };
 
   const openModal = (type: ModalType) => {

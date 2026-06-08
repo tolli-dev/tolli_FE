@@ -77,6 +77,7 @@ export default function StorageView({ done, nickname }: Props) {
     }
     await updateNickname(dataConnect, { nickname: renameValue });
     setModal(null);
+    window.location.href = "/dashboard";
   };
 
   const openModal = (type: ModalType) => {

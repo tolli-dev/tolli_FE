@@ -15,15 +15,22 @@ class CornerRadiusModule : Module() {
 
     AsyncFunction("getCornerRadius") {
       val activity = appContext.currentActivity ?: return@AsyncFunction 0.0
-      val density = activity.resources.displayMetrics.density
+      val res = activity.resources
+      val density = res.displayMetrics.density
 
+      // API 31 미만: 시스템 dimen 리소스 우선, 없으면 휴리스틱
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-        val dm = activity.resources.displayMetrics
-        val minDimPx = minOf(dm.widthPixels, dm.heightPixels)
+        val dimenPx = getSystemDimenPx(activity)
+        if (dimenPx > 0) return@AsyncFunction (dimenPx / density).toDouble()
+        val minDimPx = minOf(res.displayMetrics.widthPixels, res.displayMetrics.heightPixels)
         return@AsyncFunction (minDimPx * 0.05f / density).toDouble()
       }
 
-      // 1순위: decorView.rootWindowInsets — window에 실제 dispatch된 insets (TOP_LEFT 기준)
+      // 1순위: 시스템 dimen 리소스 (AOSP가 실제로 사용하는 값 — Samsung 포함 OEM에서 가장 정확)
+      val dimenPx = getSystemDimenPx(activity)
+      if (dimenPx > 0) return@AsyncFunction (dimenPx / density).toDouble()
+
+      // 2순위: decorView.rootWindowInsets (window에 실제 dispatch된 insets)
       val decorResult = AtomicInteger(0)
       val latch = CountDownLatch(1)
       activity.runOnUiThread {
@@ -42,7 +49,7 @@ class CornerRadiusModule : Module() {
       val decorPx = decorResult.get()
       if (decorPx > 0) return@AsyncFunction (decorPx / density).toDouble()
 
-      // 2순위: currentWindowMetrics (TOP_LEFT 기준)
+      // 3순위: currentWindowMetrics
       try {
         val wm = activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val insets = wm.currentWindowMetrics.windowInsets
@@ -52,24 +59,19 @@ class CornerRadiusModule : Module() {
         android.util.Log.e("CornerRadius", "currentWindowMetrics exception: ${e.message}")
       }
 
-      // 3순위: 시스템 프로퍼티
-      try {
-        val clazz = Class.forName("android.os.SystemProperties")
-        val get = clazz.getDeclaredMethod("get", String::class.java, String::class.java)
-        val radiusPx = listOf(
-          "ro.com.google.cornerradius",
-          "ro.config.rounded_mask_size",
-          "persist.sys.rounded.radius",
-        ).mapNotNull { key ->
-          (get.invoke(null, key, "0") as String).toIntOrNull()?.takeIf { it > 0 }
-        }.firstOrNull()
-
-        if (radiusPx != null) return@AsyncFunction (radiusPx / density).toDouble()
-      } catch (e: Exception) {
-        android.util.Log.e("CornerRadius", "SystemProperties exception: ${e.message}")
-      }
-
       0.0
     }
+  }
+
+  private fun getSystemDimenPx(context: Context): Int {
+    val res = context.resources
+    for (name in listOf("rounded_corner_radius_top", "rounded_corner_radius")) {
+      val id = res.getIdentifier(name, "dimen", "android")
+      if (id != 0) {
+        val px = res.getDimensionPixelSize(id)
+        if (px > 0) return px
+      }
+    }
+    return 0
   }
 }

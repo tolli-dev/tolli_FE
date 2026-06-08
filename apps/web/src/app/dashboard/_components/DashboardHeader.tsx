@@ -28,7 +28,9 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   const router = useRouter();
 
   const handleAccessToStorage = () => {
-    router.push(`/dashboard/storage?isDone=${done}`);
+    const params = new URLSearchParams({ isDone: String(done) });
+    if (nickname) params.set("nickname", nickname);
+    router.push(`/dashboard/storage?${params.toString()}`);
   };
 
   const handleLogout = async () => {

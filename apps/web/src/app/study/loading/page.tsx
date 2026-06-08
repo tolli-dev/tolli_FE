@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { getMyCurrentVerse } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from 'next/navigation';
 
 async function getTodayVerseId(): Promise<number> {
   const today = new Date();
@@ -20,7 +19,7 @@ async function getTodayVerseId(): Promise<number> {
 
 export default function StudyLoadingPage() {
   const router = useRouter();
-  const verseId = useSearchParams().get("verseId");
+  const verseId = useSearchParams().get('verseId');
   const [cornerRadius, setCornerRadius] = useState(0);
 
   useEffect(() => {
@@ -58,7 +57,8 @@ export default function StudyLoadingPage() {
         style={{
           borderRadius: `${cornerRadius}px`,
           padding: '5px',
-          background: 'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
+          background:
+            'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
           WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
@@ -68,7 +68,14 @@ export default function StudyLoadingPage() {
       <p className="text-[clamp(1.125rem,5.5vw,1.5rem)] leading-[clamp(2rem,8.5vw,2.125rem)] font-medium text-[#CCB5F0] text-center">
         두근두근 <br /> 오늘의 말씀은?
       </p>
-      <Image src="/tolli1.webp" alt="Tolli" width={228} height={228} className="object-contain" priority />
+      <Image
+        src="/tolli1.webp"
+        alt="Tolli"
+        width={228}
+        height={228}
+        className="object-contain"
+        priority
+      />
       <style>{`
         @property --angle {
           syntax: '<angle>';

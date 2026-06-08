@@ -78,7 +78,7 @@ export default function StorageView({ done }: Props) {
         ${done ? "is-done" : ""}
       `}
     >
-      <header className="flex flex-row items-center w-full gap-[clamp(1.5rem,7vw,2.5rem)] mb-[10px]">
+      <header className="flex flex-row items-center w-full h-[clamp(1.125rem,5vw,1.5rem)] gap-[clamp(1.5rem,7vw,2.5rem)] mb-[clamp(0.5rem,2vw,0.75rem)] z-50">
         <div className="flex flex-row items-center">
           <Icon
             onClick={() => router.back()}

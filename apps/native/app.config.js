@@ -58,13 +58,13 @@ export default {
         },
       ],
       [
-        'expo-notifications',
+        "expo-notifications",
         {
-          iosPermissions: ['Alert', 'Sound', 'Badge'],
+          iosPermissions: ["Alert", "Sound", "Badge"],
           android: {
             defaultChannel: {
-              name: 'default',
-              importance: 'HIGH',
+              name: "default",
+              importance: "HIGH",
               sound: true,
             },
           },

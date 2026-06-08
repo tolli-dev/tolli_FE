@@ -5,7 +5,7 @@
   "pnpm": {
     "overrides": {
       "react": "^18.3.1",
-      "react-dom": "^18.3.1"
+      "react-dom": "^18.3.1",
       "firebase": "12.13.0"
     }
   },

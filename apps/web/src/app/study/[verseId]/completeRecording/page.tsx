@@ -19,14 +19,16 @@ export default function CompleteStep() {
 
   useEffect(() => {
     const preloads = [Star1.src, Star2.src, FullTolli.src].map((src) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
       link.href = src;
       document.head.appendChild(link);
       return link;
     });
-    return () => { preloads.forEach((l) => document.head.removeChild(l)); };
+    return () => {
+      preloads.forEach((l) => document.head.removeChild(l));
+    };
   }, []);
 
   useEffect(() => {
@@ -46,9 +48,7 @@ export default function CompleteStep() {
   }, [component, router, verseId]);
 
   return (
-    <div
-      className="grid grid-rows-3 h-full pt-[clamp(1.5rem,11vw,2.6875rem)] pb-[clamp(1.25rem,9.5vw,2.3125rem)] px-[clamp(1rem,6.5vw,1.5625rem)]"
-    >
+    <div className="grid grid-rows-3 h-full pt-[clamp(1.5rem,11vw,2.6875rem)] pb-[clamp(1.25rem,9.5vw,2.3125rem)] px-[clamp(1rem,6.5vw,1.5625rem)]">
       <div className="flex items-center justify-center text-center">
         {!component && (
           <Header

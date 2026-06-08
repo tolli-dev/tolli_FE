@@ -3,8 +3,6 @@ import DiffHeader from "./_components/header/DiffHeader";
 import RecordButton from "./_components/button/RecordButton";
 import { useRouter } from "next/navigation";
 import RetryRecordingButton from "./_components/button/RetryRecordingButton";
-import { createStudyCompletion } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
 
 export default function RecordComplete({
   retryRecording,
@@ -15,8 +13,7 @@ export default function RecordComplete({
 }) {
   const router = useRouter();
 
-  const stopRecording = async () => {
-    await createStudyCompletion(dataConnect, { verseId });
+  const stopRecording = () => {
     router.push(`/study/${verseId}/completeRecording`);
   };
 

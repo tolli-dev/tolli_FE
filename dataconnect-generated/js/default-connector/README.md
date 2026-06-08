@@ -355,7 +355,7 @@ export interface GetMyBookmarksData {
       reference: string;
       fullText: string;
     } & Verse_Key;
-      createdAt: TimestampString;
+    createdAt: TimestampString;
   })[];
 }
 ```
@@ -453,7 +453,7 @@ export interface GetMyCompletionsData {
       id: number;
       reference: string;
     } & Verse_Key;
-      completedAt: TimestampString;
+    completedAt: TimestampString;
   } & StudyCompletion_Key)[];
 }
 ```

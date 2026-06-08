@@ -4,6 +4,7 @@ import { useReducer, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Verse } from '../types';
 import HangulKeyboard from './HangulKeyboard';
+import { playSound } from '@/lib/sound';
 import {
   toChosung,
   isVowel,
@@ -199,7 +200,9 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
 
       {!allDone && (
         <HangulKeyboard
-          onKey={(key) => dispatch({ type: 'KEY', key, targets })}
+          onKey={(key) => {
+            playSound('/sounds/타자소리 타이핑 소리.mp3');
+            dispatch({ type: 'KEY', key, targets })}}
         />
       )}
     </section>

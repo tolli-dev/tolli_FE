@@ -2,6 +2,7 @@
 
 import { WordMeaningData } from "../types";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { playSound } from "@/lib/sound";
 
 interface Props {
   meanings: WordMeaningData[];
@@ -38,6 +39,7 @@ export default function TabMaskedVerse({
   }, [meanings]);
 
   const handleTabWords = (index: number) => {
+    playSound("/sounds/보기 탭.mp3");
     setTabbedWords((prev) => {
       const updatedWords = [...prev];
       updatedWords[index] = true;
@@ -46,12 +48,18 @@ export default function TabMaskedVerse({
   };
 
   const handleWatchMeaning = (meaning: WordMeaningData, index: number) => {
+    playSound("/sounds/말씀 잠깐 보기 카드 공개_비공개.mp3");
     setIsOpen({ meaning: meaning, condition: true });
     setWatchMeaning((prev) => {
       const updatedMeaning = [...prev];
       updatedMeaning[index] = true;
       return updatedMeaning;
     });
+  };
+
+  const handleCloseMeaning = () => {
+    playSound("/sounds/원래 화면 다시 돌아갈때.mp3");
+    setIsOpen({ meaning: null, condition: false });
   };
 
   return (
@@ -109,12 +117,12 @@ export default function TabMaskedVerse({
         <>
           <div
             className="fixed inset-0 z-40"
-            onClick={() => setIsOpen({ meaning: null, condition: false })}
+            onClick={handleCloseMeaning}
           />
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#FFFFFF] rounded-t-[clamp(1rem,4vw,1.5rem)] px-[clamp(1.25rem,6vw,2rem)] pt-[clamp(1.25rem,5vw,1.75rem)] pb-[clamp(3rem,12vw,5rem)] min-h-[clamp(16rem,30vh,24rem)]">
             <button
               className="absolute top-[clamp(0.75rem,3vw,1.25rem)] right-[clamp(1rem,4vw,1.5rem)] text-[#B0B0B0] text-[clamp(1.25rem,5vw,1.75rem)] leading-none"
-              onClick={() => setIsOpen({ meaning: null, condition: false })}
+              onClick={handleCloseMeaning}
             >
               ×
             </button>

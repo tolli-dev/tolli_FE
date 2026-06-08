@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { playSound } from "@/lib/sound";
 
 const TOTAL_STEPS = 7;
 
@@ -13,36 +14,53 @@ export default function StudyHeader({ currentStep }: StudyHeaderProps) {
   const router = useRouter();
   const [showExitModal, setShowExitModal] = useState(false);
 
+  const handleBack = () => {
+    router.back();
+  };
+
+  // X 누름 → 나가기 확인 모달 열기
+  const handleClose = () => {
+    playSound("/sounds/step (0-7) x누름.mp3");
+    setShowExitModal(true);
+  };
+
+  // 모달에서 진짜 나가기 (학습 초기화)
   const handleConfirmExit = () => {
-    router.push('/dashboard');
+    playSound("/sounds/step (0-7) x누르고 진짜 나감 (초기화).mp3");
+    router.push("/dashboard");
+  };
+
+  // 모달에서 다시 돌아가기 (취소)
+  const handleCancelExit = () => {
+    playSound("/sounds/step (0-7) x누르고 다시 돌아감.mp3");
+    setShowExitModal(false);
   };
 
   return (
     <>
-      {showExitModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/92"
-          onClick={() => setShowExitModal(false)}
-        >
-          <div
-            className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] text-center whitespace-nowrap">
-              지금 나가면 진행이 저장되지 않아요
-            </h2>
-            <div className="flex flex-col w-full gap-3 mt-2">
+     {showExitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-[clamp(1.5rem,8vw,2.5rem)]">
+          <div className="w-full max-w-90 flex flex-col items-center rounded-[clamp(1rem,5vw,1.5rem)] bg-[#2A2A2A] px-[clamp(1.25rem,6vw,1.75rem)] py-[clamp(1.5rem,7vw,2rem)]">
+            <p className="text-center font-semibold text-[clamp(1rem,4.5vw,1.125rem)] leading-[1.5] text-[#FFFFFF] mb-[clamp(0.375rem,2vw,0.625rem)] whitespace-nowrap">
+              학습을 그만둘까요?
+            </p>
+            <p className="text-center font-light text-[clamp(0.8125rem,3.5vw,0.875rem)] leading-[1.5] text-[#B0B0B0] break-keep mb-[clamp(1.25rem,6vw,1.75rem)] whitespace-nowrap">
+              지금 나가면 진행한 내용이 저장되지 않아요.
+            </p>
+            <div className="flex w-full gap-[clamp(0.5rem,2.5vw,0.75rem)]">
               <button
-                onClick={handleConfirmExit}
-                className="w-full h-12 rounded-[1.25rem] text-[1rem] font-semibold text-black bg-[#CCB5F0]"
-              >
-                나가기
-              </button>
-              <button
-                onClick={() => setShowExitModal(false)}
-                className="w-full h-12 rounded-[1.25rem] text-[1rem] font-semibold text-black bg-[#D9D9D9]"
+                type="button"
+                onClick={handleCancelExit}
+                className="flex-1 rounded-[clamp(0.875rem,4vw,1.25rem)] bg-[#4A4A4A] py-[clamp(0.625rem,3vw,0.8125rem)] font-semibold text-[clamp(0.875rem,4vw,1rem)] text-[#CCB5F0]"
               >
                 계속하기
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmExit}
+                className="flex-1 rounded-[clamp(0.875rem,4vw,1.25rem)] bg-[#CCB5F0] py-[clamp(0.625rem,3vw,0.8125rem)] font-semibold text-[clamp(0.875rem,4vw,1rem)] text-[#1B1B1B]"
+              >
+                그만두기
               </button>
             </div>
           </div>

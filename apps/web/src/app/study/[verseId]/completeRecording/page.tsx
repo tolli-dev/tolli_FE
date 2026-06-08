@@ -9,6 +9,7 @@ import Header from "./_components/Header";
 import Star1 from "../../../../../public/images/star1.webp";
 import Star2 from "../../../../../public/images/star2.webp";
 import { useRouter, useParams } from "next/navigation";
+import { playSound } from "@/lib/sound";
 
 export default function CompleteStep() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function CompleteStep() {
   }, []);
 
   useEffect(() => {
+    playSound("/sounds/tolli에게 먹이가 전해졌을때.mp3");
     const time = setTimeout(() => {
       setComponent(true);
     }, 3000);

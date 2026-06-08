@@ -3,10 +3,15 @@
 import { Suspense, useEffect } from "react";
 import Image from "next/image";
 import ReadingBookTolli from "../../../../public/images/readingBookTolli.webp";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { playSound } from "@/lib/sound";
 
-function CompleteListeningInner() {
+export default function CompleteListening() {
+  const router = useRouter();
+
   useEffect(() => {
+    playSound("/sounds/말씀 step 7까지 다 완료.mp3");
     const timeout = setTimeout(() => {
       window.location.href = "/dashboard";
     }, 5000);
@@ -33,10 +38,3 @@ function CompleteListeningInner() {
   );
 }
 
-export default function CompleteListening() {
-  return (
-    <Suspense>
-      <CompleteListeningInner />
-    </Suspense>
-  );
-}

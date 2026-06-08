@@ -24,7 +24,10 @@ mutation CreateStudyCompletion($verseId: Int!) @auth(level: USER) {
 mutation AddBookmark($verseId: Int!) @auth(level: USER) {
   query {
     bookmarks(where: { userId: { eq_expr: "auth.uid" } })
-      @check(expr: "this.size() < 10", message: "북마크는 최대 10개까지 추가할 수 있어요.") {
+      @check(
+        expr: "this.size() < 10"
+        message: "북마크는 최대 10개까지 추가할 수 있어요."
+      ) {
       __typename
     }
   }

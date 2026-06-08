@@ -1,5 +1,9 @@
+"use client";
+
+import { useEffect } from "react";
 import { Verse } from "../types";
 import Link from "next/link";
+import { useSoundEffect } from "@/app/hooks/useSoundEffect";
 
 export default function ReadVerse({
   verse,
@@ -8,6 +12,11 @@ export default function ReadVerse({
   verse: Verse;
   verseId: string;
 }) {
+  const play = useSoundEffect("/sounds/처음 말씀 pop up 될때 소리.mp3");
+  useEffect(() => {
+    play();
+  });
+
   return (
     <Link className="w-full h-dvh flex-1" href={`/study/${verseId}/1`}>
       <section className="flex flex-col flex-1">

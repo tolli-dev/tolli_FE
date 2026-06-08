@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Verse, StepMaskData } from '../types';
 import MaskedVerse from './MaskedVerse';
+import { playSound } from '@/lib/sound';
 
 interface MultipleChoiceViewProps {
   step: 2 | 3 | 4 | 5;
@@ -30,9 +31,11 @@ export default function MultipleChoiceView({
     const isCorrect = choice === correctText;
 
     if (isCorrect) {
+      playSound('/sounds/정답.mp3');
       setWrongChoice(null);
       setAnswers((prev) => ({ ...prev, [currentMaskedWordIndex]: choice }));
     } else {
+      playSound('/sounds/오답.mp3');
       setWrongChoice(choice);
     }
   };

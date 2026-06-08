@@ -1,0 +1,48 @@
+mutation CreateUser(
+  $nickname: String!
+  $termsAgreedAt: Timestamp!
+  $privacyAgreedAt: Timestamp!
+  $emailMarketingAgreed: Boolean!
+  $emailMarketingAgreedAt: Timestamp
+) @auth(level: USER) {
+  user_insert(
+    data: {
+      id_expr: "auth.uid"
+      nickname: $nickname
+      termsAgreedAt: $termsAgreedAt
+      privacyAgreedAt: $privacyAgreedAt
+      emailMarketingAgreed: $emailMarketingAgreed
+      emailMarketingAgreedAt: $emailMarketingAgreedAt
+    }
+  )
+}
+
+mutation CreateStudyCompletion($verseId: Int!) @auth(level: USER) {
+  studyCompletion_insert(data: { userId_expr: "auth.uid", verseId: $verseId })
+}
+
+mutation AddBookmark($verseId: Int!) @auth(level: USER) {
+  query {
+    bookmarks(where: { userId: { eq_expr: "auth.uid" } })
+      @check(
+        expr: "this.size() < 10"
+        message: "북마크는 최대 10개까지 추가할 수 있어요."
+      ) {
+      __typename
+    }
+  }
+
+  bookmark_insert(data: { userId_expr: "auth.uid", verseId: $verseId })
+}
+
+mutation DeleteBookmark($verseId: Int!) @auth(level: USER) {
+  bookmark_delete(key: { userId_expr: "auth.uid", verseId: $verseId })
+}
+
+mutation UpdateNickname($nickname: String!) @auth(level: USER) {
+  user_update(id_expr: "auth.uid", data: { nickname: $nickname })
+}
+
+mutation DeleteUser @auth(level: USER) {
+  user_delete(id_expr: "auth.uid")
+}

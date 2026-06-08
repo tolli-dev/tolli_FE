@@ -1,0 +1,83 @@
+export default {
+  expo: {
+    name: "Tolli",
+    slug: "Tolli",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/icon.png",
+    userInterfaceStyle: "light",
+    newArchEnabled: true,
+    splash: {
+      image: "./assets/splash-icon.png",
+      resizeMode: "contain",
+      backgroundColor: "#ffffff",
+    },
+    ios: {
+      supportsTablet: true,
+      bundleIdentifier: "com.company.tolli",
+      usesAppleSignIn: true,
+      infoPlist: {
+        NSMicrophoneUsageDescription: "녹음을 위해 마이크를 사용합니다.",
+      },
+    },
+    android: {
+      package: "com.company.tolli",
+      adaptiveIcon: {
+        foregroundImage: "./assets/adaptive-icon.png",
+        backgroundColor: "#ffffff",
+      },
+      permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
+      edgeToEdgeEnabled: true,
+      predictiveBackGestureEnabled: false,
+    },
+    web: {
+      favicon: "./assets/favicon.png",
+    },
+    scheme: "tolli",
+    plugins: [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          iosUrlScheme:
+            "com.googleusercontent.apps.453019507405-qq1d999d55r3onrsdoednvtmjggfq6vf",
+          googleServicesFile: "./android/app/google-services.json",
+        },
+      ],
+      [
+        "@react-native-seoul/kakao-login",
+        {
+          kakaoAppKey: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY,
+        },
+      ],
+      [
+        "expo-build-properties",
+        {
+          android: {
+            kotlinVersion: "2.1.0",
+            extraMavenRepos: [
+              "https://devrepo.kakao.com/nexus/content/groups/public/",
+            ],
+          },
+        },
+      ],
+      [
+        'expo-notifications',
+        {
+          iosPermissions: ['Alert', 'Sound', 'Badge'],
+          android: {
+            defaultChannel: {
+              name: 'default',
+              importance: 'HIGH',
+              sound: true,
+            },
+          },
+        },
+      ],
+    ],
+    extra: {
+      googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,
+      googleIosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
+      appleClientId: process.env.APPLE_CLIENT_ID,
+    },
+  },
+};

@@ -1,26 +1,234 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --liquid-glass-filters: url(#liquid-glass-button) brightness(150%);
+  --btn-content-bg: hsl(0 100% 100% / 15%);
+  --btn-filters: blur(4px) brightness(150%);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans:
+    var(--font-pretendard), "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Primary */
+  --color-primary-50: #cfc4f4;
+  --color-primary-75: #ccb6ef;
+  --color-primary-100: #b99cfc;
+  --color-primary-200: #7d49f8;
+  --color-primary-300: #6528f7;
+  --color-primary-400: #501bce;
+
+  /* Surface */
+  --color-surface-50: #fcfcfc;
+  --color-surface-100: #d9d9d9;
+  --color-surface-200: #adadad;
+  --color-surface-300: #9a9a9a;
+  --color-surface-350: #858585;
+  --color-surface-400: #474747;
+  --color-surface-500: #303030;
+
+  --color-bg: #1b1b1b;
+  --color-dashboard-article-bg: #c8c8c8;
+  --color-dashboard-blocked-button: #656565;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-surface-50);
+  font-family: var(--font-sans);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+body:has(.afterLogin-greeting) {
+  padding-bottom: 0 !important;
+}
+
+body:has(.dashboard-layout) {
+  background: linear-gradient(to bottom, #e4e4e4 4%, #e6e6e6 66%, #ccb5f0 100%);
+}
+
+body:has(.dashboard-layout.is-done) {
+  background: linear-gradient(
+    to bottom,
+    #ccb5f0 0%,
+    #e4e4e4 26%,
+    #e6e6e6 85%,
+    #ffffff 100%
+  );
+}
+
+body:has(.dashboard-layout) {
+  color: black;
+  font-family: var(--font-sans);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+body:has(.listenVerse-layout) {
+  color: black;
+  font-family: var(--font-sans);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+body:has(.listenVerse-layout) {
+  background: linear-gradient(to bottom, #ccb5f0 0%, #ffffff 100%);
+}
+
+.bookmarks::-webkit-scrollbar {
+  width: 7px;
+}
+
+.bookmarks::-webkit-scrollbar-thumb {
+  height: 30%;
+  background: #b282ff66;
+  border-radius: 10px;
+}
+
+.bookmarks::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* H1 — Semibold, 28/40, -7% */
+.text-h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  letter-spacing: -0.07em;
+}
+
+/* H2 — Regular, 17/26 */
+.text-h2 {
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.625rem;
+}
+
+/* B2 — Regular, 17/22, -2% */
+.text-b2 {
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.375rem;
+  letter-spacing: -0.02em;
+}
+
+/* 메인홈 — Semibold, 16/20 */
+.text-main {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+/* 말씀 — Light, 15/23 */
+.text-verse {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.4375rem;
+}
+
+/* 버튼(big) — Bold, 18/21, -7% */
+.text-btn-lg {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3125rem;
+  letter-spacing: -0.07em;
+}
+
+/* 버튼(small) — Regular, 14/22, -2% */
+.text-btn-sm {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.375rem;
+  letter-spacing: -0.02em;
+}
+
+/* 말씀캡션 — Medium, 12/20, +3% */
+.text-verse-caption {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0.03em;
+}
+
+/* 캡션 — Regular, 12/17, -2% */
+.text-caption {
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.0625rem;
+  letter-spacing: -0.02em;
+}
+
+/* 입력 캡션 — Regular, 12/17, -2% */
+.input-caption {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  letter-spacing: -0.02em;
+}
+
+/* 알람 나중에 설정 — Regular, 14/22, -2% */
+.text-no-alarm {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
+}
+
+/* dashboard 제목 - Semibold, 28/40, -7%*/
+.text-dashboard-h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  letter-spacing: -0.07em;
+}
+
+/* dashboard article 글 - light, 15/23 -2% */
+.text-dashboard-article-p {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.4375rem;
+  letter-spacing: -0.02em;
+}
+
+/* dashboard button - SemiBold 16/32 -2% */
+.text-dashboard-btn {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
+}
+
+/* dashboard article h3 - SemiBold 16/20 0%*/
+.text-dashboard-article-h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: 0em;
+}
+
+/* dashboard article span - Medium 12/20 3%*/
+.text-dashboard-article-span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0em;
+}
+
+/* step loading p - semibold 26/34 0% */
+.text-step-loading-p {
+  font-size: clamp(1.25rem, 6vw, 1.625rem);
+  font-weight: 600;
+  line-height: clamp(1.75rem, 7.5vw, 2.125rem);
+  letter-spacing: 0em;
 }

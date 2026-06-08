@@ -1,0 +1,69 @@
+query GetVerse($id: Int!) @auth(level: PUBLIC) {
+  verse(id: $id) {
+    id
+    reference
+    fullText
+    words
+    maskedStep2
+    maskedStep3
+    maskedStep4
+  }
+}
+
+query GetMyCurrentVerse($today: Timestamp) @auth(level: USER) {
+  studyCompletions: studyCompletions(
+    where: { userId: { eq_expr: "auth.uid" } }
+    orderBy: { completedAt: DESC }
+    limit: 1
+  ) @retired {
+    verse { id }
+  }
+  todayCompletion: studyCompletions(
+    where: { userId: { eq_expr: "auth.uid" }, completedAt: { ge: $today } }
+    orderBy: { completedAt: DESC }
+    limit: 1
+  ) {
+    verse { id reference fullText }
+  }
+  lastCompletion: studyCompletions(
+    where: { userId: { eq_expr: "auth.uid" } }
+    orderBy: { completedAt: DESC }
+    limit: 1
+  ) {
+    verse { id }
+  }
+}
+
+query GetMyBookmarks @auth(level: USER) {
+  bookmarks(where: { userId: { eq_expr: "auth.uid" } }) {
+    verse {
+      id
+      reference
+      fullText
+    }
+    createdAt
+  }
+}
+
+query GetMyCompletions @auth(level: USER) {
+  studyCompletions(where: { userId: { eq_expr: "auth.uid" } }) {
+    id
+    verse {
+      id
+      reference
+    }
+    completedAt
+  }
+}
+
+query GetTodayCompletionCount($today: Timestamp!) @auth(level: PUBLIC, insecureReason: "오늘 함께 학습한 유저 수는 공개 정보입니다") {
+  studyCompletions(where: { completedAt: { ge: $today } }) {
+    id
+  }
+}
+
+query GetMe @auth(level: USER) {
+  user(id_expr: "auth.uid") {
+    nickname
+  }
+}

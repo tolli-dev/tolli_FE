@@ -1,0 +1,555 @@
+mutation SeedVerses @auth(level: NO_ACCESS) {
+  verse_insertMany(data: [
+    {
+      id: 1,
+      reference: "민수기 6:24",
+      fullText: "여호와는 네게 복을 주시고 너를 지키시기를 원하며",
+      words: [
+        { index: 1, text: "여호와는", meaning: "하나님의 고유 이름. 히브리어 '야훼(YHWH)'의 음역. '스스로 있는 자'라는 뜻" },
+        { index: 2, text: "네게", meaning: "너에게. 2인칭 단수 여격" },
+        { index: 3, text: "복을", meaning: "하나님이 내리시는 은혜·행복·번영" },
+        { index: 4, text: "주시고", meaning: "베푸시고, 주시며" },
+        { index: 5, text: "너를" },
+        { index: 6, text: "지키시기를", meaning: "보호하고 돌보시기를" },
+        { index: 7, text: "원하며", meaning: "바라시며, 뜻하시며" }
+      ],
+      maskedStep2: [3, 6],
+      maskedStep3: [3, 4, 6, 7],
+      maskedStep4: [1, 3, 4, 6, 7]
+    },
+    {
+      id: 2,
+      reference: "신명기 28:6",
+      fullText: "네가 들어와도 복을 받고 나가도 복을 받을 것이니라",
+      words: [
+        { index: 1, text: "네가" },
+        { index: 2, text: "들어와도", meaning: "집이나 성 안으로 들어올 때도" },
+        { index: 3, text: "복을", meaning: "하나님의 은혜를 입고" },
+        { index: 4, text: "받고" },
+        { index: 5, text: "나가도", meaning: "밖으로 나갈 때도" },
+        { index: 6, text: "복을" },
+        { index: 7, text: "받을" },
+        { index: 8, text: "것이니라", meaning: "~것이다 (확언의 종결어미)" }
+      ],
+      maskedStep2: [2, 5],
+      maskedStep3: [2, 3, 5, 7],
+      maskedStep4: [2, 3, 4, 5, 6, 7]
+    },
+    {
+      id: 3,
+      reference: "시편 23:1",
+      fullText: "여호와는 나의 목자시니 내가 부족함이 없으리로다",
+      words: [
+        { index: 1, text: "여호와는" },
+        { index: 2, text: "나의" },
+        { index: 3, text: "목자시니", meaning: "양을 치는 사람. 영적으로 인도자·돌보는 자를 의미" },
+        { index: 4, text: "내가" },
+        { index: 5, text: "부족함이", meaning: "모자람, 결핍, 부재" },
+        { index: 6, text: "없으리로다", meaning: "없을 것이다 (미래 확언)" }
+      ],
+      maskedStep2: [3, 5],
+      maskedStep3: [3, 5, 6],
+      maskedStep4: [1, 3, 4, 5, 6]
+    },
+    {
+      id: 4,
+      reference: "시편 37:5",
+      fullText: "너의 길을 여호와께 맡기라 저를 의지하면 저가 이루시고",
+      words: [
+        { index: 1, text: "너의" },
+        { index: 2, text: "길을", meaning: "인생의 행로, 삶의 방향" },
+        { index: 3, text: "여호와께" },
+        { index: 4, text: "맡기라", meaning: "위탁하라, 온전히 내어 드리라" },
+        { index: 5, text: "저를", meaning: "그를. 하나님을 가리키는 3인칭 대명사 (개역한글 표현)" },
+        { index: 6, text: "의지하면", meaning: "믿고 기대면, 의뢰하면" },
+        { index: 7, text: "저가" },
+        { index: 8, text: "이루시고", meaning: "성취하시고, 완성하시고" }
+      ],
+      maskedStep2: [4, 6],
+      maskedStep3: [2, 4, 6, 8],
+      maskedStep4: [2, 3, 4, 6, 7, 8]
+    },
+    {
+      id: 5,
+      reference: "시편 119:105",
+      fullText: "주의 말씀은 내 발에 등이요 내 길에 빛이니이다",
+      words: [
+        { index: 1, text: "주의", meaning: "하나님, 여호와" },
+        { index: 2, text: "말씀은", meaning: "하나님의 계시, 성경" },
+        { index: 3, text: "내" },
+        { index: 4, text: "발에" },
+        { index: 5, text: "등이요", meaning: "발 앞을 비추는 등불. 바로 앞 한 걸음을 밝혀주는 것" },
+        { index: 6, text: "내" },
+        { index: 7, text: "길에" },
+        { index: 8, text: "빛이니이다", meaning: "광명, 더 넓은 방향을 알게 해주는 것" }
+      ],
+      maskedStep2: [5, 8],
+      maskedStep3: [2, 5, 7, 8],
+      maskedStep4: [2, 4, 5, 6, 7, 8]
+    },
+    {
+      id: 6,
+      reference: "시편 126:5",
+      fullText: "눈물을 흘리며 씨를 뿌리는 자는 기쁨으로 거두리로다",
+      words: [
+        { index: 1, text: "눈물을", meaning: "슬픔과 고난 가운데서" },
+        { index: 2, text: "흘리며" },
+        { index: 3, text: "씨를", meaning: "수고하며 헌신하는 사람" },
+        { index: 4, text: "뿌리는" },
+        { index: 5, text: "자는" },
+        { index: 6, text: "기쁨으로", meaning: "즐거움과 환희로" },
+        { index: 7, text: "거두리로다", meaning: "추수할 것이다, 결실을 얻을 것이다" }
+      ],
+      maskedStep2: [3, 6],
+      maskedStep3: [2, 3, 6, 7],
+      maskedStep4: [1, 2, 3, 6, 7]
+    },
+    {
+      id: 7,
+      reference: "잠언 3:7",
+      fullText: "스스로 지혜롭게 여기지 말찌어다 여호와를 경외하며 악을 떠날찌어다",
+      words: [
+        { index: 1, text: "스스로", meaning: "자기 자신이, 제 스스로" },
+        { index: 2, text: "지혜롭게" },
+        { index: 3, text: "여기지" },
+        { index: 4, text: "말찌어다", meaning: "현명하다고 생각하지 말라 (개역한글 금지 명령형)" },
+        { index: 5, text: "여호와를" },
+        { index: 6, text: "경외하며", meaning: "두려워하고 공경하며" },
+        { index: 7, text: "악을", meaning: "죄악, 나쁜 것, 하나님께 반하는 것" },
+        { index: 8, text: "떠날찌어다", meaning: "멀리하라, 피하라 (개역한글 명령형)" }
+      ],
+      maskedStep2: [2, 6],
+      maskedStep3: [2, 3, 6, 7],
+      maskedStep4: [1, 2, 3, 5, 6, 7]
+    },
+    {
+      id: 8,
+      reference: "잠언 3:31",
+      fullText: "포학한 자를 부러워하지 말며 그 아무 행위든지 좇지 말라",
+      words: [
+        { index: 1, text: "포학한", meaning: "잔인하고 폭력적인 사람, 압제하는 자" },
+        { index: 2, text: "자를" },
+        { index: 3, text: "부러워하지", meaning: "선망하지 말며" },
+        { index: 4, text: "말며" },
+        { index: 5, text: "그" },
+        { index: 6, text: "아무" },
+        { index: 7, text: "행위든지", meaning: "어떤 행동이든지" },
+        { index: 8, text: "좇지", meaning: "따르지 말라, 모방하지 말라" },
+        { index: 9, text: "말라" }
+      ],
+      maskedStep2: [1, 3],
+      maskedStep3: [1, 3, 6, 7, 8],
+      maskedStep4: [1, 3, 4, 6, 7, 8, 9]
+    },
+    {
+      id: 9,
+      reference: "잠언 15:4",
+      fullText: "온량한 혀는 곧 생명 나무라도 패려한 혀는 마음을 상하게 하느니라",
+      words: [
+        { index: 1, text: "온량한", meaning: "온화하고 부드러운" },
+        { index: 2, text: "혀는", meaning: "말, 언어, 말하는 방식" },
+        { index: 3, text: "곧" },
+        { index: 4, text: "생명", meaning: "생명을 주는 나무. 에덴의 생명나무처럼 치유와 생명을 상징" },
+        { index: 5, text: "나무라도" },
+        { index: 6, text: "패려한", meaning: "사납고 거친, 패역한" },
+        { index: 7, text: "혀는" },
+        { index: 8, text: "마음을" },
+        { index: 9, text: "상하게", meaning: "마음을 다치게 하고 해를 끼치느니라" },
+        { index: 10, text: "하느니라" }
+      ],
+      maskedStep2: [1, 6, 9],
+      maskedStep3: [1, 4, 6, 8, 9],
+      maskedStep4: [1, 2, 4, 5, 6, 7, 8, 9]
+    },
+    {
+      id: 10,
+      reference: "잠언 16:24",
+      fullText: "선한 말은 꿀송이 같아서 마음에 달고 뼈에 양약이 되느니라",
+      words: [
+        { index: 1, text: "선한", meaning: "좋고 덕스러운 말" },
+        { index: 2, text: "말은" },
+        { index: 3, text: "꿀송이", meaning: "벌집에서 흘러나오는 꿀. 달콤함의 극치를 상징" },
+        { index: 4, text: "같아서" },
+        { index: 5, text: "마음에" },
+        { index: 6, text: "달고", meaning: "달콤하고, 기쁨을 주고" },
+        { index: 7, text: "뼈에", meaning: "몸의 근간. 전신을 의미" },
+        { index: 8, text: "양약이", meaning: "좋은 약, 치료하는 약" },
+        { index: 9, text: "되느니라" }
+      ],
+      maskedStep2: [3, 8],
+      maskedStep3: [1, 3, 5, 7, 8],
+      maskedStep4: [1, 2, 3, 4, 5, 8, 9]
+    },
+    {
+      id: 11,
+      reference: "잠언 20:7",
+      fullText: "완전히 행하는 자가 의인이라 그 후손에게 복이 있느니라",
+      words: [
+        { index: 1, text: "완전히", meaning: "흠 없이 바르게 사는 사람, 정직하게 걷는 자" },
+        { index: 2, text: "행하는" },
+        { index: 3, text: "자가" },
+        { index: 4, text: "의인이라", meaning: "의로운 사람, 하나님 앞에 바른 자" },
+        { index: 5, text: "그" },
+        { index: 6, text: "후손에게", meaning: "자녀, 자손, 대를 이을 사람들" },
+        { index: 7, text: "복이", meaning: "하나님의 은혜와 행복이 있느니라" },
+        { index: 8, text: "있느니라" }
+      ],
+      maskedStep2: [4, 6],
+      maskedStep3: [2, 4, 6, 7],
+      maskedStep4: [1, 2, 4, 6, 7, 8]
+    },
+    {
+      id: 12,
+      reference: "예레미야 15:21",
+      fullText: "내가 너를 악한 자의 손에서 건지며 무서운 자의 손에서 구속하리라",
+      words: [
+        { index: 1, text: "내가" },
+        { index: 2, text: "너를" },
+        { index: 3, text: "악한", meaning: "나쁜 자, 사악한 자" },
+        { index: 4, text: "자의" },
+        { index: 5, text: "손에서", meaning: "권세와 지배에서 구해내며" },
+        { index: 6, text: "건지며" },
+        { index: 7, text: "무서운", meaning: "두렵고 강한 자, 압제자" },
+        { index: 8, text: "자의" },
+        { index: 9, text: "손에서" },
+        { index: 10, text: "구속하리라", meaning: "속량하리라. 값을 치르고 자유케 함. 해방시키리라" }
+      ],
+      maskedStep2: [3, 6, 10],
+      maskedStep3: [3, 6, 7, 9, 10],
+      maskedStep4: [1, 3, 5, 6, 7, 8, 9, 10]
+    },
+    {
+      id: 13,
+      reference: "예레미야 29:13",
+      fullText: "너희가 전심으로 나를 찾고 찾으면 나를 만나리라",
+      words: [
+        { index: 1, text: "너희가" },
+        { index: 2, text: "전심으로", meaning: "온 마음을 다하여, 진심으로" },
+        { index: 3, text: "나를" },
+        { index: 4, text: "찾고" },
+        { index: 5, text: "찾으면", meaning: "열심히 구하면 (반복으로 간절함을 강조)" },
+        { index: 6, text: "나를" },
+        { index: 7, text: "만나리라", meaning: "만날 것이라, 발견하게 될 것이라" }
+      ],
+      maskedStep2: [2, 7],
+      maskedStep3: [2, 4, 5, 7],
+      maskedStep4: [2, 3, 4, 5, 7]
+    },
+    {
+      id: 14,
+      reference: "마태복음 5:5",
+      fullText: "온유한 자는 복이 있나니 저희가 땅을 기업으로 받을 것임이요",
+      words: [
+        { index: 1, text: "온유한", meaning: "겸손하고 부드러운 사람" },
+        { index: 2, text: "자는" },
+        { index: 3, text: "복이" },
+        { index: 4, text: "있나니" },
+        { index: 5, text: "저희가", meaning: "그들이 (3인칭 복수, 개역한글 표현)" },
+        { index: 6, text: "땅을" },
+        { index: 7, text: "기업으로", meaning: "유산으로, 상속물로" },
+        { index: 8, text: "받을" },
+        { index: 9, text: "것임이요", meaning: "얻게 될 것이기 때문이요" }
+      ],
+      maskedStep2: [1, 7],
+      maskedStep3: [1, 3, 6, 7, 8],
+      maskedStep4: [1, 3, 4, 6, 7, 8, 9]
+    },
+    {
+      id: 15,
+      reference: "마태복음 5:12",
+      fullText: "기뻐하고 즐거워하라 하늘에서 너희의 상이 큼이라 너희 전에 있던 선지자들을 이같이 핍박하였느니라",
+      words: [
+        { index: 1, text: "기뻐하고" },
+        { index: 2, text: "즐거워하라", meaning: "크게 기뻐하며 환호하라" },
+        { index: 3, text: "하늘에서", meaning: "천국에서, 하나님 앞에서" },
+        { index: 4, text: "너희의" },
+        { index: 5, text: "상이", meaning: "상급, 보상 (賞)" },
+        { index: 6, text: "큼이라" },
+        { index: 7, text: "너희" },
+        { index: 8, text: "전에" },
+        { index: 9, text: "있던" },
+        { index: 10, text: "선지자들을", meaning: "하나님의 말씀을 전한 예언자들" },
+        { index: 11, text: "이같이" },
+        { index: 12, text: "핍박하였느니라", meaning: "박해하였느니라, 괴롭혔느니라" }
+      ],
+      maskedStep2: [2, 5, 10],
+      maskedStep3: [1, 2, 5, 9, 10, 12],
+      maskedStep4: [1, 2, 3, 5, 6, 8, 9, 10, 12]
+    },
+    {
+      id: 16,
+      reference: "마태복음 11:28",
+      fullText: "수고하고 무거운 짐진 자들아 다 내게로 오라 내가 너희를 쉬게 하리라",
+      words: [
+        { index: 1, text: "수고하고", meaning: "힘들게 일하고, 지쳐있고" },
+        { index: 2, text: "무거운" },
+        { index: 3, text: "짐진", meaning: "무거운 짐을 진 사람들아" },
+        { index: 4, text: "자들아" },
+        { index: 5, text: "다" },
+        { index: 6, text: "내게로" },
+        { index: 7, text: "오라", meaning: "모두 나에게로 오라" },
+        { index: 8, text: "내가" },
+        { index: 9, text: "너희를" },
+        { index: 10, text: "쉬게", meaning: "안식을 주리라, 편히 쉬게 하리라" },
+        { index: 11, text: "하리라" }
+      ],
+      maskedStep2: [1, 6, 10],
+      maskedStep3: [1, 2, 3, 6, 7, 10],
+      maskedStep4: [1, 2, 3, 5, 6, 7, 10, 11]
+    },
+    {
+      id: 17,
+      reference: "누가복음 1:28",
+      fullText: "그에게 들어가 가로되 은혜를 받은 자여 평안할찌어다 주께서 너와 함께하시도다 하니",
+      words: [
+        { index: 1, text: "그에게" },
+        { index: 2, text: "들어가" },
+        { index: 3, text: "가로되", meaning: "말하되, 이르되 (개역한글의 인용 표현)" },
+        { index: 4, text: "은혜를", meaning: "하나님의 은총을 입은 자여" },
+        { index: 5, text: "받은" },
+        { index: 6, text: "자여" },
+        { index: 7, text: "평안할찌어다", meaning: "평안하여라. 히브리어 '샬롬'에 해당하는 인사" },
+        { index: 8, text: "주께서" },
+        { index: 9, text: "너와" },
+        { index: 10, text: "함께하시도다", meaning: "동행하시도다, 임재하시도다" },
+        { index: 11, text: "하니", meaning: "하였으니, ~라고 말하니 (인용 종결)" }
+      ],
+      maskedStep2: [4, 7, 10],
+      maskedStep3: [2, 4, 5, 7, 10, 11],
+      maskedStep4: [2, 3, 4, 5, 7, 9, 10, 11]
+    },
+    {
+      id: 18,
+      reference: "누가복음 6:31",
+      fullText: "남에게 대접을 받고자 하는대로 너희도 남을 대접하라",
+      words: [
+        { index: 1, text: "남에게" },
+        { index: 2, text: "대접을", meaning: "대우받기를 원하는 것처럼" },
+        { index: 3, text: "받고자" },
+        { index: 4, text: "하는대로", meaning: "하는 것과 같이, 바라는 그대로" },
+        { index: 5, text: "너희도" },
+        { index: 6, text: "남을" },
+        { index: 7, text: "대접하라", meaning: "대우하라, 섬기라" }
+      ],
+      maskedStep2: [2, 7],
+      maskedStep3: [2, 3, 4, 7],
+      maskedStep4: [2, 3, 4, 5, 7]
+    },
+    {
+      id: 19,
+      reference: "요한복음 8:32",
+      fullText: "진리를 알찌니 진리가 너희를 자유케 하리라",
+      words: [
+        { index: 1, text: "진리를", meaning: "참된 것. 하나님의 말씀, 예수님 자신을 가리킴" },
+        { index: 2, text: "알찌니", meaning: "알게 되면 (개역한글 표현)" },
+        { index: 3, text: "진리가" },
+        { index: 4, text: "너희를" },
+        { index: 5, text: "자유케", meaning: "자유롭게 하리라, 해방시키리라" },
+        { index: 6, text: "하리라" }
+      ],
+      maskedStep2: [2, 5],
+      maskedStep3: [2, 3, 5],
+      maskedStep4: [1, 2, 3, 5, 6]
+    },
+    {
+      id: 20,
+      reference: "요한복음 14:18",
+      fullText: "내가 너희를 고아와 같이 버려두지 아니하고 너희에게로 오리라",
+      words: [
+        { index: 1, text: "내가" },
+        { index: 2, text: "너희를" },
+        { index: 3, text: "고아와", meaning: "부모 없는 자, 외롭고 돌봄 받지 못하는 자" },
+        { index: 4, text: "같이" },
+        { index: 5, text: "버려두지", meaning: "홀로 내버려 두지 않고" },
+        { index: 6, text: "아니하고" },
+        { index: 7, text: "너희에게로" },
+        { index: 8, text: "오리라", meaning: "다시 오겠다 (성령 강림 혹은 재림을 암시)" }
+      ],
+      maskedStep2: [3, 5],
+      maskedStep3: [3, 4, 5, 8],
+      maskedStep4: [3, 4, 5, 6, 7, 8]
+    },
+    {
+      id: 21,
+      reference: "로마서 5:4",
+      fullText: "인내는 연단을, 연단은 소망을 이루는 줄 앎이로다",
+      words: [
+        { index: 1, text: "인내는", meaning: "참음, 고난을 끝까지 견딤" },
+        { index: 2, text: "연단을,", meaning: "단련, 시련을 통한 성숙과 검증" },
+        { index: 3, text: "연단은" },
+        { index: 4, text: "소망을", meaning: "희망, 하나님을 향한 기대" },
+        { index: 5, text: "이루는", meaning: "만들어낸다는 것을 알기 때문이라" },
+        { index: 6, text: "줄" },
+        { index: 7, text: "앎이로다" }
+      ],
+      maskedStep2: [2, 4],
+      maskedStep3: [1, 2, 4, 7],
+      maskedStep4: [1, 2, 3, 4, 7]
+    },
+    {
+      id: 22,
+      reference: "로마서 10:13",
+      fullText: "누구든지 주의 이름을 부르는 자는 구원을 얻으리라",
+      words: [
+        { index: 1, text: "누구든지", meaning: "어떤 사람이라도, 예외 없이" },
+        { index: 2, text: "주의" },
+        { index: 3, text: "이름을", meaning: "예수 그리스도의 이름" },
+        { index: 4, text: "부르는", meaning: "기도하며 의지하는 자" },
+        { index: 5, text: "자는" },
+        { index: 6, text: "구원을", meaning: "죄와 죽음에서 건짐을 받을 것이라" },
+        { index: 7, text: "얻으리라" }
+      ],
+      maskedStep2: [3, 6],
+      maskedStep3: [3, 4, 6, 7],
+      maskedStep4: [1, 3, 4, 6, 7]
+    },
+    {
+      id: 23,
+      reference: "로마서 10:17",
+      fullText: "그러므로 믿음은 들음에서 나며 들음은 그리스도의 말씀으로 말미암았느니라",
+      words: [
+        { index: 1, text: "그러므로" },
+        { index: 2, text: "믿음은" },
+        { index: 3, text: "들음에서", meaning: "말씀을 듣는 것, 청취" },
+        { index: 4, text: "나며", meaning: "생겨나며, 비롯되며" },
+        { index: 5, text: "들음은" },
+        { index: 6, text: "그리스도의" },
+        { index: 7, text: "말씀으로" },
+        { index: 8, text: "말미암았느니라", meaning: "~로부터 비롯되었느니라, ~에서 기인하였느니라" }
+      ],
+      maskedStep2: [2, 7],
+      maskedStep3: [2, 3, 5, 7],
+      maskedStep4: [2, 3, 4, 5, 6, 7]
+    },
+    {
+      id: 24,
+      reference: "로마서 12:18",
+      fullText: "할 수 있거든 너희로서는 모든 사람으로 더불어 평화하라",
+      words: [
+        { index: 1, text: "할" },
+        { index: 2, text: "수" },
+        { index: 3, text: "있거든", meaning: "가능하다면, 할 수 있는 한" },
+        { index: 4, text: "너희로서는", meaning: "너희 편에서는, 너희가 할 수 있는 범위 안에서" },
+        { index: 5, text: "모든" },
+        { index: 6, text: "사람으로" },
+        { index: 7, text: "더불어", meaning: "함께, ~와 같이" },
+        { index: 8, text: "평화하라", meaning: "화목하게 지내라, 평화를 유지하라" }
+      ],
+      maskedStep2: [4, 8],
+      maskedStep3: [3, 4, 6, 8],
+      maskedStep4: [3, 4, 5, 6, 7, 8]
+    },
+    {
+      id: 25,
+      reference: "갈라디아서 6:9",
+      fullText: "우리가 선을 행하되 낙심하지 말찌니 피곤하지 아니하면 때가 이르매 거두리라",
+      words: [
+        { index: 1, text: "우리가" },
+        { index: 2, text: "선을", meaning: "좋은 일을 하되" },
+        { index: 3, text: "행하되" },
+        { index: 4, text: "낙심하지", meaning: "포기하거나 실망하지 말라 (개역한글 금지 명령형)" },
+        { index: 5, text: "말찌니" },
+        { index: 6, text: "피곤하지", meaning: "지쳐 쓰러지지 않으면" },
+        { index: 7, text: "아니하면" },
+        { index: 8, text: "때가", meaning: "때가 되면, 적절한 시기가 오면" },
+        { index: 9, text: "이르매" },
+        { index: 10, text: "거두리라", meaning: "수확할 것이라, 결실을 얻으리라" }
+      ],
+      maskedStep2: [4, 6, 10],
+      maskedStep3: [2, 4, 6, 9, 10],
+      maskedStep4: [2, 3, 4, 5, 6, 7, 9, 10]
+    },
+    {
+      id: 26,
+      reference: "히브리서 11:1",
+      fullText: "믿음은 바라는 것들의 실상이요 보지 못하는 것들의 증거니",
+      words: [
+        { index: 1, text: "믿음은" },
+        { index: 2, text: "바라는", meaning: "소망하는 것들, 희망하는 것들" },
+        { index: 3, text: "것들의" },
+        { index: 4, text: "실상이요", meaning: "실체, 본질, 본바탕" },
+        { index: 5, text: "보지" },
+        { index: 6, text: "못하는", meaning: "눈에 보이지 않는 것들, 영적 실재" },
+        { index: 7, text: "것들의" },
+        { index: 8, text: "증거니", meaning: "확증, 확신, 증명" }
+      ],
+      maskedStep2: [4, 8],
+      maskedStep3: [2, 4, 6, 8],
+      maskedStep4: [2, 3, 4, 5, 6, 8]
+    },
+    {
+      id: 27,
+      reference: "히브리서 13:8",
+      fullText: "예수 그리스도는 어제나 오늘이나 영원토록 동일하시니라",
+      words: [
+        { index: 1, text: "예수" },
+        { index: 2, text: "그리스도는" },
+        { index: 3, text: "어제나", meaning: "과거와 현재를 아울러" },
+        { index: 4, text: "오늘이나" },
+        { index: 5, text: "영원토록", meaning: "영원히, 끝없이" },
+        { index: 6, text: "동일하시니라", meaning: "변함없으시니라, 한결같으시니라" }
+      ],
+      maskedStep2: [5, 6],
+      maskedStep3: [2, 5, 6],
+      maskedStep4: [2, 3, 4, 5, 6]
+    },
+    {
+      id: 28,
+      reference: "베드로전서 5:7",
+      fullText: "너희 염려를 다 주께 맡겨 버리라 이는 저가 너희를 권고하심이니라",
+      words: [
+        { index: 1, text: "너희" },
+        { index: 2, text: "염려를", meaning: "걱정, 근심, 불안" },
+        { index: 3, text: "다" },
+        { index: 4, text: "주께" },
+        { index: 5, text: "맡겨", meaning: "완전히 내어드리라, 온전히 위탁하라" },
+        { index: 6, text: "버리라" },
+        { index: 7, text: "이는" },
+        { index: 8, text: "저가", meaning: "그가. 하나님을 가리키는 3인칭 대명사 (개역한글 표현)" },
+        { index: 9, text: "너희를" },
+        { index: 10, text: "권고하심이니라", meaning: "돌보심이니라, 관심 가지심이니라" }
+      ],
+      maskedStep2: [2, 5, 10],
+      maskedStep3: [2, 3, 5, 6, 10],
+      maskedStep4: [2, 3, 4, 5, 6, 8, 9, 10]
+    },
+    {
+      id: 29,
+      reference: "요한일서 4:19",
+      fullText: "우리가 사랑함은 그가 먼저 우리를 사랑하셨음이라",
+      words: [
+        { index: 1, text: "우리가" },
+        { index: 2, text: "사랑함은", meaning: "사랑할 수 있음은" },
+        { index: 3, text: "그가" },
+        { index: 4, text: "먼저", meaning: "우리보다 앞서서, 선행적으로" },
+        { index: 5, text: "우리를" },
+        { index: 6, text: "사랑하셨음이라", meaning: "사랑하셨기 때문이라 (원인·근거를 나타냄)" }
+      ],
+      maskedStep2: [2, 6],
+      maskedStep3: [2, 4, 6],
+      maskedStep4: [2, 3, 4, 5, 6]
+    },
+    {
+      id: 30,
+      reference: "요한일서 5:4",
+      fullText: "대저 하나님께로서 난 자마다 세상을 이기느니라 세상을 이긴 이김은 이것이니 우리의 믿음이니라",
+      words: [
+        { index: 1, text: "대저", meaning: "무릇, 왜냐하면 (개역한글의 접속어. 이유·근거를 이끎)" },
+        { index: 2, text: "하나님께로서", meaning: "하나님에게서 태어난 자, 거듭난 자" },
+        { index: 3, text: "난" },
+        { index: 4, text: "자마다", meaning: "~하는 사람은 누구든지" },
+        { index: 5, text: "세상을" },
+        { index: 6, text: "이기느니라", meaning: "세상의 유혹·죄악·악한 세력을 이겨내느니라" },
+        { index: 7, text: "세상을" },
+        { index: 8, text: "이긴" },
+        { index: 9, text: "이김은", meaning: "승리 (勝利)" },
+        { index: 10, text: "이것이니", meaning: "바로 이것이니, 다름 아닌 이것이니" },
+        { index: 11, text: "우리의" },
+        { index: 12, text: "믿음이니라", meaning: "예수 그리스도를 향한 신앙, 하나님을 향한 신뢰" }
+      ],
+      maskedStep2: [2, 6, 12],
+      maskedStep3: [2, 4, 6, 8, 9, 12],
+      maskedStep4: [2, 3, 4, 5, 6, 8, 9, 10, 12]
+    }
+  ])
+}

@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { useParams,useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getVerse, getTodayCompletionCount } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
 import Bookmark from './_components/Bookmark';
-import { getMyCompletions } from "@firebasegen/default-connector";
+import { getMyCompletions } from '@firebasegen/default-connector';
 
 export default function ListenVerse() {
   const [played, setPlayed] = useState(false);
@@ -15,11 +15,11 @@ export default function ListenVerse() {
   const [verseText, setVerseText] = useState('');
   const [reference, setReference] = useState('');
   const [todayCount, setTodayCount] = useState(0);
-  const verseAudioRef = useState(() => typeof Audio !== 'undefined' ? new Audio() : null)[0];
-  const bgmAudioRef = useState(() => typeof Audio !== 'undefined' ? new Audio('/verse-audio/bgm.mp3') : null)[0];
+  const verseAudioRef = useState(() => (typeof Audio !== 'undefined' ? new Audio() : null))[0];
+  const bgmAudioRef = useState(() =>
+    typeof Audio !== 'undefined' ? new Audio('/verse-audio/bgm.mp3') : null,
+  )[0];
   const router = useRouter();
-  const { verseId } = useParams();
-
   const { verseId: verseIdParam } = useParams<{ verseId: string }>();
   const verseId = Number(verseIdParam);
 
@@ -60,7 +60,7 @@ export default function ListenVerse() {
       delete (window as any).__startBGM;
     };
   }, []);
-    
+
   const handleButton = () => {
     if (!verseAudioRef) return;
 
@@ -78,15 +78,13 @@ export default function ListenVerse() {
       };
     }
   };
-    
+
   const handleBookmarkModal = async () => {
     const { data } = await getMyCompletions(dataConnect);
-    const isRetryMission = data.studyCompletions.some(
-      (item) => item.verse.id === Number(verseId),
-    );
+    const isRetryMission = data.studyCompletions.some((item) => item.verse.id === Number(verseId));
 
     if (isRetryMission) {
-      router.push("/study/completeRetry");
+      router.push('/study/completeRetry');
     } else {
       setBookmarkModal(true);
     }

@@ -55,9 +55,14 @@ export default function DashBoard() {
       <DashboardHeader nickname={nickname} done={done} />
 
       {loading && <LoadingSpinner />}
-      {activeIndex === 0 && !loading &&
-        (done ? <AfterFinish todayVerse={todayVerse} nickname={nickname} /> : <BeforeFinish nickname={nickname} />)}
-      {activeIndex === 1 && <Bookmark />}
+      {activeIndex === 0 &&
+        !loading &&
+        (done ? (
+          <AfterFinish todayVerse={todayVerse} nickname={nickname} />
+        ) : (
+          <BeforeFinish nickname={nickname} />
+        ))}
+      {activeIndex === 1 && <Bookmark nickname={nickname} />}
 
       <footer
         className="

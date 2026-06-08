@@ -1,15 +1,12 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import ReadingBookTolli from "../../../../public/images/readingBookTolli.webp";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { playSound } from "@/lib/sound";
 
 export default function CompleteListening() {
-  const router = useRouter();
-
   useEffect(() => {
     playSound("/sounds/말씀 step 7까지 다 완료.mp3");
     const timeout = setTimeout(() => {

@@ -1,12 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import IndividualBookmark from "./_components/IndividaulBookmark";
-import {
-  getMyBookmarks,
-  GetMyBookmarksData,
-} from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
+import { useState, useEffect } from 'react';
+import IndividualBookmark from './_components/IndividaulBookmark';
+import { getMyBookmarks, GetMyBookmarksData } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
 
 interface BookMarks {
   verse: {
@@ -17,13 +14,13 @@ interface BookMarks {
   createdAt: string;
 }
 
-export default function Bookmark() {
+export default function Bookmark({ nickname }: { nickname: string }) {
   const [bookmarks, setBookmarks] = useState<BookMarks[]>();
 
   useEffect(() => {
     const getBookmarks = async () => {
       const { data } = await getMyBookmarks(dataConnect, {
-        fetchPolicy: "SERVER_ONLY",
+        fetchPolicy: 'SERVER_ONLY',
       });
       setBookmarks(data.bookmarks);
     };
@@ -35,7 +32,7 @@ export default function Bookmark() {
   return (
     <div className="flex flex-1 flex-col items-center w-full min-h-0">
       <header className="flex flex-col w-full shrink-0 mb-[clamp(0.625rem,3vw,0.9375rem)]">
-        <h1 className="text-dashboard-h1">몽디님의 즐겨찾기</h1>
+        <h1 className="text-dashboard-h1">{nickname}님의 즐겨찾기</h1>
         <h2 className="font-light text-[clamp(0.6875rem,3vw,0.75rem)] leading-[1.6] tracking-[-2%] text-[#353535]">
           톨리 무료 버전에서는
           <span className="font-medium">최대 10구절</span>

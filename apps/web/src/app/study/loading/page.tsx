@@ -21,7 +21,7 @@ async function getTodayVerseId(): Promise<number> {
 
 export default function StudyLoadingPage() {
   const router = useRouter();
-  const verseId = useSearchParams().get("verseId");
+  const verseId = useSearchParams().get('verseId');
   const [cornerRadius, setCornerRadius] = useState(0);
 
   useEffect(() => {

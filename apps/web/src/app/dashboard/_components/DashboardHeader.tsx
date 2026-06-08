@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Icon } from '@iconify/react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { signOut } from 'firebase/auth';
-import { updateNickname, deleteUser } from '@firebasegen/default-connector';
-import { fireAuth } from '@/firebase/fireAuth';
-import { dataConnect } from '@/lib/dataconnect';
-import ProfileDropdown from './ProfileDropdown';
-import standingTolli from '../../../../public/tolli1.webp';
+import { useState } from "react";
+import { Icon } from "@iconify/react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { updateNickname, deleteUser } from "@firebasegen/default-connector";
+import { fireAuth } from "@/firebase/fireAuth";
+import { dataConnect } from "@/lib/dataconnect";
+import ProfileDropdown from "./ProfileDropdown";
+import standingTolli from "../../../../public/tolli1.webp";
 
 const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{1,8}$/;
 
-type ModalType = 'logout' | 'withdraw' | 'rename' | null;
+type ModalType = "logout" | "withdraw" | "rename" | null;
 
 type Props = {
   nickname?: string;
@@ -23,7 +23,7 @@ type Props = {
 export default function DashboardHeader({ nickname, done = false }: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [modal, setModal] = useState<ModalType>(null);
-  const [renameValue, setRenameValue] = useState(nickname ?? '');
+  const [renameValue, setRenameValue] = useState(nickname ?? "");
   const [renameError, setRenameError] = useState(false);
   const router = useRouter();
 
@@ -32,24 +32,28 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   };
 
   const handleLogout = async () => {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_OUT' }));
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "SET_LOGGED_OUT" }),
+    );
     await signOut(fireAuth);
-    router.push('/login');
+    router.push("/login");
   };
 
   const handleWithdraw = async () => {
     const idToken = await fireAuth.currentUser?.getIdToken();
     await deleteUser(dataConnect);
     if (idToken) {
-      await fetch('/api/auth/unregister', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/auth/unregister", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),
       });
     }
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_OUT' }));
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "SET_LOGGED_OUT" }),
+    );
     await signOut(fireAuth);
-    router.push('/login');
+    router.push("/login");
   };
 
   const handleRenameSave = async () => {
@@ -69,30 +73,38 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   return (
     <>
       {isDropdownOpen && !modal && (
-        <div className="fixed inset-0 z-40 bg-black/45" onClick={() => setIsDropdownOpen(false)} />
+        <div
+          className="fixed inset-0 z-40 bg-black/45"
+          onClick={() => setIsDropdownOpen(false)}
+        />
       )}
 
       {/* 로그아웃 / 회원탈퇴 모달 */}
-      {(modal === 'logout' || modal === 'withdraw') && (
+      {(modal === "logout" || modal === "withdraw") && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/92">
           <div className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]">
             <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] whitespace-nowrap">
-              {modal === 'logout' ? '로그아웃 할까요?' : '회원 탈퇴 할까요?'}
+              {modal === "logout" ? "로그아웃 할까요?" : "회원 탈퇴 할까요?"}
             </h2>
             <div className="relative w-32 h-32">
-              <Image src={standingTolli} fill alt="tolli" className="object-contain" />
+              <Image
+                src={standingTolli}
+                fill
+                alt="tolli"
+                className="object-contain"
+              />
             </div>
             <p className="text-[0.875rem] leading-4.5 text-[#949494] text-center whitespace-pre-line">
-              {modal === 'logout'
-                ? '다음에 또 만나요!\n톨리가 기다리고 있을게요!'
-                : '탈퇴하면 계정 정보는 복구되지 않아요\n정말 탈퇴하시나요?'}
+              {modal === "logout"
+                ? "다음에 또 만나요!\n톨리가 기다리고 있을게요!"
+                : "탈퇴하면 계정 정보는 복구되지 않아요\n정말 탈퇴하시나요?"}
             </p>
             <div className="flex flex-col w-full gap-3 mt-2">
               <button
-                onClick={modal === 'logout' ? handleLogout : handleWithdraw}
+                onClick={modal === "logout" ? handleLogout : handleWithdraw}
                 className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0]"
               >
-                {modal === 'logout' ? '로그아웃하기' : '탈퇴하기'}
+                {modal === "logout" ? "로그아웃하기" : "탈퇴하기"}
               </button>
               <button
                 onClick={() => setModal(null)}
@@ -106,7 +118,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       )}
 
       {/* 이름 변경 모달 */}
-      {modal === 'rename' && (
+      {modal === "rename" && (
         <div
           className="fixed inset-0 z-200 flex items-center justify-center bg-black/60"
           onClick={() => setModal(null)}
@@ -114,10 +126,10 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
           <div
             className="flex flex-col w-79.5 rounded-4xl gap-4.5 bg-[#373737]"
             style={{
-              paddingTop: '1.0625rem',
-              paddingBottom: '1.0625rem',
-              paddingLeft: '1.438rem',
-              paddingRight: '1.438rem',
+              paddingTop: "1.0625rem",
+              paddingBottom: "1.0625rem",
+              paddingLeft: "1.438rem",
+              paddingRight: "1.438rem",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -133,6 +145,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
             <div className="flex flex-col gap-1.5">
               <div className="relative w-full h-12.5 rounded-full overflow-hidden bg-white/12">
                 <input
+                  aria-label="이름 입력"
                   type="text"
                   value={renameValue}
                   onChange={(e) => {
@@ -197,9 +210,9 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
             nickname={nickname}
             onModal={(type) => openModal(type)}
             onRename={() => {
-              setRenameValue(nickname ?? '');
+              setRenameValue(nickname ?? "");
               setRenameError(false);
-              openModal('rename');
+              openModal("rename");
             }}
           />
         </button>

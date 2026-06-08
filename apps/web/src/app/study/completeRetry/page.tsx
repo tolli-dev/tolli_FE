@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import ReadingBookTolli from "../../../../public/images/readingBookTolli.svg";
+import ReadingBookTolli from "../../../../public/images/readingBookTolli.webp";
 
 export default function CompleteRetry() {
   const router = useRouter();

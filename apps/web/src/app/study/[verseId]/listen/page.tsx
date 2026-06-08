@@ -1,23 +1,30 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Icon } from '@iconify/react';
-import { useParams, useRouter } from 'next/navigation';
-import { getVerse, getTodayCompletionCount } from '@firebasegen/default-connector';
-import { dataConnect } from '@/lib/dataconnect';
-import Bookmark from './_components/Bookmark';
-import { getMyCompletions } from '@firebasegen/default-connector';
+import { useState, useEffect } from "react";
+import { Icon } from "@iconify/react";
+import { useParams, useRouter } from "next/navigation";
+import {
+  getVerse,
+  getTodayCompletionCount,
+  getMyCompletions,
+  createStudyCompletion,
+} from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
+import Bookmark from "./_components/Bookmark";
+import { QueryFetchPolicy } from "firebase/data-connect";
 
 export default function ListenVerse() {
   const [played, setPlayed] = useState(false);
   const [home, setHome] = useState(false);
   const [bookmarkModal, setBookmarkModal] = useState(false);
-  const [verseText, setVerseText] = useState('');
-  const [reference, setReference] = useState('');
+  const [verseText, setVerseText] = useState("");
+  const [reference, setReference] = useState("");
   const [todayCount, setTodayCount] = useState(0);
-  const verseAudioRef = useState(() => (typeof Audio !== 'undefined' ? new Audio() : null))[0];
+  const verseAudioRef = useState(() =>
+    typeof Audio !== "undefined" ? new Audio() : null,
+  )[0];
   const bgmAudioRef = useState(() =>
-    typeof Audio !== 'undefined' ? new Audio('/verse-audio/bgm.mp3') : null,
+    typeof Audio !== "undefined" ? new Audio("/verse-audio/bgm.mp3") : null,
   )[0];
   const router = useRouter();
   const { verseId: verseIdParam } = useParams<{ verseId: string }>();
@@ -36,9 +43,11 @@ export default function ListenVerse() {
   useEffect(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    getTodayCompletionCount(dataConnect, { today: today.toISOString() }).then((result) => {
-      setTodayCount(result.data.studyCompletions.length);
-    });
+    getTodayCompletionCount(dataConnect, { today: today.toISOString() }).then(
+      (result) => {
+        setTodayCount(result.data.studyCompletions.length);
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -80,12 +89,17 @@ export default function ListenVerse() {
   };
 
   const handleBookmarkModal = async () => {
-    const { data } = await getMyCompletions(dataConnect);
-    const isRetryMission = data.studyCompletions.some((item) => item.verse.id === Number(verseId));
+    const { data } = await getMyCompletions(dataConnect, {
+      fetchPolicy: QueryFetchPolicy.SERVER_ONLY,
+    });
+    const isRetryMission = data.studyCompletions.some(
+      (item) => item.verse.id === Number(verseId),
+    );
 
     if (isRetryMission) {
-      router.push('/study/completeRetry');
+      router.push("/study/completeRetry");
     } else {
+      await createStudyCompletion(dataConnect, { verseId });
       setBookmarkModal(true);
     }
   };
@@ -109,7 +123,8 @@ export default function ListenVerse() {
             className="text-[#383838] text-[clamp(1rem,5.25vw,1.3125rem)]"
           />
           <h4 className="text-[#202020] font-medium text-[clamp(0.8125rem,4vw,1rem)] whitespace-nowrap">
-            오늘 <span className="text-[#383838]">{todayCount}</span>명이 함께 읽고 있어요
+            오늘 <span className="text-[#383838]">{todayCount}</span>명이 함께
+            읽고 있어요
           </h4>
         </div>
       </div>
@@ -119,12 +134,13 @@ export default function ListenVerse() {
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-[clamp(2.5rem,12.8vw,3.125rem)]"
           style={{
-            padding: '3px',
-            background: 'linear-gradient(to bottom left, #7A7A7A, #917DB0)',
-            WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-            WebkitMaskComposite: 'xor',
-            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-            maskComposite: 'exclude',
+            padding: "3px",
+            background: "linear-gradient(to bottom left, #7A7A7A, #917DB0)",
+            WebkitMask:
+              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            WebkitMaskComposite: "xor",
+            mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            maskComposite: "exclude",
           }}
         />
         <div className="flex flex-col w-full h-full px-[clamp(2.5rem,14.9vw,3.625rem)] py-[clamp(1.5rem,8.5vw,2.0625rem)]">
@@ -142,7 +158,7 @@ export default function ListenVerse() {
       <button
         type="button"
         onClick={handleButton}
-        aria-label={played ? '일시정지' : '재생'}
+        aria-label={played ? "일시정지" : "재생"}
         className="relative flex shrink-0 items-center justify-center rounded-full bg-[#CCB5F0]
         w-[clamp(3.5rem,16.9vw,4.125rem)] h-[clamp(3.5rem,16.9vw,4.125rem)]
         mb-[clamp(1rem,6vw,2.625rem)]"
@@ -164,7 +180,7 @@ export default function ListenVerse() {
         className={`w-full shrink-0 bg-[#CCB5F0] flex items-center justify-center
           py-[clamp(0.625rem,3.3vw,0.8125rem)] rounded-[clamp(1rem,5vw,1.25rem)]
           text-[clamp(0.875rem,4vw,1rem)]
-          ${home ? '' : 'invisible pointer-events-none'}`}
+          ${home ? "" : "invisible pointer-events-none"}`}
       >
         홈으로
       </button>

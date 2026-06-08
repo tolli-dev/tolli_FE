@@ -19,8 +19,10 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem] mb-[clamp(1.5rem,5dvh,3.813rem)] mt-[0.438rem]">
-          <h1 className="text-h1 text-primary-50">양식을 채워요</h1>
-          <h2 className="text-h2 text-surface-200">
+          <h1 className="text-h1 text-primary-50 whitespace-nowrap">
+            양식을 채워요
+          </h1>
+          <h2 className="text-h2 text-surface-200 whitespace-nowrap">
             말씀을 외울수록 tolli의 배가 불러요
           </h2>
         </div>
@@ -36,7 +38,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-col items-center w-full">
-        <p className="text-b2 text-surface-300 mb-[0.938rem]">
+        <p className="text-b2 text-surface-300 mb-[0.938rem] whitespace-nowrap">
           한 구절씩, tolli의 배를 채워줘요
         </p>
         <Link href="/afterLogin/step3" className="w-full max-w-[19.688rem]">

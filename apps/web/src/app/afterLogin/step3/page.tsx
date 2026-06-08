@@ -1,4 +1,4 @@
-import FullTolli from "../../../../public/images/onBoarding/fullTolli.svg";
+import FullTolli from "../../../../public/images/onBoarding/fullTolli.webp";
 import Image from "next/image";
 import Link from "next/link";
 

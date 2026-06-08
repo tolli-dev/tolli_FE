@@ -12,14 +12,27 @@ import { Icon } from "@iconify/react";
 import RecordComplete from "./RecordComplete";
 import { useRecord } from "./hooks/useRecord";
 import { formatTime } from "./_utils/formatTime";
+import { getVerse } from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
 import { playSound } from "@/lib/sound";
 
-export default function Record() {
+export default function Record({ verseId }: { verseId: number }) {
   const [phase, setPhase] = useState<Step7Phase>("idle");
   const [showVerse, setShowVerse] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { elapsed, start, stop, levels } = useRecord();
   const [needSettings, setNeedSettings] = useState(false);
+  const [fullText, setFullText] = useState('');
+  const [reference, setReference] = useState('');
+
+  useEffect(() => {
+    getVerse(dataConnect, { id: verseId }).then((result) => {
+      const verse = result.data.verse;
+      if (!verse) return;
+      setFullText(verse.fullText);
+      setReference(verse.reference);
+    });
+  }, [verseId]);
 
   // start()를 통해 녹음 기능을 시작한다.
   // 그와 더해 관련 상태를 변화시킨다.
@@ -99,7 +112,7 @@ export default function Record() {
   }
 
   if (phase === "complete") {
-    return <RecordComplete retryRecording={retryRecording} />;
+    return <RecordComplete retryRecording={retryRecording} verseId={verseId} />;
   }
 
   const openAppSettings = () => {
@@ -122,6 +135,8 @@ export default function Record() {
           <RecordBarContainer
             showVerse={showVerse}
             soundBar={NotActiveSoundbar}
+            fullText={fullText}
+            reference={reference}
           />
         )}
         {phase === "recording" && (
@@ -131,6 +146,8 @@ export default function Record() {
             recordIcon={RecordCircle}
             description={formatTime(elapsed)}
             levels={levels}
+            fullText={fullText}
+            reference={reference}
           />
         )}
 
@@ -152,7 +169,7 @@ export default function Record() {
               />
             </div>
           </div>
-          <span className="font-regular text-[2.99vw] leading-[5.67vw] text-[#CECECE]">
+          <span className="font-regular text-[2.99vw] leading-[5.67vw] text-[#CECECE] whitespace-nowrap">
             구절 잠깐 보기
           </span>
         </button>

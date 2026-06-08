@@ -12,6 +12,7 @@ This README will guide you through the process of using the generated JavaScript
   - [*GetMyCurrentVerse*](#getmycurrentverse)
   - [*GetMyBookmarks*](#getmybookmarks)
   - [*GetMyCompletions*](#getmycompletions)
+  - [*GetTodayCompletionCount*](#gettodaycompletioncount)
   - [*GetMe*](#getme)
 - [**Mutations**](#mutations)
   - [*CreateUser*](#createuser)
@@ -186,22 +187,22 @@ executeQuery(ref).then((response) => {
 ## GetMyCurrentVerse
 You can execute the `GetMyCurrentVerse` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [default-connector/index.d.ts](./index.d.ts):
 ```typescript
-getMyCurrentVerse(options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
+getMyCurrentVerse(vars?: GetMyCurrentVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
 
 interface GetMyCurrentVerseRef {
   ...
   /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetMyCurrentVerseData, undefined>;
+  (vars?: GetMyCurrentVerseVariables): QueryRef<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
 }
 export const getMyCurrentVerseRef: GetMyCurrentVerseRef;
 ```
 You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
 ```typescript
-getMyCurrentVerse(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
+getMyCurrentVerse(dc: DataConnect, vars?: GetMyCurrentVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
 
 interface GetMyCurrentVerseRef {
   ...
-  (dc: DataConnect): QueryRef<GetMyCurrentVerseData, undefined>;
+  (dc: DataConnect, vars?: GetMyCurrentVerseVariables): QueryRef<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
 }
 export const getMyCurrentVerseRef: GetMyCurrentVerseRef;
 ```
@@ -213,41 +214,64 @@ console.log(name);
 ```
 
 ### Variables
-The `GetMyCurrentVerse` query has no variables.
+The `GetMyCurrentVerse` query has an optional argument of type `GetMyCurrentVerseVariables`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface GetMyCurrentVerseVariables {
+  today?: TimestampString | null;
+}
+```
 ### Return Type
 Recall that executing the `GetMyCurrentVerse` query returns a `QueryPromise` that resolves to an object with a `data` property.
 
 The `data` property is an object of type `GetMyCurrentVerseData`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
 ```typescript
 export interface GetMyCurrentVerseData {
-  studyCompletions: ({
+  todayCompletion: ({
     verse: {
       id: number;
+      reference: string;
+      fullText: string;
     } & Verse_Key;
   })[];
+    lastCompletion: ({
+      verse: {
+        id: number;
+      } & Verse_Key;
+    })[];
 }
 ```
 ### Using `GetMyCurrentVerse`'s action shortcut function
 
 ```typescript
 import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, getMyCurrentVerse } from '@firebasegen/default-connector';
+import { connectorConfig, getMyCurrentVerse, GetMyCurrentVerseVariables } from '@firebasegen/default-connector';
 
+// The `GetMyCurrentVerse` query has an optional argument of type `GetMyCurrentVerseVariables`:
+const getMyCurrentVerseVars: GetMyCurrentVerseVariables = {
+  today: ..., // optional
+};
 
 // Call the `getMyCurrentVerse()` function to execute the query.
 // You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await getMyCurrentVerse(getMyCurrentVerseVars);
+// Variables can be defined inline as well.
+const { data } = await getMyCurrentVerse({ today: ..., });
+// Since all variables are optional for this query, you can omit the `GetMyCurrentVerseVariables` argument.
 const { data } = await getMyCurrentVerse();
 
 // You can also pass in a `DataConnect` instance to the action shortcut function.
 const dataConnect = getDataConnect(connectorConfig);
-const { data } = await getMyCurrentVerse(dataConnect);
+const { data } = await getMyCurrentVerse(dataConnect, getMyCurrentVerseVars);
 
-console.log(data.studyCompletions);
+console.log(data.todayCompletion);
+console.log(data.lastCompletion);
 
 // Or, you can use the `Promise` API.
-getMyCurrentVerse().then((response) => {
+getMyCurrentVerse(getMyCurrentVerseVars).then((response) => {
   const data = response.data;
-  console.log(data.studyCompletions);
+  console.log(data.todayCompletion);
+  console.log(data.lastCompletion);
 });
 ```
 
@@ -255,26 +279,36 @@ getMyCurrentVerse().then((response) => {
 
 ```typescript
 import { getDataConnect, executeQuery } from 'firebase/data-connect';
-import { connectorConfig, getMyCurrentVerseRef } from '@firebasegen/default-connector';
+import { connectorConfig, getMyCurrentVerseRef, GetMyCurrentVerseVariables } from '@firebasegen/default-connector';
 
+// The `GetMyCurrentVerse` query has an optional argument of type `GetMyCurrentVerseVariables`:
+const getMyCurrentVerseVars: GetMyCurrentVerseVariables = {
+  today: ..., // optional
+};
 
 // Call the `getMyCurrentVerseRef()` function to get a reference to the query.
+const ref = getMyCurrentVerseRef(getMyCurrentVerseVars);
+// Variables can be defined inline as well.
+const ref = getMyCurrentVerseRef({ today: ..., });
+// Since all variables are optional for this query, you can omit the `GetMyCurrentVerseVariables` argument.
 const ref = getMyCurrentVerseRef();
 
 // You can also pass in a `DataConnect` instance to the `QueryRef` function.
 const dataConnect = getDataConnect(connectorConfig);
-const ref = getMyCurrentVerseRef(dataConnect);
+const ref = getMyCurrentVerseRef(dataConnect, getMyCurrentVerseVars);
 
 // Call `executeQuery()` on the reference to execute the query.
 // You can use the `await` keyword to wait for the promise to resolve.
 const { data } = await executeQuery(ref);
 
-console.log(data.studyCompletions);
+console.log(data.todayCompletion);
+console.log(data.lastCompletion);
 
 // Or, you can use the `Promise` API.
 executeQuery(ref).then((response) => {
   const data = response.data;
-  console.log(data.studyCompletions);
+  console.log(data.todayCompletion);
+  console.log(data.lastCompletion);
 });
 ```
 
@@ -460,6 +494,117 @@ const ref = getMyCompletionsRef();
 // You can also pass in a `DataConnect` instance to the `QueryRef` function.
 const dataConnect = getDataConnect(connectorConfig);
 const ref = getMyCompletionsRef(dataConnect);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.studyCompletions);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.studyCompletions);
+});
+```
+
+## GetTodayCompletionCount
+You can execute the `GetTodayCompletionCount` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [default-connector/index.d.ts](./index.d.ts):
+```typescript
+getTodayCompletionCount(vars: GetTodayCompletionCountVariables, options?: ExecuteQueryOptions): QueryPromise<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
+
+interface GetTodayCompletionCountRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetTodayCompletionCountVariables): QueryRef<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
+}
+export const getTodayCompletionCountRef: GetTodayCompletionCountRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+getTodayCompletionCount(dc: DataConnect, vars: GetTodayCompletionCountVariables, options?: ExecuteQueryOptions): QueryPromise<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
+
+interface GetTodayCompletionCountRef {
+  ...
+  (dc: DataConnect, vars: GetTodayCompletionCountVariables): QueryRef<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
+}
+export const getTodayCompletionCountRef: GetTodayCompletionCountRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the getTodayCompletionCountRef:
+```typescript
+const name = getTodayCompletionCountRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `GetTodayCompletionCount` query requires an argument of type `GetTodayCompletionCountVariables`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface GetTodayCompletionCountVariables {
+  today: TimestampString;
+}
+```
+### Return Type
+Recall that executing the `GetTodayCompletionCount` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `GetTodayCompletionCountData`, which is defined in [default-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface GetTodayCompletionCountData {
+  studyCompletions: ({
+    id: UUIDString;
+  } & StudyCompletion_Key)[];
+}
+```
+### Using `GetTodayCompletionCount`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, getTodayCompletionCount, GetTodayCompletionCountVariables } from '@firebasegen/default-connector';
+
+// The `GetTodayCompletionCount` query requires an argument of type `GetTodayCompletionCountVariables`:
+const getTodayCompletionCountVars: GetTodayCompletionCountVariables = {
+  today: ..., 
+};
+
+// Call the `getTodayCompletionCount()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await getTodayCompletionCount(getTodayCompletionCountVars);
+// Variables can be defined inline as well.
+const { data } = await getTodayCompletionCount({ today: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await getTodayCompletionCount(dataConnect, getTodayCompletionCountVars);
+
+console.log(data.studyCompletions);
+
+// Or, you can use the `Promise` API.
+getTodayCompletionCount(getTodayCompletionCountVars).then((response) => {
+  const data = response.data;
+  console.log(data.studyCompletions);
+});
+```
+
+### Using `GetTodayCompletionCount`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, getTodayCompletionCountRef, GetTodayCompletionCountVariables } from '@firebasegen/default-connector';
+
+// The `GetTodayCompletionCount` query requires an argument of type `GetTodayCompletionCountVariables`:
+const getTodayCompletionCountVars: GetTodayCompletionCountVariables = {
+  today: ..., 
+};
+
+// Call the `getTodayCompletionCountRef()` function to get a reference to the query.
+const ref = getTodayCompletionCountRef(getTodayCompletionCountVars);
+// Variables can be defined inline as well.
+const ref = getTodayCompletionCountRef({ today: ..., });
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = getTodayCompletionCountRef(dataConnect, getTodayCompletionCountVars);
 
 // Call `executeQuery()` on the reference to execute the query.
 // You can use the `await` keyword to wait for the promise to resolve.
@@ -860,7 +1005,7 @@ export interface AddBookmarkData {
       __typename?: string | null;
     })[];
   };
-  bookmark_insert: Bookmark_Key;
+    bookmark_insert: Bookmark_Key;
 }
 ```
 ### Using `AddBookmark`'s action shortcut function

@@ -1,7 +1,8 @@
 "use client";
 
+import { Suspense, useEffect } from "react";
 import Image from "next/image";
-import ReadingBookTolli from "../../../../public/images/readingBookTolli.svg";
+import ReadingBookTolli from "../../../../public/images/readingBookTolli.webp";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { playSound } from "@/lib/sound";
@@ -12,7 +13,7 @@ export default function CompleteListening() {
   useEffect(() => {
     playSound("/sounds/말씀 step 7까지 다 완료.mp3");
     const timeout = setTimeout(() => {
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     }, 5000);
 
     return () => clearTimeout(timeout);
@@ -31,7 +32,9 @@ export default function CompleteListening() {
         src={ReadingBookTolli}
         alt="책 읽는 톨리"
         className="w-[clamp(4.5rem,25vw,6.125rem)] h-auto"
+        priority
       />
     </div>
   );
 }
+

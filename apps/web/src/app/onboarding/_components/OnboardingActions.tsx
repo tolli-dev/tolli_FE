@@ -10,7 +10,7 @@ interface OnboardingActionsProps {
 
 export default function OnboardingActions({ isLastStep, onNext, onSkip }: OnboardingActionsProps) {
   return (
-    <div className="flex flex-col items-center gap-2 w-full px-10.75">
+    <div className="flex flex-col items-center gap-2 w-full px-10.75 pb-4">
       <Button onClick={onNext}>{isLastStep ? '시작하기' : '다음'}</Button>
       {isLastStep ? (
         <div className="text-btn-sm">&nbsp;</div>

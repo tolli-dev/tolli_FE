@@ -111,6 +111,8 @@ const COMPOUND_VOWEL_MAP: Record<string, string[]> = {
   ㅗ: ['ㅘ', 'ㅙ', 'ㅚ'],
   ㅜ: ['ㅝ', 'ㅞ', 'ㅟ'],
   ㅡ: ['ㅢ'],
+  ㅐ: ['ㅒ'],
+  ㅔ: ['ㅖ'],
 };
 
 export function resolveVowel(inputVowel: string, expectedJung: string): string {

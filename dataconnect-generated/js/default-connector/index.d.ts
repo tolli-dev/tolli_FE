@@ -16,7 +16,7 @@ export interface AddBookmarkData {
       __typename?: string | null;
     })[];
   };
-  bookmark_insert: Bookmark_Key;
+    bookmark_insert: Bookmark_Key;
 }
 
 export interface AddBookmarkVariables {
@@ -90,11 +90,32 @@ export interface GetMyCompletionsData {
 }
 
 export interface GetMyCurrentVerseData {
-  studyCompletions: ({
+  todayCompletion: ({
     verse: {
       id: number;
+      reference: string;
+      fullText: string;
     } & Verse_Key;
   })[];
+    lastCompletion: ({
+      verse: {
+        id: number;
+      } & Verse_Key;
+    })[];
+}
+
+export interface GetMyCurrentVerseVariables {
+  today?: TimestampString | null;
+}
+
+export interface GetTodayCompletionCountData {
+  studyCompletions: ({
+    id: UUIDString;
+  } & StudyCompletion_Key)[];
+}
+
+export interface GetTodayCompletionCountVariables {
+  today: TimestampString;
 }
 
 export interface GetVerseData {
@@ -222,15 +243,15 @@ export function getVerse(dc: DataConnect, vars: GetVerseVariables, options?: Exe
 
 interface GetMyCurrentVerseRef {
   /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetMyCurrentVerseData, undefined>;
+  (vars?: GetMyCurrentVerseVariables): QueryRef<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<GetMyCurrentVerseData, undefined>;
+  (dc: DataConnect, vars?: GetMyCurrentVerseVariables): QueryRef<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
   operationName: string;
 }
 export const getMyCurrentVerseRef: GetMyCurrentVerseRef;
 
-export function getMyCurrentVerse(options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
-export function getMyCurrentVerse(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, undefined>;
+export function getMyCurrentVerse(vars?: GetMyCurrentVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
+export function getMyCurrentVerse(dc: DataConnect, vars?: GetMyCurrentVerseVariables, options?: ExecuteQueryOptions): QueryPromise<GetMyCurrentVerseData, GetMyCurrentVerseVariables>;
 
 interface GetMyBookmarksRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -255,6 +276,18 @@ export const getMyCompletionsRef: GetMyCompletionsRef;
 
 export function getMyCompletions(options?: ExecuteQueryOptions): QueryPromise<GetMyCompletionsData, undefined>;
 export function getMyCompletions(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCompletionsData, undefined>;
+
+interface GetTodayCompletionCountRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetTodayCompletionCountVariables): QueryRef<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetTodayCompletionCountVariables): QueryRef<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
+  operationName: string;
+}
+export const getTodayCompletionCountRef: GetTodayCompletionCountRef;
+
+export function getTodayCompletionCount(vars: GetTodayCompletionCountVariables, options?: ExecuteQueryOptions): QueryPromise<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
+export function getTodayCompletionCount(dc: DataConnect, vars: GetTodayCompletionCountVariables, options?: ExecuteQueryOptions): QueryPromise<GetTodayCompletionCountData, GetTodayCompletionCountVariables>;
 
 interface GetMeRef {
   /* Allow users to create refs without passing in DataConnect */

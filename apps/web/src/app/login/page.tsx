@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Image from 'next/image';
 import {
   signInWithAppleToken,
   signInWithGoogleToken,
@@ -75,9 +76,9 @@ export default function LoginPage() {
         </p>
       </div>
       <div className="flex-1" />
-      <img src={'/tolli-logo.svg'} alt="tolli" className="w-46.5 object-contain" />
+      <Image src="/tolli-logo.webp" alt="tolli" width={744} height={744} className="w-46.5 object-contain" priority />
       <div className="flex-1" />
-      <div className="flex flex-col justify-center px-10.75 items-center gap-2.75 w-full">
+      <div className="flex flex-col justify-center px-10.75 items-center gap-2.75 w-full" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
         <button
           type="button"
           onClick={requestKakaoLogin}

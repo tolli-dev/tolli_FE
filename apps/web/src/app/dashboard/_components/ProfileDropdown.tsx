@@ -195,7 +195,7 @@ export default function ProfileDropdown({ isOpen, onClose, nickname = '', onModa
             className="w-[2.063rem] h-[2.063rem] rounded-full flex items-center justify-center shrink-0 overflow-hidden"
             style={{ backgroundColor: '#D9D9D9' }}
           >
-            <Image src="/tolli1.svg" alt="tolli" width={28} height={28} className="object-contain" />
+            <Image src="/tolli1.webp" alt="tolli" width={28} height={28} className="object-contain" />
           </div>
           <span className="text-white font-light text-[1rem] tracking-[-0.02em]">{nickname}</span>
         </div>

@@ -77,7 +77,7 @@ export default function App() {
 
       if (data.type === 'WEB_READY') {
         const radius = await getCornerRadius();
-        const cssRadius = Platform.OS === 'android' ? Math.round(radius * 0.3) : radius;
+        const cssRadius = Math.round(radius);
         webviewRef.current?.postMessage(
           JSON.stringify({ type: 'DEVICE_CORNER_RADIUS', value: cssRadius }),
         );
@@ -200,8 +200,20 @@ export default function App() {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       allowsLinkPreview={false}
+      mixedContentMode="always"
+      domStorageEnabled={true}
+      mediaPlaybackRequiresUserAction={false}
+      allowsInlineMediaPlayback={true}
       // 마이크 WebView 레이어 권한
       mediaCapturePermissionGrantType="grant"
+      onLoadEnd={() => {
+        webviewRef.current?.injectJavaScript(`
+          (function() {
+            if (window.__startBGM) window.__startBGM();
+          })();
+          true;
+        `);
+      }}
     />
   );
 }

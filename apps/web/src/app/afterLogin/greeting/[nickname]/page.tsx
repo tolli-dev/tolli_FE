@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import FullHappyTolli from "../../../../../public/images/onBoarding/fullHappyTolli.svg";
+import FullHappyTolli from "../../../../../public/images/onBoarding/fullHappyTolli.webp";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 

@@ -1,6 +1,6 @@
 'use client';
 
-import StandingTolli_1 from '../../../../public/images/onBoarding/standingTolli_1.svg';
+import StandingTolli_1 from '../../../../public/images/onBoarding/standingTolli_1.webp';
 import Image from 'next/image';
 import Form from 'next/form';
 import { useState } from 'react';
@@ -64,9 +64,9 @@ export default function Page() {
     <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
       <div className="flex flex-col items-center w-full mt-[clamp(1rem,4dvh,10.25rem)]">
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem]">
-          <h1 className="text-h1 text-primary-50">당신의 tolli,</h1>
-          <h1 className="text-h1 text-primary-50">이름이 뭐예요?</h1>
-          <h2 className="text-h2 text-surface-200">tolli에게 불러줄 닉네임을 지어주세요!</h2>
+          <h1 className="text-h1 text-primary-50">tolli가 어떻게</h1>
+          <h1 className="text-h1 text-primary-50">불러드리면 좋을까요?</h1>
+          <h2 className="text-h2 text-surface-200">앞으로 tolli가 불러드릴 이름을 입력해주세요.</h2>
         </div>
         <div className="relative w-full max-w-[16.125rem] aspect-square">
           <Image src={StandingTolli_1} fill alt="hungryTolli" className="object-contain" />

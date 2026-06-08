@@ -38,8 +38,8 @@ const { data } = await DeleteUser(dataConnect);
 // Operation GetVerse:  For variables, look at type GetVerseVars in ../index.d.ts
 const { data } = await GetVerse(dataConnect, getVerseVars);
 
-// Operation GetMyCurrentVerse: 
-const { data } = await GetMyCurrentVerse(dataConnect);
+// Operation GetMyCurrentVerse:  For variables, look at type GetMyCurrentVerseVars in ../index.d.ts
+const { data } = await GetMyCurrentVerse(dataConnect, getMyCurrentVerseVars);
 
 // Operation GetMyBookmarks: 
 const { data } = await GetMyBookmarks(dataConnect);

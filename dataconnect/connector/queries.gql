@@ -10,11 +10,27 @@ query GetVerse($id: Int!) @auth(level: PUBLIC) {
   }
 }
 
-query GetMyCurrentVerse @auth(level: USER) {
-  studyCompletions(where: { userId: { eq_expr: "auth.uid" } }, orderBy: { completedAt: DESC }, limit: 1) {
-    verse {
-      id
-    }
+query GetMyCurrentVerse($today: Timestamp) @auth(level: USER) {
+  studyCompletions: studyCompletions(
+    where: { userId: { eq_expr: "auth.uid" } }
+    orderBy: { completedAt: DESC }
+    limit: 1
+  ) @retired {
+    verse { id }
+  }
+  todayCompletion: studyCompletions(
+    where: { userId: { eq_expr: "auth.uid" }, completedAt: { ge: $today } }
+    orderBy: { completedAt: DESC }
+    limit: 1
+  ) {
+    verse { id reference fullText }
+  }
+  lastCompletion: studyCompletions(
+    where: { userId: { eq_expr: "auth.uid" } }
+    orderBy: { completedAt: DESC }
+    limit: 1
+  ) {
+    verse { id }
   }
 }
 
@@ -37,6 +53,12 @@ query GetMyCompletions @auth(level: USER) {
       reference
     }
     completedAt
+  }
+}
+
+query GetTodayCompletionCount($today: Timestamp!) @auth(level: PUBLIC, insecureReason: "오늘 함께 학습한 유저 수는 공개 정보입니다") {
+  studyCompletions(where: { completedAt: { ge: $today } }) {
+    id
   }
 }
 

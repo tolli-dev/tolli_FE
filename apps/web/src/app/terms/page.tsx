@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Button from '@/components/ui/Button';
 
 function CheckIcon({ checked }: { checked: boolean }) {
@@ -66,7 +67,7 @@ export default function TermsPage() {
 
       <div className="flex-1" />
       <div className="flex justify-center">
-        <img src={'/tolli-terms.svg'} alt="tolli" className="w-43.75 object-contain" />
+        <Image src="/tolli-terms.webp" alt="tolli" width={700} height={700} className="w-43.75 object-contain" priority />
       </div>
       <div className="flex-1" />
 

@@ -106,17 +106,17 @@ exports.getVerse = function getVerse(dcOrVars, varsOrOptions, options) {
 }
 ;
 
-const getMyCurrentVerseRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+const getMyCurrentVerseRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetMyCurrentVerse');
+  return queryRef(dcInstance, 'GetMyCurrentVerse', inputVars);
 }
 getMyCurrentVerseRef.operationName = 'GetMyCurrentVerse';
 exports.getMyCurrentVerseRef = getMyCurrentVerseRef;
 
-exports.getMyCurrentVerse = function getMyCurrentVerse(dcOrOptions, options) {
+exports.getMyCurrentVerse = function getMyCurrentVerse(dcOrVars, varsOrOptions, options) {
   
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, false);
   return executeQuery(getMyCurrentVerseRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
 }
 ;
@@ -148,6 +148,21 @@ exports.getMyCompletions = function getMyCompletions(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
   return executeQuery(getMyCompletionsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+}
+;
+
+const getTodayCompletionCountRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetTodayCompletionCount', inputVars);
+}
+getTodayCompletionCountRef.operationName = 'GetTodayCompletionCount';
+exports.getTodayCompletionCountRef = getTodayCompletionCountRef;
+
+exports.getTodayCompletionCount = function getTodayCompletionCount(dcOrVars, varsOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  return executeQuery(getTodayCompletionCountRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
 }
 ;
 

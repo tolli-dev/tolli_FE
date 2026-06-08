@@ -1,9 +1,7 @@
-export default function CircleLoading({ component }: { component: boolean }) {
+export default function CircleLoading({ component: _ }: { component: boolean }) {
   return (
     <svg
-      className={`
-        absolute inset-0 w-full h-full animate-spin [animation-duration:3s]
-        ${component ? "[animation-play-state:paused]" : "[animation-play-state:running]"}`}
+      className="absolute inset-0 w-full h-full animate-spin [animation-duration:3s]"
       viewBox="0 0 197 197"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

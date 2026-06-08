@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import TimeTolly from '../../../../public/images/onBoarding/timeSetTolli.svg';
+import TimeTolly from '../../../../public/images/onBoarding/timeSetTolli.webp';
 
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
@@ -153,7 +153,8 @@ export default function SetAlarmTimePage() {
   }, []);
 
   const handleConfirm = () => {
-    const hour24 = period === '오전' ? hourIndex + 1 : (hourIndex === 12 ? 12 : hourIndex + 12);
+    const hour12 = hourIndex + 1;
+    const hour24 = period === '오전' ? (hour12 === 12 ? 0 : hour12) : (hour12 === 12 ? 12 : hour12 + 12);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: 'SAVE_ALARM_TIME', hour: hour24, minute: minuteIndex }),
     );
@@ -175,12 +176,12 @@ export default function SetAlarmTimePage() {
         className="fixed inset-0 pointer-events-none"
         style={{
           borderRadius: `${cornerRadius}px`,
-          padding: '3px',
-          background: 'conic-gradient(from var(--angle), white, #CCB5F0, white)',
+          padding: '5px',
+          background: 'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
           WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
-          animation: 'border-spin 3s linear infinite',
+          animation: 'border-spin 6s linear infinite',
         }}
       />
 
@@ -208,7 +209,7 @@ export default function SetAlarmTimePage() {
 
       <div className="flex flex-row items-center justify-between w-full">
         <div className="flex flex-col justify-center">
-          <h1 className="text-h1 text-[#CCB5F0]">톨리가 매일 알려줄게요!</h1>
+          <h1 className="text-h1 text-[#CCB5F0] text-[clamp(1.25rem,5vw,1.75rem)] leading-[clamp(1.75rem,7vw,2.5rem)] whitespace-nowrap">톨리가 매일 알려줄게요!</h1>
           <p className="font-light text-[0.75rem] leading-5 text-[#CECECE] mt-px">알림 설정하기</p>
         </div>
         <div className="relative w-16.5 h-16.5 shrink-0">

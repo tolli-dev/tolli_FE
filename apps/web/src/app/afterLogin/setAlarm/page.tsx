@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import TimeTolly from '../../../../public/images/onBoarding/timeTolli.svg';
+import TimeTolly from '../../../../public/images/onBoarding/timeTolli.webp';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {

@@ -29,6 +29,7 @@ class CornerRadiusModule : Module() {
           val radius = rootView?.rootWindowInsets
             ?.getRoundedCorner(RoundedCorner.POSITION_TOP_LEFT)
             ?.radius ?: 0
+          android.util.Log.d("CornerRadius", "model=${Build.MODEL}, SDK=${Build.VERSION.SDK_INT}, density=$density, px=$radius, dp=${radius / density}")
           result.set(radius)
         } catch (e: Exception) {
           android.util.Log.e("CornerRadius", "exception: ${e.message}")
@@ -39,6 +40,7 @@ class CornerRadiusModule : Module() {
       latch.await()
 
       val px = result.get()
+      android.util.Log.d("CornerRadius", "final result: px=$px, dp=${px / density}")
       if (px > 0) (px / density).toDouble() else 0.0
     }
   }

@@ -83,7 +83,7 @@ export default function TermsPage() {
           <CheckIcon checked={allChecked} />
         </button>
 
-        <p className="mt-0.75 text-[12px] font-medium leading-[22.8px] tracking-normal text-[#C1C1C1]">
+        <p className="mt-0.75 text-[12px] font-medium leading-[22.8px] tracking-normal text-[#C1C1C1] whitespace-nowrap">
           툴리 서비스 이용을 위한 약관 동의가 필요해요.
         </p>
 
@@ -103,9 +103,11 @@ export default function TermsPage() {
       </div>
 
       <div className="flex-1" />
-      <Button onClick={handleNext} className={requiredChecked ? '' : 'opacity-40'}>
-        다음
-      </Button>
+      <div className="pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+        <Button onClick={handleNext} className={requiredChecked ? '' : 'opacity-40'}>
+          다음
+        </Button>
+      </div>
     </div>
   );
 }

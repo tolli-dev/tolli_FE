@@ -46,7 +46,7 @@ export default {
       [
         "@react-native-seoul/kakao-login",
         {
-          kakaoAppKey: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY,
+          kakaoAppKey: process.env.KAKAO_APP_KEY,
         },
       ],
       [
@@ -61,13 +61,13 @@ export default {
         },
       ],
       [
-        'expo-notifications',
+        "expo-notifications",
         {
-          iosPermissions: ['Alert', 'Sound', 'Badge'],
+          iosPermissions: ["Alert", "Sound", "Badge"],
           android: {
             defaultChannel: {
-              name: 'default',
-              importance: 'HIGH',
+              name: "default",
+              importance: "HIGH",
               sound: true,
             },
           },

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { fireAuth } from '@/firebase/fireAuth';
 import { useRouter } from 'next/navigation';
-import LoginPage from './login/page';
 
 export default function Home() {
   const router = useRouter();

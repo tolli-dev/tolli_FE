@@ -6,7 +6,6 @@ import { Verse } from '../types';
 import HangulKeyboard from './HangulKeyboard';
 import { playSound } from '@/lib/sound';
 import {
-  toChosung,
   isVowel,
   isHangulChar,
   combineHangul,

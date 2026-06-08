@@ -46,7 +46,7 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleRetryStep = () => {
-    router.push(`/study/loading?verseId=${verse.id}`);
+    router.push(`/study/${verse.id}/0`);
   };
 
   const handleDeleteBookmark = async (verseId: number) => {

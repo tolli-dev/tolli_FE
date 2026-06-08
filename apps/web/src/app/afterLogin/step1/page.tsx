@@ -1,6 +1,6 @@
-import HungryTolli from '../../../../public/images/onBoarding/hungryTolli_1.webp';
-import Image from 'next/image';
-import Link from 'next/link';
+import HungryTolli from "../../../../public/images/onBoarding/hungryTolli_1.webp";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -19,17 +19,28 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem] mb-[clamp(1.5rem,5dvh,3.813rem)] mt-[0.438rem]">
-          <h1 className="text-h1 text-primary-50">양식을 만나요</h1>
-          <h2 className="text-h2 text-surface-200">말씀, 하루의 일용할 양식</h2>
+          <h1 className="text-h1 text-primary-50 whitespace-nowrap">
+            양식을 만나요
+          </h1>
+          <h2 className="text-h2 text-surface-200 whitespace-nowrap">
+            말씀, 하루의 일용할 양식
+          </h2>
         </div>
 
         <div className="relative w-full max-w-[16.125rem] aspect-square">
-          <Image src={HungryTolli} fill alt="hungryTolli" className="object-contain" />
+          <Image
+            src={HungryTolli}
+            fill
+            alt="hungryTolli"
+            className="object-contain"
+          />
         </div>
       </div>
 
       <div className="flex flex-col items-center w-full">
-        <p className="text-b2 text-surface-300 mb-[0.938rem]">배고픈 tolli가 기다리고 있어요!</p>
+        <p className="text-b2 text-surface-300 mb-[0.938rem] whitespace-nowrap">
+          배고픈 tolli가 기다리고 있어요!
+        </p>
         <Link href="/afterLogin/step2" className="w-full max-w-[19.688rem]">
           <button className="w-full h-[3rem] text-btn-lg text-primary-75 bg-surface-500 rounded-[1.25rem]">
             다음

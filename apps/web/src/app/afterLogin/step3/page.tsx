@@ -19,8 +19,12 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem] mb-[clamp(1.5rem,5dvh,3.813rem)] mt-[0.438rem]">
-          <h1 className="text-h1 text-primary-50">양식이 새겨져요</h1>
-          <h2 className="text-h2 text-surface-200">tolli를 먹일수록</h2>
+          <h1 className="text-h1 text-primary-50 whitespace-nowrap">
+            양식이 새겨져요
+          </h1>
+          <h2 className="text-h2 text-surface-200 whitespace-nowrap">
+            tolli를 먹일수록
+          </h2>
         </div>
 
         <div className="relative w-full max-w-[16.125rem] aspect-square">
@@ -34,7 +38,7 @@ export default function Page() {
       </div>
 
       <div className="flex flex-col items-center w-full">
-        <p className="text-b2 text-surface-300 mb-[0.938rem]">
+        <p className="text-b2 text-surface-300 mb-[0.938rem] whitespace-nowrap">
           일상 속에서 말씀이 나를 먹여요
         </p>
         <Link

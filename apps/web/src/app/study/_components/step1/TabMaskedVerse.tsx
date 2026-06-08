@@ -115,10 +115,7 @@ export default function TabMaskedVerse({
       })}
       {isOpen.condition && isOpen.meaning && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={handleCloseMeaning}
-          />
+          <div className="fixed inset-0 z-40" onClick={handleCloseMeaning} />
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#FFFFFF] rounded-t-[clamp(1rem,4vw,1.5rem)] px-[clamp(1.25rem,6vw,2rem)] pt-[clamp(1.25rem,5vw,1.75rem)] pb-[clamp(3rem,12vw,5rem)] min-h-[clamp(16rem,30vh,24rem)]">
             <button
               className="absolute top-[clamp(0.75rem,3vw,1.25rem)] right-[clamp(1rem,4vw,1.5rem)] text-[#B0B0B0] text-[clamp(1.25rem,5vw,1.75rem)] leading-none"
@@ -126,7 +123,7 @@ export default function TabMaskedVerse({
             >
               ×
             </button>
-            <p className="text-[clamp(1rem,4.5vw,1.25rem)] font-regular text-[#373737] mb-[clamp(0.5rem,2vw,0.75rem)]">
+            <p className="text-[clamp(1rem,4.5vw,1.25rem)] font-regular text-[#373737] mb-[clamp(1.5rem,5vw,2rem)]">
               {isOpen.meaning.word}
             </p>
             <hr className="border-[#e0e0e0] mb-[clamp(0.5rem,2vw,0.75rem)]" />

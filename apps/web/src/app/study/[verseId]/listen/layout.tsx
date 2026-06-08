@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div
         className="fixed inset-0 pointer-events-none z-50"
         style={{
-          borderRadius: `${cornerRadius}px`,
+          borderRadius: `${Math.round(cornerRadius * 0.95)}px`,
           padding: "5px",
           background:
             "conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)",

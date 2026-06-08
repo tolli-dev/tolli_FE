@@ -45,7 +45,7 @@ export default function Step2IntroPage() {
       <div
         className="fixed inset-0 pointer-events-none"
         style={{
-          borderRadius: `${cornerRadius}px`,
+          borderRadius: `${Math.round(cornerRadius * 0.95)}px`,
           padding: '5px',
           background: 'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
           WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',

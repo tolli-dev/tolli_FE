@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import LeftEar from "../../../../public/images/leftEar.svg";
-import RightEar from "../../../../public/images/rightEar.svg";
+import LeftEar from "../../../../../public/images/leftEar.svg";
+import RightEar from "../../../../../public/images/rightEar.svg";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [cornerRadius, setCornerRadius] = useState(0);

@@ -5,71 +5,6 @@ export const connectorConfig = {
   service: 'tolli-fe',
   location: 'asia-northeast3'
 };
-export const getVerseRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetVerse', inputVars);
-}
-getVerseRef.operationName = 'GetVerse';
-
-export function getVerse(dcOrVars, varsOrOptions, options) {
-  
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(getVerseRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
-}
-
-export const getMyCurrentVerseRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetMyCurrentVerse');
-}
-getMyCurrentVerseRef.operationName = 'GetMyCurrentVerse';
-
-export function getMyCurrentVerse(dcOrOptions, options) {
-  
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(getMyCurrentVerseRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
-}
-
-export const getMyBookmarksRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetMyBookmarks');
-}
-getMyBookmarksRef.operationName = 'GetMyBookmarks';
-
-export function getMyBookmarks(dcOrOptions, options) {
-  
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(getMyBookmarksRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
-}
-
-export const getMyCompletionsRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetMyCompletions');
-}
-getMyCompletionsRef.operationName = 'GetMyCompletions';
-
-export function getMyCompletions(dcOrOptions, options) {
-  
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(getMyCompletionsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
-}
-
-export const getMeRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetMe');
-}
-getMeRef.operationName = 'GetMe';
-
-export function getMe(dcOrOptions, options) {
-  
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(getMeRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
-}
-
 export const createUserRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
@@ -140,5 +75,70 @@ deleteUserRef.operationName = 'DeleteUser';
 export function deleteUser(dc) {
   const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dc, undefined);
   return executeMutation(deleteUserRef(dcInstance, inputVars));
+}
+
+export const getVerseRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetVerse', inputVars);
+}
+getVerseRef.operationName = 'GetVerse';
+
+export function getVerse(dcOrVars, varsOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  return executeQuery(getVerseRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+}
+
+export const getMyCurrentVerseRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetMyCurrentVerse');
+}
+getMyCurrentVerseRef.operationName = 'GetMyCurrentVerse';
+
+export function getMyCurrentVerse(dcOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  return executeQuery(getMyCurrentVerseRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+}
+
+export const getMyBookmarksRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetMyBookmarks');
+}
+getMyBookmarksRef.operationName = 'GetMyBookmarks';
+
+export function getMyBookmarks(dcOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  return executeQuery(getMyBookmarksRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+}
+
+export const getMyCompletionsRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetMyCompletions');
+}
+getMyCompletionsRef.operationName = 'GetMyCompletions';
+
+export function getMyCompletions(dcOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  return executeQuery(getMyCompletionsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+}
+
+export const getMeRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetMe');
+}
+getMeRef.operationName = 'GetMe';
+
+export function getMe(dcOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  return executeQuery(getMeRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
 }
 

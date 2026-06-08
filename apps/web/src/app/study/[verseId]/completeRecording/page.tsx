@@ -2,19 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import FullTolli from "../../../../public/images/onBoarding/fullTolli.svg";
-import EatingTolli from "../../../../public/images/onBoarding/eatingTolli.svg";
+import FullTolli from "../../../../../public/images/onBoarding/fullTolli.svg";
+import EatingTolli from "../../../../../public/images/onBoarding/eatingTolli.svg";
 import CircleLoading from "./_components/CircleLoading";
 import Header from "./_components/Header";
-import Star1 from "../../../../public/images/star1.svg";
-import Star2 from "../../../../public/images/star2.svg";
-import { useRouter } from "next/navigation";
+import Star1 from "../../../../../public/images/star1.svg";
+import Star2 from "../../../../../public/images/star2.svg";
+import { useRouter, useParams } from "next/navigation";
+import { playSound } from "@/lib/sound";
 
 export default function CompleteStep() {
   const router = useRouter();
+  const { verseId } = useParams();
   const [component, setComponent] = useState(false);
 
   useEffect(() => {
+    playSound("/sounds/tolli에게 먹이가 전해졌을때.mp3");
     const time = setTimeout(() => {
       setComponent(true);
     }, 3000);
@@ -22,7 +25,7 @@ export default function CompleteStep() {
   }, []);
 
   const handleRouter = () => {
-    router.push("/study/listen");
+    router.push(`/study/${verseId}/listen`);
   };
 
   return (

@@ -3,8 +3,13 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import Bookmark from "./_components/Bookmark";
+import { dataConnect } from "@/lib/dataconnect";
+import { getMyCompletions } from "@firebasegen/default-connector";
+import { useParams, useRouter } from "next/navigation";
 
 export default function ListenVerse() {
+  const router = useRouter();
+  const { verseId } = useParams();
   const [played, setPlayed] = useState(false);
   const [home, setHome] = useState(false);
   const [bookmarkModal, SetBookmarkModal] = useState(false);
@@ -14,11 +19,17 @@ export default function ListenVerse() {
     setHome(true);
   };
 
-  const handleBookmarkModal = () => {
-    // 현재 공부 내용이 이미 학습 db에 있으면 즐겨찾기 모달을 띄우지 않고 바로 홈으로 가는 페이지로 가기
-    // 첫 공부 내용이면 즐겨찾기 모달 띄우기
-    // api 연동하면서 하면 좋을 것 같음
-    SetBookmarkModal(true);
+  const handleBookmarkModal = async () => {
+    const { data } = await getMyCompletions(dataConnect);
+    const isRetryMission = data.studyCompletions.some(
+      (item) => item.verse.id === Number(verseId),
+    );
+
+    if (isRetryMission) {
+      router.push("/study/completeRetry");
+    } else {
+      SetBookmarkModal(true);
+    }
   };
 
   return (

@@ -4,6 +4,7 @@ import { Verse, WordMeaningData } from "../types";
 import { useState } from "react";
 import Link from "next/link";
 import TabMaskedVerse from "./TabMaskedVerse";
+import { playSound } from "@/lib/sound";
 
 export default function TabVerse({
   verse,
@@ -54,6 +55,7 @@ export default function TabVerse({
         {checkAllWordsAreTabbed && checkAllWordsAreRead && (
           <Link href={`/study/${verseId}/2`} className="mt-auto mx-auto">
             <button
+              onClick={() => playSound("/sounds/다음탭 이동.mp3")}
               className="mt-auto py-1.75 mx-auto w-32 rounded-[20px] border border-[#CCB5F0] text-[1rem] text-[#FFFFFF] font-bold tracking-[0.03em]"
               style={{ marginTop: 0, marginBottom: "auto" }}
             >

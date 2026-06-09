@@ -42,9 +42,10 @@ export default function LoginPage() {
   }, [router]);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const appleToken = params.get('apple_token');
+    const match = document.cookie.match(/(?:^|;\s*)apple_id_token=([^;]+)/);
+    const appleToken = match ? decodeURIComponent(match[1]) : null;
     if (appleToken) {
+      document.cookie = 'apple_id_token=; max-age=0; path=/';
       redirectAfterLogin(() => signInWithAppleToken(appleToken));
     }
   }, [redirectAfterLogin]);

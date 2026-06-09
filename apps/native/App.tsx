@@ -47,6 +47,20 @@ export default function App() {
     })();
   }, []);
 
+  useEffect(() => {
+    const handleDeepLink = (event: { url: string }) => {
+      const url = event.url;
+      if (url.startsWith('tolli://auth/apple/callback')) {
+        const idToken = new URL(url).searchParams.get('id_token');
+        if (idToken) {
+          webviewRef.current?.postMessage(JSON.stringify({ type: 'APPLE_TOKEN', token: idToken }));
+        }
+      }
+    };
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+    return () => subscription.remove();
+  }, []);
+
   const postToken = (type: string, token: string) => {
     webviewRef.current?.postMessage(JSON.stringify({ type, token }));
   };
@@ -121,6 +135,12 @@ export default function App() {
 
       if (data.type === 'SET_LOGGED_OUT') {
         await AsyncStorage.removeItem('isLoggedIn');
+        await AsyncStorage.removeItem('alarmTime');
+      }
+
+      if (data.type === 'CLEAR_ALL_DATA') {
+        await AsyncStorage.removeItem('isLoggedIn');
+        await AsyncStorage.removeItem('alarmTime');
       }
 
       if (data.type === 'REQUEST_NOTIFICATION_PERMISSION') {

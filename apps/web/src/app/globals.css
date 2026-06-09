@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --liquid-glass-filters: url(#liquid-glass-button) brightness(150%);
@@ -8,8 +8,8 @@
 
 @theme inline {
   --font-sans:
-    var(--font-pretendard), "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, sans-serif;
+    var(--font-pretendard), 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, sans-serif;
 
   /* Primary */
   --color-primary-50: #cfc4f4;
@@ -53,13 +53,7 @@ body:has(.dashboard-layout) {
 }
 
 body:has(.dashboard-layout.is-done) {
-  background: linear-gradient(
-    to bottom,
-    #ccb5f0 0%,
-    #e4e4e4 26%,
-    #e6e6e6 85%,
-    #ffffff 100%
-  );
+  background: linear-gradient(to bottom, #ccb5f0 0%, #e4e4e4 26%, #e6e6e6 85%, #ffffff 100%);
 }
 
 body:has(.dashboard-layout) {
@@ -235,12 +229,26 @@ body:has(.listenVerse-layout) {
 
 /* Login character float */
 @-webkit-keyframes float {
-  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
-  50%       { -webkit-transform: translateY(-0.5rem); transform: translateY(-0.5rem); }
+  0%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-0.5rem);
+    transform: translateY(-0.5rem);
+  }
 }
 @keyframes float {
-  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
-  50%       { -webkit-transform: translateY(-0.5rem); transform: translateY(-0.5rem); }
+  0%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-0.5rem);
+    transform: translateY(-0.5rem);
+  }
 }
 
 .animate-float {
@@ -250,37 +258,73 @@ body:has(.listenVerse-layout) {
 
 /* Study animations */
 @keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slide-up {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide-down {
-  from { transform: translateY(0); }
-  to   { transform: translateY(100%); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
 }
 
 /* Onboarding slide animations */
 @-webkit-keyframes slide-out-left {
-  from { -webkit-transform: translateX(0); transform: translateX(0); }
-  to   { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  to {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
 }
 @keyframes slide-out-left {
-  from { -webkit-transform: translateX(0); transform: translateX(0); }
-  to   { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  to {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
 }
 
 @-webkit-keyframes slide-in-right {
-  from { -webkit-transform: translateX(100%); transform: translateX(100%); }
-  to   { -webkit-transform: translateX(0); transform: translateX(0); }
+  from {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  to {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
 }
 @keyframes slide-in-right {
-  from { -webkit-transform: translateX(100%); transform: translateX(100%); }
-  to   { -webkit-transform: translateX(0); transform: translateX(0); }
+  from {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  to {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
 }
 
 .onboarding-slide-exit {
@@ -294,20 +338,40 @@ body:has(.listenVerse-layout) {
 }
 
 @keyframes fade-in-modal {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes fade-out-modal {
-  from { opacity: 1; }
-  to   { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 @keyframes dropdown-enter {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes dropdown-exit {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-6px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
 }
 
 .card-flip-scene {

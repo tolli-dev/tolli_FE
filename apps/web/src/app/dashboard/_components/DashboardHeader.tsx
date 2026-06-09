@@ -75,7 +75,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       });
     }
     window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "SET_LOGGED_OUT" }),
+      JSON.stringify({ type: "CLEAR_ALL_DATA" }),
     );
     await signOut(fireAuth);
     router.push("/login");

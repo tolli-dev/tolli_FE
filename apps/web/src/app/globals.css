@@ -233,6 +233,21 @@ body:has(.listenVerse-layout) {
   letter-spacing: 0em;
 }
 
+/* Login character float */
+@-webkit-keyframes float {
+  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  50%       { -webkit-transform: translateY(-0.5rem); transform: translateY(-0.5rem); }
+}
+@keyframes float {
+  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  50%       { -webkit-transform: translateY(-0.5rem); transform: translateY(-0.5rem); }
+}
+
+.animate-float {
+  -webkit-animation: float 1.5s ease-in-out infinite;
+  animation: float 1.5s ease-in-out infinite;
+}
+
 /* Onboarding slide animations */
 @-webkit-keyframes slide-out-left {
   from { -webkit-transform: translateX(0); transform: translateX(0); }

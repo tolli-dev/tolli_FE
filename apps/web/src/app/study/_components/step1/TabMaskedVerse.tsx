@@ -127,9 +127,10 @@ export default function TabMaskedVerse({
               style={{
                 fontWeight: 400,
                 fontSize: 'clamp(1rem, 4.5vw, 1.25rem)',
-                lineHeight: '2.875rem',
+                lineHeight: '1.4',
                 letterSpacing: '0.08em',
                 color: '#373737',
+                paddingBottom: 'clamp(0.75rem, 3vw, 1rem)',
               }}
             >
               {isOpen.meaning.text}
@@ -137,11 +138,11 @@ export default function TabMaskedVerse({
             <hr className="border-[#e0e0e0]" />
             <p
               style={{
-                fontWeight: 400,
-                fontSize: 'clamp(1rem, 4.5vw, 1.25rem)',
-                lineHeight: '2.875rem',
-                letterSpacing: '0.08em',
-                color: '#373737',
+                fontWeight: 500,
+                fontSize: 'clamp(0.875rem, 3.5vw, 0.9375rem)',
+                lineHeight: '1.5rem',
+                color: '#8A8880',
+                paddingTop: 'clamp(0.75rem, 3vw, 1rem)',
               }}
             >
               {isOpen.meaning.meaning}

@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { getMe, getMyCurrentVerse } from '@firebasegen/default-connector';
-import { dataConnect } from '@/lib/dataconnect';
-import { onAuthStateChanged } from 'firebase/auth';
-import { fireAuth } from '@/firebase/fireAuth';
-import SwipeNav from './_components/SwipeNav';
-import DashboardHeader from './_components/DashboardHeader';
-import BeforeFinish from './BeforeFinish';
-import AfterFinish from './AfterFinish';
-import Bookmark from './Bookmark';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { useState, useEffect } from "react";
+import { getMe, getMyCurrentVerse } from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
+import { onAuthStateChanged } from "firebase/auth";
+import { fireAuth } from "@/firebase/fireAuth";
+import SwipeNav from "./_components/SwipeNav";
+import DashboardHeader from "./_components/DashboardHeader";
+import BeforeFinish from "./BeforeFinish";
+import AfterFinish from "./AfterFinish";
+import Bookmark from "./Bookmark";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 type TodayVerse = { id: number; reference: string; fullText: string } | null;
 
 export default function DashBoard() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState("");
   const [done, setDone] = useState(false);
   const [todayVerse, setTodayVerse] = useState<TodayVerse>(null);
   const [loading, setLoading] = useState(true);
@@ -29,10 +29,12 @@ export default function DashBoard() {
       today.setHours(0, 0, 0, 0);
 
       Promise.all([
-        getMe(dataConnect),
+        getMe(dataConnect, {
+          fetchPolicy: "SERVER_ONLY",
+        }),
         getMyCurrentVerse(dataConnect, { today: today.toISOString() }),
       ]).then(([meResult, verseResult]) => {
-        setNickname(meResult.data.user?.nickname ?? '');
+        setNickname(meResult.data.user?.nickname ?? "");
         const verse = verseResult.data.todayCompletion[0]?.verse ?? null;
         setTodayVerse(verse);
         setDone(verse !== null);
@@ -49,7 +51,7 @@ export default function DashBoard() {
         dashboard-layout
         flex flex-col w-full flex-1 min-h-0 justify-between items-center
         px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]
-        ${done ? 'is-done' : ''}
+        ${done ? "is-done" : ""}
       `}
     >
       <DashboardHeader nickname={nickname} done={done} />

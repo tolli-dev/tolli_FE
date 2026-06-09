@@ -13,7 +13,7 @@ async function getTodayVerseId(): Promise<number> {
   const result = await getMyCurrentVerse(dataConnect, { today: today.toISOString() });
   const { lastCompletion } = result.data;
 
-  if (lastCompletion.length > 0) return lastCompletion[0].verse.id + 1;
+  if (lastCompletion.length > 0) return (lastCompletion[0].verse.id % 30) + 1;
   return 1;
 }
 
@@ -43,7 +43,7 @@ export default function StudyLoadingPage() {
   useEffect(() => {
     Promise.all([
       getTodayVerseId(),
-      new Promise<void>((resolve) => setTimeout(resolve, 3000)),
+      new Promise<void>((resolve) => setTimeout(resolve, 1500)),
     ]).then(([verseId]) => {
       router.push(`/study/${verseId}/0`);
     });

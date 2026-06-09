@@ -17,6 +17,7 @@ import { updateNickname, deleteUser } from "@firebasegen/default-connector";
 import standingTolli from "../../../../../public/tolli1.webp";
 import Image from "next/image";
 import ProfileDropdown from "../../_components/ProfileDropdown";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 interface CompletedVerse {
   verse: {
@@ -44,8 +45,11 @@ export default function StorageView({ done, nickname }: Props) {
   const [modal, setModal] = useState<ModalType>(null);
   const [renameValue, setRenameValue] = useState(nickname ?? "");
   const [renameError, setRenameError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
 
   const handleLogout = async () => {
+    setActionLoading(true);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
@@ -54,6 +58,7 @@ export default function StorageView({ done, nickname }: Props) {
   };
 
   const handleWithdraw = async () => {
+    setActionLoading(true);
     const idToken = await fireAuth.currentUser?.getIdToken();
     await deleteUser(dataConnect);
     if (idToken) {
@@ -75,8 +80,8 @@ export default function StorageView({ done, nickname }: Props) {
       setRenameError(true);
       return;
     }
+    setActionLoading(true);
     await updateNickname(dataConnect, { nickname: renameValue });
-    setModal(null);
     window.location.href = "/dashboard";
   };
 
@@ -87,6 +92,7 @@ export default function StorageView({ done, nickname }: Props) {
 
   useEffect(() => {
     const getMyStorage = async () => {
+      setLoading(true);
       const { data } = await getMyCompletions(dataConnect);
       const [verses, { data: bookmarksData }] = await Promise.all([
         Promise.all(
@@ -109,6 +115,7 @@ export default function StorageView({ done, nickname }: Props) {
       ]);
       setBookmarkedIds(new Set(bookmarksData.bookmarks.map((b) => b.verse.id)));
       setMyCompletions(verses);
+      setLoading(false);
     };
     getMyStorage();
   }, []);
@@ -134,6 +141,8 @@ export default function StorageView({ done, nickname }: Props) {
       `}
     >
       <>
+        {(loading || actionLoading) && <LoadingSpinner />}
+
         {isDropdownOpen && !modal && (
           <div
             className="fixed inset-0 z-40 bg-black/45"

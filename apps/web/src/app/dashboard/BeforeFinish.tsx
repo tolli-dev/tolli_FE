@@ -1,22 +1,25 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import hungry_tolli from '../../../public/images/onBoarding/hungryTolli_1.webp';
 import NoiseOverlay from './_components/NoiseOverlay';
 import GrainBorder from './_components/_GrainBorder';
 import { useRouter } from 'next/navigation';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function BeforeFinish({ nickname }: { nickname: string }) {
   const router = useRouter();
+  const [navigating, setNavigating] = useState(false);
 
   const getTodayMission = () => {
-    // 버튼 클릭 시, 해당 유저가 오늘 할 미션에 대한 데이터를 받는 동안,
-    // loading 화면을 띄운다.
+    setNavigating(true);
     router.push('/study/loading');
   };
 
   return (
     <main className="flex flex-1 flex-col items-center w-full">
+      {navigating && <LoadingSpinner />}
         <div className="flex flex-col w-full">
           <h1 className="text-dashboard-h1">{nickname}님,</h1>
           <h1 className="text-dashboard-h1">안녕하세요!</h1>

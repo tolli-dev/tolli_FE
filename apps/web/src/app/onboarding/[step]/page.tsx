@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import OnboardingSlide from '@/app/onboarding/_components/OnboardingSlide';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import OnboardingActions from '@/app/onboarding/_components/OnboardingActions';
 import LearningSteps from '@/app/onboarding/_components/LearningSteps';
 
@@ -30,24 +30,28 @@ const STEPS = [
 
 const TOTAL_STEPS = STEPS.length;
 
+type SlidePhase = 'idle' | 'exit' | 'enter';
+
 export default function OnboardingStepPage() {
   const router = useRouter();
-  const params = useParams();
-  const step = Number(params.step);
+  const [step, setStep] = useState(0);
+  const [phase, setPhase] = useState<SlidePhase>('idle');
+  const nextRef = useRef<number | 'login' | null>(null);
+  const slideRef = useRef<HTMLDivElement>(null);
 
-  const current = STEPS[step - 1];
-  const next = STEPS[step]; // undefined on last step
-  const isLastStep = step === TOTAL_STEPS;
+  const current = STEPS[step];
+  const isLastStep = step === TOTAL_STEPS - 1;
 
   useEffect(() => {
-    if (!next) return;
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = next.image;
-    document.head.appendChild(link);
-    return () => { document.head.removeChild(link); };
-  }, [next]);
+    STEPS.forEach((s) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = s.image;
+      document.head.appendChild(link);
+    });
+    router.prefetch('/login');
+  }, [router]);
 
   const notifyOnboardingComplete = () => {
     window.ReactNativeWebView?.postMessage(
@@ -55,36 +59,86 @@ export default function OnboardingStepPage() {
     );
   };
 
-  const handleNext = () => {
-    if (isLastStep) {
-      notifyOnboardingComplete();
-      router.push('/login');
-    } else {
-      router.push(`/onboarding/${step + 1}`);
+  const navigate = (dest: number | 'login') => {
+    if (phase !== 'idle') return;
+    nextRef.current = dest;
+    setPhase('exit');
+  };
+
+  const handleAnimationEnd = () => {
+    if (phase === 'exit') {
+      const dest = nextRef.current;
+      if (dest === 'login') {
+        notifyOnboardingComplete();
+        router.push('/login');
+        return;
+      }
+      if (dest !== null) setStep(dest as number);
+      nextRef.current = null;
+      setPhase('enter');
+    } else if (phase === 'enter') {
+      setPhase('idle');
     }
   };
 
+  const handleNext = () => navigate(isLastStep ? 'login' : step + 1);
   const handleSkip = () => {
     notifyOnboardingComplete();
     router.push('/login');
   };
 
-  if (!current) {
-    router.replace('/onboarding/1');
-    return null;
-  }
+  const slideClass =
+    phase === 'exit'
+      ? 'onboarding-slide-exit'
+      : phase === 'enter'
+        ? 'onboarding-slide-enter'
+        : '';
 
   return (
-    <>
-      <OnboardingSlide
-        title={current.title}
-        description={current.description}
-        image={current.image}
-        imageSize={current.imageSize}
-        extra={current.extra}
-        priority
-      />
+    <div className="flex flex-col h-full w-full justify-center items-start overflow-hidden">
+      {/* Step indicator */}
+      <div className="flex items-center gap-4.5 pb-6.75 pt-12.75 pl-8.5">
+        {Array.from({ length: TOTAL_STEPS }, (_, i) => (
+          <span
+            key={i}
+            style={{
+              display: 'block',
+              width: '0.4375rem',
+              height: '0.4375rem',
+              borderRadius: '9999px',
+              backgroundColor:
+                i === step
+                  ? 'var(--color-primary-50)'
+                  : 'var(--color-surface-100)',
+              transform: i === step ? 'scale(1.3)' : 'scale(1)',
+              WebkitTransition: 'background-color 0.3s ease, -webkit-transform 0.3s ease',
+              transition: 'background-color 0.3s ease, transform 0.3s ease',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Slide area */}
+      <div
+        ref={slideRef}
+        className={`flex flex-col flex-1 w-full ${slideClass}`}
+        onAnimationEnd={handleAnimationEnd}
+      >
+        <div className="flex flex-col flex-1 items-start px-6">
+          <h1 className="text-h1 text-primary-50 whitespace-pre-line">{current.title}</h1>
+          <p className="mt-3 text-h2 text-surface-200 whitespace-pre-line">{current.description}</p>
+          <div className="flex-1" />
+          <div className="flex flex-col w-full justify-center items-center">
+            {current.extra && <div className="w-full">{current.extra}</div>}
+            <div className="relative" style={{ width: current.imageSize, height: current.imageSize }}>
+              <Image src={current.image} alt="" fill className="object-contain" priority />
+            </div>
+          </div>
+          <div className="flex-1" />
+        </div>
+      </div>
+
       <OnboardingActions isLastStep={isLastStep} onNext={handleNext} onSkip={handleSkip} />
-    </>
+    </div>
   );
 }

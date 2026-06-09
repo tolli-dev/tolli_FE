@@ -123,11 +123,27 @@ export default function TabMaskedVerse({
             >
               ×
             </button>
-            <p className="text-[clamp(1rem,4.5vw,1.25rem)] font-regular text-[#373737] mb-[clamp(1.5rem,5vw,2rem)]">
-              {isOpen.meaning.word}
+            <p
+              style={{
+                fontWeight: 400,
+                fontSize: 'clamp(1rem, 4.5vw, 1.25rem)',
+                lineHeight: '2.875rem',
+                letterSpacing: '0.08em',
+                color: '#373737',
+              }}
+            >
+              {isOpen.meaning.text}
             </p>
-            <hr className="border-[#e0e0e0] mb-[clamp(0.5rem,2vw,0.75rem)]" />
-            <p className="text-[clamp(0.875rem,3.5vw,1rem)] font-medium text-[#8A8880] leading-[1.8]">
+            <hr className="border-[#e0e0e0]" />
+            <p
+              style={{
+                fontWeight: 400,
+                fontSize: 'clamp(1rem, 4.5vw, 1.25rem)',
+                lineHeight: '2.875rem',
+                letterSpacing: '0.08em',
+                color: '#373737',
+              }}
+            >
               {isOpen.meaning.meaning}
             </p>
           </div>

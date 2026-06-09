@@ -32,7 +32,7 @@ export default function RecallIntroPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(`/study/${verseId}/6`);
-    }, 3000);
+    }, 1500);
     return () => clearTimeout(timer);
   }, [router, verseId]);
 

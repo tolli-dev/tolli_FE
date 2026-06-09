@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -123,14 +123,13 @@ type Props = {
   onRename?: () => void;
 };
 
-export default function ProfileDropdown({
+const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdown({
   isOpen,
   onClose,
   nickname = "",
   onModal,
   onRename,
-}: Props) {
-  const ref = useRef<HTMLDivElement>(null);
+}, ref) {
   const menuListRef = useRef<HTMLDivElement>(null);
   const menuRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const router = useRouter();
@@ -183,16 +182,6 @@ export default function ProfileDropdown({
     };
   }, []);
 
-  useEffect(() => {
-    const handleOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    };
-    if (isOpen) document.addEventListener("mousedown", handleOutside);
-    return () => document.removeEventListener("mousedown", handleOutside);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
   const handleMenuClick = (item: MenuItem) => {
     if (item.key === "feedback") {
       window.ReactNativeWebView?.postMessage(
@@ -232,10 +221,13 @@ export default function ProfileDropdown({
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <div
       ref={ref}
       className="absolute top-[calc(100%+0.5rem)] right-0 z-50 w-[15.563rem]"
+      style={{ animation: 'dropdown-enter 0.2s cubic-bezier(0.4,0,0.2,1) forwards' }}
       onClick={(e) => e.stopPropagation()}
     >
       <div
@@ -302,6 +294,7 @@ export default function ProfileDropdown({
                       paddingBottom: "1.4375rem",
                       backgroundColor: "rgba(60,60,60,0.85)",
                       border: "1px solid #CCB5F0",
+                      animation: 'dropdown-enter 0.2s cubic-bezier(0.4,0,0.2,1) forwards',
                     }}
                   >
                     <button
@@ -395,4 +388,6 @@ export default function ProfileDropdown({
       </div>
     </div>
   );
-}
+});
+
+export default ProfileDropdown;

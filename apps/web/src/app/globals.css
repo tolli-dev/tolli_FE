@@ -232,3 +232,108 @@ body:has(.listenVerse-layout) {
   line-height: clamp(1.75rem, 7.5vw, 2.125rem);
   letter-spacing: 0em;
 }
+
+/* Login character float */
+@-webkit-keyframes float {
+  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  50%       { -webkit-transform: translateY(-0.5rem); transform: translateY(-0.5rem); }
+}
+@keyframes float {
+  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  50%       { -webkit-transform: translateY(-0.5rem); transform: translateY(-0.5rem); }
+}
+
+.animate-float {
+  -webkit-animation: float 1.5s ease-in-out infinite;
+  animation: float 1.5s ease-in-out infinite;
+}
+
+/* Study animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
+/* Onboarding slide animations */
+@-webkit-keyframes slide-out-left {
+  from { -webkit-transform: translateX(0); transform: translateX(0); }
+  to   { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+}
+@keyframes slide-out-left {
+  from { -webkit-transform: translateX(0); transform: translateX(0); }
+  to   { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+}
+
+@-webkit-keyframes slide-in-right {
+  from { -webkit-transform: translateX(100%); transform: translateX(100%); }
+  to   { -webkit-transform: translateX(0); transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { -webkit-transform: translateX(100%); transform: translateX(100%); }
+  to   { -webkit-transform: translateX(0); transform: translateX(0); }
+}
+
+.onboarding-slide-exit {
+  -webkit-animation: slide-out-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: slide-out-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.onboarding-slide-enter {
+  -webkit-animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fade-in-modal {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fade-out-modal {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes dropdown-enter {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dropdown-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+.card-flip-scene {
+  perspective: 1000px;
+}
+
+.card-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-flip-front,
+.card-flip-back {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.card-flip-back {
+  transform: rotateY(180deg);
+}

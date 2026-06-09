@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, useEffect, useMemo } from 'react';
+import { useReducer, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Verse } from '../types';
 import HangulKeyboard from './HangulKeyboard';
@@ -140,6 +140,8 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
 
   const targets = useMemo(() => buildTargets(verse, bookName), [verse, bookName]);
 
+  const [wrongKey, setWrongKey] = useState<string | null>(null);
+
   const [state, dispatch] = useReducer(reducer, {
     targetIdx: 0,
     typedChars: [],
@@ -199,9 +201,25 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
 
       {!allDone && (
         <HangulKeyboard
+          wrongKey={wrongKey}
           onKey={(key) => {
             playSound('/sounds/타자소리 타이핑 소리.mp3');
-            dispatch({ type: 'KEY', key, targets })}}
+            const target = targets[state.targetIdx];
+            if (target && isVowel(key)) {
+              const expectedChar = target.text[state.typedChars.length] ?? '';
+              if (isHangulChar(expectedChar)) {
+                const activeCho = state.cho || getChosung(expectedChar);
+                const [, expectedJung, jong] = decomposeHangul(expectedChar);
+                const activeJung = resolveVowel(key, expectedJung);
+                const composed = combineHangul(activeCho, activeJung, jong);
+                if (composed !== expectedChar) {
+                  setWrongKey(key);
+                  setTimeout(() => setWrongKey(null), 500);
+                }
+              }
+            }
+            dispatch({ type: 'KEY', key, targets });
+          }}
         />
       )}
     </section>

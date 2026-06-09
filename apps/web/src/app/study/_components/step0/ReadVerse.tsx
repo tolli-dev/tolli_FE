@@ -20,7 +20,7 @@ export default function ReadVerse({
   return (
     <Link className="w-full h-dvh flex-1" href={`/study/${verseId}/1`}>
       <section className="flex flex-col flex-1">
-        <div className="flex flex-col mt-[clamp(5rem,20vh,10rem)] justify-center gap-[clamp(2rem,8vw,4.25rem)] px-[clamp(1.5rem,9vw,4.25rem)]">
+        <div className="flex flex-col mt-[clamp(5rem,20vh,10rem)] justify-center gap-[clamp(2rem,8vw,4.25rem)] px-[clamp(1.5rem,9vw,4.25rem)]" style={{ animation: 'fade-in 0.3s ease forwards' }}>
           <p className="text-center text-[clamp(1rem,4.5vw,1.25rem)] font-medium leading-6 tracking-[0.03em] text-[#CCB5F0]">
             {verse.reference}
           </p>

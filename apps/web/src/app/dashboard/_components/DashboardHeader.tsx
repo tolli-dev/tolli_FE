@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -21,11 +21,34 @@ type Props = {
 };
 
 export default function DashboardHeader({ nickname, done = false }: Props) {
+  const profileBtnRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOutside = (e: MouseEvent) => {
+      if (
+        profileBtnRef.current?.contains(e.target as Node) ||
+        dropdownRef.current?.contains(e.target as Node)
+      ) return;
+      setIsDropdownOpen(false);
+    };
+    if (isDropdownOpen) document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [isDropdownOpen]);
   const [modal, setModal] = useState<ModalType>(null);
+  const [modalClosing, setModalClosing] = useState(false);
   const [renameValue, setRenameValue] = useState(nickname ?? "");
   const [renameError, setRenameError] = useState(false);
   const router = useRouter();
+
+  const closeModal = () => {
+    setModalClosing(true);
+    setTimeout(() => {
+      setModal(null);
+      setModalClosing(false);
+    }, 200);
+  };
 
   const handleAccessToStorage = () => {
     const params = new URLSearchParams({ isDone: String(done) });
@@ -64,7 +87,6 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       return;
     }
     await updateNickname(dataConnect, { nickname: renameValue });
-    setModal(null);
     window.location.href = "/dashboard";
   };
 
@@ -84,7 +106,10 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
 
       {/* 로그아웃 / 회원탈퇴 모달 */}
       {(modal === "logout" || modal === "withdraw") && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/92">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/92"
+          style={{ animation: `${modalClosing ? 'fade-out-modal' : 'fade-in-modal'} 0.2s ease forwards` }}
+        >
           <div className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]">
             <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] whitespace-nowrap">
               {modal === "logout" ? "로그아웃 할까요?" : "회원 탈퇴 할까요?"}
@@ -110,7 +135,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
                 {modal === "logout" ? "로그아웃하기" : "탈퇴하기"}
               </button>
               <button
-                onClick={() => setModal(null)}
+                onClick={closeModal}
                 className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#D9D9D9]"
               >
                 남아있기
@@ -124,7 +149,8 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       {modal === "rename" && (
         <div
           className="fixed inset-0 z-200 flex items-center justify-center bg-black/60"
-          onClick={() => setModal(null)}
+          style={{ animation: `${modalClosing ? 'fade-out-modal' : 'fade-in-modal'} 0.2s ease forwards` }}
+          onClick={closeModal}
         >
           <div
             className="flex flex-col w-79.5 rounded-4xl gap-4.5 bg-[#373737]"
@@ -169,7 +195,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
 
             <div className="flex gap-2.5">
               <button
-                onClick={() => setModal(null)}
+                onClick={closeModal}
                 className="flex-1 h-12 rounded-[1.25rem] font-semibold text-[1rem] text-[#CCB5F0] border border-[#CCB5F0] bg-transparent"
               >
                 취소
@@ -199,6 +225,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
           className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
         />
         <button
+          ref={profileBtnRef}
           onClick={() => setIsDropdownOpen((v) => !v)}
           className="relative"
           aria-label="프로필 메뉴"
@@ -208,6 +235,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
             className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
           />
           <ProfileDropdown
+            ref={dropdownRef}
             isOpen={isDropdownOpen}
             onClose={() => setIsDropdownOpen(false)}
             nickname={nickname}

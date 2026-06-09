@@ -46,7 +46,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'token exchange failed', detail: tokenData }, { status: 400 });
   }
 
-  return NextResponse.redirect(
-    `https://tolli-fe-web.vercel.app/login?apple_token=${encodeURIComponent(idToken)}`,
-  );
+  const response = NextResponse.redirect('https://tolli-fe-web.vercel.app/login');
+  response.cookies.set('apple_id_token', idToken, {
+    httpOnly: false,
+    secure: true,
+    sameSite: 'none',
+    maxAge: 60,
+    path: '/',
+  });
+  return response;
 }

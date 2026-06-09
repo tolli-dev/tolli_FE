@@ -50,7 +50,8 @@ export default function OnboardingStepPage() {
       link.href = s.image;
       document.head.appendChild(link);
     });
-  }, []);
+    router.prefetch('/login');
+  }, [router]);
 
   const notifyOnboardingComplete = () => {
     window.ReactNativeWebView?.postMessage(

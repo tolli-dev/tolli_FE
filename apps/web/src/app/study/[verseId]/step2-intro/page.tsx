@@ -32,7 +32,7 @@ export default function Step2IntroPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(`/study/${verseId}/2`);
-    }, 3000);
+    }, 1500);
     return () => clearTimeout(timer);
   }, [router, verseId]);
 

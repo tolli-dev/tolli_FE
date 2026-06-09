@@ -22,7 +22,8 @@ export default function TabMaskedVerse({
   const [isOpen, setIsOpen] = useState<{
     meaning: WordMeaningData | null;
     condition: boolean;
-  }>({ meaning: null, condition: false });
+    closing: boolean;
+  }>({ meaning: null, condition: false, closing: false });
 
   useEffect(() => {
     meanings.forEach((word, index) => {
@@ -49,7 +50,7 @@ export default function TabMaskedVerse({
 
   const handleWatchMeaning = (meaning: WordMeaningData, index: number) => {
     playSound("/sounds/말씀 잠깐 보기 카드 공개_비공개.mp3");
-    setIsOpen({ meaning: meaning, condition: true });
+    setIsOpen({ meaning, condition: true, closing: false });
     setWatchMeaning((prev) => {
       const updatedMeaning = [...prev];
       updatedMeaning[index] = true;
@@ -59,7 +60,10 @@ export default function TabMaskedVerse({
 
   const handleCloseMeaning = () => {
     playSound("/sounds/원래 화면 다시 돌아갈때.mp3");
-    setIsOpen({ meaning: null, condition: false });
+    setIsOpen((prev) => ({ ...prev, closing: true }));
+    setTimeout(() => {
+      setIsOpen({ meaning: null, condition: false, closing: false });
+    }, 200);
   };
 
   return (
@@ -116,7 +120,10 @@ export default function TabMaskedVerse({
       {isOpen.condition && isOpen.meaning && (
         <>
           <div className="fixed inset-0 z-40" onClick={handleCloseMeaning} />
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#FFFFFF] rounded-t-[clamp(1rem,4vw,1.5rem)] px-[clamp(1.25rem,6vw,2rem)] pt-[clamp(1.25rem,5vw,1.75rem)] pb-[clamp(3rem,12vw,5rem)] min-h-[clamp(16rem,30vh,24rem)]">
+          <div
+            className="fixed bottom-0 left-0 right-0 z-50 bg-[#FFFFFF] rounded-t-[clamp(1rem,4vw,1.5rem)] px-[clamp(1.25rem,6vw,2rem)] pt-[clamp(1.25rem,5vw,1.75rem)] pb-[clamp(3rem,12vw,5rem)] min-h-[clamp(16rem,30vh,24rem)]"
+            style={{ animation: isOpen.closing ? 'slide-down 0.2s ease forwards' : 'slide-up 0.3s ease forwards' }}
+          >
             <button
               className="absolute top-[clamp(0.75rem,3vw,1.25rem)] right-[clamp(1rem,4vw,1.5rem)] text-[#B0B0B0] text-[clamp(1.25rem,5vw,1.75rem)] leading-none"
               onClick={handleCloseMeaning}

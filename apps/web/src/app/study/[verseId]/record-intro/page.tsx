@@ -31,7 +31,7 @@ export default function RecordIntroPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push(`/study/${verseId}/7`);
-    }, 3000);
+    }, 1500);
     return () => clearTimeout(timer);
   }, [router, verseId]);
 
@@ -57,7 +57,7 @@ export default function RecordIntroPage() {
           <br /> 외쳐보세요!
         </p>
       </div>
-      <Image src="/TolliLastStep.webp" alt="tolli" width={1080} height={1080} className="w-full h-auto" priority />
+      <Image src="/TolliLastStep.webp" alt="tolli" width={1080} height={1080} className="relative -z-10 w-full h-auto" priority style={{ animation: 'slide-up 0.4s ease forwards' }} />
       <style>{`
         @property --angle {
           syntax: '<angle>';

@@ -248,6 +248,22 @@ body:has(.listenVerse-layout) {
   animation: float 1.5s ease-in-out infinite;
 }
 
+/* Study animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
 /* Onboarding slide animations */
 @-webkit-keyframes slide-out-left {
   from { -webkit-transform: translateX(0); transform: translateX(0); }

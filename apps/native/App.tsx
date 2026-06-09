@@ -50,7 +50,7 @@ export default function App() {
   const [initialUri, setInitialUri] = useState<string | null>(null);
 
   let isExitApp = false;
-  let timeout: NodeJS.Timeout;
+  let timeout: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
     if (Platform.OS !== "android") return;

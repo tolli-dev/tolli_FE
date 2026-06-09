@@ -4,7 +4,9 @@
   "packageManager": "pnpm@9.0.0",
   "pnpm": {
     "overrides": {
-      "firebase": "12.13.0"
+      "firebase": "12.13.0",
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
     }
   },
   "scripts": {

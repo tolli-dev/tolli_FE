@@ -1,4 +1,4 @@
-export default function CircleLoading({ component: _ }: { component: boolean }) {
+export default function CircleLoading() {
   return (
     <svg
       className="absolute inset-0 w-full h-full animate-spin [animation-duration:3s]"

@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import Image from "next/image";
 import StandingTolli from "../../../../../../../public/images/onBoarding/standingTolli_1.webp";
 
@@ -8,7 +9,7 @@ export default function ShowPhaseContainer({
   levels,
 }: {
   description?: string;
-  recordIcon?: () => JSX.Element;
+  recordIcon?: () => ReactElement;
   soundBar: string;
   levels?: number[];
 }) {

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { getMyCurrentVerse } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 async function getTodayVerseId(): Promise<number> {
   const today = new Date();
@@ -19,7 +19,6 @@ async function getTodayVerseId(): Promise<number> {
 
 export default function StudyLoadingPage() {
   const router = useRouter();
-  const verseId = useSearchParams().get('verseId');
   const [cornerRadius, setCornerRadius] = useState(0);
 
   useEffect(() => {

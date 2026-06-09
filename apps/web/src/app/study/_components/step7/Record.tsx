@@ -42,8 +42,8 @@ export default function Record({ verseId }: { verseId: number }) {
       setPhase("recording");
       setDisabled(true);
       setTimeout(() => setDisabled(false), 5000);
-    } catch (e: any) {
-      if (e?.name === "NotAllowedError") setNeedSettings(true);
+    } catch (e) {
+      if (e instanceof Error && e.name === "NotAllowedError") setNeedSettings(true);
       // 나중에 vercel 배포 후에 수정 필요
       setPhase("idle");
     }

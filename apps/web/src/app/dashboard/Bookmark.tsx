@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import IndividualBookmark from './_components/IndividaulBookmark';
-import { getMyBookmarks, GetMyBookmarksData } from '@firebasegen/default-connector';
+import { getMyBookmarks } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
 
 interface BookMarks {

@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import ShowVerseContainer from "./ShowVerseContainer";
 import ShowPhaseContainer from "./ShowIdleContainer";
 
@@ -12,7 +13,7 @@ export default function RecordBarContainer({
 }: {
   showVerse: boolean;
   description?: string;
-  recordIcon?: () => JSX.Element;
+  recordIcon?: () => ReactElement;
   soundBar: string;
   levels?: number[];
   fullText?: string;

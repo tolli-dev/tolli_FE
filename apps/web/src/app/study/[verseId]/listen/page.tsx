@@ -56,7 +56,7 @@ export default function ListenVerse() {
     bgmAudioRef.volume = 0.7;
 
     // injectJavaScript는 네이티브 WebView 컨텍스트에서 실행되므로 autoplay 정책 우회됨
-    (window as any).__startBGM = () => {
+    (window as Window & { __startBGM?: () => void }).__startBGM = () => {
       bgmAudioRef.play().catch(() => {});
     };
 
@@ -66,7 +66,7 @@ export default function ListenVerse() {
     return () => {
       bgmAudioRef.pause();
       verseAudioRef?.pause();
-      delete (window as any).__startBGM;
+      delete (window as Window & { __startBGM?: () => void }).__startBGM;
     };
   }, []);
 

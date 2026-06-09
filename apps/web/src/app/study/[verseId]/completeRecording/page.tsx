@@ -69,7 +69,7 @@ export default function CompleteStep() {
 
       <div className="flex items-center justify-center">
         <div className="relative w-full h-full">
-          <CircleLoading component={component} />
+          <CircleLoading />
           {!component && (
             <Image
               src={EatingTolli}

@@ -14,16 +14,6 @@ export default function StudyHeader({ currentStep }: StudyHeaderProps) {
   const router = useRouter();
   const [showExitModal, setShowExitModal] = useState(false);
 
-  const handleBack = () => {
-    router.back();
-  };
-
-  // X 누름 → 나가기 확인 모달 열기
-  const handleClose = () => {
-    playSound("/sounds/step (0-7) x누름.mp3");
-    setShowExitModal(true);
-  };
-
   // 모달에서 진짜 나가기 (학습 초기화)
   const handleConfirmExit = () => {
     playSound("/sounds/step (0-7) x누르고 진짜 나감 (초기화).mp3");

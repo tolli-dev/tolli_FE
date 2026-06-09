@@ -1,1 +1,1 @@
-export const IP_URL = "http://localhost:3000";
+export const IP_URL = 'https://tolli-fe-web.vercel.app';

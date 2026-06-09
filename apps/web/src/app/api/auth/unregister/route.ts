@@ -6,6 +6,6 @@ export async function POST(request: NextRequest) {
   if (!idToken) return NextResponse.json({ error: 'idToken required' }, { status: 400 });
 
   const decoded = await admin.auth().verifyIdToken(idToken);
-  await admin.auth().setCustomUserClaims(decoded.uid, { registered: false });
+  await admin.auth().deleteUser(decoded.uid);
   return NextResponse.json({ ok: true });
 }

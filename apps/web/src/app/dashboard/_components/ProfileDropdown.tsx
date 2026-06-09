@@ -227,12 +227,12 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
     <div
       ref={ref}
       className="absolute top-[calc(100%+0.5rem)] right-0 z-50 w-[15.563rem]"
-      style={{ animation: 'dropdown-enter 0.2s cubic-bezier(0.4,0,0.2,1) forwards' }}
       onClick={(e) => e.stopPropagation()}
     >
       <div
         className="rounded-4xl px-4 py-3"
         style={{
+          animation: 'dropdown-enter 0.2s cubic-bezier(0.4,0,0.2,1) forwards',
           backgroundColor: "rgba(217,217,217,0.15)",
           boxShadow:
             "0 4px 24px rgba(0,0,0,0.18), inset 0 1px 1px rgba(255,255,255,0.12), inset 0 -1px 1px rgba(0,0,0,0.15)",

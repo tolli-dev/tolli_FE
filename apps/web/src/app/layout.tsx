@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
-import SoundInitializer from './SoundInitializer';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -47,7 +46,6 @@ export default function RootLayout({
           paddingRight: 'env(safe-area-inset-right)',
         }}
       >
-        <SoundInitializer />
         {children}
       </body>
     </html>

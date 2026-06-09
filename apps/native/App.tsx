@@ -125,7 +125,8 @@ export default function App() {
       }
 
       if (data.type === 'CLEAR_ALL_DATA') {
-        await AsyncStorage.clear();
+        await AsyncStorage.removeItem('isLoggedIn');
+        await AsyncStorage.removeItem('alarmTime');
       }
 
       if (data.type === 'REQUEST_NOTIFICATION_PERMISSION') {

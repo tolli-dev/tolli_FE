@@ -13,7 +13,7 @@ async function getTodayVerseId(): Promise<number> {
   const result = await getMyCurrentVerse(dataConnect, { today: today.toISOString() });
   const { lastCompletion } = result.data;
 
-  if (lastCompletion.length > 0) return lastCompletion[0].verse.id + 1;
+  if (lastCompletion.length > 0) return (lastCompletion[0].verse.id % 30) + 1;
   return 1;
 }
 

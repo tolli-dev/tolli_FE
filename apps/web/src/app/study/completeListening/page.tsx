@@ -11,7 +11,7 @@ function CompleteListeningContent() {
     playSound("/sounds/말씀 step 7까지 다 완료.mp3");
     const timeout = setTimeout(() => {
       window.location.href = "/dashboard";
-    }, 5000);
+    }, 1500);
 
     return () => clearTimeout(timeout);
   }, []);

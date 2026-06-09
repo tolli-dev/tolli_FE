@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import {
   signInWithAppleToken,
@@ -23,7 +23,7 @@ export default function LoginPage() {
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'APPLE_LOGIN' }));
   };
 
-  const redirectAfterLogin = async (
+  const redirectAfterLogin = useCallback(async (
     signInFn: () => Promise<{ getIdToken: (force: boolean) => Promise<string> }>,
   ) => {
     try {
@@ -39,7 +39,15 @@ export default function LoginPage() {
     } catch {
       router.push('/terms');
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const appleToken = params.get('apple_token');
+    if (appleToken) {
+      redirectAfterLogin(() => signInWithAppleToken(appleToken));
+    }
+  }, [redirectAfterLogin]);
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {

@@ -17,15 +17,12 @@ async function generateClientSecret(): Promise<string> {
     .sign(privateKey);
 }
 
-async function handleCallback(code: string | null, idToken: string | null): Promise<NextResponse> {
-  if (!code && !idToken) {
-    return NextResponse.json({ error: 'missing params' }, { status: 400 });
-  }
+export async function POST(request: NextRequest) {
+  const formData = await request.formData();
+  const code = formData.get('code') as string | null;
 
-  if (idToken) {
-    return NextResponse.redirect(
-      `tolli://auth/apple/callback?id_token=${encodeURIComponent(idToken)}`,
-    );
+  if (!code) {
+    return NextResponse.json({ error: 'missing code' }, { status: 400 });
   }
 
   const clientSecret = await generateClientSecret();
@@ -36,34 +33,20 @@ async function handleCallback(code: string | null, idToken: string | null): Prom
     body: new URLSearchParams({
       client_id: 'com.web.tolli',
       client_secret: clientSecret,
-      code: code ?? '',
+      code,
       grant_type: 'authorization_code',
       redirect_uri: 'https://tolli-fe-web.vercel.app/api/auth/apple/callback',
     }),
   });
 
   const tokenData = await tokenRes.json();
-  const exchangedIdToken = tokenData.id_token as string | undefined;
+  const idToken = tokenData.id_token as string | undefined;
 
-  if (!exchangedIdToken) {
+  if (!idToken) {
     return NextResponse.json({ error: 'token exchange failed', detail: tokenData }, { status: 400 });
   }
 
   return NextResponse.redirect(
-    `tolli://auth/apple/callback?id_token=${encodeURIComponent(exchangedIdToken)}`,
+    `https://tolli-fe-web.vercel.app/login?apple_token=${encodeURIComponent(idToken)}`,
   );
-}
-
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get('code');
-  const idToken = searchParams.get('id_token');
-  return handleCallback(code, idToken);
-}
-
-export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  const code = formData.get('code') as string | null;
-  const idToken = formData.get('id_token') as string | null;
-  return handleCallback(code, idToken);
 }

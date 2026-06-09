@@ -29,7 +29,7 @@ export default function DashBoard() {
       today.setHours(0, 0, 0, 0);
 
       Promise.all([
-        getMe(dataConnect),
+        getMe(dataConnect, { fetchPolicy: 'SERVER_ONLY' }),
         getMyCurrentVerse(dataConnect, { today: today.toISOString() }),
       ]).then(([meResult, verseResult]) => {
         setNickname(meResult.data.user?.nickname ?? '');

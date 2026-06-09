@@ -121,6 +121,11 @@ export default function App() {
 
       if (data.type === 'SET_LOGGED_OUT') {
         await AsyncStorage.removeItem('isLoggedIn');
+        await AsyncStorage.removeItem('alarmTime');
+      }
+
+      if (data.type === 'CLEAR_ALL_DATA') {
+        await AsyncStorage.clear();
       }
 
       if (data.type === 'REQUEST_NOTIFICATION_PERMISSION') {

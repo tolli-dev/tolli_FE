@@ -232,3 +232,32 @@ body:has(.listenVerse-layout) {
   line-height: clamp(1.75rem, 7.5vw, 2.125rem);
   letter-spacing: 0em;
 }
+
+/* Onboarding slide animations */
+@-webkit-keyframes slide-out-left {
+  from { -webkit-transform: translateX(0); transform: translateX(0); }
+  to   { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+}
+@keyframes slide-out-left {
+  from { -webkit-transform: translateX(0); transform: translateX(0); }
+  to   { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+}
+
+@-webkit-keyframes slide-in-right {
+  from { -webkit-transform: translateX(100%); transform: translateX(100%); }
+  to   { -webkit-transform: translateX(0); transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { -webkit-transform: translateX(100%); transform: translateX(100%); }
+  to   { -webkit-transform: translateX(0); transform: translateX(0); }
+}
+
+.onboarding-slide-exit {
+  -webkit-animation: slide-out-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: slide-out-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.onboarding-slide-enter {
+  -webkit-animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

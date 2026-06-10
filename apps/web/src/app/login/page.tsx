@@ -13,8 +13,10 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const requestKakaoLogin = () => {
+    setError(null);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "KAKAO_LOGIN" }),
     );
@@ -22,6 +24,7 @@ export default function LoginPage() {
   };
 
   const requestGoogleLogin = () => {
+    setError(null);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "GOOGLE_LOGIN" }),
     );
@@ -29,6 +32,7 @@ export default function LoginPage() {
   };
 
   const requestAppleLogin = () => {
+    setError(null);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "APPLE_LOGIN" }),
     );
@@ -54,7 +58,8 @@ export default function LoginPage() {
           router.push("/terms");
         }
       } catch {
-        router.push("/terms");
+        setLoading(false);
+        setError("로그인에 실패했어요. 다시 시도해주세요.");
       }
     },
     [router],
@@ -81,7 +86,10 @@ export default function LoginPage() {
         if (type === "KAKAO_TOKEN" && token) {
           redirectAfterLogin(() => signInWithKakaoToken(token));
         }
-      } catch {}
+      } catch {
+        setLoading(false);
+        setError("로그인에 실패했어요. 다시 시도해주세요.");
+      }
     };
 
     window.addEventListener("message", handleMessage);
@@ -121,6 +129,9 @@ export default function LoginPage() {
         className="flex flex-col justify-center px-10.75 items-center gap-2.75 w-full"
         style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
       >
+        {error && (
+          <p className="text-red-400 text-[13px] text-center">{error}</p>
+        )}
         <button
           type="button"
           onClick={requestKakaoLogin}

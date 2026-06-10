@@ -309,60 +309,68 @@ export default function StorageView({ done, nickname }: Props) {
         </header>
       </>
 
-      <div className="flex flex-col w-full shrink-0 mb-[clamp(0.625rem,3vw,0.9375rem)]">
-        <h1 className="text-dashboard-h1">{nickname}의 보관함</h1>
-        <h2 className="font-light text-[clamp(0.6875rem,3vw,0.75rem)] leading-[1.6] tracking-[-2%] text-[#353535]">
-          지금까지 완료한 말씀들을 확인하고, 다시 복습할 수 있어요
-        </h2>
+      <div className="flex flex-col flex-1 min-h-0 w-full">
+        <div className="flex flex-col w-full shrink-0 mb-[clamp(0.625rem,3vw,0.9375rem)]">
+          <h1 className="text-dashboard-h1">{nickname}의 보관함</h1>
+          <h2 className="font-light text-[clamp(0.6875rem,3vw,0.75rem)] leading-[1.6] tracking-[-2%] text-[#353535]">
+            지금까지 완료한 말씀들을 확인하고, 다시 복습할 수 있어요
+          </h2>
+        </div>
+
+        {loading && (
+          <main className="w-full flex-1 flex items-center justify-center">
+            <LoadingSpinner />
+          </main>
+        )}
+
+        {!loading && !searchVerse && myCompletions.length === 0 && (
+          <main className="w-full flex-1 flex flex-col items-center justify-center">
+            <div className="text-center">
+              <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
+                아직 완료한 말씀 구절이 없어요
+              </p>
+            </div>
+          </main>
+        )}
+
+        {!loading && !searchVerse && myCompletions.length !== 0 && (
+          <main className="w-full flex-1 min-h-0 flex flex-col items-center">
+            <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
+              {myCompletions.map((value) => (
+                <IndividualStorage
+                  key={value.verse.id}
+                  bookmarkedIds={bookmarkedIds}
+                  verse={value.verse}
+                />
+              ))}
+            </div>
+          </main>
+        )}
+
+        {!loading && searchVerse && filteredData.length === 0 && (
+          <main className="w-full flex-1 flex flex-col items-center justify-center">
+            <div className="text-center">
+              <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
+                검색 결과를 찾을 수 없습니다
+              </p>
+            </div>
+          </main>
+        )}
+
+        {!loading && searchVerse && filteredData.length !== 0 && (
+          <main className="w-full flex-1 min-h-0 flex flex-col items-center">
+            <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
+              {filteredData.map((value) => (
+                <IndividualStorage
+                  key={value.verse.id}
+                  bookmarkedIds={bookmarkedIds}
+                  verse={value.verse}
+                />
+              ))}
+            </div>
+          </main>
+        )}
       </div>
-
-      {!searchVerse && myCompletions.length === 0 && (
-        <main className="w-full flex-1 flex flex-col items-center justify-center">
-          <div className="text-center">
-            <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
-              아직 완료한 말씀 구절이 없어요
-            </p>
-          </div>
-        </main>
-      )}
-
-      {!searchVerse && myCompletions.length !== 0 && (
-        <main className="w-full flex-1 min-h-0 flex flex-col items-center">
-          <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
-            {myCompletions.map((value) => (
-              <IndividualStorage
-                key={value.verse.id}
-                bookmarkedIds={bookmarkedIds}
-                verse={value.verse}
-              />
-            ))}
-          </div>
-        </main>
-      )}
-
-      {searchVerse && filteredData.length === 0 && (
-        <main className="w-full flex-1 flex flex-col items-center justify-center">
-          <div className="text-center">
-            <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
-              검색 결과를 찾을 수 없습니다
-            </p>
-          </div>
-        </main>
-      )}
-
-      {searchVerse && filteredData.length !== 0 && (
-        <main className="w-full flex-1 min-h-0 flex flex-col items-center">
-          <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
-            {filteredData.map((value) => (
-              <IndividualStorage
-                key={value.verse.id}
-                bookmarkedIds={bookmarkedIds}
-                verse={value.verse}
-              />
-            ))}
-          </div>
-        </main>
-      )}
     </section>
   );
 }

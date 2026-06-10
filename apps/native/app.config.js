@@ -37,6 +37,7 @@ export default {
     },
     scheme: 'tolli',
     plugins: [
+      'expo-audio',
       [
         '@react-native-google-signin/google-signin',
         {

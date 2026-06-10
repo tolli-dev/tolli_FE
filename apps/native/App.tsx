@@ -30,7 +30,6 @@ import {
   markFirstLaunchDone,
 } from "./utils/checkFirstLaunch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { initSounds, playSound } from "./lib/sound";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -83,11 +82,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    // 효과음을 미리 로드하고 무음 스위치와 무관하게 재생되도록 오디오 세션을 설정한다.
-    initSounds().catch(() => {});
-  }, []);
-
-  useEffect(() => {
     (async () => {
       const isFirst = await checkFirstLaunch();
       if (isFirst) {
@@ -111,11 +105,6 @@ export default function App() {
 
     try {
       const data = JSON.parse(e.nativeEvent.data);
-
-      if (data.type === "PLAY_SOUND") {
-        playSound(data.src);
-        return;
-      }
 
       if (data.type === "GOOGLE_LOGIN") {
         const idToken = await signInWithGoogle();

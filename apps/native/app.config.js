@@ -1,74 +1,77 @@
-import 'dotenv/config';
+import "dotenv/config";
 
 export default {
   expo: {
-    name: 'Tolli',
-    slug: 'Tolli',
-    version: '1.0.0',
-    orientation: 'portrait',
-    icon: './assets/icon.png',
-    userInterfaceStyle: 'light',
+    name: "tolli",
+    slug: "tolli",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/icon.png",
+    userInterfaceStyle: "light",
     newArchEnabled: true,
     splash: {
-      image: './assets/splash-icon.png',
-      resizeMode: 'contain',
-      backgroundColor: '#1B1B1B',
+      image: "./assets/splash-icon.png",
+      resizeMode: "contain",
+      backgroundColor: "#1B1B1B",
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.company.tolli',
+      bundleIdentifier: "com.company.tolli",
       usesAppleSignIn: true,
       infoPlist: {
-        NSMicrophoneUsageDescription: '녹음을 위해 마이크를 사용합니다.',
+        NSMicrophoneUsageDescription: "녹음을 위해 마이크를 사용합니다.",
       },
     },
     android: {
-      package: 'com.company.tolli',
+      package: "com.company.tolli",
       allowBackup: false,
       adaptiveIcon: {
-        foregroundImage: './assets/icon.png',
-        backgroundColor: '#ffffff',
+        foregroundImage: "./assets/icon.png",
+        backgroundColor: "#ffffff",
       },
-      permissions: ['RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS'],
+      permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
     },
     web: {
-      favicon: './assets/favicon.png',
+      favicon: "./assets/favicon.png",
     },
-    scheme: 'tolli',
+    scheme: "tolli",
     plugins: [
       [
-        '@react-native-google-signin/google-signin',
+        "@react-native-google-signin/google-signin",
         {
-          iosUrlScheme: 'com.googleusercontent.apps.453019507405-qq1d999d55r3onrsdoednvtmjggfq6vf',
-          googleServicesFile: './android/app/google-services.json',
+          iosUrlScheme:
+            "com.googleusercontent.apps.453019507405-qq1d999d55r3onrsdoednvtmjggfq6vf",
+          googleServicesFile: "./android/app/google-services.json",
         },
       ],
       [
-        '@react-native-seoul/kakao-login',
+        "@react-native-seoul/kakao-login",
         {
           kakaoAppKey: process.env.KAKAO_APP_KEY,
-          kotlinVersion: '2.1.0',
+          kotlinVersion: "2.1.0",
         },
       ],
       [
-        'expo-build-properties',
+        "expo-build-properties",
         {
           android: {
-            kotlinVersion: '2.1.0',
-            extraMavenRepos: ['https://devrepo.kakao.com/nexus/content/groups/public/'],
+            kotlinVersion: "2.1.0",
+            extraMavenRepos: [
+              "https://devrepo.kakao.com/nexus/content/groups/public/",
+            ],
           },
         },
       ],
       [
-        'expo-notifications',
+        "expo-notifications",
         {
-          iosPermissions: ['Alert', 'Sound', 'Badge'],
+          iosPermissions: ["Alert", "Sound", "Badge"],
           android: {
             defaultChannel: {
-              name: 'default',
-              importance: 'HIGH',
+              name: "default",
+              importance: "HIGH",
               sound: true,
             },
           },

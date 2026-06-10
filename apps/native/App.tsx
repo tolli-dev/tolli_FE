@@ -112,8 +112,12 @@ export default function App() {
       }
 
       if (data.type === "APPLE_LOGIN") {
-        const idToken = await signInWithApple();
-        if (idToken) postToken("APPLE_TOKEN", idToken);
+        const appleResult = await signInWithApple();
+        if (appleResult) {
+          webviewRef.current?.postMessage(
+            JSON.stringify({ type: "APPLE_TOKEN", token: appleResult.idToken, rawNonce: appleResult.rawNonce }),
+          );
+        }
       }
 
       if (data.type === "KAKAO_LOGIN") {

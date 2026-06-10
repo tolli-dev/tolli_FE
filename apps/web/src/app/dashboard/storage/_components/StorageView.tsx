@@ -154,7 +154,7 @@ export default function StorageView({ done, nickname }: Props) {
 
         {/* 로그아웃 / 회원탈퇴 모달 */}
         {(modal === "logout" || modal === "withdraw") && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/92">
+          <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/92">
             <div className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]">
               <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] whitespace-nowrap">
                 {modal === "logout" ? "로그아웃 할까요?" : "회원 탈퇴 할까요?"}

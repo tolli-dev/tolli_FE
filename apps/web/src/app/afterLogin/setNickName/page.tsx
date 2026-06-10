@@ -5,6 +5,7 @@ import Image from "next/image";
 import Form from "next/form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
 import { createUser } from "@firebasegen/default-connector";
 import { dataConnect } from "@/lib/dataconnect";
 import { fireAuth } from "@/firebase/fireAuth";
@@ -53,7 +54,17 @@ export default function Page() {
     sessionStorage.removeItem("emailMarketingAgreed");
     sessionStorage.removeItem("emailMarketingAgreedAt");
 
-    const idToken = await fireAuth.currentUser?.getIdToken();
+    const idToken = await new Promise<string | null>((resolve) => {
+      if (fireAuth.currentUser) {
+        fireAuth.currentUser.getIdToken().then(resolve).catch(() => resolve(null));
+        return;
+      }
+      const unsub = onAuthStateChanged(fireAuth, (user) => {
+        unsub();
+        if (user) user.getIdToken().then(resolve).catch(() => resolve(null));
+        else resolve(null);
+      });
+    });
     if (idToken) {
       await fetch("/api/auth/register", {
         method: "POST",

@@ -131,16 +131,14 @@ export default function TermsPage() {
         </p>
 
         {TERMS.map(({ id, label, url }) => (
-          <button
+          <div
             key={id}
-            type="button"
-            onClick={() => toggle(id)}
             className="flex items-center justify-between w-full mt-6.5 pr-4.25"
           >
-            <span
-              onClick={(e) => {
+            <button
+              type="button"
+              onClick={() => {
                 if (url) {
-                  e.stopPropagation();
                   if (window.ReactNativeWebView) {
                     window.ReactNativeWebView.postMessage(JSON.stringify({ type: "OPEN_EXTERNAL_URL", url }));
                   } else {
@@ -148,12 +146,14 @@ export default function TermsPage() {
                   }
                 }
               }}
-              className={`text-[14.5px] font-medium leading-[22.8px] tracking-normal text-[#E0E0E0] ${url && "underline"}`}
+              className={`text-[14.5px] font-medium leading-[22.8px] tracking-normal text-[#E0E0E0] text-left ${url ? "underline" : ""}`}
             >
               {label}
-            </span>
-            <CheckIcon checked={checked[id]} />
-          </button>
+            </button>
+            <button type="button" aria-label={`${label} 동의`} onClick={() => toggle(id)}>
+              <CheckIcon checked={checked[id]} />
+            </button>
+          </div>
         ))}
       </div>
 

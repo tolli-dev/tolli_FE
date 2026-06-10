@@ -12,7 +12,7 @@ export default {
     splash: {
       image: './assets/splash-icon.png',
       resizeMode: 'contain',
-      backgroundColor: '#ffffff',
+      backgroundColor: '#1B1B1B',
     },
     ios: {
       supportsTablet: true,
@@ -25,7 +25,7 @@ export default {
     android: {
       package: 'com.company.tolli',
       adaptiveIcon: {
-        foregroundImage: './assets/adaptive-icon.png',
+        foregroundImage: './assets/icon.png',
         backgroundColor: '#ffffff',
       },
       permissions: ['RECORD_AUDIO', 'MODIFY_AUDIO_SETTINGS'],

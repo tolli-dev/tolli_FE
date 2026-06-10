@@ -24,6 +24,7 @@ export default {
     },
     android: {
       package: 'com.company.tolli',
+      allowBackup: false,
       adaptiveIcon: {
         foregroundImage: './assets/icon.png',
         backgroundColor: '#ffffff',

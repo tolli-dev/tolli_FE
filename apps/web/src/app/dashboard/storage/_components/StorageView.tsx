@@ -47,6 +47,7 @@ export default function StorageView({ done, nickname }: Props) {
   const [renameError, setRenameError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogout = async () => {
     setActionLoading(true);
@@ -90,9 +91,10 @@ export default function StorageView({ done, nickname }: Props) {
     setModal(type);
   };
 
-  useEffect(() => {
-    const getMyStorage = async () => {
-      setLoading(true);
+  const getMyStorage = async () => {
+    setLoading(true);
+    setError("");
+    try {
       const { data } = await getMyCompletions(dataConnect, {
         fetchPolicy: "SERVER_ONLY",
       });
@@ -117,8 +119,14 @@ export default function StorageView({ done, nickname }: Props) {
       ]);
       setBookmarkedIds(new Set(bookmarksData.bookmarks.map((b) => b.verse.id)));
       setMyCompletions(verses);
+    } catch {
+      setError("저장소를 불러오는 중 에러가 발생하였습니다. 다시 시도해주세요.");
+    } finally {
       setLoading(false);
-    };
+    }
+  };
+
+  useEffect(() => {
     getMyStorage();
   }, []);
 
@@ -133,6 +141,10 @@ export default function StorageView({ done, nickname }: Props) {
     );
   });
 
+  const handleRetry = () => {
+    getMyStorage();
+  };
+
   return (
     <section
       className={`
@@ -143,7 +155,7 @@ export default function StorageView({ done, nickname }: Props) {
       `}
     >
       <>
-        {(loading || actionLoading) && <LoadingSpinner />}
+        {actionLoading && <LoadingSpinner />}
 
         {isDropdownOpen && !modal && (
           <div
@@ -323,7 +335,22 @@ export default function StorageView({ done, nickname }: Props) {
           </main>
         )}
 
-        {!loading && !searchVerse && myCompletions.length === 0 && (
+        {!loading && error && (
+          <main className="w-full flex-1 flex flex-col items-center justify-center gap-3">
+            <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535] text-center">
+              {error}
+            </p>
+            <button
+              type="button"
+              onClick={handleRetry}
+              className="px-5 py-2 rounded-full bg-[#CCB5F0] text-black text-[0.875rem] font-medium"
+            >
+              다시 시도하기
+            </button>
+          </main>
+        )}
+
+        {!loading && !error && !searchVerse && myCompletions.length === 0 && (
           <main className="w-full flex-1 flex flex-col items-center justify-center">
             <div className="text-center">
               <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
@@ -333,7 +360,7 @@ export default function StorageView({ done, nickname }: Props) {
           </main>
         )}
 
-        {!loading && !searchVerse && myCompletions.length !== 0 && (
+        {!loading && !error && !searchVerse && myCompletions.length !== 0 && (
           <main className="w-full flex-1 min-h-0 flex flex-col items-center">
             <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
               {myCompletions.map((value) => (
@@ -347,7 +374,7 @@ export default function StorageView({ done, nickname }: Props) {
           </main>
         )}
 
-        {!loading && searchVerse && filteredData.length === 0 && (
+        {!loading && !error && searchVerse && filteredData.length === 0 && (
           <main className="w-full flex-1 flex flex-col items-center justify-center">
             <div className="text-center">
               <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
@@ -357,7 +384,7 @@ export default function StorageView({ done, nickname }: Props) {
           </main>
         )}
 
-        {!loading && searchVerse && filteredData.length !== 0 && (
+        {!loading && !error && searchVerse && filteredData.length !== 0 && (
           <main className="w-full flex-1 min-h-0 flex flex-col items-center">
             <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
               {filteredData.map((value) => (

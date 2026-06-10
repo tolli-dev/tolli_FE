@@ -1,30 +1,59 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import Button from '@/components/ui/Button';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Button from "@/components/ui/Button";
 
 function CheckIcon({ checked }: { checked: boolean }) {
   if (checked) {
     return (
-      <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="21"
+        height="21"
+        viewBox="0 0 21 21"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <circle cx="10.5" cy="10.5" r="10" fill="#CCB5F0" stroke="#928C9C" />
-        <path d="M9.19632 15L5 11.2079L6.04908 10.2599L9.19632 13.1039L15.9509 7L17 7.94803L9.19632 15Z" fill="#1B1B1B" />
+        <path
+          d="M9.19632 15L5 11.2079L6.04908 10.2599L9.19632 13.1039L15.9509 7L17 7.94803L9.19632 15Z"
+          fill="#1B1B1B"
+        />
       </svg>
     );
   }
   return (
-    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="21"
+      height="21"
+      viewBox="0 0 21 21"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="10.5" cy="10.5" r="10" stroke="#928C9C" />
     </svg>
   );
 }
 
 const TERMS = [
-  { id: 'service', label: '(필수) 이용약관 동의', required: true },
-  { id: 'privacy', label: '(필수) 개인정보 처리방침 동의', required: true },
-  { id: 'marketing', label: '(선택) tolli 새소식 이메일 수신 동의', required: false },
+  {
+    id: "service",
+    label: "(필수) 이용약관 동의",
+    required: true,
+    url: "https://polite-swift-c6b.notion.site/tolli-3724b4ce693880cd8ee8e17d36cd0353",
+  },
+  {
+    id: "privacy",
+    label: "(필수) 개인정보 처리방침 동의",
+    required: true,
+    url: "https://polite-swift-c6b.notion.site/tolli-3724b4ce69388037a658f35884348c2a",
+  },
+  {
+    id: "marketing",
+    label: "(선택) tolli 새소식 이메일 수신 동의",
+    required: false,
+  },
 ];
 
 export default function TermsPage() {
@@ -36,7 +65,9 @@ export default function TermsPage() {
   });
 
   const allChecked = TERMS.every(({ id }) => checked[id]);
-  const requiredChecked = TERMS.filter(({ required }) => required).every(({ id }) => checked[id]);
+  const requiredChecked = TERMS.filter(({ required }) => required).every(
+    ({ id }) => checked[id],
+  );
 
   const toggleAll = () => {
     const next = !allChecked;
@@ -49,17 +80,22 @@ export default function TermsPage() {
 
   const handleNext = () => {
     const agreedAt = new Date().toISOString();
-    sessionStorage.setItem('termsAgreedAt', agreedAt);
-    sessionStorage.setItem('privacyAgreedAt', agreedAt);
-    sessionStorage.setItem('emailMarketingAgreed', String(checked.marketing));
-    sessionStorage.setItem('emailMarketingAgreedAt', checked.marketing ? agreedAt : '');
-    router.push('/welcome');
+    sessionStorage.setItem("termsAgreedAt", agreedAt);
+    sessionStorage.setItem("privacyAgreedAt", agreedAt);
+    sessionStorage.setItem("emailMarketingAgreed", String(checked.marketing));
+    sessionStorage.setItem(
+      "emailMarketingAgreedAt",
+      checked.marketing ? agreedAt : "",
+    );
+    router.push("/welcome");
   };
 
   return (
     <div className="flex flex-col flex-1 h-full px-13.25 ">
       <div className="pt-20 ">
-        <h1 className="text-[24px] leading-8.75 tracking-[-0.07em] font-semibold">환영합니다!</h1>
+        <h1 className="text-[24px] leading-8.75 tracking-[-0.07em] font-semibold">
+          환영합니다!
+        </h1>
         <h1 className="text-[24px] leading-8.75 tracking-[-0.07em] font-semibold">
           tolli와 함께 해볼까요?
         </h1>
@@ -67,7 +103,14 @@ export default function TermsPage() {
 
       <div className="flex-1" />
       <div className="flex justify-center">
-        <Image src="/tolli-terms.webp" alt="tolli" width={700} height={700} className="w-43.75 object-contain" priority />
+        <Image
+          src="/tolli-terms.webp"
+          alt="tolli"
+          width={700}
+          height={700}
+          className="w-43.75 object-contain"
+          priority
+        />
       </div>
       <div className="flex-1" />
 
@@ -87,14 +130,22 @@ export default function TermsPage() {
           툴리 서비스 이용을 위한 약관 동의가 필요해요.
         </p>
 
-        {TERMS.map(({ id, label }) => (
+        {TERMS.map(({ id, label, url }) => (
           <button
             key={id}
             type="button"
             onClick={() => toggle(id)}
             className="flex items-center justify-between w-full mt-6.5 pr-4.25"
           >
-            <span className="text-[14.5px] font-medium leading-[22.8px] tracking-normal text-[#E0E0E0]">
+            <span
+              onClick={(e) => {
+                if (url) {
+                  e.stopPropagation();
+                  window.open(url, "_blank");
+                }
+              }}
+              className={`text-[14.5px] font-medium leading-[22.8px] tracking-normal text-[#E0E0E0] ${url && "underline"}`}
+            >
               {label}
             </span>
             <CheckIcon checked={checked[id]} />
@@ -104,7 +155,10 @@ export default function TermsPage() {
 
       <div className="flex-1" />
       <div className="pb-[calc(env(safe-area-inset-bottom)+1rem)]">
-        <Button onClick={handleNext} className={requiredChecked ? '' : 'opacity-40'}>
+        <Button
+          onClick={handleNext}
+          className={requiredChecked ? "" : "opacity-40"}
+        >
           다음
         </Button>
       </div>

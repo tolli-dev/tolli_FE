@@ -69,8 +69,6 @@ export default function Page() {
       router.push(`/afterLogin/greeting/${name}`);
     } catch {
       setError("닉네임 설정에 실패했어요. 다시 시도해주세요.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -105,7 +103,10 @@ export default function Page() {
       </div>
 
       <form
-        onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
         className="flex flex-col items-center flex-1 w-full justify-between mt-[clamp(1rem,2dvh,2.938rem)] gap-[1rem]"
       >
         <div className="flex flex-col w-full items-center">

@@ -20,7 +20,6 @@ export default function LoginPage() {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "KAKAO_LOGIN" }),
     );
-    setLoading(true);
   };
 
   const requestGoogleLogin = () => {
@@ -28,7 +27,6 @@ export default function LoginPage() {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "GOOGLE_LOGIN" }),
     );
-    setLoading(true);
   };
 
   const requestAppleLogin = () => {
@@ -36,7 +34,6 @@ export default function LoginPage() {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "APPLE_LOGIN" }),
     );
-    setLoading(true);
   };
 
   const redirectAfterLogin = useCallback(
@@ -45,6 +42,7 @@ export default function LoginPage() {
         getIdToken: (force: boolean) => Promise<string>;
       }>,
     ) => {
+      setLoading(true);
       try {
         const signedInUser = await signInFn();
         const idToken = await signedInUser.getIdToken(true);

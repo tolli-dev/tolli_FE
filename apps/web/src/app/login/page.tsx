@@ -6,8 +6,9 @@ import {
   signInWithAppleToken,
   signInWithGoogleToken,
   signInWithKakaoToken,
-} from "@/firebase/fireAuth";
-import { useRouter } from "next/navigation";
+} from '@/firebase/fireAuth';
+import { useRouter } from 'next/navigation';
+import posthog from 'posthog-js';
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function LoginPage() {
@@ -17,23 +18,20 @@ export default function LoginPage() {
 
   const requestKakaoLogin = () => {
     setError(null);
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "KAKAO_LOGIN" }),
-    );
+    posthog.capture('login_clicked', { provider: 'kakao' });
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'KAKAO_LOGIN' }));
   };
 
   const requestGoogleLogin = () => {
     setError(null);
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "GOOGLE_LOGIN" }),
-    );
+    posthog.capture('login_clicked', { provider: 'google' });
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GOOGLE_LOGIN' }));
   };
 
   const requestAppleLogin = () => {
     setError(null);
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "APPLE_LOGIN" }),
-    );
+    posthog.capture('login_clicked', { provider: 'apple' });
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'APPLE_LOGIN' }));
   };
 
   const redirectAfterLogin = useCallback(
@@ -48,11 +46,13 @@ export default function LoginPage() {
         const idToken = await signedInUser.getIdToken(true);
         const payload = JSON.parse(atob(idToken.split(".")[1]));
         if (payload.registered) {
+          posthog.capture('login_success', { is_new_user: false });
           window.ReactNativeWebView?.postMessage(
             JSON.stringify({ type: "SET_LOGGED_IN" }),
           );
           router.push("/dashboard");
         } else {
+          posthog.capture('login_success', { is_new_user: true });
           router.push("/terms");
         }
       } catch {

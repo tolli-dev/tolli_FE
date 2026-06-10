@@ -15,6 +15,7 @@ import { formatTime } from "./_utils/formatTime";
 import { getVerse } from "@firebasegen/default-connector";
 import { dataConnect } from "@/lib/dataconnect";
 import { playSound } from "@/lib/sound";
+import posthog from "posthog-js";
 
 export default function Record({ verseId }: { verseId: number }) {
   const [phase, setPhase] = useState<Step7Phase>("idle");
@@ -83,6 +84,7 @@ export default function Record({ verseId }: { verseId: number }) {
   // 녹음 시작하기 누르면 RN으로 마이크 권한 요청 전송함
   // 단, RN WebView가 아닌 일반 브라우저에서는 브라우저가 직접 권한을 처리하므로 바로 시작한다.
   const startRecording = () => {
+    posthog.capture('recording_started', { verse_id: verseId });
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(
         JSON.stringify({ type: "RECORD_READY" }),
@@ -92,9 +94,9 @@ export default function Record({ verseId }: { verseId: number }) {
     }
   };
 
-  // 녹음 중단되면 멈춘다.
   const stopRecording = async () => {
     await stop();
+    posthog.capture('recording_completed', { verse_id: verseId, duration_sec: elapsed });
     setPhase("complete");
   };
 

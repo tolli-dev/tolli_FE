@@ -10,6 +10,7 @@ import { createUser } from "@firebasegen/default-connector";
 import { dataConnect } from "@/lib/dataconnect";
 import { fireAuth } from "@/firebase/fireAuth";
 import posthog from "posthog-js";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const getValidationResult = (name: string) => {
   const blankRegex = /\s/g;
@@ -31,9 +32,14 @@ export default function Page() {
   const [name, setName] = useState("");
   const { state, message } = getValidationResult(name);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     if (!state) return;
+    setLoading(true);
+    setError(null);
+    try {
     const termsAgreedAt = sessionStorage.getItem("termsAgreedAt") ?? "";
     const privacyAgreedAt = sessionStorage.getItem("privacyAgreedAt") ?? "";
     const emailMarketingAgreed =
@@ -75,11 +81,20 @@ export default function Page() {
       });
     }
 
-    router.push(`/afterLogin/greeting/${name}`);
+      router.push(`/afterLogin/greeting/${name}`);
+    } catch {
+      setLoading(false);
+      setError("오류가 발생했어요. 다시 시도해주세요.");
+    }
   };
 
   return (
     <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <LoadingSpinner />
+        </div>
+      )}
       <div className="flex flex-col items-center w-full mt-[clamp(1rem,4dvh,10.25rem)]">
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem]">
           <h1 className="text-h1 text-primary-50 whitespace-nowrap">
@@ -121,13 +136,16 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col items-center w-full">
+          {error && (
+            <p className="text-red-400 text-[0.8125rem] text-center mb-2">{error}</p>
+          )}
           <button
             type="submit"
             className="
-              w-full max-w-[19.688rem] h-[3rem] text-btn-lg 
+              w-full max-w-[19.688rem] h-[3rem] text-btn-lg
               text-primary-75 bg-surface-500 rounded-[1.25rem] whitespace-nowrap
             "
-            disabled={!state}
+            disabled={!state || loading}
           >
             닉네임 설정 완료
           </button>

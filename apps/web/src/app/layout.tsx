@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { Noto_Sans_KR } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
+import { PHProvider } from './_components/PHProvider';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -35,6 +37,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID;
+
   return (
     <html lang="ko" className={`${pretendard.variable} ${notoSansKR.variable} h-full antialiased`}>
       <body
@@ -46,7 +50,18 @@ export default function RootLayout({
           paddingRight: 'env(safe-area-inset-right)',
         }}
       >
-        {children}
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`}
+            </Script>
+          </>
+        )}
+        <PHProvider>{children}</PHProvider>
       </body>
     </html>
   );

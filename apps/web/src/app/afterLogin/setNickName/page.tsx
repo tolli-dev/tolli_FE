@@ -9,6 +9,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { createUser } from "@firebasegen/default-connector";
 import { dataConnect } from "@/lib/dataconnect";
 import { fireAuth } from "@/firebase/fireAuth";
+import posthog from "posthog-js";
 
 const getValidationResult = (name: string) => {
   const blankRegex = /\s/g;
@@ -47,6 +48,8 @@ export default function Page() {
       emailMarketingAgreed,
       emailMarketingAgreedAt,
     });
+
+    posthog.capture('signup_complete', { email_marketing_agreed: emailMarketingAgreed });
 
     sessionStorage.removeItem("termsAgreedAt");
     sessionStorage.removeItem("privacyAgreedAt");

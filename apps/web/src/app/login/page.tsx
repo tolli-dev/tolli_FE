@@ -8,18 +8,22 @@ import {
   signInWithKakaoToken,
 } from '@/firebase/fireAuth';
 import { useRouter } from 'next/navigation';
+import posthog from 'posthog-js';
 export default function LoginPage() {
   const router = useRouter();
 
   const requestKakaoLogin = () => {
+    posthog.capture('login_clicked', { provider: 'kakao' });
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'KAKAO_LOGIN' }));
   };
 
   const requestGoogleLogin = () => {
+    posthog.capture('login_clicked', { provider: 'google' });
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GOOGLE_LOGIN' }));
   };
 
   const requestAppleLogin = () => {
+    posthog.capture('login_clicked', { provider: 'apple' });
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'APPLE_LOGIN' }));
   };
 
@@ -31,9 +35,11 @@ export default function LoginPage() {
       const idToken = await signedInUser.getIdToken(true);
       const payload = JSON.parse(atob(idToken.split('.')[1]));
       if (payload.registered) {
+        posthog.capture('login_success', { is_new_user: false });
         window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
         router.push('/dashboard');
       } else {
+        posthog.capture('login_success', { is_new_user: true });
         router.push('/terms');
       }
     } catch {

@@ -48,5 +48,6 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.redirect(
     `tolli://auth?id_token=${encodeURIComponent(idToken)}`,
+    { status: 302 },
   );
 }

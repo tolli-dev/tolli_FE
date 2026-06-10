@@ -93,7 +93,9 @@ export default function StorageView({ done, nickname }: Props) {
   useEffect(() => {
     const getMyStorage = async () => {
       setLoading(true);
-      const { data } = await getMyCompletions(dataConnect);
+      const { data } = await getMyCompletions(dataConnect, {
+        fetchPolicy: "SERVER_ONLY",
+      });
       const [verses, { data: bookmarksData }] = await Promise.all([
         Promise.all(
           data.studyCompletions.map(async (value) => {

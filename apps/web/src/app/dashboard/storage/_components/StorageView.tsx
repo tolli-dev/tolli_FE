@@ -47,6 +47,7 @@ export default function StorageView({ done, nickname }: Props) {
   const [renameError, setRenameError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogout = async () => {
     setActionLoading(true);
@@ -90,10 +91,13 @@ export default function StorageView({ done, nickname }: Props) {
     setModal(type);
   };
 
-  useEffect(() => {
-    const getMyStorage = async () => {
-      setLoading(true);
-      const { data } = await getMyCompletions(dataConnect);
+  const getMyStorage = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const { data } = await getMyCompletions(dataConnect, {
+        fetchPolicy: "SERVER_ONLY",
+      });
       const [verses, { data: bookmarksData }] = await Promise.all([
         Promise.all(
           data.studyCompletions.map(async (value) => {
@@ -115,8 +119,14 @@ export default function StorageView({ done, nickname }: Props) {
       ]);
       setBookmarkedIds(new Set(bookmarksData.bookmarks.map((b) => b.verse.id)));
       setMyCompletions(verses);
+    } catch {
+      setError("저장소를 불러오는 중 에러가 발생하였습니다. 다시 시도해주세요.");
+    } finally {
       setLoading(false);
-    };
+    }
+  };
+
+  useEffect(() => {
     getMyStorage();
   }, []);
 
@@ -131,6 +141,10 @@ export default function StorageView({ done, nickname }: Props) {
     );
   });
 
+  const handleRetry = () => {
+    getMyStorage();
+  };
+
   return (
     <section
       className={`
@@ -141,7 +155,7 @@ export default function StorageView({ done, nickname }: Props) {
       `}
     >
       <>
-        {(loading || actionLoading) && <LoadingSpinner />}
+        {actionLoading && <LoadingSpinner />}
 
         {isDropdownOpen && !modal && (
           <div
@@ -152,7 +166,7 @@ export default function StorageView({ done, nickname }: Props) {
 
         {/* 로그아웃 / 회원탈퇴 모달 */}
         {(modal === "logout" || modal === "withdraw") && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/92">
+          <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/92">
             <div className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]">
               <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] whitespace-nowrap">
                 {modal === "logout" ? "로그아웃 할까요?" : "회원 탈퇴 할까요?"}
@@ -307,60 +321,83 @@ export default function StorageView({ done, nickname }: Props) {
         </header>
       </>
 
-      <div className="flex flex-col w-full shrink-0 mb-[clamp(0.625rem,3vw,0.9375rem)]">
-        <h1 className="text-dashboard-h1">{nickname}의 보관함</h1>
-        <h2 className="font-light text-[clamp(0.6875rem,3vw,0.75rem)] leading-[1.6] tracking-[-2%] text-[#353535]">
-          지금까지 완료한 말씀들을 확인하고, 다시 복습할 수 있어요
-        </h2>
+      <div className="flex flex-col flex-1 min-h-0 w-full">
+        <div className="flex flex-col w-full shrink-0 mb-[clamp(0.625rem,3vw,0.9375rem)]">
+          <h1 className="text-dashboard-h1">{nickname}의 보관함</h1>
+          <h2 className="font-light text-[clamp(0.6875rem,3vw,0.75rem)] leading-[1.6] tracking-[-2%] text-[#353535]">
+            지금까지 완료한 말씀들을 확인하고, 다시 복습할 수 있어요
+          </h2>
+        </div>
+
+        {loading && (
+          <main className="w-full flex-1 flex items-center justify-center">
+            <LoadingSpinner />
+          </main>
+        )}
+
+        {!loading && error && (
+          <main className="w-full flex-1 flex flex-col items-center justify-center gap-3">
+            <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535] text-center">
+              {error}
+            </p>
+            <button
+              type="button"
+              onClick={handleRetry}
+              className="px-5 py-2 rounded-full bg-[#CCB5F0] text-black text-[0.875rem] font-medium"
+            >
+              다시 시도하기
+            </button>
+          </main>
+        )}
+
+        {!loading && !error && !searchVerse && myCompletions.length === 0 && (
+          <main className="w-full flex-1 flex flex-col items-center justify-center">
+            <div className="text-center">
+              <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
+                아직 완료한 말씀 구절이 없어요
+              </p>
+            </div>
+          </main>
+        )}
+
+        {!loading && !error && !searchVerse && myCompletions.length !== 0 && (
+          <main className="w-full flex-1 min-h-0 flex flex-col items-center">
+            <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
+              {myCompletions.map((value) => (
+                <IndividualStorage
+                  key={value.verse.id}
+                  bookmarkedIds={bookmarkedIds}
+                  verse={value.verse}
+                />
+              ))}
+            </div>
+          </main>
+        )}
+
+        {!loading && !error && searchVerse && filteredData.length === 0 && (
+          <main className="w-full flex-1 flex flex-col items-center justify-center">
+            <div className="text-center">
+              <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
+                검색 결과를 찾을 수 없습니다
+              </p>
+            </div>
+          </main>
+        )}
+
+        {!loading && !error && searchVerse && filteredData.length !== 0 && (
+          <main className="w-full flex-1 min-h-0 flex flex-col items-center">
+            <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
+              {filteredData.map((value) => (
+                <IndividualStorage
+                  key={value.verse.id}
+                  bookmarkedIds={bookmarkedIds}
+                  verse={value.verse}
+                />
+              ))}
+            </div>
+          </main>
+        )}
       </div>
-
-      {!searchVerse && myCompletions.length === 0 && (
-        <main className="w-full flex-1 flex flex-col items-center justify-center">
-          <div className="text-center">
-            <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
-              아직 완료한 말씀 구절이 없어요
-            </p>
-          </div>
-        </main>
-      )}
-
-      {!searchVerse && myCompletions.length !== 0 && (
-        <main className="w-full flex-1 min-h-0 flex flex-col items-center">
-          <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
-            {myCompletions.map((value) => (
-              <IndividualStorage
-                key={value.verse.id}
-                bookmarkedIds={bookmarkedIds}
-                verse={value.verse}
-              />
-            ))}
-          </div>
-        </main>
-      )}
-
-      {searchVerse && filteredData.length === 0 && (
-        <main className="w-full flex-1 flex flex-col items-center justify-center">
-          <div className="text-center">
-            <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
-              검색 결과를 찾을 수 없습니다
-            </p>
-          </div>
-        </main>
-      )}
-
-      {searchVerse && filteredData.length !== 0 && (
-        <main className="w-full flex-1 min-h-0 flex flex-col items-center">
-          <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] overflow-auto bookmarks">
-            {filteredData.map((value) => (
-              <IndividualStorage
-                key={value.verse.id}
-                bookmarkedIds={bookmarkedIds}
-                verse={value.verse}
-              />
-            ))}
-          </div>
-        </main>
-      )}
     </section>
   );
 }

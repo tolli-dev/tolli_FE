@@ -32,7 +32,11 @@ export default function DashBoard() {
         getMe(dataConnect, {
           fetchPolicy: "SERVER_ONLY",
         }),
-        getMyCurrentVerse(dataConnect, { today: today.toISOString() }),
+        getMyCurrentVerse(
+          dataConnect,
+          { today: today.toISOString() },
+          { fetchPolicy: "SERVER_ONLY" },
+        ),
       ]).then(([meResult, verseResult]) => {
         setNickname(meResult.data.user?.nickname ?? "");
         const verse = verseResult.data.todayCompletion[0]?.verse ?? null;

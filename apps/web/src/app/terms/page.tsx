@@ -141,7 +141,11 @@ export default function TermsPage() {
               onClick={(e) => {
                 if (url) {
                   e.stopPropagation();
-                  window.open(url, "_blank");
+                  if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: "OPEN_EXTERNAL_URL", url }));
+                  } else {
+                    window.open(url, "_blank");
+                  }
                 }
               }}
               className={`text-[14.5px] font-medium leading-[22.8px] tracking-normal text-[#E0E0E0] ${url && "underline"}`}

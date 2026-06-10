@@ -46,7 +46,7 @@ export default function RootLayout({
           paddingRight: 'env(safe-area-inset-right)',
         }}
       >
-        {children}
+{children}
       </body>
     </html>
   );

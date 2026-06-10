@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Verse } from "../types";
 import Link from "next/link";
 import { useSoundEffect } from "@/app/hooks/useSoundEffect";
+import posthog from "posthog-js";
 
 export default function ReadVerse({
   verse,
@@ -15,6 +16,7 @@ export default function ReadVerse({
   const play = useSoundEffect("/sounds/처음 말씀 pop up 될때 소리.mp3");
   useEffect(() => {
     play();
+    posthog.capture('study_started', { verse_id: verseId, reference: verse.reference });
   });
 
   return (

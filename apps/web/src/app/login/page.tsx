@@ -64,9 +64,10 @@ export default function LoginPage() {
   );
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const appleToken = params.get("apple_token");
+    const match = document.cookie.match(/(?:^|;\s*)apple_id_token=([^;]+)/);
+    const appleToken = match ? decodeURIComponent(match[1]) : null;
     if (appleToken) {
+      document.cookie = 'apple_id_token=; max-age=0; path=/';
       redirectAfterLogin(() => signInWithAppleToken(appleToken));
     }
   }, [redirectAfterLogin]);
@@ -74,12 +75,12 @@ export default function LoginPage() {
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       try {
-        const { type, token } = JSON.parse(e.data);
-        if (type === "GOOGLE_TOKEN" && token) {
+        const { type, token, rawNonce } = JSON.parse(e.data);
+        if (type === 'GOOGLE_TOKEN' && token) {
           redirectAfterLogin(() => signInWithGoogleToken(token));
         }
-        if (type === "APPLE_TOKEN" && token) {
-          redirectAfterLogin(() => signInWithAppleToken(token));
+        if (type === 'APPLE_TOKEN' && token) {
+          redirectAfterLogin(() => signInWithAppleToken(token, rawNonce));
         }
         if (type === "KAKAO_TOKEN" && token) {
           redirectAfterLogin(() => signInWithKakaoToken(token));

@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.redirect(
-    `https://tolli-fe-web.vercel.app/login?apple_token=${encodeURIComponent(idToken)}`,
+    `tolli://auth?id_token=${encodeURIComponent(idToken)}`,
+    { status: 302 },
   );
 }

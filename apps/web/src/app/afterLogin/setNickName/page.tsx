@@ -2,12 +2,13 @@
 
 import StandingTolli_1 from "../../../../public/images/onBoarding/standingTolli_1.webp";
 import Image from "next/image";
+import Form from "next/form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
 import { createUser } from "@firebasegen/default-connector";
 import { dataConnect } from "@/lib/dataconnect";
 import { fireAuth } from "@/firebase/fireAuth";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const getValidationResult = (name: string) => {
   const blankRegex = /\s/g;
@@ -29,57 +30,53 @@ export default function Page() {
   const [name, setName] = useState("");
   const { state, message } = getValidationResult(name);
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     if (!state) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const termsAgreedAt = sessionStorage.getItem("termsAgreedAt") ?? "";
-      const privacyAgreedAt = sessionStorage.getItem("privacyAgreedAt") ?? "";
-      const emailMarketingAgreed =
-        sessionStorage.getItem("emailMarketingAgreed") === "true";
-      const emailMarketingAgreedAt =
-        sessionStorage.getItem("emailMarketingAgreedAt") || null;
+    const termsAgreedAt = sessionStorage.getItem("termsAgreedAt") ?? "";
+    const privacyAgreedAt = sessionStorage.getItem("privacyAgreedAt") ?? "";
+    const emailMarketingAgreed =
+      sessionStorage.getItem("emailMarketingAgreed") === "true";
+    const emailMarketingAgreedAt =
+      sessionStorage.getItem("emailMarketingAgreedAt") || null;
 
-      await createUser(dataConnect, {
-        nickname: name,
-        termsAgreedAt,
-        privacyAgreedAt,
-        emailMarketingAgreed,
-        emailMarketingAgreedAt,
-      });
+    await createUser(dataConnect, {
+      nickname: name,
+      termsAgreedAt,
+      privacyAgreedAt,
+      emailMarketingAgreed,
+      emailMarketingAgreedAt,
+    });
 
-      sessionStorage.removeItem("termsAgreedAt");
-      sessionStorage.removeItem("privacyAgreedAt");
-      sessionStorage.removeItem("emailMarketingAgreed");
-      sessionStorage.removeItem("emailMarketingAgreedAt");
+    sessionStorage.removeItem("termsAgreedAt");
+    sessionStorage.removeItem("privacyAgreedAt");
+    sessionStorage.removeItem("emailMarketingAgreed");
+    sessionStorage.removeItem("emailMarketingAgreedAt");
 
-      const idToken = await fireAuth.currentUser?.getIdToken();
-      if (idToken) {
-        await fetch("/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ idToken }),
-        });
+    const idToken = await new Promise<string | null>((resolve) => {
+      if (fireAuth.currentUser) {
+        fireAuth.currentUser.getIdToken().then(resolve).catch(() => resolve(null));
+        return;
       }
-
-      router.push(`/afterLogin/greeting/${name}`);
-    } catch {
-      setError("닉네임 설정에 실패했어요. 다시 시도해주세요.");
+      const unsub = onAuthStateChanged(fireAuth, (user) => {
+        unsub();
+        if (user) user.getIdToken().then(resolve).catch(() => resolve(null));
+        else resolve(null);
+      });
+    });
+    if (idToken) {
+      await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
     }
+
+    router.push(`/afterLogin/greeting/${name}`);
   };
 
   return (
     <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
-      {loading && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/50">
-          <LoadingSpinner />
-        </div>
-      )}
-
       <div className="flex flex-col items-center w-full mt-[clamp(1rem,4dvh,10.25rem)]">
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem]">
           <h1 className="text-h1 text-primary-50 whitespace-nowrap">
@@ -102,11 +99,8 @@ export default function Page() {
         </div>
       </div>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
+      <Form
+        action={handleSubmit}
         className="flex flex-col items-center flex-1 w-full justify-between mt-[clamp(1rem,2dvh,2.938rem)] gap-[1rem]"
       >
         <div className="flex flex-col w-full items-center">
@@ -123,10 +117,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center w-full gap-2">
-          {error && (
-            <p className="text-red-400 text-[0.8125rem] text-center">{error}</p>
-          )}
+        <div className="flex flex-col items-center w-full">
           <button
             type="submit"
             className="
@@ -138,7 +129,7 @@ export default function Page() {
             닉네임 설정 완료
           </button>
         </div>
-      </form>
+      </Form>
     </section>
   );
 }

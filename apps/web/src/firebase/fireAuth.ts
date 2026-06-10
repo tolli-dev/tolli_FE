@@ -15,9 +15,9 @@ export const signInWithGoogleToken = async (idToken: string) => {
   return userCredential.user;
 };
 
-export const signInWithAppleToken = async (idToken: string) => {
+export const signInWithAppleToken = async (idToken: string, rawNonce?: string) => {
   const provider = new OAuthProvider('apple.com');
-  const credential = provider.credential({ idToken });
+  const credential = provider.credential({ idToken, rawNonce: rawNonce || undefined });
   const userCredential = await signInWithCredential(fireAuth, credential);
   return userCredential.user;
 };

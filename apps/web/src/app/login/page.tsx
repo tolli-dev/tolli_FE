@@ -86,10 +86,7 @@ export default function LoginPage() {
         if (type === "KAKAO_TOKEN" && token) {
           redirectAfterLogin(() => signInWithKakaoToken(token));
         }
-      } catch {
-        setLoading(false);
-        setError("로그인에 실패했어요. 다시 시도해주세요.");
-      }
+      } catch {}
     };
 
     window.addEventListener("message", handleMessage);

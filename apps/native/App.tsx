@@ -19,6 +19,7 @@ import type {
   WebViewMessageEvent,
 } from "react-native-webview";
 import * as Notifications from "expo-notifications";
+import * as SplashScreen from "expo-splash-screen";
 import { IP_URL } from "../web/src/constants/url";
 import {
   KakaoOAuthToken,
@@ -30,6 +31,8 @@ import {
   markFirstLaunchDone,
 } from "./utils/checkFirstLaunch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+SplashScreen.preventAutoHideAsync();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -86,12 +89,14 @@ export default function App() {
       const isFirst = await checkFirstLaunch();
       if (isFirst) {
         setInitialUri(`${IP_URL}/onboarding/1`);
-        return;
+      } else {
+        const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+        setInitialUri(
+          isLoggedIn === "true" ? `${IP_URL}/dashboard` : `${IP_URL}/login`,
+        );
       }
-      const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-      setInitialUri(
-        isLoggedIn === "true" ? `${IP_URL}/dashboard` : `${IP_URL}/login`,
-      );
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await SplashScreen.hideAsync();
     })();
   }, []);
 

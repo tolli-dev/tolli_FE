@@ -16,6 +16,13 @@ export const signInWithApple = async (): Promise<string | null> => {
     nonce: hashedNonce,
   });
 
-  await WebBrowser.openBrowserAsync(`${APPLE_AUTH_URL}?${params.toString()}`);
-  return null;
+  const result = await WebBrowser.openAuthSessionAsync(
+    `${APPLE_AUTH_URL}?${params.toString()}`,
+    'tolli://',
+  );
+
+  if (result.type !== 'success') return null;
+
+  const url = new URL(result.url);
+  return url.searchParams.get('id_token');
 };

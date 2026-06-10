@@ -2,7 +2,6 @@
 
 import StandingTolli_1 from "../../../../public/images/onBoarding/standingTolli_1.webp";
 import Image from "next/image";
-import Form from "next/form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
@@ -105,8 +104,8 @@ export default function Page() {
         </div>
       </div>
 
-      <Form
-        action={handleSubmit}
+      <form
+        onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}
         className="flex flex-col items-center flex-1 w-full justify-between mt-[clamp(1rem,2dvh,2.938rem)] gap-[1rem]"
       >
         <div className="flex flex-col w-full items-center">
@@ -135,7 +134,7 @@ export default function Page() {
             닉네임 설정 완료
           </button>
         </div>
-      </Form>
+      </form>
     </section>
   );
 }

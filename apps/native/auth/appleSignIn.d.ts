@@ -1,1 +1,1 @@
-export declare const signInWithApple: () => Promise<string | null>;
+export declare const signInWithApple: () => Promise<{ idToken: string; rawNonce: string } | null>;

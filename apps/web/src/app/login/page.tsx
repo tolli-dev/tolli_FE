@@ -53,12 +53,12 @@ export default function LoginPage() {
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       try {
-        const { type, token } = JSON.parse(e.data);
+        const { type, token, rawNonce } = JSON.parse(e.data);
         if (type === 'GOOGLE_TOKEN' && token) {
           redirectAfterLogin(() => signInWithGoogleToken(token));
         }
         if (type === 'APPLE_TOKEN' && token) {
-          redirectAfterLogin(() => signInWithAppleToken(token));
+          redirectAfterLogin(() => signInWithAppleToken(token, rawNonce));
         }
         if (type === 'KAKAO_TOKEN' && token) {
           redirectAfterLogin(() => signInWithKakaoToken(token));

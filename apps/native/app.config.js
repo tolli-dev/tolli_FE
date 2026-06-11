@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 export default {
   expo: {
     name: "tolli",
@@ -8,18 +6,17 @@ export default {
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
-    newArchEnabled: true,
     splash: {
-      image: "./assets/splash-icon.png",
-      resizeMode: "contain",
       backgroundColor: "#1B1B1B",
     },
+    newArchEnabled: true,
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.company.tolli",
       usesAppleSignIn: true,
       infoPlist: {
         NSMicrophoneUsageDescription: "녹음을 위해 마이크를 사용합니다.",
+        ITSAppUsesNonExemptEncryption: false,
       },
     },
     android: {
@@ -82,6 +79,9 @@ export default {
       googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,
       googleIosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
       appleClientId: process.env.APPLE_CLIENT_ID,
+      eas: {
+        projectId: "c25cfa1e-4df0-417d-9890-242c9e10c2e2",
+      },
     },
   },
 };

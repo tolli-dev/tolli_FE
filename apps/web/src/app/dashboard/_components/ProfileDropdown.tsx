@@ -121,6 +121,8 @@ type Props = {
   nickname?: string;
   onModal?: (type: "logout" | "withdraw") => void;
   onRename?: () => void;
+  notificationEnabled: boolean | null;
+  onNotificationChange: (enabled: boolean) => void;
 };
 
 const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdown({
@@ -129,20 +131,20 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
   nickname = "",
   onModal,
   onRename,
+  notificationEnabled,
+  onNotificationChange,
 }, ref) {
   const menuListRef = useRef<HTMLDivElement>(null);
   const menuRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const router = useRouter();
   const [expandedKey, setExpandedKey] = useState<MenuKey>(null);
   const [subPanelTops, setSubPanelTops] = useState<Record<string, number>>({});
-  const [notificationEnabled, setNotificationEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
       setExpandedKey(null);
       return;
     }
-    setNotificationEnabled(null);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "QUERY_NOTIFICATION_STATUS" }),
     );
@@ -152,19 +154,16 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
     const handler = (e: MessageEvent) => {
       try {
         const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.type === "NOTIFICATION_STATUS") {
-          setNotificationEnabled(data.enabled);
-        }
         if (data.type === "ALARM_TIME") {
           if (data.hour !== null && data.minute !== null) {
             window.ReactNativeWebView?.postMessage(
               JSON.stringify({
-                type: "SCHEDULE_NOTIFICATION",
+                type: "SAVE_ALARM_TIME",
                 hour: data.hour,
                 minute: data.minute,
               }),
             );
-            setNotificationEnabled(true);
+            onNotificationChange(true);
           } else {
             router.push("/afterLogin/setAlarmTime");
             onClose();
@@ -181,7 +180,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
         handler as unknown as EventListener,
       );
     };
-  }, []);
+  }, [router, onClose, onNotificationChange]);
 
   const handleMenuClick = (item: MenuItem) => {
     if (item.key === "feedback") {
@@ -330,6 +329,11 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                                   if (!notificationEnabled) {
                                     window.ReactNativeWebView?.postMessage(
                                       JSON.stringify({
+                                        type: "REQUEST_NOTIFICATION_PERMISSION",
+                                      }),
+                                    );
+                                    window.ReactNativeWebView?.postMessage(
+                                      JSON.stringify({
                                         type: "GET_ALARM_TIME",
                                       }),
                                     );
@@ -339,7 +343,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                                         type: "CANCEL_NOTIFICATION",
                                       }),
                                     );
-                                    setNotificationEnabled(false);
+                                    onNotificationChange(false);
                                   }
                                 }}
                                 className="relative w-11 h-6.5 rounded-full transition-colors duration-200"

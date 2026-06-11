@@ -135,13 +135,14 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
   const router = useRouter();
   const [expandedKey, setExpandedKey] = useState<MenuKey>(null);
   const [subPanelTops, setSubPanelTops] = useState<Record<string, number>>({});
-  const [notificationEnabled, setNotificationEnabled] = useState(false);
+  const [notificationEnabled, setNotificationEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
       setExpandedKey(null);
       return;
     }
+    setNotificationEnabled(null);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "QUERY_NOTIFICATION_STATUS" }),
     );
@@ -324,6 +325,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                               </span>
                               <button
                                 title="알람 설정"
+                                disabled={notificationEnabled === null}
                                 onClick={() => {
                                   if (!notificationEnabled) {
                                     window.ReactNativeWebView?.postMessage(
@@ -349,6 +351,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                                     ? "inset 0 0 0 1px rgba(204,181,240,0.6)"
                                     : "inset 0 0 0 1px rgba(255,255,255,0.15)",
                                   backdropFilter: "blur(4px)",
+                                  opacity: notificationEnabled === null ? 0.5 : 1,
                                 }}
                               >
                                 <span

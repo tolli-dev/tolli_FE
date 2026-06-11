@@ -135,12 +135,26 @@ export default function SetAlarmTimePage() {
   const [hourIndex, setHourIndex] = useState(6);
   const [minuteIndex, setMinuteIndex] = useState(0);
   const [period, setPeriod] = useState<Period>('오전');
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
+  const pendingAlarm = useRef<{ hour: number; minute: number } | null>(null);
 
   useEffect(() => {
     const handler = (e: MessageEvent) => {
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
         if (data.type === 'DEVICE_CORNER_RADIUS') setCornerRadius(data.value ?? 0);
+        if (data.type === 'NOTIFICATION_PERMISSION_RESULT') {
+          if (data.granted && pendingAlarm.current) {
+            window.ReactNativeWebView?.postMessage(
+              JSON.stringify({ type: 'SAVE_ALARM_TIME', ...pendingAlarm.current }),
+            );
+            window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
+            router.push('/dashboard');
+          } else if (!data.granted) {
+            pendingAlarm.current = null;
+            setShowPermissionModal(true);
+          }
+        }
       } catch {}
     };
     window.addEventListener('message', handler);
@@ -150,20 +164,17 @@ export default function SetAlarmTimePage() {
       window.removeEventListener('message', handler);
       document.removeEventListener('message', handler as unknown as EventListener);
     };
-  }, []);
+  }, [router]);
 
   const handleConfirm = () => {
     const hour12 = hourIndex + 1;
     const hour24 =
       period === '오전' ? (hour12 === 12 ? 0 : hour12) : hour12 === 12 ? 12 : hour12 + 12;
+    pendingAlarm.current = { hour: hour24, minute: minuteIndex };
+    setShowPermissionModal(false);
     window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: 'SAVE_ALARM_TIME', hour: hour24, minute: minuteIndex }),
+      JSON.stringify({ type: 'REQUEST_NOTIFICATION_PERMISSION' }),
     );
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: 'SCHEDULE_NOTIFICATION', hour: hour24, minute: minuteIndex }),
-    );
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
-    router.push('/dashboard');
   };
 
   const handleSkip = () => {
@@ -173,6 +184,31 @@ export default function SetAlarmTimePage() {
 
   return (
     <div className="relative flex flex-col flex-1 h-full w-full px-[2.688rem] pt-[clamp(1rem,3dvh,1.5rem)] pb-[clamp(2rem,5dvh,5.313rem)]">
+      {showPermissionModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="flex flex-col items-center gap-4 bg-[#1e1e1e] rounded-4xl px-6 pt-8 pb-6 w-[80vw] max-w-80">
+            <p className="text-[#CCB5F0] text-[1rem] font-medium text-center whitespace-nowrap">알림 권한이 필요해요</p>
+            <p className="text-[#949494] text-[0.875rem] text-center whitespace-nowrap">설정에서 알림을 허용해주세요</p>
+            <div className="flex flex-col w-full gap-3">
+              <button
+                onClick={() => {
+                  window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'OPEN_APP_SETTINGS' }));
+                  setShowPermissionModal(false);
+                }}
+                className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0] whitespace-nowrap"
+              >
+                설정으로 이동
+              </button>
+              <button
+                onClick={() => setShowPermissionModal(false)}
+                className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#D9D9D9] whitespace-nowrap"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div
         className="fixed inset-0 pointer-events-none"
         style={{

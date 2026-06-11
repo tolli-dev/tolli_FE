@@ -42,6 +42,14 @@ Notifications.setNotificationHandler({
   }),
 });
 
+if (Platform.OS === "android") {
+  Notifications.setNotificationChannelAsync("default", {
+    name: "기본 알림",
+    importance: Notifications.AndroidImportance.HIGH,
+    sound: "default",
+  });
+}
+
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
   iosClientId: Constants.expoConfig?.extra?.googleIosClientId,
@@ -85,6 +93,16 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
+      // alarmEnabled 키가 없는 기존 유저 마이그레이션 (최초 1회)
+      const migrated = await AsyncStorage.getItem("alarmEnabledMigrated");
+      if (migrated === null) {
+        const alarmTime = await AsyncStorage.getItem("alarmTime");
+        if (alarmTime !== null) {
+          await AsyncStorage.setItem("alarmEnabled", "true");
+        }
+        await AsyncStorage.setItem("alarmEnabledMigrated", "true");
+      }
+
       const isFirst = await checkFirstLaunch();
       if (isFirst) {
         setInitialUri(`${IP_URL}/onboarding/1`);
@@ -181,30 +199,39 @@ export default function App() {
       if (data.type === "SET_LOGGED_OUT") {
         await AsyncStorage.removeItem("isLoggedIn");
         await AsyncStorage.removeItem("alarmTime");
+        await AsyncStorage.removeItem("alarmEnabled");
       }
 
       if (data.type === "CLEAR_ALL_DATA") {
         await AsyncStorage.removeItem("isLoggedIn");
         await AsyncStorage.removeItem("alarmTime");
+        await AsyncStorage.removeItem("alarmEnabled");
+        await AsyncStorage.removeItem("alarmEnabledMigrated");
       }
 
       if (data.type === "REQUEST_NOTIFICATION_PERMISSION") {
-        await Notifications.requestPermissionsAsync();
+        const { status } = await Notifications.requestPermissionsAsync();
+        webviewRef.current?.postMessage(
+          JSON.stringify({
+            type: "NOTIFICATION_PERMISSION_RESULT",
+            granted: status === "granted",
+          }),
+        );
       }
 
       if (data.type === "QUERY_NOTIFICATION_STATUS") {
-        const scheduled =
-          await Notifications.getAllScheduledNotificationsAsync();
+        const enabled = await AsyncStorage.getItem("alarmEnabled");
         webviewRef.current?.postMessage(
           JSON.stringify({
             type: "NOTIFICATION_STATUS",
-            enabled: scheduled.length > 0,
+            enabled: enabled === "true",
           }),
         );
       }
 
       if (data.type === "CANCEL_NOTIFICATION") {
         await Notifications.cancelAllScheduledNotificationsAsync();
+        await AsyncStorage.removeItem("alarmEnabled");
       }
 
       if (data.type === "OPEN_EXTERNAL_URL") {
@@ -216,6 +243,20 @@ export default function App() {
           "alarmTime",
           JSON.stringify({ hour: data.hour, minute: data.minute }),
         );
+        await AsyncStorage.setItem("alarmEnabled", "true");
+        await Notifications.cancelAllScheduledNotificationsAsync();
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "오늘의 말씀 🐘",
+            body: "톨리가 오늘의 말씀을 가져왔어요!",
+            sound: "default",
+          },
+          trigger: {
+            type: Notifications.SchedulableTriggerInputTypes.DAILY,
+            hour: data.hour,
+            minute: data.minute,
+          },
+        });
       }
 
       if (data.type === "GET_ALARM_TIME") {
@@ -229,11 +270,13 @@ export default function App() {
       }
 
       if (data.type === "SCHEDULE_NOTIFICATION") {
+        await AsyncStorage.setItem("alarmEnabled", "true");
         await Notifications.cancelAllScheduledNotificationsAsync();
         await Notifications.scheduleNotificationAsync({
           content: {
-            title: "오늘의 말씀 🕊️",
-            body: "말씀으로 하루를 시작해요!",
+            title: "오늘의 말씀 🐘",
+            body: "톨리가 오늘의 말씀을 가져왔어요!",
+            sound: "default",
           },
           trigger: {
             type: Notifications.SchedulableTriggerInputTypes.DAILY,

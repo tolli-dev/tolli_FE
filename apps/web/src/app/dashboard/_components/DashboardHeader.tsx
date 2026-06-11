@@ -24,6 +24,24 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   const profileBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [notificationEnabled, setNotificationEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      try {
+        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+        if (data.type === "NOTIFICATION_STATUS") {
+          setNotificationEnabled(data.enabled);
+        }
+      } catch {}
+    };
+    window.addEventListener("message", handler);
+    document.addEventListener("message", handler as unknown as EventListener);
+    return () => {
+      window.removeEventListener("message", handler);
+      document.removeEventListener("message", handler as unknown as EventListener);
+    };
+  }, []);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -97,7 +115,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
 
   return (
     <>
-      {isDropdownOpen && !modal && (
+{isDropdownOpen && !modal && (
         <div
           className="fixed inset-0 z-40 bg-black/45"
           onClick={() => setIsDropdownOpen(false)}
@@ -245,6 +263,8 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
               setRenameError(false);
               openModal("rename");
             }}
+            notificationEnabled={notificationEnabled}
+            onNotificationChange={setNotificationEnabled}
           />
         </button>
       </header>

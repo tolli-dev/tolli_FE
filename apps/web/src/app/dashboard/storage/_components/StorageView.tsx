@@ -43,6 +43,7 @@ export default function StorageView({ done, nickname }: Props) {
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [modal, setModal] = useState<ModalType>(null);
+  const [notificationEnabled, setNotificationEnabled] = useState<boolean | null>(null);
   const [renameValue, setRenameValue] = useState(nickname ?? "");
   const [renameError, setRenameError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -85,6 +86,23 @@ export default function StorageView({ done, nickname }: Props) {
     await updateNickname(dataConnect, { nickname: renameValue });
     window.location.href = "/dashboard";
   };
+
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      try {
+        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+        if (data.type === "NOTIFICATION_STATUS") {
+          setNotificationEnabled(data.enabled);
+        }
+      } catch {}
+    };
+    window.addEventListener("message", handler);
+    document.addEventListener("message", handler as unknown as EventListener);
+    return () => {
+      window.removeEventListener("message", handler);
+      document.removeEventListener("message", handler as unknown as EventListener);
+    };
+  }, []);
 
   const openModal = (type: ModalType) => {
     setIsDropdownOpen(false);
@@ -316,6 +334,8 @@ export default function StorageView({ done, nickname }: Props) {
                 setRenameError(false);
                 openModal("rename");
               }}
+              notificationEnabled={notificationEnabled}
+              onNotificationChange={setNotificationEnabled}
             />
           </button>
         </header>

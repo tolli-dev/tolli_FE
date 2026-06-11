@@ -21,7 +21,7 @@ import type {
 } from "react-native-webview";
 import * as Notifications from "expo-notifications";
 
-import { IP_URL } from "../web/src/constants/url";
+const IP_URL = "https://tolli-fe-web.vercel.app/";
 import {
   KakaoOAuthToken,
   login,

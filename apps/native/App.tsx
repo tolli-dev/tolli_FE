@@ -52,28 +52,27 @@ export default function App() {
   const [initialUri, setInitialUri] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  let isExitApp = false;
-  let timeout: ReturnType<typeof setTimeout>;
+  const isExitApp = useRef(false);
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     if (Platform.OS !== "android") return;
 
     const onExit = () => {
-      if (!isExitApp) {
-        isExitApp = true;
+      if (!isExitApp.current) {
+        isExitApp.current = true;
         ToastAndroid.show(
           "뒤로 버튼을 한 번 더 누르시면 종료됩니다.",
           ToastAndroid.SHORT,
         );
-
-        timeout = setTimeout(() => {
-          isExitApp = false;
+        timeout.current = setTimeout(() => {
+          isExitApp.current = false;
         }, 2000);
       } else {
-        clearTimeout(timeout);
+        clearTimeout(timeout.current);
+        isExitApp.current = false; // ← 종료 전 상태 리셋
         BackHandler.exitApp();
       }
-
       return true;
     };
 
@@ -117,7 +116,11 @@ export default function App() {
         const appleResult = await signInWithApple();
         if (appleResult) {
           webviewRef.current?.postMessage(
-            JSON.stringify({ type: "APPLE_TOKEN", token: appleResult.idToken, rawNonce: appleResult.rawNonce }),
+            JSON.stringify({
+              type: "APPLE_TOKEN",
+              token: appleResult.idToken,
+              rawNonce: appleResult.rawNonce,
+            }),
           );
         }
       }
@@ -175,14 +178,14 @@ export default function App() {
         await AsyncStorage.setItem("isLoggedIn", "true");
       }
 
-      if (data.type === 'SET_LOGGED_OUT') {
-        await AsyncStorage.removeItem('isLoggedIn');
-        await AsyncStorage.removeItem('alarmTime');
+      if (data.type === "SET_LOGGED_OUT") {
+        await AsyncStorage.removeItem("isLoggedIn");
+        await AsyncStorage.removeItem("alarmTime");
       }
 
-      if (data.type === 'CLEAR_ALL_DATA') {
-        await AsyncStorage.removeItem('isLoggedIn');
-        await AsyncStorage.removeItem('alarmTime');
+      if (data.type === "CLEAR_ALL_DATA") {
+        await AsyncStorage.removeItem("isLoggedIn");
+        await AsyncStorage.removeItem("alarmTime");
       }
 
       if (data.type === "REQUEST_NOTIFICATION_PERMISSION") {

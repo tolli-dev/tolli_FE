@@ -4,7 +4,7 @@ export default {
     slug: "tolli",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/icon.png",
+    icon: "./assets/apple-icon.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
     ios: {
@@ -20,8 +20,8 @@ export default {
       package: "com.company.tolli",
       allowBackup: false,
       adaptiveIcon: {
-        foregroundImage: "./assets/icon.png",
-        backgroundColor: "#ffffff",
+        foregroundImage: "./assets/android-icon.png",
+        backgroundColor: "#1B1B1B",
       },
       permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
       edgeToEdgeEnabled: true,

@@ -19,6 +19,7 @@ import type {
   WebViewMessageEvent,
 } from "react-native-webview";
 import * as Notifications from "expo-notifications";
+
 import { IP_URL } from "../web/src/constants/url";
 import {
   KakaoOAuthToken,
@@ -92,10 +93,8 @@ export default function App() {
           isLoggedIn === "true" ? `${IP_URL}/dashboard` : `${IP_URL}/login`,
         );
       }
-      await new Promise((resolve) => setTimeout(resolve, 2000));
     })();
   }, []);
-
 
   const postToken = (type: string, token: string) => {
     webviewRef.current?.postMessage(JSON.stringify({ type, token }));

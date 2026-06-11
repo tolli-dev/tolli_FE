@@ -1,33 +1,27 @@
-import "dotenv/config";
-
 export default {
   expo: {
     name: "tolli",
     slug: "tolli",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/icon.png",
+    icon: "./assets/apple-icon.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
-    splash: {
-      image: "./assets/splash-icon.png",
-      resizeMode: "contain",
-      backgroundColor: "#1B1B1B",
-    },
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.company.tolli",
       usesAppleSignIn: true,
       infoPlist: {
         NSMicrophoneUsageDescription: "녹음을 위해 마이크를 사용합니다.",
+        ITSAppUsesNonExemptEncryption: false,
       },
     },
     android: {
       package: "com.company.tolli",
       allowBackup: false,
       adaptiveIcon: {
-        foregroundImage: "./assets/icon.png",
-        backgroundColor: "#ffffff",
+        foregroundImage: "./assets/android-icon.png",
+        backgroundColor: "#1B1B1B",
       },
       permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
       edgeToEdgeEnabled: true,
@@ -82,6 +76,9 @@ export default {
       googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,
       googleIosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
       appleClientId: process.env.APPLE_CLIENT_ID,
+      eas: {
+        projectId: "c25cfa1e-4df0-417d-9890-242c9e10c2e2",
+      },
     },
   },
 };

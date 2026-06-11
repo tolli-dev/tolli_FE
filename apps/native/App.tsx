@@ -6,6 +6,7 @@ import {
   Linking,
   BackHandler,
   ToastAndroid,
+  View,
 } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Constants from "expo-constants";
@@ -19,7 +20,7 @@ import type {
   WebViewMessageEvent,
 } from "react-native-webview";
 import * as Notifications from "expo-notifications";
-import * as SplashScreen from "expo-splash-screen";
+
 import { IP_URL } from "../web/src/constants/url";
 import {
   KakaoOAuthToken,
@@ -31,8 +32,6 @@ import {
   markFirstLaunchDone,
 } from "./utils/checkFirstLaunch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-SplashScreen.preventAutoHideAsync();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -51,6 +50,7 @@ GoogleSignin.configure({
 export default function App() {
   const webviewRef = useRef<WebViewType>(null);
   const [initialUri, setInitialUri] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   let isExitApp = false;
   let timeout: ReturnType<typeof setTimeout>;
@@ -95,11 +95,8 @@ export default function App() {
           isLoggedIn === "true" ? `${IP_URL}/dashboard` : `${IP_URL}/login`,
         );
       }
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      await SplashScreen.hideAsync();
     })();
   }, []);
-
 
   const postToken = (type: string, token: string) => {
     webviewRef.current?.postMessage(JSON.stringify({ type, token }));
@@ -257,33 +254,40 @@ export default function App() {
   if (!initialUri) return null;
 
   return (
-    <WebView
-      ref={webviewRef}
-      source={{ uri: initialUri }}
-      style={styles.container}
-      onMessage={handleMessage}
-      contentInsetAdjustmentBehavior="never"
-      scalesPageToFit={false}
-      bounces={false}
-      overScrollMode="never"
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      allowsLinkPreview={false}
-      mixedContentMode="always"
-      domStorageEnabled={true}
-      mediaPlaybackRequiresUserAction={false}
-      allowsInlineMediaPlayback={true}
-      // 마이크 WebView 레이어 권한
-      mediaCapturePermissionGrantType="grant"
-      onLoadEnd={() => {
-        webviewRef.current?.injectJavaScript(`
-          (function() {
-            if (window.__startBGM) window.__startBGM();
-          })();
-          true;
-        `);
-      }}
-    />
+    <>
+      <WebView
+        ref={webviewRef}
+        source={{ uri: initialUri }}
+        style={styles.container}
+        onMessage={handleMessage}
+        contentInsetAdjustmentBehavior="never"
+        scalesPageToFit={false}
+        bounces={false}
+        overScrollMode="never"
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        allowsLinkPreview={false}
+        mixedContentMode="always"
+        domStorageEnabled={true}
+        mediaPlaybackRequiresUserAction={false}
+        allowsInlineMediaPlayback={true}
+        mediaCapturePermissionGrantType="grant"
+        onLoadEnd={() => {
+          setIsLoaded(true);
+          webviewRef.current?.injectJavaScript(`
+            (function() {
+              if (window.__startBGM) window.__startBGM();
+            })();
+            true;
+          `);
+        }}
+      />
+      {!isLoaded && (
+        <View style={StyleSheet.absoluteFill} pointerEvents="none">
+          <View style={{ flex: 1, backgroundColor: "#1B1B1B" }} />
+        </View>
+      )}
+    </>
   );
 }
 
@@ -291,5 +295,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    backgroundColor: "#1B1B1B",
   },
 });

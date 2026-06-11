@@ -6,9 +6,6 @@ export default {
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
-    splash: {
-      backgroundColor: "#1B1B1B",
-    },
     newArchEnabled: true,
     ios: {
       supportsTablet: true,

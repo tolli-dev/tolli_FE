@@ -4,7 +4,11 @@
     "promptToConfigurePushNotifications": false
   },
   "build": {
+    "base": {
+      "pnpm": "9.0.0"
+    },
     "preview": {
+      "extends": "base",
       "distribution": "internal",
       "ios": {
         "simulator": false

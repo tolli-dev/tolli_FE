@@ -21,7 +21,9 @@ import type {
 } from "react-native-webview";
 import * as Notifications from "expo-notifications";
 
-const IP_URL = "https://tolli-fe-web.vercel.app/";
+// const IP_URL = "https://tolli-fe-web.vercel.app/";
+const IP_URL = "http://192.168.35.166:3000";
+
 import {
   KakaoOAuthToken,
   login,
@@ -32,6 +34,7 @@ import {
   markFirstLaunchDone,
 } from "./utils/checkFirstLaunch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NativeOfflineScreen from "./components/NativeOfflineScreen";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -327,6 +330,9 @@ export default function App() {
             true;
           `);
         }}
+        renderError={() => (
+          <NativeOfflineScreen onRetry={() => webviewRef.current?.reload()} />
+        )}
       />
       {!isLoaded && (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">

@@ -52,7 +52,9 @@ export default function Error({ error, reset }: Props) {
 
   const handleErrorReset = () => {
     setIsLoading(true);
-    reset();
+    setTimeout(() => {
+      reset();
+    }, 800);
   };
 
   return (

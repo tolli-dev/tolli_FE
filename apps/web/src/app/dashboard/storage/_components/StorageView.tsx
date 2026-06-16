@@ -43,11 +43,15 @@ export default function StorageView({ done, nickname }: Props) {
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [modal, setModal] = useState<ModalType>(null);
-  const [notificationEnabled, setNotificationEnabled] = useState<boolean | null>(null);
+  const [notificationEnabled, setNotificationEnabled] = useState<
+    boolean | null
+  >(null);
   const [renameValue, setRenameValue] = useState(nickname ?? "");
   const [renameError, setRenameError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [renameApiError, setRenameApiError] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   const handleLogout = async () => {
@@ -55,14 +59,28 @@ export default function StorageView({ done, nickname }: Props) {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
-    await signOut(fireAuth);
+    try {
+      await signOut(fireAuth);
+    } catch (error) {
+      console.error("로그아웃 에러", error);
+    }
     router.push("/login");
   };
 
   const handleWithdraw = async () => {
     setActionLoading(true);
+    setActionError(null);
     const idToken = await fireAuth.currentUser?.getIdToken();
-    await deleteUser(dataConnect);
+
+    try {
+      await deleteUser(dataConnect);
+    } catch (error) {
+      console.error("계정 삭제 실패", error);
+      setActionLoading(false);
+      setActionError("탈퇴 중 오류가 발생했어요. 다시 시도해주세요.");
+      return;
+    }
+
     if (idToken) {
       await fetch("/api/auth/unregister", {
         method: "POST",
@@ -73,7 +91,13 @@ export default function StorageView({ done, nickname }: Props) {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
-    await signOut(fireAuth);
+
+    try {
+      await signOut(fireAuth);
+    } catch (error) {
+      console.error("로그아웃 실패", error);
+    }
+
     router.push("/login");
   };
 
@@ -83,8 +107,17 @@ export default function StorageView({ done, nickname }: Props) {
       return;
     }
     setActionLoading(true);
-    await updateNickname(dataConnect, { nickname: renameValue });
-    window.location.href = "/dashboard";
+    setRenameApiError(null);
+    try {
+      await updateNickname(dataConnect, { nickname: renameValue });
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.error("닉네임 재설정 에러", error);
+      setActionLoading(false);
+      setRenameApiError(
+        "닉네임 재설정 중 오류가 발생했어요. 다시 시도해주세요.",
+      );
+    }
   };
 
   useEffect(() => {
@@ -100,7 +133,10 @@ export default function StorageView({ done, nickname }: Props) {
     document.addEventListener("message", handler as unknown as EventListener);
     return () => {
       window.removeEventListener("message", handler);
-      document.removeEventListener("message", handler as unknown as EventListener);
+      document.removeEventListener(
+        "message",
+        handler as unknown as EventListener,
+      );
     };
   }, []);
 
@@ -138,7 +174,9 @@ export default function StorageView({ done, nickname }: Props) {
       setBookmarkedIds(new Set(bookmarksData.bookmarks.map((b) => b.verse.id)));
       setMyCompletions(verses);
     } catch {
-      setError("저장소를 불러오는 중 에러가 발생하였습니다. 다시 시도해주세요.");
+      setError(
+        "저장소를 불러오는 중 에러가 발생하였습니다. 다시 시도해주세요.",
+      );
     } finally {
       setLoading(false);
     }
@@ -202,15 +240,24 @@ export default function StorageView({ done, nickname }: Props) {
                   ? "다음에 또 만나요!\n톨리가 기다리고 있을게요!"
                   : "탈퇴하면 계정 정보는 복구되지 않아요\n정말 탈퇴하시나요?"}
               </p>
+              {actionError && (
+                <p className="text-red-400 text-[0.8125rem] text-center -mb-1">
+                  {actionError}
+                </p>
+              )}
               <div className="flex flex-col w-full gap-3 mt-2">
                 <button
                   onClick={modal === "logout" ? handleLogout : handleWithdraw}
-                  className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0]"
+                  disabled={actionLoading}
+                  className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0] disabled:opacity-50"
                 >
                   {modal === "logout" ? "로그아웃하기" : "탈퇴하기"}
                 </button>
                 <button
-                  onClick={() => setModal(null)}
+                  onClick={() => {
+                    setModal(null);
+                    setActionError(null);
+                  }}
                   className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#D9D9D9]"
                 >
                   남아있기
@@ -267,16 +314,25 @@ export default function StorageView({ done, nickname }: Props) {
                 )}
               </div>
 
+              {renameApiError && (
+                <p className="text-red-400 text-[0.75rem] text-center px-2 whitespace-nowrap">
+                  {renameApiError}
+                </p>
+              )}
               <div className="flex gap-2.5">
                 <button
-                  onClick={() => setModal(null)}
+                  onClick={() => {
+                    setModal(null);
+                    setRenameApiError(null);
+                  }}
                   className="flex-1 h-12 rounded-[1.25rem] font-semibold text-[1rem] text-[#CCB5F0] border border-[#CCB5F0] bg-transparent"
                 >
                   취소
                 </button>
                 <button
                   onClick={handleRenameSave}
-                  className="flex-1 h-12 rounded-[1.25rem] font-semibold text-[1rem] bg-[#CCB5F0] text-[#373737]"
+                  disabled={actionLoading}
+                  className="flex-1 h-12 rounded-[1.25rem] font-semibold text-[1rem] bg-[#CCB5F0] text-[#373737] disabled:opacity-50"
                 >
                   저장
                 </button>

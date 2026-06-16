@@ -10,6 +10,7 @@ import { fireAuth } from "@/firebase/fireAuth";
 import { dataConnect } from "@/lib/dataconnect";
 import ProfileDropdown from "./ProfileDropdown";
 import standingTolli from "../../../../public/tolli1.webp";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{1,8}$/;
 
@@ -24,7 +25,9 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   const profileBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [notificationEnabled, setNotificationEnabled] = useState<boolean | null>(null);
+  const [notificationEnabled, setNotificationEnabled] = useState<
+    boolean | null
+  >(null);
 
   useEffect(() => {
     const handler = (e: MessageEvent) => {
@@ -39,7 +42,10 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
     document.addEventListener("message", handler as unknown as EventListener);
     return () => {
       window.removeEventListener("message", handler);
-      document.removeEventListener("message", handler as unknown as EventListener);
+      document.removeEventListener(
+        "message",
+        handler as unknown as EventListener,
+      );
     };
   }, []);
 
@@ -48,19 +54,25 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       if (
         profileBtnRef.current?.contains(e.target as Node) ||
         dropdownRef.current?.contains(e.target as Node)
-      ) return;
+      )
+        return;
       setIsDropdownOpen(false);
     };
-    if (isDropdownOpen) document.addEventListener('mousedown', handleOutside);
-    return () => document.removeEventListener('mousedown', handleOutside);
+    if (isDropdownOpen) document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
   }, [isDropdownOpen]);
   const [modal, setModal] = useState<ModalType>(null);
   const [modalClosing, setModalClosing] = useState(false);
   const [renameValue, setRenameValue] = useState(nickname ?? "");
   const [renameError, setRenameError] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [renameApiError, setRenameApiError] = useState<string | null>(null);
   const router = useRouter();
 
   const closeModal = () => {
+    setActionError(null);
+    setRenameApiError(null);
     setModalClosing(true);
     setTimeout(() => {
       setModal(null);
@@ -75,16 +87,32 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   };
 
   const handleLogout = async () => {
+    setActionLoading(true);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
-    await signOut(fireAuth);
+    try {
+      await signOut(fireAuth);
+    } catch (error) {
+      console.error("로그아웃 에러", error);
+    }
     router.push("/login");
   };
 
   const handleWithdraw = async () => {
+    setActionLoading(true);
+    setActionError(null);
     const idToken = await fireAuth.currentUser?.getIdToken();
-    await deleteUser(dataConnect);
+
+    try {
+      await deleteUser(dataConnect);
+    } catch (error) {
+      console.error("계정 삭제 실패", error);
+      setActionLoading(false);
+      setActionError("탈퇴 중 오류가 발생했어요. 다시 시도해주세요.");
+      return;
+    }
+
     if (idToken) {
       await fetch("/api/auth/unregister", {
         method: "POST",
@@ -95,7 +123,11 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "CLEAR_ALL_DATA" }),
     );
-    await signOut(fireAuth);
+    try {
+      await signOut(fireAuth);
+    } catch (error) {
+      console.error("로그아웃 실패", error);
+    }
     router.push("/login");
   };
 
@@ -104,8 +136,18 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       setRenameError(true);
       return;
     }
-    await updateNickname(dataConnect, { nickname: renameValue });
-    window.location.href = "/dashboard";
+    setActionLoading(true);
+    setRenameApiError(null);
+    try {
+      await updateNickname(dataConnect, { nickname: renameValue });
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.error("닉네임 재설정 에러", error);
+      setActionLoading(false);
+      setRenameApiError(
+        "닉네임 재설정 중 오류가 발생했어요. 다시 시도해주세요.",
+      );
+    }
   };
 
   const openModal = (type: ModalType) => {
@@ -115,7 +157,9 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
 
   return (
     <>
-{isDropdownOpen && !modal && (
+      {actionLoading && <LoadingSpinner />}
+
+      {isDropdownOpen && !modal && (
         <div
           className="fixed inset-0 z-40 bg-black/45"
           onClick={() => setIsDropdownOpen(false)}
@@ -126,7 +170,9 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       {(modal === "logout" || modal === "withdraw") && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/92"
-          style={{ animation: `${modalClosing ? 'fade-out-modal' : 'fade-in-modal'} 0.2s ease forwards` }}
+          style={{
+            animation: `${modalClosing ? "fade-out-modal" : "fade-in-modal"} 0.2s ease forwards`,
+          }}
         >
           <div className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]">
             <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] whitespace-nowrap">
@@ -145,10 +191,16 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
                 ? "다음에 또 만나요!\n톨리가 기다리고 있을게요!"
                 : "탈퇴하면 계정 정보는 복구되지 않아요\n정말 탈퇴하시나요?"}
             </p>
+            {actionError && (
+              <p className="text-red-400 text-[0.8125rem] text-center -mb-1">
+                {actionError}
+              </p>
+            )}
             <div className="flex flex-col w-full gap-3 mt-2">
               <button
                 onClick={modal === "logout" ? handleLogout : handleWithdraw}
-                className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0]"
+                disabled={actionLoading}
+                className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0] disabled:opacity-50"
               >
                 {modal === "logout" ? "로그아웃하기" : "탈퇴하기"}
               </button>
@@ -167,7 +219,9 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       {modal === "rename" && (
         <div
           className="fixed inset-0 z-200 flex items-center justify-center bg-black/60"
-          style={{ animation: `${modalClosing ? 'fade-out-modal' : 'fade-in-modal'} 0.2s ease forwards` }}
+          style={{
+            animation: `${modalClosing ? "fade-out-modal" : "fade-in-modal"} 0.2s ease forwards`,
+          }}
           onClick={closeModal}
         >
           <div
@@ -211,6 +265,11 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
               )}
             </div>
 
+            {renameApiError && (
+              <p className="text-red-400 text-[0.75rem] text-center px-2 whitespace-nowrap">
+                {renameApiError}
+              </p>
+            )}
             <div className="flex gap-2.5">
               <button
                 onClick={closeModal}
@@ -220,7 +279,8 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
               </button>
               <button
                 onClick={handleRenameSave}
-                className="flex-1 h-12 rounded-[1.25rem] font-semibold text-[1rem] bg-[#CCB5F0] text-[#373737]"
+                disabled={actionLoading}
+                className="flex-1 h-12 rounded-[1.25rem] font-semibold text-[1rem] bg-[#CCB5F0] text-[#373737] disabled:opacity-50"
               >
                 저장
               </button>

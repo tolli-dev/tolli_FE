@@ -79,7 +79,7 @@ export default function App() {
       if (!state.isInternetReachable) {
         offlineTimer.current = setTimeout(() => {
           setIsOffline(true);
-        }, 5000);
+        }, 1000);
       } else {
         setIsOffline(false);
       }
@@ -355,7 +355,7 @@ export default function App() {
             true;
           `);
         }}
-        onLoadStart={() => setHasLoadError(false)}
+        onLoad={() => setHasLoadError(false)}
         onError={() => setHasLoadError(true)}
         renderError={() => (
           <NativeOfflineScreen onRetry={() => webviewRef.current?.reload()} />
@@ -374,7 +374,6 @@ export default function App() {
           ]}
         />
       )}
-
       <NetworkBanner
         visible={isOffline && !hasLoadError}
         onRetry={() => NetInfo.refresh()}

@@ -22,7 +22,7 @@ import type {
 import * as Notifications from "expo-notifications";
 
 // const IP_URL = "https://tolli-fe-web.vercel.app/";
-const IP_URL = "http://192.168.2.250:3000";
+const IP_URL = "http://192.168.35.166:3000";
 
 import {
   KakaoOAuthToken,

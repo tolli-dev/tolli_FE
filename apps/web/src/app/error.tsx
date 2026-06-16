@@ -74,14 +74,14 @@ export default function Error({ error, reset }: Props) {
       <div className="flex flex-col w-full h-full items-center justify-between">
         <div className="flex flex-col w-full h-full items-center justify-center gap-[clamp(1rem,4.8vw,1.875rem)]">
           <h2 className="font-bold text-[clamp(1.375rem,6.6vw,1.625rem)] leading-[clamp(1.75rem,8.7vw,2.125rem)] text-[#CCB5F0]">
-            Offline
+            문제가 발생했어요
           </h2>
           <div className="flex flex-col items-center justify-center">
             <p className="text-[clamp(0.9375rem,4.4vw,1.0625rem)] leading-[clamp(1.375rem,6.6vw,1.625rem)] text-[#ADADAD] whitespace-nowrap">
-              인터넷이 연결되지 않았어요
+              예상치 못한 오류가 발생했어요
             </p>
             <p className="text-[clamp(0.9375rem,4.4vw,1.0625rem)] leading-[clamp(1.375rem,6.6vw,1.625rem)] text-[#ADADAD] whitespace-nowrap">
-              연결 후 다시 시도해주세요
+              잠시 후 다시 시도해주세요
             </p>
           </div>
           <Image

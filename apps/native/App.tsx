@@ -22,7 +22,7 @@ import type {
 import * as Notifications from "expo-notifications";
 
 // const IP_URL = "https://tolli-fe-web.vercel.app/";
-const IP_URL = "http://192.168.35.166:3000";
+const IP_URL = "http://192.168.2.250:3000";
 
 import {
   KakaoOAuthToken,
@@ -35,6 +35,8 @@ import {
 } from "./utils/checkFirstLaunch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NativeOfflineScreen from "./components/NativeOfflineScreen";
+import NetInfo from "@react-native-community/netinfo";
+import NetworkBanner from "./components/NetworkBanner";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -62,9 +64,32 @@ export default function App() {
   const webviewRef = useRef<WebViewType>(null);
   const [initialUri, setInitialUri] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isOffline, setIsOffline] = useState(false);
+  const [hasLoadError, setHasLoadError] = useState(false);
 
   const isExitApp = useRef(false);
   const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const offlineTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      clearTimeout(offlineTimer.current);
+      if (!state.isInternetReachable) {
+        offlineTimer.current = setTimeout(() => {
+          setIsOffline(true);
+        }, 5000);
+      } else {
+        setIsOffline(false);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      clearTimeout(offlineTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (Platform.OS !== "android") return;
@@ -330,6 +355,8 @@ export default function App() {
             true;
           `);
         }}
+        onLoadStart={() => setHasLoadError(false)}
+        onError={() => setHasLoadError(true)}
         renderError={() => (
           <NativeOfflineScreen onRetry={() => webviewRef.current?.reload()} />
         )}
@@ -339,6 +366,19 @@ export default function App() {
           <View style={{ flex: 1, backgroundColor: "#1B1B1B" }} />
         </View>
       )}
+      {isOffline && !hasLoadError && (
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            { backgroundColor: "rgba(0,0,0,0.12)" },
+          ]}
+        />
+      )}
+
+      <NetworkBanner
+        visible={isOffline && !hasLoadError}
+        onRetry={() => NetInfo.refresh()}
+      />
     </>
   );
 }

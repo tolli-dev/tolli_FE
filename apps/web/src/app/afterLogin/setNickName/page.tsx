@@ -2,11 +2,10 @@
 
 import StandingTolli_1 from "../../../../public/images/onBoarding/standingTolli_1.webp";
 import Image from "next/image";
-import Form from "next/form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-import { createUser } from "@firebasegen/default-connector";
+import { createUser, deleteUser } from "@firebasegen/default-connector";
 import { dataConnect } from "@/lib/dataconnect";
 import { fireAuth } from "@/firebase/fireAuth";
 import posthog from "posthog-js";
@@ -33,13 +32,15 @@ export default function Page() {
   const { state, message } = getValidationResult(name);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [nicknameError, setNicknameError] = useState<string | null>(null);
+  const [userError, setUserError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     if (!state) return;
     setLoading(true);
-    setError(null);
-    try {
+    setNicknameError(null);
+    setUserError(null);
+
     const termsAgreedAt = sessionStorage.getItem("termsAgreedAt") ?? "";
     const privacyAgreedAt = sessionStorage.getItem("privacyAgreedAt") ?? "";
     const emailMarketingAgreed =
@@ -47,54 +48,106 @@ export default function Page() {
     const emailMarketingAgreedAt =
       sessionStorage.getItem("emailMarketingAgreedAt") || null;
 
-    await createUser(dataConnect, {
-      nickname: name,
-      termsAgreedAt,
-      privacyAgreedAt,
-      emailMarketingAgreed,
-      emailMarketingAgreedAt,
+    const idToken = await new Promise<string | null>((resolve) => {
+      if (fireAuth.currentUser) {
+        fireAuth.currentUser
+          .getIdToken()
+          .then(resolve)
+          .catch(() => resolve(null));
+        return;
+      }
+      const unsub = onAuthStateChanged(fireAuth, (user) => {
+        unsub();
+        if (user)
+          user
+            .getIdToken()
+            .then(resolve)
+            .catch(() => resolve(null));
+        else resolve(null);
+      });
     });
 
-    posthog.capture('signup_complete', { email_marketing_agreed: emailMarketingAgreed });
+    if (!idToken) {
+      setLoading(false);
+      setUserError("로그인 정보를 불러오지 못했어요. 다시 시도해주세요.");
+      return;
+    }
+
+    try {
+      await createUser(dataConnect, {
+        nickname: name,
+        termsAgreedAt,
+        privacyAgreedAt,
+        emailMarketingAgreed,
+        emailMarketingAgreedAt,
+      });
+    } catch (error) {
+      setLoading(false);
+      console.error("닉네임 설정 오류", error);
+      setNicknameError("닉네임 설정 중 오류가 발생했어요. 다시 시도해주세요.");
+      return;
+    }
+
+    posthog.capture("signup_complete", {
+      email_marketing_agreed: emailMarketingAgreed,
+    });
+
+    try {
+      await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
+    } catch (error) {
+      try {
+        await deleteUser(dataConnect);
+      } catch (rollbackError) {
+        console.error("삭제 실패", rollbackError);
+      }
+      setLoading(false);
+      console.error(`${error} 유저 생성 실패`);
+      setUserError("유저 생성 중 오류가 발생했어요. 다시 시도해주세요.");
+      return;
+    }
 
     sessionStorage.removeItem("termsAgreedAt");
     sessionStorage.removeItem("privacyAgreedAt");
     sessionStorage.removeItem("emailMarketingAgreed");
     sessionStorage.removeItem("emailMarketingAgreedAt");
 
-    const idToken = await new Promise<string | null>((resolve) => {
-      if (fireAuth.currentUser) {
-        fireAuth.currentUser.getIdToken().then(resolve).catch(() => resolve(null));
-        return;
-      }
-      const unsub = onAuthStateChanged(fireAuth, (user) => {
-        unsub();
-        if (user) user.getIdToken().then(resolve).catch(() => resolve(null));
-        else resolve(null);
-      });
-    });
-    if (idToken) {
-      await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      });
-    }
+    router.push(`/afterLogin/greeting/${name}`);
+  };
 
-      router.push(`/afterLogin/greeting/${name}`);
-    } catch {
-      setLoading(false);
-      setError("오류가 발생했어요. 다시 시도해주세요.");
-    }
+  const handleUserError = () => {
+    setUserError(null);
+    router.push("/login");
   };
 
   return (
     <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
       {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1B1B1B]/50">
           <LoadingSpinner />
         </div>
       )}
+
+      {userError && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-[2rem]">
+          <div className="flex flex-col items-center gap-[1.25rem] bg-[#2A2A2A] rounded-[1rem] px-[1.5rem] py-[1.75rem] w-full max-w-[18rem]">
+            <p className="text-[#ADADAD] text-[0.9375rem] text-center leading-[1.5]">
+              {userError}
+            </p>
+            <button
+              type="button"
+              onClick={handleUserError}
+              className="w-full h-[2.75rem] rounded-[0.75rem] bg-[#CCB5F0] text-[#1B1B1B] font-bold text-[0.9375rem]"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col items-center w-full mt-[clamp(1rem,4dvh,10.25rem)]">
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem]">
           <h1 className="text-h1 text-primary-50 whitespace-nowrap">
@@ -117,8 +170,11 @@ export default function Page() {
         </div>
       </div>
 
-      <Form
-        action={handleSubmit}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
         className="flex flex-col items-center flex-1 w-full justify-between mt-[clamp(1rem,2dvh,2.938rem)] gap-[1rem]"
       >
         <div className="flex flex-col w-full items-center">
@@ -136,8 +192,10 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col items-center w-full">
-          {error && (
-            <p className="text-red-400 text-[0.8125rem] text-center mb-2">{error}</p>
+          {nicknameError && (
+            <p className="text-red-400 text-[0.8125rem] text-center mb-2">
+              {nicknameError}
+            </p>
           )}
           <button
             type="submit"
@@ -150,7 +208,7 @@ export default function Page() {
             닉네임 설정 완료
           </button>
         </div>
-      </Form>
+      </form>
     </section>
   );
 }

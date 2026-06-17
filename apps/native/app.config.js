@@ -18,6 +18,7 @@ export default {
     },
     android: {
       package: "com.company.tolli",
+      versionCode: 4,
       allowBackup: false,
       adaptiveIcon: {
         foregroundImage: "./assets/android-icon.png",
@@ -52,6 +53,7 @@ export default {
         {
           android: {
             kotlinVersion: "2.1.0",
+            targetSdkVersion: 35,
             extraMavenRepos: [
               "https://devrepo.kakao.com/nexus/content/groups/public/",
             ],

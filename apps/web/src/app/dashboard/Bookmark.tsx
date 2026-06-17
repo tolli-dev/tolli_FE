@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import IndividualBookmark from './_components/IndividaulBookmark';
-import { getMyBookmarks } from '@firebasegen/default-connector';
-import { dataConnect } from '@/lib/dataconnect';
+import { useState, useEffect } from "react";
+import IndividualBookmark from "./_components/IndividaulBookmark";
+import { getMyBookmarks } from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 interface BookMarks {
   verse: {
@@ -15,19 +16,34 @@ interface BookMarks {
 }
 
 export default function Bookmark({ nickname }: { nickname: string }) {
-  const [bookmarks, setBookmarks] = useState<BookMarks[]>();
+  const [bookmarks, setBookmarks] = useState<BookMarks[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const { data } = await getMyBookmarks(dataConnect, {
+        fetchPolicy: "SERVER_ONLY",
+      });
+      setLoading(false);
+      setBookmarks(data.bookmarks);
+    } catch {
+      setLoading(false);
+      setError(true);
+    }
+  };
 
   useEffect(() => {
-    const getBookmarks = async () => {
-      const { data } = await getMyBookmarks(dataConnect, {
-        fetchPolicy: 'SERVER_ONLY',
-      });
-      setBookmarks(data.bookmarks);
-    };
-    getBookmarks();
-  }, [bookmarks]);
+    fetchData();
+  }, []);
 
-  if (!bookmarks) return null;
+  const handleError = () => {
+    setError(false);
+    setLoading(true);
+    fetchData();
+  };
 
   return (
     <div className="flex flex-1 flex-col items-center w-full min-h-0">
@@ -40,7 +56,29 @@ export default function Bookmark({ nickname }: { nickname: string }) {
         </h2>
       </header>
 
-      {bookmarks.length === 0 && (
+      {error && !loading && (
+        <div className="flex flex-col flex-1 items-center justify-center gap-[clamp(1rem,4.8vw,1.875rem)] w-full">
+          <div className="flex flex-col items-center gap-1.5">
+            <p className="text-[clamp(0.9375rem,4.4vw,1.0625rem)] leading-[clamp(1.375rem,6.6vw,1.625rem)] text-[#494949]">
+              데이터를 불러오지 못했어요
+            </p>
+            <p className="text-[clamp(0.9375rem,4.4vw,1.0625rem)] leading-[clamp(1.375rem,6.6vw,1.625rem)] text-[#494949]">
+              잠시 후 다시 시도해주세요
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleError}
+            className="w-full rounded-[1.25rem] bg-[#CCB5F0] py-[clamp(0.625rem,3.3vw,0.8125rem)] font-bold text-[clamp(1rem,4.6vw,1.125rem)] leading-[clamp(1.25rem,5.9vw,1.4375rem)] text-[#1B1B1B]"
+          >
+            다시 시도
+          </button>
+        </div>
+      )}
+
+      {loading && <LoadingSpinner />}
+
+      {bookmarks.length === 0 && !error && !loading && (
         <main className="w-full flex-1 flex flex-col items-center justify-center">
           <div className="text-center">
             <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535]">
@@ -53,14 +91,18 @@ export default function Bookmark({ nickname }: { nickname: string }) {
         </main>
       )}
 
-      {bookmarks.length !== 0 && (
+      {bookmarks.length !== 0 && !error && !loading && (
         <main className="w-full flex-1 min-h-0 flex flex-col items-center">
           <span className="w-full text-right font-semibold text-[clamp(0.75rem,3.5vw,0.875rem)] leading-[1.6] tracking-[-2%] text-[#686868] shrink-0 mb-[3px]">
             {bookmarks.length}/10
           </span>
           <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] pb-[clamp(2.5rem,12vw,4.375rem)] overflow-auto bookmarks">
             {bookmarks.map((value) => (
-              <IndividualBookmark key={value.verse.id} value={value} />
+              <IndividualBookmark
+                key={value.verse.id}
+                value={value}
+                fetchData={fetchData}
+              />
             ))}
           </div>
 

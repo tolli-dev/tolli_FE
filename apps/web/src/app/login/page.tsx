@@ -6,9 +6,9 @@ import {
   signInWithAppleToken,
   signInWithGoogleToken,
   signInWithKakaoToken,
-} from '@/firebase/fireAuth';
-import { useRouter } from 'next/navigation';
-import posthog from 'posthog-js';
+} from "@/firebase/fireAuth";
+import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function LoginPage() {
@@ -18,20 +18,26 @@ export default function LoginPage() {
 
   const requestKakaoLogin = () => {
     setError(null);
-    posthog.capture('login_clicked', { provider: 'kakao' });
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'KAKAO_LOGIN' }));
+    posthog.capture("login_clicked", { provider: "kakao" });
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "KAKAO_LOGIN" }),
+    );
   };
 
   const requestGoogleLogin = () => {
     setError(null);
-    posthog.capture('login_clicked', { provider: 'google' });
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GOOGLE_LOGIN' }));
+    posthog.capture("login_clicked", { provider: "google" });
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "GOOGLE_LOGIN" }),
+    );
   };
 
   const requestAppleLogin = () => {
     setError(null);
-    posthog.capture('login_clicked', { provider: 'apple' });
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'APPLE_LOGIN' }));
+    posthog.capture("login_clicked", { provider: "apple" });
+    window.ReactNativeWebView?.postMessage(
+      JSON.stringify({ type: "APPLE_LOGIN" }),
+    );
   };
 
   const redirectAfterLogin = useCallback(
@@ -46,13 +52,13 @@ export default function LoginPage() {
         const idToken = await signedInUser.getIdToken(true);
         const payload = JSON.parse(atob(idToken.split(".")[1]));
         if (payload.registered) {
-          posthog.capture('login_success', { is_new_user: false });
+          posthog.capture("login_success", { is_new_user: false });
           window.ReactNativeWebView?.postMessage(
             JSON.stringify({ type: "SET_LOGGED_IN" }),
           );
           router.push("/dashboard");
         } else {
-          posthog.capture('login_success', { is_new_user: true });
+          posthog.capture("login_success", { is_new_user: true });
           router.push("/terms");
         }
       } catch {
@@ -67,7 +73,7 @@ export default function LoginPage() {
     const match = document.cookie.match(/(?:^|;\s*)apple_id_token=([^;]+)/);
     const appleToken = match ? decodeURIComponent(match[1]) : null;
     if (appleToken) {
-      document.cookie = 'apple_id_token=; max-age=0; path=/';
+      document.cookie = "apple_id_token=; max-age=0; path=/";
       redirectAfterLogin(() => signInWithAppleToken(appleToken));
     }
   }, [redirectAfterLogin]);
@@ -76,10 +82,10 @@ export default function LoginPage() {
     const handleMessage = (e: MessageEvent) => {
       try {
         const { type, token, rawNonce } = JSON.parse(e.data);
-        if (type === 'GOOGLE_TOKEN' && token) {
+        if (type === "GOOGLE_TOKEN" && token) {
           redirectAfterLogin(() => signInWithGoogleToken(token));
         }
-        if (type === 'APPLE_TOKEN' && token) {
+        if (type === "APPLE_TOKEN" && token) {
           redirectAfterLogin(() => signInWithAppleToken(token, rawNonce));
         }
         if (type === "KAKAO_TOKEN" && token) {

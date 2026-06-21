@@ -21,7 +21,7 @@ export default function ListenVerse() {
   const [reference, setReference] = useState('');
   const [todayCount, setTodayCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [networkError, setNetworkError] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const verseAudioRef = useState(() => (typeof Audio !== 'undefined' ? new Audio() : null))[0];
   const bgmAudioRef = useState(() =>
     typeof Audio !== 'undefined' ? new Audio('/verse-audio/bgm.mp3') : null,
@@ -107,7 +107,7 @@ export default function ListenVerse() {
       }
     } catch (error) {
       console.error('학습 완료 처리 중 에러가 발생했습니다:', error);
-      setNetworkError(true);
+      setSubmitError(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -198,20 +198,20 @@ export default function ListenVerse() {
         </div>
       )}
 
-      {networkError && (
+      {submitError && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-[60] bg-[#000000]/60 px-[clamp(1.5rem,8vw,2.5rem)]">
           <div className="bg-white w-full rounded-[clamp(1.5rem,8vw,2rem)] p-[clamp(1.5rem,8vw,2rem)] flex flex-col items-center gap-[clamp(1rem,5vw,1.5rem)] shadow-[0px_4px_20px_rgba(0,0,0,0.15)]">
             <div className="flex flex-col items-center gap-[clamp(0.5rem,2vw,0.75rem)]">
               <h3 className="text-[#1B1B1B] font-bold text-[clamp(1.125rem,5vw,1.25rem)] text-center whitespace-nowrap">
-                인터넷 연결이 끊겼어요
+                학습 완료에 실패했어요
               </h3>
               <p className="text-[#383838] text-[clamp(0.875rem,4vw,1rem)] text-center whitespace-nowrap leading-relaxed">
-                네트워크 연결이 원활하지 않습니다.<br />잠시 후 다시 시도해주세요.
+                학습 데이터를 저장하는 중 문제가 발생했습니다.<br />잠시 후 다시 시도해주세요.
               </p>
             </div>
             <button
               type="button"
-              onClick={() => setNetworkError(false)}
+              onClick={() => setSubmitError(false)}
               className="w-full bg-[#CCB5F0] text-[#1B1B1B] font-bold py-[clamp(0.875rem,4.5vw,1.125rem)] rounded-[clamp(1rem,5vw,1.25rem)] text-[clamp(0.875rem,4vw,1rem)] mt-[clamp(0.5rem,2vw,1rem)] whitespace-nowrap"
             >
               확인

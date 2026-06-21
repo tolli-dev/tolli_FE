@@ -1,3 +1,5 @@
+"use client";
+
 import Header from "./_components/Header";
 import Loading from "./_components/Loading";
 import LoginLayout from "./_components/LoginLayout";
@@ -8,15 +10,15 @@ import LoginButton from "./_components/LoginButton";
 import useLogin from "./_hooks/useLogin";
 
 export default function LoginPage() {
-  const { loading, error, requestLogin } = useLogin();
+  const { state, requestLogin } = useLogin();
 
   return (
     <LoginLayout>
-      <Loading loading={loading} />
+      <Loading state={state} />
       <Header />
       <TolliLogoImage />
       <LoginActions>
-        <LoginErrorMessage error={error} />
+        <LoginErrorMessage state={state} />
         <LoginButton requestLogin={requestLogin} />
       </LoginActions>
     </LoginLayout>

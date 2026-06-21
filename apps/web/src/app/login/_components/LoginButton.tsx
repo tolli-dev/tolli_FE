@@ -1,6 +1,5 @@
 import ProviderButton from "./ProviderButton";
-
-type Provider = "kakao" | "google" | "apple";
+import { Provider } from "../_hooks/useLogin";
 
 interface Props {
   requestLogin: (provider: Provider) => void;

@@ -1,13 +1,23 @@
 import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import {
   signInWithAppleToken,
   signInWithGoogleToken,
   signInWithKakaoToken,
 } from "@/firebase/fireAuth";
 
-type Provider = "kakao" | "google" | "apple";
+export type Provider = "kakao" | "google" | "apple";
+
+export type LoginState =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "error"; message: string };
+
+type LoginAction =
+  | { type: "idle" }
+  | { type: "loading" }
+  | { type: "error"; message: string };
 
 const MESSAGE_TYPE: Record<Provider, string> = {
   kakao: "KAKAO_LOGIN",
@@ -15,14 +25,26 @@ const MESSAGE_TYPE: Record<Provider, string> = {
   apple: "APPLE_LOGIN",
 };
 
+function reducer(state: LoginState, action: LoginAction): LoginState {
+  switch (action.type) {
+    case "idle":
+      return { status: "idle" };
+    case "loading":
+      return { status: "loading" };
+    case "error":
+      return { status: "error", message: action.message };
+    default:
+      return state;
+  }
+}
+
 export default function useLogin() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [state, dispatch] = useReducer(reducer, { status: "idle" });
 
   const requestLogin = (provider: Provider) => {
-    setError(null);
-    posthog.capture("login_clicked", { provider: { provider } });
+    dispatch({ type: "idle" });
+    posthog.capture("login_clicked", { provider });
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: MESSAGE_TYPE[provider] }),
     );
@@ -34,7 +56,7 @@ export default function useLogin() {
         getIdToken: (force: boolean) => Promise<string>;
       }>,
     ) => {
-      setLoading(true);
+      dispatch({ type: "loading" });
       try {
         const signedInUser = await signInFn();
         const idToken = await signedInUser.getIdToken(true);
@@ -50,8 +72,10 @@ export default function useLogin() {
           router.push("/terms");
         }
       } catch {
-        setLoading(false);
-        setError("로그인에 실패했어요. 다시 시도해주세요.");
+        dispatch({
+          type: "error",
+          message: "로그인에 실패했어요. 다시 시도해주세요.",
+        });
       }
     },
     [router],
@@ -91,8 +115,7 @@ export default function useLogin() {
   }, []);
 
   return {
-    loading,
-    error,
+    state,
     requestLogin,
   };
 }

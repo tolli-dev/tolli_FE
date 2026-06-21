@@ -10,6 +10,8 @@ import {
 import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Header from "./_components/Header";
+import Loading from "./_components/Loading";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -104,19 +106,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center h-full">
-      {loading && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/50">
-          <LoadingSpinner />
-        </div>
-      )}
-      <div className="flex flex-col justify-center items-center w-full gap-2.25 pt-27.5">
-        <h1 className="text-[3.125rem] leading-12.5 tracking-[-0.07em] text-primary-50 font-(family-name:--font-noto-sans-kr) font-extrabold">
-          tolli
-        </h1>
-        <p className="text-[19px] leading-6.5 tracking-[-0.03em] text-[#E3E3E3]">
-          하루 한 절, to holy
-        </p>
-      </div>
+      <Loading loading={loading} />
+      <Header />
       <div className="flex-1" />
       <Image
         src="/tolli-logo.webp"

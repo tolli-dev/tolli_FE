@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import {
   signInWithAppleToken,
   signInWithGoogleToken,
@@ -11,8 +10,9 @@ import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import Header from "./_components/Header";
 import Loading from "./_components/Loading";
-import LoginButton from "./_components/LoginButton";
-import LoginErrorMessage from "./_components/LoginErrorMessage";
+import Login from "./_components/Login";
+import LoginActions from "./_components/LoginActions";
+import TolliLogoImage from "./_components/TolliLogoImage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -106,25 +106,16 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center h-full">
+    <Login>
       <Loading loading={loading} />
       <Header />
-      <div className="flex-1" />
-      <Image
-        src="/tolli-logo.webp"
-        alt="tolli"
-        width={744}
-        height={744}
-        className="w-46.5 object-contain animate-float"
-        priority
-      />
-      <div className="flex-1" />
-      <LoginErrorMessage error={error} />
-      <LoginButton
+      <TolliLogoImage />
+      <LoginActions
+        error={error}
         requestKakaoLogin={requestKakaoLogin}
         requestGoogleLogin={requestGoogleLogin}
         requestAppleLogin={requestAppleLogin}
       />
-    </div>
+    </Login>
   );
 }

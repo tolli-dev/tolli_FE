@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import Header from "./_components/Header";
 import Loading from "./_components/Loading";
-import Login from "./_components/Login";
+import LoginLayout from "./_components/LoginLayout";
 import LoginActions from "./_components/LoginActions";
 import TolliLogoImage from "./_components/TolliLogoImage";
 import LoginErrorMessage from "./_components/LoginErrorMessage";
@@ -108,7 +108,7 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <Login>
+    <LoginLayout>
       <Loading loading={loading} />
       <Header />
       <TolliLogoImage />
@@ -120,6 +120,6 @@ export default function LoginPage() {
           requestAppleLogin={requestAppleLogin}
         />
       </LoginActions>
-    </Login>
+    </LoginLayout>
   );
 }

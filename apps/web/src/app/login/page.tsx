@@ -13,6 +13,8 @@ import Loading from "./_components/Loading";
 import Login from "./_components/Login";
 import LoginActions from "./_components/LoginActions";
 import TolliLogoImage from "./_components/TolliLogoImage";
+import LoginErrorMessage from "./_components/LoginErrorMessage";
+import LoginButton from "./_components/LoginButton";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -110,12 +112,14 @@ export default function LoginPage() {
       <Loading loading={loading} />
       <Header />
       <TolliLogoImage />
-      <LoginActions
-        error={error}
-        requestKakaoLogin={requestKakaoLogin}
-        requestGoogleLogin={requestGoogleLogin}
-        requestAppleLogin={requestAppleLogin}
-      />
+      <LoginActions>
+        <LoginErrorMessage error={error} />
+        <LoginButton
+          requestKakaoLogin={requestKakaoLogin}
+          requestGoogleLogin={requestGoogleLogin}
+          requestAppleLogin={requestAppleLogin}
+        />
+      </LoginActions>
     </Login>
   );
 }

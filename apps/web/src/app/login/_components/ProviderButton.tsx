@@ -4,19 +4,19 @@ const PROVIDER_CONFIG = {
   kakao: {
     bgColor: "bg-[#FEE500]",
     textColor: "text-[#000000]",
-    icon: <KakaoIcon />,
+    icon: KakaoIcon,
     label: "카카오로 로그인",
   },
   google: {
     bgColor: "bg-white",
     textColor: "text-[#1f1f1f]",
-    icon: <GoogleIcon />,
+    icon: GoogleIcon,
     label: "Sign in with Google",
   },
   apple: {
     bgColor: "bg-black",
     textColor: "text-white",
-    icon: <AppleIcon />,
+    icon: AppleIcon,
     label: "Sign in with Apple",
   },
 } as const;
@@ -29,15 +29,15 @@ interface Props {
 }
 
 export default function ProviderButton({ provider, onClick }: Props) {
-  const { bgColor, textColor, icon, label } = PROVIDER_CONFIG[provider];
+  const { bgColor, textColor, icon: Icon, label } = PROVIDER_CONFIG[provider];
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`w-full h-13.5 flex items-center justify-center gap-3 ${bgColor} rounded-[20px]`}
+      className={`w-full h-13.5 flex items-center justify-center gap-3 ${bgColor} rounded-[20px] tracking-[0.25px]`}
     >
-      {icon}
+      <Icon />
       <span className={`${textColor} text-[14px] font-medium`}>{label}</span>
     </button>
   );

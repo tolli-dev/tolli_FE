@@ -5,13 +5,10 @@ interface Props {
 }
 
 export default function Loading({ loading }: Props) {
+  if (!loading) return null;
   return (
-    <>
-      {loading && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/50">
-          <LoadingSpinner />
-        </div>
-      )}
-    </>
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/50">
+      <LoadingSpinner />
+    </div>
   );
 }

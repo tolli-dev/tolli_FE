@@ -35,10 +35,10 @@ export default function ProviderButton({ provider, onClick }: Props) {
     <button
       type="button"
       onClick={onClick}
-      className={`w-full h-13.5 flex items-center justify-center gap-3 ${bgColor} rounded-[20px] tracking-[0.25px]`}
+      className={`w-full h-[clamp(3rem,10vw,3.375rem)] flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] ${bgColor} rounded-[clamp(1rem,5vw,1.25rem)] tracking-[0.25px]`}
     >
       <Icon />
-      <span className={`${textColor} text-[14px] font-medium`}>{label}</span>
+      <span className={`${textColor} text-[clamp(0.8125rem,3.5vw,0.875rem)] font-medium`}>{label}</span>
     </button>
   );
 }

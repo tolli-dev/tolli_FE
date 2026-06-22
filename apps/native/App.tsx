@@ -133,7 +133,7 @@ export default function App() {
 
       const isFirst = await checkFirstLaunch();
       if (isFirst) {
-        setInitialUri(`${IP_URL}/onboarding/1`);
+        setInitialUri(`${IP_URL}/onboarding`);
       } else {
         const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
         setInitialUri(

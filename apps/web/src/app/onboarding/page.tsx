@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import OnboardingActions from "@/app/onboarding/_components/OnboardingActions";
-import LearningSteps from "@/app/onboarding/_components/LearningSteps";
+import LearningSteps from "./_components/LearningSteps";
 import StepIndicator from "./_components/StepIndicator";
+import OnboardingSlide from "./_components/OnboardingSlide";
+import SlideWrapper from "./_components/SlideWrapper";
 
 const STEPS = [
   {
@@ -39,7 +40,6 @@ export default function OnboardingStepPage() {
   const [step, setStep] = useState(0);
   const [phase, setPhase] = useState<SlidePhase>("idle");
   const nextRef = useRef<number | "login" | null>(null);
-  const slideRef = useRef<HTMLDivElement>(null);
 
   const current = STEPS[step];
   const isLastStep = step === TOTAL_STEPS - 1;
@@ -100,38 +100,12 @@ export default function OnboardingStepPage() {
     <div className="flex flex-col h-full w-full justify-center items-start overflow-hidden">
       <StepIndicator totalSteps={TOTAL_STEPS} currentStep={step} />
 
-      {/* Slide area */}
-      <div
-        ref={slideRef}
-        className={`flex flex-col flex-1 w-full ${slideClass}`}
-        onAnimationEnd={handleAnimationEnd}
+      <SlideWrapper
+        handleAnimationEnd={handleAnimationEnd}
+        slideClass={slideClass}
       >
-        <div className="flex flex-col flex-1 items-start px-6">
-          <h1 className="text-h1 text-primary-50 whitespace-pre-line">
-            {current.title}
-          </h1>
-          <p className="mt-3 text-h2 text-surface-200 whitespace-pre-line">
-            {current.description}
-          </p>
-          <div className="flex-1" />
-          <div className="flex flex-col w-full justify-center items-center">
-            {current.extra && <div className="w-full">{current.extra}</div>}
-            <div
-              className="relative"
-              style={{ width: current.imageSize, height: current.imageSize }}
-            >
-              <Image
-                src={current.image}
-                alt=""
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-          <div className="flex-1" />
-        </div>
-      </div>
+        <OnboardingSlide current={current} />
+      </SlideWrapper>
 
       <OnboardingActions
         isLastStep={isLastStep}

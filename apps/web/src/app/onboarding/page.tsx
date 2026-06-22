@@ -97,7 +97,7 @@ export default function OnboardingStepPage() {
         : "";
 
   return (
-    <div className="flex flex-col h-full w-full justify-center items-start overflow-hidden">
+    <>
       <StepIndicator totalSteps={TOTAL_STEPS} currentStep={step} />
 
       <SlideWrapper
@@ -112,6 +112,6 @@ export default function OnboardingStepPage() {
         onNext={handleNext}
         onSkip={handleSkip}
       />
-    </div>
+    </>
   );
 }

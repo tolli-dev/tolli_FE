@@ -1,6 +1,10 @@
-export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
+export default function OnboardingLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex flex-col h-full justify-center items-start">
+    <div className="flex flex-col h-full w-full justify-center items-start overflow-hidden">
       {children}
     </div>
   );

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Button from '@/components/ui/Button';
+import Button from "@/components/ui/Button";
 
 interface OnboardingActionsProps {
   isLastStep: boolean;
@@ -8,14 +8,22 @@ interface OnboardingActionsProps {
   onSkip: () => void;
 }
 
-export default function OnboardingActions({ isLastStep, onNext, onSkip }: OnboardingActionsProps) {
+export default function OnboardingActions({
+  isLastStep,
+  onNext,
+  onSkip,
+}: OnboardingActionsProps) {
   return (
-    <div className="flex flex-col items-center gap-2 w-full px-10.75 pb-4">
-      <Button onClick={onNext}>{isLastStep ? '시작하기' : '다음'}</Button>
+    <div className="flex flex-col items-center gap-2 w-full px-[clamp(0.75rem,7vw,1.5rem)] pb-[clamp(1.75rem,10vw,2.5rem)]">
+      <Button onClick={onNext}>{isLastStep ? "시작하기" : "다음"}</Button>
       {isLastStep ? (
         <div className="text-btn-sm">&nbsp;</div>
       ) : (
-        <button type="button" onClick={onSkip} className="text-btn-sm text-surface-300 underline">
+        <button
+          type="button"
+          onClick={onSkip}
+          className="text-btn-sm text-surface-300 underline py-3.25"
+        >
           건너뛰기
         </button>
       )}

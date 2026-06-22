@@ -5,7 +5,7 @@ interface Props {
 
 export default function StepIndicator({ totalSteps, currentStep }: Props) {
   return (
-    <div className="flex items-center justify-center gap-4.5 pb-6.75 pt-12.75 pl-8.5 ">
+    <div className="flex items-center justify-start gap-4.5 pb-[clamp(1.25rem,8vw,2rem)] pt-[clamp(2.5rem,15vw,3.75rem)]">
       {Array.from({ length: totalSteps }, (_, i) => (
         <span
           key={i}

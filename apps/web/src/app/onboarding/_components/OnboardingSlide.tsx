@@ -14,7 +14,7 @@ export default function OnboardingSlide({ current }: Props) {
   const { title, description, extra, imageSize, image } = current;
 
   return (
-    <div className="flex flex-col flex-1 items-start px-6">
+    <div className="flex flex-col flex-1 items-start">
       <h1 className="text-h1 text-primary-50 whitespace-pre-line">{title}</h1>
       <p className="mt-3 text-h2 text-surface-200 whitespace-pre-line">
         {description}

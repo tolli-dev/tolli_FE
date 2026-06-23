@@ -28,6 +28,12 @@ const STEPS = [
 
 const TOTAL_STEPS = STEPS.length;
 
+function notifyOnboardingComplete() {
+  window.ReactNativeWebView?.postMessage(
+    JSON.stringify({ type: "ONBOARDING_COMPLETE" }),
+  );
+}
+
 export function useOnboarding() {
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -56,12 +62,6 @@ export function useOnboarding() {
     });
     router.prefetch("/login");
   }, [router]);
-
-  const notifyOnboardingComplete = () => {
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "ONBOARDING_COMPLETE" }),
-    );
-  };
 
   const handleNext = () => startTransition(isLastStep ? "login" : step + 1);
   const handleSkip = () => {

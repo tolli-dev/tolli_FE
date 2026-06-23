@@ -20,7 +20,7 @@ const STEPS = [
     description: "한 구절을 따라가다 보면,\n어느 순간 입으로 말하게 됩니다.",
     image: "/tolli2.webp",
     imageSize: "clamp(14rem, 84vw, 19.625rem)",
-    extra: <LearningSteps />,
+    extra: LearningSteps,
   },
   {
     title: "매일 5분, 한 구절이면\n충분합니다",

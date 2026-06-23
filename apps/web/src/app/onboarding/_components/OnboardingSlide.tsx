@@ -6,12 +6,12 @@ interface Props {
     description: string;
     image: string;
     imageSize: string;
-    extra?: React.ReactElement | undefined;
+    extra?: React.ComponentType;
   };
 }
 
 export default function OnboardingSlide({ current }: Props) {
-  const { title, description, extra, imageSize, image } = current;
+  const { title, description, extra: Extra, imageSize, image } = current;
 
   return (
     <div className="flex flex-col flex-1 items-start">
@@ -20,7 +20,11 @@ export default function OnboardingSlide({ current }: Props) {
         {description}
       </p>
       <div className="flex flex-col flex-1 w-full justify-center items-center">
-        {extra && <div className="w-full">{extra}</div>}
+        {Extra && (
+          <div className="w-full">
+            <Extra />
+          </div>
+        )}
         <div
           className="relative"
           style={{ width: imageSize, height: imageSize }}

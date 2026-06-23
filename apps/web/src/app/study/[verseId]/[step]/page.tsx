@@ -60,7 +60,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
     case 6:
       return <ConsonantTypingView verse={verse} verseId={verseId} />;
     case 7:
-      return <Record verseId={Number(verseId)} />;
+      return <Record verseId={Number(verseId)} fullText={verseData.fullText} reference={verseData.reference} />;
     default:
       return null;
   }

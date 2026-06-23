@@ -3,8 +3,8 @@
 import DiffHeader from './_components/header/DiffHeader';
 import RecordBarContainer from './_components/center/RecordBarContainer';
 import RecordCircle from './_components/RecordCircle';
-import ActiveSoundBar from '../../../../../public/images/activeSoundBar.svg';
-import NotActiveSoundbar from '../../../../../public/images/NotActiveSoundbar.svg';
+import ActiveSoundBar from '../../../../../../../public/images/activeSoundBar.svg';
+import NotActiveSoundbar from '../../../../../../../public/images/NotActiveSoundbar.svg';
 import RecordButton from './_components/button/RecordButton';
 import { useCallback, useEffect, useState } from 'react';
 import { Step7Phase } from './_types';
@@ -12,28 +12,21 @@ import { Icon } from '@iconify/react';
 import RecordComplete from './RecordComplete';
 import { useRecord } from './hooks/useRecord';
 import { formatTime } from './_utils/formatTime';
-import { getVerse } from '@firebasegen/default-connector';
-import { dataConnect } from '@/lib/dataconnect';
 import { playSound } from '@/lib/sound';
 import posthog from 'posthog-js';
 
-export default function Record({ verseId }: { verseId: number }) {
+interface RecordProps {
+  verseId: number;
+  fullText: string;
+  reference: string;
+}
+
+export default function Record({ verseId, fullText, reference }: RecordProps) {
   const [phase, setPhase] = useState<Step7Phase>('idle');
   const [showVerse, setShowVerse] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { elapsed, start, stop, levels } = useRecord();
   const [needSettings, setNeedSettings] = useState(false);
-  const [fullText, setFullText] = useState('');
-  const [reference, setReference] = useState('');
-
-  useEffect(() => {
-    getVerse(dataConnect, { id: verseId }).then((result) => {
-      const verse = result.data.verse;
-      if (!verse) return;
-      setFullText(verse.fullText);
-      setReference(verse.reference);
-    });
-  }, [verseId]);
 
   // start()를 통해 녹음 기능을 시작한다.
   // 그와 더해 관련 상태를 변화시킨다.

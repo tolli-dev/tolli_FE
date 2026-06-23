@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import DiffHeader from "./_components/header/DiffHeader";
-import RecordBarContainer from "./_components/center/RecordBarContainer";
-import RecordCircle from "./_components/RecordCircle";
-import ActiveSoundBar from "../../../../../public/images/activeSoundBar.svg";
-import NotActiveSoundbar from "../../../../../public/images/NotActiveSoundbar.svg";
-import RecordButton from "./_components/button/RecordButton";
-import { useCallback, useEffect, useState } from "react";
-import { Step7Phase } from "./_types";
-import { Icon } from "@iconify/react";
-import RecordComplete from "./RecordComplete";
-import { useRecord } from "./hooks/useRecord";
-import { formatTime } from "./_utils/formatTime";
-import { getVerse } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
-import { playSound } from "@/lib/sound";
-import posthog from "posthog-js";
+import DiffHeader from './_components/header/DiffHeader';
+import RecordBarContainer from './_components/center/RecordBarContainer';
+import RecordCircle from './_components/RecordCircle';
+import ActiveSoundBar from '../../../../../public/images/activeSoundBar.svg';
+import NotActiveSoundbar from '../../../../../public/images/NotActiveSoundbar.svg';
+import RecordButton from './_components/button/RecordButton';
+import { useCallback, useEffect, useState } from 'react';
+import { Step7Phase } from './_types';
+import { Icon } from '@iconify/react';
+import RecordComplete from './RecordComplete';
+import { useRecord } from './hooks/useRecord';
+import { formatTime } from './_utils/formatTime';
+import { getVerse } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
+import { playSound } from '@/lib/sound';
+import posthog from 'posthog-js';
 
 export default function Record({ verseId }: { verseId: number }) {
-  const [phase, setPhase] = useState<Step7Phase>("idle");
+  const [phase, setPhase] = useState<Step7Phase>('idle');
   const [showVerse, setShowVerse] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { elapsed, start, stop, levels } = useRecord();
@@ -40,13 +40,13 @@ export default function Record({ verseId }: { verseId: number }) {
   const beginRecording = useCallback(async () => {
     try {
       await start();
-      setPhase("recording");
+      setPhase('recording');
       setDisabled(true);
       setTimeout(() => setDisabled(false), 5000);
     } catch (e) {
-      if (e instanceof Error && e.name === "NotAllowedError") setNeedSettings(true);
+      if (e instanceof Error && e.name === 'NotAllowedError') setNeedSettings(true);
       // 나중에 vercel 배포 후에 수정 필요
-      setPhase("idle");
+      setPhase('idle');
     }
   }, [start]);
 
@@ -54,14 +54,14 @@ export default function Record({ verseId }: { verseId: number }) {
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       // RN이 보낸 JSON 문자열만 처리 (HMR/DevTools 등 객체 메시지는 무시)
-      if (typeof e.data !== "string") return;
+      if (typeof e.data !== 'string') return;
       try {
         const { type, status } = JSON.parse(e.data);
-        if (type === "RECORD_PERMISSION") {
-          if (status === "granted") {
+        if (type === 'RECORD_PERMISSION') {
+          if (status === 'granted') {
             setNeedSettings(false);
             beginRecording();
-          } else if (status === "denied") {
+          } else if (status === 'denied') {
             setNeedSettings(true);
           } else {
             setNeedSettings(true);
@@ -73,11 +73,11 @@ export default function Record({ verseId }: { verseId: number }) {
       }
     };
 
-    window.addEventListener("message", handleMessage);
-    document.addEventListener("message", handleMessage as EventListener);
+    window.addEventListener('message', handleMessage);
+    document.addEventListener('message', handleMessage as EventListener);
     return () => {
-      window.removeEventListener("message", handleMessage);
-      document.removeEventListener("message", handleMessage as EventListener);
+      window.removeEventListener('message', handleMessage);
+      document.removeEventListener('message', handleMessage as EventListener);
     };
   }, [beginRecording]);
 
@@ -86,9 +86,7 @@ export default function Record({ verseId }: { verseId: number }) {
   const startRecording = () => {
     posthog.capture('recording_started', { verse_id: verseId });
     if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({ type: "RECORD_READY" }),
-      );
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'RECORD_READY' }));
     } else {
       beginRecording();
     }
@@ -97,11 +95,11 @@ export default function Record({ verseId }: { verseId: number }) {
   const stopRecording = async () => {
     await stop();
     posthog.capture('recording_completed', { verse_id: verseId, duration_sec: elapsed });
-    setPhase("complete");
+    setPhase('complete');
   };
 
   const handleViewVerse = () => {
-    playSound("/sounds/말씀 잠깐 보기 힌트일때 카드 공개_비공개 후보.mp3");
+    playSound('/sounds/말씀 잠깐 보기 힌트일때 카드 공개_비공개 후보.mp3');
     setShowVerse(true);
     setTimeout(() => {
       setShowVerse(false);
@@ -110,17 +108,15 @@ export default function Record({ verseId }: { verseId: number }) {
   };
 
   function retryRecording() {
-    setPhase("idle");
+    setPhase('idle');
   }
 
-  if (phase === "complete") {
+  if (phase === 'complete') {
     return <RecordComplete retryRecording={retryRecording} verseId={verseId} />;
   }
 
   const openAppSettings = () => {
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "OPEN_APP_SETTINGS" }),
-    );
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'OPEN_APP_SETTINGS' }));
   };
 
   return (
@@ -133,7 +129,7 @@ export default function Record({ verseId }: { verseId: number }) {
       </header>
 
       <main className="flex flex-col flex-1 justify-center gap-[14.18vw] w-full mb-[3.73vw]">
-        {phase === "idle" && (
+        {phase === 'idle' && (
           <RecordBarContainer
             showVerse={showVerse}
             soundBar={NotActiveSoundbar}
@@ -141,7 +137,7 @@ export default function Record({ verseId }: { verseId: number }) {
             reference={reference}
           />
         )}
-        {phase === "recording" && (
+        {phase === 'recording' && (
           <RecordBarContainer
             showVerse={showVerse}
             soundBar={ActiveSoundBar}
@@ -160,14 +156,14 @@ export default function Record({ verseId }: { verseId: number }) {
           <div
             className={`w-[14.18vw] h-[9.20vw] rounded-[4.60vw] ${
               showVerse
-                ? "bg-[#B09ECC]"
-                : "border-1 border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20"
+                ? 'bg-[#B09ECC]'
+                : 'border border-white/15 bg-linear-to-br from-white/10 via-white/15 to-white/20'
             }`}
           >
             <div className="flex flex-col items-center justify-center w-full px-[4.23vw] py-[1.74vw] bg-[#787878]/20 rounded-[4.60vw]">
               <Icon
                 icon="famicons:eye"
-                className={`${showVerse ? "text-[#1B1B1B]" : "text-[#FFFFFF]"} w-[5.72vw] h-auto`}
+                className={`${showVerse ? 'text-[#1B1B1B]' : 'text-[#FFFFFF]'} w-[5.72vw] h-auto`}
               />
             </div>
           </div>
@@ -177,15 +173,15 @@ export default function Record({ verseId }: { verseId: number }) {
         </button>
       </main>
 
-      <footer className="flex justify-center w-full min-h-[48px]">
-        {phase === "idle" && (
+      <footer className="flex justify-center w-full min-h-12">
+        {phase === 'idle' && (
           <RecordButton
             icon="fluent:mic-record-28-filled"
             description="녹음 시작"
             handleRecord={startRecording}
           />
         )}
-        {phase === "recording" && (
+        {phase === 'recording' && (
           <RecordButton
             icon="line-md:square-filled"
             description="녹음 완료"

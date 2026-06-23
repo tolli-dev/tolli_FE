@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect } from "react";
 import Image from "next/image";
-import ReadingBookTolli from "../../../../public/images/readingBookTolli.webp";
+import ReadingBookTolli from "../../../../../public/images/readingBookTolli.webp";
 import { useSearchParams } from "next/navigation";
 import { playSound } from "@/lib/sound";
 

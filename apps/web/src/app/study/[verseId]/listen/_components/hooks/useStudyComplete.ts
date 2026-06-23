@@ -29,7 +29,7 @@ export function useStudyComplete(verseId: number) {
       );
 
       if (isRetryMission) {
-        router.push('/study/completeRetry');
+        router.push(`/study/${verseId}/completeRetry`);
       } else {
         await createStudyCompletion(dataConnect, { verseId });
         setBookmarkModal(true);

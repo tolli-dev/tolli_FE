@@ -1,6 +1,6 @@
-import type { ReactElement } from "react";
-import Image from "next/image";
-import StandingTolli from "../../../../../../../public/images/onBoarding/standingTolli_1.webp";
+import type { ReactElement } from 'react';
+import Image from 'next/image';
+import StandingTolli from '../../../../../../../public/images/onBoarding/standingTolli_1.webp';
 
 export default function ShowPhaseContainer({
   description,
@@ -23,7 +23,7 @@ export default function ShowPhaseContainer({
           className="w-[32.34vw] h-auto drop-shadow-[0.25rem_0.6875rem_1.5rem_rgba(255,255,255,0.25)]"
         />
         {levels?.length ? (
-          <div className="flex items-center justify-center gap-[1.5vw] h-[73px]">
+          <div className="flex items-center justify-center gap-[1.5vw] h-18.25">
             {levels.map((v, i) => (
               <span
                 key={i}
@@ -39,9 +39,7 @@ export default function ShowPhaseContainer({
       <div className="flex-1 flex items-end">
         <div className="flex flex-row items-center gap-2">
           {RecordIcon && <RecordIcon />}
-          <p className="font-normal text-[0.8125rem] leading-7.75 text-[#B0B0B0]">
-            {description}
-          </p>
+          <p className="font-normal text-[0.8125rem] leading-7.75 text-[#B0B0B0]">{description}</p>
         </div>
       </div>
     </>

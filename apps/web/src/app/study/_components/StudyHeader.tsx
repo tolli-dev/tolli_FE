@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { playSound } from "@/lib/sound";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { playSound } from '@/lib/sound';
 
 const TOTAL_STEPS = 7;
 
@@ -16,25 +16,25 @@ export default function StudyHeader({ currentStep }: StudyHeaderProps) {
 
   // 모달에서 진짜 나가기 (학습 초기화)
   const handleConfirmExit = () => {
-    playSound("/sounds/step (0-7) x누르고 진짜 나감 (초기화).mp3");
-    router.push("/dashboard");
+    playSound('/sounds/step (0-7) x누르고 진짜 나감 (초기화).mp3');
+    router.push('/dashboard');
   };
 
   // 모달에서 다시 돌아가기 (취소)
   const handleCancelExit = () => {
-    playSound("/sounds/step (0-7) x누르고 다시 돌아감.mp3");
+    playSound('/sounds/step (0-7) x누르고 다시 돌아감.mp3');
     setShowExitModal(false);
   };
 
   return (
     <>
-     {showExitModal && (
+      {showExitModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-[clamp(1.5rem,8vw,2.5rem)]">
           <div className="w-full max-w-90 flex flex-col items-center rounded-[clamp(1rem,5vw,1.5rem)] bg-[#2A2A2A] px-[clamp(1.25rem,6vw,1.75rem)] py-[clamp(1.5rem,7vw,2rem)]">
-            <p className="text-center font-semibold text-[clamp(1rem,4.5vw,1.125rem)] leading-[1.5] text-[#FFFFFF] mb-[clamp(0.375rem,2vw,0.625rem)] whitespace-nowrap">
+            <p className="text-center font-semibold text-[clamp(1rem,4.5vw,1.125rem)] leading-normal text-[#FFFFFF] mb-[clamp(0.375rem,2vw,0.625rem)] whitespace-nowrap">
               학습을 그만둘까요?
             </p>
-            <p className="text-center font-light text-[clamp(0.8125rem,3.5vw,0.875rem)] leading-[1.5] text-[#B0B0B0] break-keep mb-[clamp(1.25rem,6vw,1.75rem)] whitespace-nowrap">
+            <p className="text-center font-light text-[clamp(0.8125rem,3.5vw,0.875rem)] leading-normal text-[#B0B0B0] break-keep mb-[clamp(1.25rem,6vw,1.75rem)] whitespace-nowrap">
               지금 나가면 진행한 내용이 저장되지 않아요.
             </p>
             <div className="flex w-full gap-[clamp(0.5rem,2.5vw,0.75rem)]">

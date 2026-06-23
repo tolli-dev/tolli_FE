@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import TimeTolly from '../../../../public/images/onBoarding/timeSetTolli.webp';
+import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
 
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
@@ -131,7 +132,7 @@ function WheelPicker({
 
 export default function SetAlarmTimePage() {
   const router = useRouter();
-  const [cornerRadius, setCornerRadius] = useState(0);
+  const cornerRadius = useDeviceCornerRadius();
   const [hourIndex, setHourIndex] = useState(6);
   const [minuteIndex, setMinuteIndex] = useState(0);
   const [period, setPeriod] = useState<Period>('오전');
@@ -142,7 +143,6 @@ export default function SetAlarmTimePage() {
     const handler = (e: MessageEvent) => {
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        if (data.type === 'DEVICE_CORNER_RADIUS') setCornerRadius(data.value ?? 0);
         if (data.type === 'NOTIFICATION_PERMISSION_RESULT') {
           if (data.granted && pendingAlarm.current) {
             window.ReactNativeWebView?.postMessage(

@@ -1,37 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import LeftEar from "../../../../../public/images/leftEar.webp";
 import RightEar from "../../../../../public/images/rightEar.webp";
+import { useDeviceCornerRadius } from "@/hooks/useDeviceCornerRadius";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [cornerRadius, setCornerRadius] = useState(0);
-
-  useEffect(() => {
-    const handler = (e: MessageEvent) => {
-      try {
-        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.type === "DEVICE_CORNER_RADIUS") {
-          setCornerRadius(data.value ?? 0);
-        }
-      } catch {}
-    };
-    window.addEventListener("message", handler);
-    document.addEventListener("message", handler as unknown as EventListener);
-
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "WEB_READY" }),
-    );
-
-    return () => {
-      window.removeEventListener("message", handler);
-      document.removeEventListener(
-        "message",
-        handler as unknown as EventListener,
-      );
-    };
-  }, []);
+  const cornerRadius = useDeviceCornerRadius();
 
   return (
     <div className="relative h-full overflow-hidden">

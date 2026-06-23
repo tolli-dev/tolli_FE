@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { Verse } from "../types";
 import Link from "next/link";
-import { useSoundEffect } from "@/app/hooks/useSoundEffect";
+import { useSoundEffect } from "@/hooks/useSoundEffect";
 import posthog from "posthog-js";
 
 export default function ReadVerse({

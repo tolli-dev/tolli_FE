@@ -1,4 +1,4 @@
-import StudyHeader from '../../_components/StudyHeader';
+import StudyHeader from './_components/StudyHeader';
 
 interface StudyLayoutProps {
   children: React.ReactNode;

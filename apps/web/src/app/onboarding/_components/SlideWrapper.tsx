@@ -1,7 +1,7 @@
 interface Props {
   children: React.ReactNode;
   handleAnimationEnd: () => void;
-  slideClass: "" | "onboarding-slide-exit" | "onboarding-slide-enter";
+  slideClass: string;
 }
 
 export default function SlideWrapper({

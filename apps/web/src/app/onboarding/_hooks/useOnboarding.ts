@@ -37,15 +37,15 @@ function notifyOnboardingComplete() {
 export function useOnboarding() {
   const router = useRouter();
   const [step, setStep] = useState(0);
+
+  const navigateToLogin = () => {
+    notifyOnboardingComplete();
+    router.push("/login");
+  };
+
   const { startTransition, handleAnimationEnd, slideClass } = useSlideAnimation(
     (destination) => {
-      if (destination === "login") {
-        notifyOnboardingComplete();
-        router.push("/login");
-        return false;
-      }
       setStep(destination);
-      return true;
     },
   );
 
@@ -63,11 +63,8 @@ export function useOnboarding() {
     router.prefetch("/login");
   }, [router]);
 
-  const handleNext = () => startTransition(isLastStep ? "login" : step + 1);
-  const handleSkip = () => {
-    notifyOnboardingComplete();
-    router.push("/login");
-  };
+  const handleNext = () =>
+    isLastStep ? navigateToLogin() : startTransition(step + 1);
 
   return {
     step,
@@ -75,7 +72,7 @@ export function useOnboarding() {
     isLastStep,
     handleAnimationEnd,
     handleNext,
-    handleSkip,
+    handleSkip: navigateToLogin,
     slideClass,
     TOTAL_STEPS,
   };

@@ -2,7 +2,7 @@ export default {
   expo: {
     name: "tolli",
     slug: "tolli",
-    version: "1.0.0",
+    version: "1.0.1",
     orientation: "portrait",
     icon: "./assets/apple-icon.png",
     userInterfaceStyle: "light",
@@ -18,7 +18,7 @@ export default {
     },
     android: {
       package: "com.company.tolli",
-      versionCode: 4,
+      versionCode: 5,
       allowBackup: false,
       adaptiveIcon: {
         foregroundImage: "./assets/android-icon.png",

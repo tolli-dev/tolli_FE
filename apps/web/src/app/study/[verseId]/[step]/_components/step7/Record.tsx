@@ -6,11 +6,12 @@ import RecordCircle from './_components/RecordCircle';
 import ActiveSoundBar from '../../../../../../../public/images/activeSoundBar.svg';
 import NotActiveSoundbar from '../../../../../../../public/images/NotActiveSoundbar.svg';
 import RecordButton from './_components/button/RecordButton';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Step7Phase } from './_types';
 import { Icon } from '@iconify/react';
 import RecordComplete from './RecordComplete';
 import { useRecord } from './hooks/useRecord';
+import { useRNRecordPermission } from './hooks/useRNRecordPermission';
 import { formatTime } from './_utils/formatTime';
 import { playSound } from '@/lib/sound';
 import posthog from 'posthog-js';
@@ -26,63 +27,29 @@ export default function Record({ verseId, fullText, reference }: RecordProps) {
   const [showVerse, setShowVerse] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { elapsed, start, stop, levels } = useRecord();
-  const [needSettings, setNeedSettings] = useState(false);
+
+  const { needSettings, requestPermission, openAppSettings, triggerNeedSettings, clearNeedSettings } =
+    useRNRecordPermission(beginRecording);
 
   // start()를 통해 녹음 기능을 시작한다.
   // 그와 더해 관련 상태를 변화시킨다.
-  const beginRecording = useCallback(async () => {
-    try {
-      await start();
-      setPhase('recording');
-      setDisabled(true);
-      setTimeout(() => setDisabled(false), 5000);
-    } catch (e) {
-      if (e instanceof Error && e.name === 'NotAllowedError') setNeedSettings(true);
-      // 나중에 vercel 배포 후에 수정 필요
-      setPhase('idle');
-    }
-  }, [start]);
+  function beginRecording() {
+    start()
+      .then(() => {
+        setPhase('recording');
+        setDisabled(true);
+        setTimeout(() => setDisabled(false), 5000);
+      })
+      .catch((e: unknown) => {
+        if (e instanceof Error && e.name === 'NotAllowedError') triggerNeedSettings();
+        // 나중에 vercel 배포 후에 수정 필요
+        setPhase('idle');
+      });
+  }
 
-  // startRecording() 응답 결과가 마이크 권한 허용이면 녹음 로직 시작
-  useEffect(() => {
-    const handleMessage = (e: MessageEvent) => {
-      // RN이 보낸 JSON 문자열만 처리 (HMR/DevTools 등 객체 메시지는 무시)
-      if (typeof e.data !== 'string') return;
-      try {
-        const { type, status } = JSON.parse(e.data);
-        if (type === 'RECORD_PERMISSION') {
-          if (status === 'granted') {
-            setNeedSettings(false);
-            beginRecording();
-          } else if (status === 'denied') {
-            setNeedSettings(true);
-          } else {
-            setNeedSettings(true);
-          }
-          // 거부되면 거부 메시지 안내 처리
-        }
-      } catch {
-        // RN 외 메시지 무시
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    document.addEventListener('message', handleMessage as EventListener);
-    return () => {
-      window.removeEventListener('message', handleMessage);
-      document.removeEventListener('message', handleMessage as EventListener);
-    };
-  }, [beginRecording]);
-
-  // 녹음 시작하기 누르면 RN으로 마이크 권한 요청 전송함
-  // 단, RN WebView가 아닌 일반 브라우저에서는 브라우저가 직접 권한을 처리하므로 바로 시작한다.
   const startRecording = () => {
     posthog.capture('recording_started', { verse_id: verseId });
-    if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'RECORD_READY' }));
-    } else {
-      beginRecording();
-    }
+    requestPermission();
   };
 
   const stopRecording = async () => {
@@ -107,10 +74,6 @@ export default function Record({ verseId, fullText, reference }: RecordProps) {
   if (phase === 'complete') {
     return <RecordComplete retryRecording={retryRecording} verseId={verseId} />;
   }
-
-  const openAppSettings = () => {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'OPEN_APP_SETTINGS' }));
-  };
 
   return (
     <section className="flex flex-col w-full h-full overflow-hidden pt-8.75 pb-4 px-10.5">
@@ -183,9 +146,10 @@ export default function Record({ verseId, fullText, reference }: RecordProps) {
           />
         )}
       </footer>
+
       {needSettings && (
         <div
-          onClick={() => setNeedSettings(false)}
+          onClick={clearNeedSettings}
           className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 bg-[#000000]/60"
         >
           <div className="flex items-center justify-center min-h-screen w-full px-[clamp(0.875rem,5vw,1.25rem)]">
@@ -207,7 +171,7 @@ export default function Record({ verseId, fullText, reference }: RecordProps) {
                     설정 열기
                   </button>
                   <button
-                    onClick={() => setNeedSettings(false)}
+                    onClick={clearNeedSettings}
                     className="
                     w-full rounded-[clamp(0.875rem,5vw,1.25rem)]
                     py-[clamp(0.5rem,3vw,0.75rem)]

@@ -1,82 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getMe, getMyCurrentVerse } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
-import { onAuthStateChanged } from "firebase/auth";
-import { fireAuth } from "@/firebase/fireAuth";
+import { useState } from "react";
 import SwipeNav from "./_components/SwipeNav";
 import DashboardHeader from "./_components/DashboardHeader";
 import BeforeFinish from "./BeforeFinish";
 import AfterFinish from "./AfterFinish";
 import Bookmark from "./Bookmark";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useDashboard } from "./_hooks/useDashboard";
+import DashboardLayout from "./_components/DashboardLayout";
 
-type TodayVerse = { id: number; reference: string; fullText: string } | null;
+export type TodayVerse = {
+  id: number;
+  reference: string;
+  fullText: string;
+} | null;
 
 export default function DashBoard() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [nickname, setNickname] = useState("");
-  const [done, setDone] = useState(false);
-  const [todayVerse, setTodayVerse] = useState<TodayVerse>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  const fetchData = () => {
-    setLoading(true);
-    setError(false);
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    Promise.all([
-      getMe(dataConnect, {
-        fetchPolicy: "SERVER_ONLY",
-      }),
-      getMyCurrentVerse(
-        dataConnect,
-        { today: today.toISOString() },
-        { fetchPolicy: "SERVER_ONLY" },
-      ),
-    ])
-      .then(([meResult, verseResult]) => {
-        setNickname(meResult.data.user?.nickname ?? "");
-        const verse = verseResult.data.todayCompletion[0]?.verse ?? null;
-        setTodayVerse(verse);
-        setDone(verse !== null);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-        setError(true);
-      });
-  };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
-      if (!user) return;
-      fetchData();
-    });
-    return () => unsubscribe();
-  }, []);
-
-  const handleError = () => {
-    setError(false);
-    setLoading(true);
-    fetchData();
-  };
+  const { state, onError } = useDashboard();
+  const {
+    nickname = "",
+    todayVerse = null,
+    done = false,
+  } = state.status === "success" ? state.data : {};
 
   return (
-    <section
-      className={`
-        dashboard-layout
-        flex flex-col w-full flex-1 min-h-0 justify-between items-center
-        px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]
-        ${done ? "is-done" : ""}
-      `}
-    >
+    <DashboardLayout done={done}>
       <DashboardHeader nickname={nickname} done={done} />
-      {error && !loading && (
+      {state.status === "error" && (
         <div className="flex flex-col flex-1 items-center justify-center gap-[clamp(1rem,4.8vw,1.875rem)] w-full">
           <div className="flex flex-col items-center gap-1.5">
             <p className="text-[clamp(0.9375rem,4.4vw,1.0625rem)] leading-[clamp(1.375rem,6.6vw,1.625rem)] text-[#494949]">
@@ -88,23 +40,22 @@ export default function DashBoard() {
           </div>
           <button
             type="button"
-            onClick={handleError}
+            onClick={onError}
             className="w-full rounded-[1.25rem] bg-[#CCB5F0] py-[clamp(0.625rem,3.3vw,0.8125rem)] font-bold text-[clamp(1rem,4.6vw,1.125rem)] leading-[clamp(1.25rem,5.9vw,1.4375rem)] text-[#1B1B1B]"
           >
             다시 시도
           </button>
         </div>
       )}
-      {loading && <LoadingSpinner />}
+      {state.status === "loading" && <LoadingSpinner />}
       {activeIndex === 0 &&
-        !loading &&
-        !error &&
+        state.status === "success" &&
         (done ? (
           <AfterFinish todayVerse={todayVerse} nickname={nickname} />
         ) : (
           <BeforeFinish nickname={nickname} />
         ))}
-      {activeIndex === 1 && !loading && !error && (
+      {activeIndex === 1 && state.status === "success" && (
         <Bookmark nickname={nickname} />
       )}
 
@@ -118,6 +69,6 @@ export default function DashBoard() {
       >
         <SwipeNav activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
       </footer>
-    </section>
+    </DashboardLayout>
   );
 }

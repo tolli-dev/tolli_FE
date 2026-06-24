@@ -1,127 +1,30 @@
-"use client";
+'use client';
 
-import StandingTolli_1 from "../../../../public/images/onBoarding/standingTolli_1.webp";
-import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
-import { createUser, deleteUser } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
-import { fireAuth } from "@/firebase/fireAuth";
-import posthog from "posthog-js";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import StandingTolli_1 from '../../../../public/images/onBoarding/standingTolli_1.webp';
+import Image from 'next/image';
+import { useState } from 'react';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { useSignupSubmit } from './useSignupSubmit';
+
+const BLANK_REGEX = /\s/;
+const SPECIAL_CHAR_REGEX = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/;
 
 const getValidationResult = (name: string) => {
-  const blankRegex = /\s/g;
-  const specialWordRegex = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/g;
-
-  if (name.length === 0) return { state: false, message: "" };
-  if (name.length > 0 && name.length < 2)
-    return { state: false, message: "2글자 이상으로 입력해주세요." };
-  if (name.length > 10)
-    return { state: false, message: "10글자 이하로 입력해주세요." };
-  if (blankRegex.test(name))
-    return { state: false, message: "공백을 제거해주세요." };
-  if (specialWordRegex.test(name))
-    return { state: false, message: "특수 문자를 제거해주세요." };
-  return { state: true, message: "사용 가능한 닉네임이에요." };
+  if (name.length === 0) return { state: false, message: '' };
+  if (name.length < 2) return { state: false, message: '2글자 이상으로 입력해주세요.' };
+  if (name.length > 10) return { state: false, message: '10글자 이하로 입력해주세요.' };
+  if (BLANK_REGEX.test(name)) return { state: false, message: '공백을 제거해주세요.' };
+  if (SPECIAL_CHAR_REGEX.test(name)) return { state: false, message: '특수 문자를 제거해주세요.' };
+  return { state: true, message: '사용 가능한 닉네임이에요.' };
 };
 
 export default function Page() {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const { state, message } = getValidationResult(name);
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [nicknameError, setNicknameError] = useState<string | null>(null);
-  const [userError, setUserError] = useState<string | null>(null);
-
-  const handleSubmit = async () => {
-    if (!state) return;
-    setLoading(true);
-    setNicknameError(null);
-    setUserError(null);
-
-    const termsAgreedAt = sessionStorage.getItem("termsAgreedAt") ?? "";
-    const privacyAgreedAt = sessionStorage.getItem("privacyAgreedAt") ?? "";
-    const emailMarketingAgreed =
-      sessionStorage.getItem("emailMarketingAgreed") === "true";
-    const emailMarketingAgreedAt =
-      sessionStorage.getItem("emailMarketingAgreedAt") || null;
-
-    const idToken = await new Promise<string | null>((resolve) => {
-      if (fireAuth.currentUser) {
-        fireAuth.currentUser
-          .getIdToken()
-          .then(resolve)
-          .catch(() => resolve(null));
-        return;
-      }
-      const unsub = onAuthStateChanged(fireAuth, (user) => {
-        unsub();
-        if (user)
-          user
-            .getIdToken()
-            .then(resolve)
-            .catch(() => resolve(null));
-        else resolve(null);
-      });
-    });
-
-    if (!idToken) {
-      setLoading(false);
-      setUserError("로그인 정보를 불러오지 못했어요. 다시 시도해주세요.");
-      return;
-    }
-
-    try {
-      await createUser(dataConnect, {
-        nickname: name,
-        termsAgreedAt,
-        privacyAgreedAt,
-        emailMarketingAgreed,
-        emailMarketingAgreedAt,
-      });
-    } catch (error) {
-      setLoading(false);
-      console.error("닉네임 설정 오류", error);
-      setNicknameError("닉네임 설정 중 오류가 발생했어요. 다시 시도해주세요.");
-      return;
-    }
-
-    posthog.capture("signup_complete", {
-      email_marketing_agreed: emailMarketingAgreed,
-    });
-
-    try {
-      await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      });
-    } catch (error) {
-      try {
-        await deleteUser(dataConnect);
-      } catch (rollbackError) {
-        console.error("삭제 실패", rollbackError);
-      }
-      setLoading(false);
-      console.error(`${error} 유저 생성 실패`);
-      setUserError("유저 생성 중 오류가 발생했어요. 다시 시도해주세요.");
-      return;
-    }
-
-    sessionStorage.removeItem("termsAgreedAt");
-    sessionStorage.removeItem("privacyAgreedAt");
-    sessionStorage.removeItem("emailMarketingAgreed");
-    sessionStorage.removeItem("emailMarketingAgreedAt");
-
-    router.push(`/signup/greeting/${name}`);
-  };
-
-  const handleUserError = () => {
-    setUserError(null);
-    router.push("/login");
-  };
+  const { loading, nicknameError, userError, handleSubmit, handleUserError } = useSignupSubmit(
+    name,
+    state,
+  );
 
   return (
     <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">

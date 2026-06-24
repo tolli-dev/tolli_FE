@@ -2,11 +2,11 @@
 
 import Image from 'next/image';
 import FullHappyTolli from '../../../../../public/images/onBoarding/fullHappyTolli.webp';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 
 export default function Page() {
   const params = useParams<{ nickname: string }>();
+  const router = useRouter();
   const decodedNickname = params.nickname ? decodeURIComponent(params.nickname) : '';
 
   return (
@@ -32,17 +32,16 @@ export default function Page() {
       </div>
 
       <div className="flex flex-col items-center w-full gap-[1rem]">
-        <Link href="/signup/set-alarm" className="flex flex-col items-center w-full">
-          <button
-            type="button"
-            className="
-              w-full max-w-[19.688rem] h-[3rem] text-btn-lg 
-              text-primary-75 bg-surface-500 rounded-[1.25rem]
-            "
-          >
-            좋아요!
-          </button>
-        </Link>
+        <button
+          type="button"
+          onClick={() => router.push('/signup/set-alarm')}
+          className="
+            w-full max-w-[19.688rem] h-12 text-btn-lg
+            text-primary-75 bg-surface-500 rounded-[1.25rem]
+          "
+        >
+          좋아요!
+        </button>
       </div>
     </section>
   );

@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import DashboardHeader from "./_components/DashboardHeader";
-import BeforeFinish from "./BeforeFinish";
-import AfterFinish from "./AfterFinish";
 import Bookmark from "./Bookmark";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useDashboard } from "./_hooks/useDashboard";
 import DashboardLayout from "./_components/DashboardLayout";
 import DashboardError from "./_components/DashboardError";
 import DashboardNav from "./_components/DashboardNav";
+import DashboardHome from "./_components/DashboardHome";
+import { useTab } from "./_hooks/useTab";
 
 export type TodayVerse = {
   id: number;
@@ -18,7 +17,7 @@ export type TodayVerse = {
 } | null;
 
 export default function DashBoard() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const { activeIndex, onTabChange } = useTab();
   const { state, onError } = useDashboard();
   const {
     nickname = "",
@@ -29,18 +28,19 @@ export default function DashBoard() {
   return (
     <DashboardLayout done={done}>
       <DashboardHeader nickname={nickname} done={done} />
-      {activeIndex === 0 &&
-        state.status === "success" &&
-        (done ? (
-          <AfterFinish todayVerse={todayVerse} nickname={nickname} />
-        ) : (
-          <BeforeFinish nickname={nickname} />
-        ))}
-      {activeIndex === 1 && state.status === "success" && (
-        <Bookmark nickname={nickname} />
-      )}
 
-      <DashboardNav activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
+      {state.status === "success" &&
+        (activeIndex === 0 ? (
+          <DashboardHome
+            done={done}
+            todayVerse={todayVerse}
+            nickname={nickname}
+          />
+        ) : (
+          <Bookmark nickname={nickname} />
+        ))}
+
+      <DashboardNav activeIndex={activeIndex} onTabChange={onTabChange} />
       {state.status === "error" && <DashboardError onError={onError} />}
       {state.status === "loading" && <LoadingSpinner />}
     </DashboardLayout>

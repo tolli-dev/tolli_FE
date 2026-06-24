@@ -4,7 +4,7 @@ import StandingTolli_1 from '../../../../public/images/onBoarding/standingTolli_
 import Image from 'next/image';
 import { useState } from 'react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { useSignupSubmit } from './useSignupSubmit';
+import { useSignupSubmit } from './hooks/useSignupSubmit';
 
 const BLANK_REGEX = /\s/;
 const SPECIAL_CHAR_REGEX = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/;
@@ -37,9 +37,7 @@ export default function Page() {
       {userError && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-[2rem]">
           <div className="flex flex-col items-center gap-[1.25rem] bg-[#2A2A2A] rounded-[1rem] px-[1.5rem] py-[1.75rem] w-full max-w-[18rem]">
-            <p className="text-[#ADADAD] text-[0.9375rem] text-center leading-[1.5]">
-              {userError}
-            </p>
+            <p className="text-[#ADADAD] text-[0.9375rem] text-center leading-[1.5]">{userError}</p>
             <button
               type="button"
               onClick={handleUserError}
@@ -53,23 +51,14 @@ export default function Page() {
 
       <div className="flex flex-col items-center w-full mt-[clamp(1rem,4dvh,10.25rem)]">
         <div className="flex flex-col items-center justify-center w-full gap-[0.125rem]">
-          <h1 className="text-h1 text-primary-50 whitespace-nowrap">
-            tolli가 어떻게
-          </h1>
-          <h1 className="text-h1 text-primary-50 whitespace-nowrap">
-            불러드리면 좋을까요?
-          </h1>
+          <h1 className="text-h1 text-primary-50 whitespace-nowrap">tolli가 어떻게</h1>
+          <h1 className="text-h1 text-primary-50 whitespace-nowrap">불러드리면 좋을까요?</h1>
           <h2 className="text-h2 text-surface-200 whitespace-nowrap">
             앞으로 tolli가 불러드릴 이름을 입력해주세요.
           </h2>
         </div>
         <div className="relative w-full max-w-[16.125rem] aspect-square">
-          <Image
-            src={StandingTolli_1}
-            fill
-            alt="hungryTolli"
-            className="object-contain"
-          />
+          <Image src={StandingTolli_1} fill alt="hungryTolli" className="object-contain" />
         </div>
       </div>
 
@@ -96,9 +85,7 @@ export default function Page() {
 
         <div className="flex flex-col items-center w-full">
           {nicknameError && (
-            <p className="text-red-400 text-[0.8125rem] text-center mb-2">
-              {nicknameError}
-            </p>
+            <p className="text-red-400 text-[0.8125rem] text-center mb-2">{nicknameError}</p>
           )}
           <button
             type="submit"

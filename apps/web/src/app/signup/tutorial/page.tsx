@@ -48,7 +48,7 @@ export default function AfterLoginOnboardingPage() {
       link.href = s.image;
       document.head.appendChild(link);
     });
-    router.prefetch('/afterLogin/setNickName');
+    router.prefetch('/signup/set-nickname');
   }, [router]);
 
   const navigate = (dest: number | 'done') => {
@@ -61,7 +61,7 @@ export default function AfterLoginOnboardingPage() {
     if (phase === 'exit') {
       const dest = nextRef.current;
       if (dest === 'done') {
-        router.push('/afterLogin/setNickName');
+        router.push('/signup/set-nickname');
         return;
       }
       if (dest !== null) setStep(dest as number);

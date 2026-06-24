@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import FullHappyTolli from "../../../../../public/images/onBoarding/fullHappyTolli.webp";
-import { useParams } from "next/navigation";
-import Link from "next/link";
+import Image from 'next/image';
+import FullHappyTolli from '../../../../../public/images/onBoarding/fullHappyTolli.webp';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Page() {
   const params = useParams<{ nickname: string }>();
-  const decodedNickname = params.nickname
-    ? decodeURIComponent(params.nickname)
-    : "";
+  const decodedNickname = params.nickname ? decodeURIComponent(params.nickname) : '';
 
   return (
     <section className="relative overflow-hidden flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]">
@@ -24,25 +22,17 @@ export default function Page() {
       <div className="relative w-full max-w-[16.125rem] aspect-square">
         <div
           className="
-            afterLogin-greeting
+            signup-greeting
             absolute top-[120%] left-1/2 -translate-x-1/2 w-[150vw] h-[100dvh] 
             bg-gradient-to-b from-transparent via-primary-75 to-primary-100
             [clip-path:polygon(40%_0%,_60%_0%,_180%_80%,_-80%_80%)] 
             pointer-events-none -z-10 -my-[5.313rem]"
         />
-        <Image
-          src={FullHappyTolli}
-          fill
-          alt="hungryTolli"
-          className="object-contain"
-        />
+        <Image src={FullHappyTolli} fill alt="hungryTolli" className="object-contain" />
       </div>
 
       <div className="flex flex-col items-center w-full gap-[1rem]">
-        <Link
-          href="/afterLogin/setAlarm"
-          className="flex flex-col items-center w-full"
-        >
+        <Link href="/signup/set-alarm" className="flex flex-col items-center w-full">
           <button
             type="button"
             className="

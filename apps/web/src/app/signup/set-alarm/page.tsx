@@ -18,7 +18,7 @@ export default function Page() {
       window.ReactNativeWebView?.postMessage(
         JSON.stringify({ type: "REQUEST_NOTIFICATION_PERMISSION" }),
       );
-      router.push("/afterLogin/setAlarmTime");
+      router.push("/signup/set-alarm-time");
     } catch {
       setLoading(false);
       setError("오류가 발생했어요. 다시 시도해주세요.");

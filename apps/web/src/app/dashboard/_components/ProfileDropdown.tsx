@@ -78,7 +78,7 @@ const MENU_ITEMS: MenuItem[] = [
       {
         type: "link",
         label: "알림 시간 설정",
-        href: "/afterLogin/setAlarmTime",
+        href: "/signup/set-alarm-time",
       },
     ],
   },
@@ -165,7 +165,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
             );
             onNotificationChange(true);
           } else {
-            router.push("/afterLogin/setAlarmTime");
+            router.push("/signup/set-alarm-time");
             onClose();
           }
         }

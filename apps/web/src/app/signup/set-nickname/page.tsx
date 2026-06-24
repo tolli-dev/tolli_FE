@@ -115,7 +115,7 @@ export default function Page() {
     sessionStorage.removeItem("emailMarketingAgreed");
     sessionStorage.removeItem("emailMarketingAgreedAt");
 
-    router.push(`/afterLogin/greeting/${name}`);
+    router.push(`/signup/greeting/${name}`);
   };
 
   const handleUserError = () => {

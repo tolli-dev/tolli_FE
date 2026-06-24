@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import SwipeNav from "./_components/SwipeNav";
 import DashboardHeader from "./_components/DashboardHeader";
 import BeforeFinish from "./BeforeFinish";
 import AfterFinish from "./AfterFinish";
@@ -10,6 +9,7 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useDashboard } from "./_hooks/useDashboard";
 import DashboardLayout from "./_components/DashboardLayout";
 import DashboardError from "./_components/DashboardError";
+import DashboardNav from "./_components/DashboardNav";
 
 export type TodayVerse = {
   id: number;
@@ -40,16 +40,7 @@ export default function DashBoard() {
         <Bookmark nickname={nickname} />
       )}
 
-      <footer
-        className="
-          fixed bottom-0 left-0 right-0
-          flex justify-center items-center
-          pb-[max(calc(env(safe-area-inset-bottom)+1rem),1rem)]
-          pt-4
-        "
-      >
-        <SwipeNav activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
-      </footer>
+      <DashboardNav activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
       {state.status === "error" && <DashboardError onError={onError} />}
       {state.status === "loading" && <LoadingSpinner />}
     </DashboardLayout>

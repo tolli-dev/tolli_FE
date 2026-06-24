@@ -28,7 +28,7 @@ export default function Page() {
             [clip-path:polygon(40%_0%,_60%_0%,_180%_80%,_-80%_80%)] 
             pointer-events-none -z-10 -my-[5.313rem]"
         />
-        <Image src={FullHappyTolli} fill alt="hungryTolli" className="object-contain" />
+        <Image src={FullHappyTolli} fill alt="happyTolli" className="object-contain" />
       </div>
 
       <div className="flex flex-col items-center w-full gap-[1rem]">

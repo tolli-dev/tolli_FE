@@ -13,17 +13,17 @@ interface Props {
     };
     createdAt: string;
   };
-  fetchData: () => void;
+  onDelete: () => void;
 }
 
-export default function IndividualBookmark({ value, fetchData }: Props) {
+export default function IndividualBookmark({ value, onDelete }: Props) {
   const [error, setError] = useState(false);
 
   const handleDeleteBookmark = async (verseId: number) => {
     setError(false);
     try {
       await deleteBookmark(dataConnect, { verseId: verseId });
-      fetchData();
+      onDelete();
     } catch {
       setError(true);
     }

@@ -1,5 +1,5 @@
 import NoiseOverlay from "../NoiseOverlay";
-import GrainBorder from "../_GrainBorder";
+import GrainBorder from "../GrainBorder";
 
 interface Props {
   children: React.ReactNode;

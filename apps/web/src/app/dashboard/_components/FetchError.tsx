@@ -2,7 +2,7 @@ interface Props {
   onError: () => void;
 }
 
-export default function DashboardError({ onError }: Props) {
+export default function FetchError({ onError }: Props) {
   return (
     <div className="flex flex-col flex-1 items-center justify-center gap-[clamp(1rem,4.8vw,1.875rem)] w-full">
       <div className="flex flex-col items-center gap-1.5">

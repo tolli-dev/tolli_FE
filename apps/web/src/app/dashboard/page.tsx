@@ -1,11 +1,11 @@
 "use client";
 
 import DashboardHeader from "./_components/DashboardHeader";
-import Bookmark from "./Bookmark";
+import Bookmark from "./_components/bookmark/Bookmark";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { useDashboard } from "./_hooks/useDashboard";
 import DashboardLayout from "./_components/DashboardLayout";
-import DashboardError from "./_components/DashboardError";
+import FetchError from "./_components/FetchError";
 import DashboardNav from "./_components/DashboardNav";
 import DashboardHome from "./_components/home/DashboardHome";
 import { useTab } from "./_hooks/useTab";
@@ -41,7 +41,7 @@ export default function DashBoard() {
         ))}
 
       <DashboardNav activeIndex={activeIndex} onTabChange={onTabChange} />
-      {state.status === "error" && <DashboardError onError={onError} />}
+      {state.status === "error" && <FetchError onError={onError} />}
       {state.status === "loading" && <LoadingSpinner />}
     </DashboardLayout>
   );

@@ -1,9 +1,10 @@
-import Image from "next/image";
-import FullHappyTolli from "../../../public/images/onBoarding/fullHappyTolli.webp";
 import NoiseOverlay from "../NoiseOverlay";
 import GrainBorder from "../_GrainBorder";
 import { TodayVerse } from "../../page";
 import Nickname from "./Nickname";
+import Illustration from "./Illustration";
+
+const src = "/images/onBoarding/fullHappyTolli.webp";
 
 export default function AfterFinish({
   todayVerse,
@@ -15,15 +16,7 @@ export default function AfterFinish({
   return (
     <main className="flex flex-1 flex-col items-center w-full">
       <Nickname nickname={nickname} />
-
-      <Image
-        src={FullHappyTolli}
-        alt="full happy tolli"
-        className="
-            w-[clamp(12rem,55vw,18rem)]
-            h-[clamp(12rem,55vw,18rem)]
-          "
-      />
+      <Illustration src={src} />
 
       <article
         className="

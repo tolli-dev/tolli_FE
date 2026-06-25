@@ -1,13 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import hungry_tolli from "../../../public/images/onBoarding/hungryTolli_1.webp";
 import NoiseOverlay from "../NoiseOverlay";
 import GrainBorder from "../_GrainBorder";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Nickname from "./Nickname";
+import Illustration from "./Illustration";
+
+const src = "/images/onBoarding/hungryTolli_1.webp";
 
 export default function BeforeFinish({ nickname }: { nickname: string }) {
   const router = useRouter();
@@ -22,15 +23,7 @@ export default function BeforeFinish({ nickname }: { nickname: string }) {
     <main className="flex flex-1 flex-col items-center w-full">
       {navigating && <LoadingSpinner />}
       <Nickname nickname={nickname} />
-
-      <Image
-        src={hungry_tolli}
-        alt="hungry tolli"
-        className="
-            w-[clamp(12rem,55vw,18rem)]
-            h-[clamp(12rem,55vw,18rem)]
-          "
-      />
+      <Illustration src={src} />
 
       <article
         className="

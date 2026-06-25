@@ -7,7 +7,7 @@ import { useDashboard } from "./_hooks/useDashboard";
 import DashboardLayout from "./_components/DashboardLayout";
 import DashboardError from "./_components/DashboardError";
 import DashboardNav from "./_components/DashboardNav";
-import DashboardHome from "./_components/DashboardHome";
+import DashboardHome from "./_components/home/DashboardHome";
 import { useTab } from "./_hooks/useTab";
 
 export type TodayVerse = {

@@ -1,6 +1,6 @@
-import { TodayVerse } from "../page";
-import AfterFinish from "../AfterFinish";
-import BeforeFinish from "../BeforeFinish";
+import { TodayVerse } from "../../page";
+import AfterFinish from "./AfterFinish";
+import BeforeFinish from "./BeforeFinish";
 
 interface Props {
   done: boolean;

@@ -18,7 +18,7 @@ export default {
     },
     android: {
       package: "com.company.tolli",
-      versionCode: 5,
+      versionCode: 7,
       allowBackup: false,
       adaptiveIcon: {
         foregroundImage: "./assets/android-icon.png",

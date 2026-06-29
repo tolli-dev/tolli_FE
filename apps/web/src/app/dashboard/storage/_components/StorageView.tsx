@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import posthog from "posthog-js";
 import { useRouter } from "next/navigation";
 import IndividualStorage from "./IndividualStorage";
 import { QueryFetchPolicy } from "firebase/data-connect";
@@ -183,6 +184,7 @@ export default function StorageView({ done, nickname }: Props) {
   };
 
   useEffect(() => {
+    posthog.capture("recall_exposed");
     getMyStorage();
   }, []);
 

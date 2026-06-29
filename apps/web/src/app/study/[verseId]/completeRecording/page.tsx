@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import FullTolli from '../../../../../public/images/onBoarding/fullTolli.webp';
-import EatingTolli from '../../../../../public/images/onBoarding/eatingTolli.webp';
-import CircleLoading from './_components/CircleLoading';
-import Header from './_components/Header';
-import Star1 from '../../../../../public/images/star1.webp';
-import Star2 from '../../../../../public/images/star2.webp';
-import { useRouter, useParams } from 'next/navigation';
-import { playSound } from '@/lib/sound';
-import posthog from 'posthog-js';
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import FullTolli from "../../../../../public/images/onBoarding/fullTolli.webp";
+import EatingTolli from "../../../../../public/images/onBoarding/eatingTolli.webp";
+import CircleLoading from "./_components/CircleLoading";
+import Header from "./_components/Header";
+import Star1 from "../../../../../public/images/star1.webp";
+import Star2 from "../../../../../public/images/star2.webp";
+import { useRouter, useParams } from "next/navigation";
+import { playSound } from "@/lib/sound";
+import posthog from "posthog-js";
 
 export default function CompleteStep() {
   const router = useRouter();
@@ -20,9 +20,9 @@ export default function CompleteStep() {
 
   useEffect(() => {
     const preloads = [Star1.src, Star2.src, FullTolli.src].map((src) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
       link.href = src;
       document.head.appendChild(link);
       return link;
@@ -33,8 +33,14 @@ export default function CompleteStep() {
   }, []);
 
   useEffect(() => {
-    posthog.capture('study_completed', { verse_id: verseId });
-    playSound('/sounds/tolli에게 먹이가 전해졌을때.mp3');
+    posthog.capture("study_completed", { verse_id: verseId });
+    const from = sessionStorage.getItem("studyFrom");
+    if (from === "recall") {
+      posthog.capture("recall_completed", { verse_id: verseId });
+      sessionStorage.removeItem("studyFrom");
+    }
+    playSound("/sounds/tolli에게 먹이가 전해졌을때.mp3");
+
     const time = setTimeout(() => {
       setComponent(true);
     }, 3000);
@@ -53,7 +59,10 @@ export default function CompleteStep() {
     <div className="grid grid-rows-3 h-full pt-[clamp(1.5rem,11vw,2.6875rem)] pb-[clamp(1.25rem,9.5vw,2.3125rem)] px-[clamp(1rem,6.5vw,1.5625rem)]">
       <div className="flex items-center justify-center text-center">
         {!component && (
-          <Header comment1="말씀 먹는 중..." comment2="톨리가 완성된 말씀을 먹고 있어요" />
+          <Header
+            comment1="말씀 먹는 중..."
+            comment2="톨리가 완성된 말씀을 먹고 있어요"
+          />
         )}
         {component && (
           <Header

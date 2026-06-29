@@ -6,13 +6,13 @@ const STEPS = [
 ];
 
 const numStyle = {
-  fontSize: '0.875rem',
+  fontSize: 'clamp(0.75rem, 2.3vw, 0.875rem)',
   lineHeight: '1.25rem',
   letterSpacing: '-0.07em',
 };
 
 const labelStyle = {
-  fontSize: '1.25rem',
+  fontSize: 'clamp(1rem, 3.3vw, 1.25rem)',
   lineHeight: '1.25rem',
   letterSpacing: '-0.07em',
   fontWeight: 600,
@@ -44,7 +44,7 @@ export default function LearningSteps() {
           <div key={label} className="relative flex flex-1 justify-center">
             <div
               style={{ border: `1px solid ${borderColor}`, ...labelStyle }}
-              className="px-3 py-2 rounded-[10px] bg-surface-400 text-primary-50 whitespace-nowrap"
+              className="px-3 py-2 rounded-[0.625rem] bg-surface-400 text-primary-50 whitespace-nowrap"
             >
               {label}
             </div>

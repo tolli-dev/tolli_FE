@@ -21,7 +21,7 @@ import type {
 } from "react-native-webview";
 import * as Notifications from "expo-notifications";
 
-const IP_URL = "https://tolli-fe-web.vercel.app/";
+const IP_URL = "https://tolli-fe-web.vercel.app";
 // const IP_URL = "http://192.168.35.166:3000";
 
 import {
@@ -133,7 +133,7 @@ export default function App() {
 
       const isFirst = await checkFirstLaunch();
       if (isFirst) {
-        setInitialUri(`${IP_URL}/onboarding/1`);
+        setInitialUri(`${IP_URL}/onboarding`);
       } else {
         const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
         setInitialUri(

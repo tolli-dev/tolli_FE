@@ -6,12 +6,12 @@ import { playSound } from "@/lib/sound";
 type Props = {
   tabs: readonly string[];
   activeIndex: number;
-  onChange: (index: number) => void;
+  onTabChange: (index: number) => void;
 };
 
 const SWIPE_THRESHOLD = 20;
 
-export default function GlassTabBar({ tabs, activeIndex, onChange }: Props) {
+export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
   const startX = useRef<number | null>(null);
   const moved = useRef(false);
 
@@ -34,10 +34,10 @@ export default function GlassTabBar({ tabs, activeIndex, onChange }: Props) {
     if (moved.current && Math.abs(dx) > SWIPE_THRESHOLD) {
       if (dx < 0 && activeIndex < tabs.length - 1) {
         playSound("/sounds/네비게이션 오른쪽 스와이프.mp3");
-        onChange(activeIndex + 1);
+        onTabChange(activeIndex + 1);
       } else if (dx > 0 && activeIndex > 0) {
         playSound("/sounds/네비게이션 왼쪽 스와이프.mp3");
-        onChange(activeIndex - 1);
+        onTabChange(activeIndex - 1);
       }
     }
 
@@ -63,7 +63,7 @@ export default function GlassTabBar({ tabs, activeIndex, onChange }: Props) {
       playSound("/sounds/네비게이션 왼쪽 스와이프.mp3");
     }
 
-    onChange(targetIndex);
+    onTabChange(targetIndex);
   };
 
   return (

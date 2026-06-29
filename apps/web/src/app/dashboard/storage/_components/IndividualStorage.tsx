@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { dataConnect } from "@/lib/dataconnect";
+import posthog from "posthog-js";
 import { deleteBookmark, addBookmark } from "@firebasegen/default-connector";
 import { useState } from "react";
 import { DataConnectError } from "firebase/data-connect";
@@ -46,6 +47,8 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleRetryStep = () => {
+    posthog.capture("recall_clicked", { verse_id: verse.id });
+    sessionStorage.setItem("studyFrom", "recall");
     router.push(`/study/${verse.id}/0`);
   };
 

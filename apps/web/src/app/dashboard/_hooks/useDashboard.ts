@@ -29,10 +29,13 @@ function reducer(_: State, action: Action): State {
   }
 }
 
-const initialState: State = { status: "loading" };
-
-export function useDashboard() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export function useDashboard(initialData?: Data) {
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialData
+      ? { status: "success" as const, data: initialData }
+      : { status: "loading" as const },
+  );
 
   const fetchData = () => {
     dispatch({ status: "loading" });
@@ -41,14 +44,8 @@ export function useDashboard() {
     today.setHours(0, 0, 0, 0);
 
     Promise.all([
-      getMe(dataConnect, {
-        fetchPolicy: "SERVER_ONLY",
-      }),
-      getMyCurrentVerse(
-        dataConnect,
-        { today: today.toISOString() },
-        { fetchPolicy: "SERVER_ONLY" },
-      ),
+      getMe(dataConnect),
+      getMyCurrentVerse(dataConnect, { today: today.toISOString() }),
     ])
       .then(([meResult, verseResult]) => {
         const verse = verseResult.data.todayCompletion[0]?.verse ?? null;
@@ -67,6 +64,7 @@ export function useDashboard() {
   };
 
   useEffect(() => {
+    if (initialData) return;
     if (fireAuth.currentUser) {
       fetchData();
       return;

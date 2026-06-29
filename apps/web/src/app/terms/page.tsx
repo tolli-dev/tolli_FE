@@ -161,6 +161,7 @@ export default function TermsPage() {
       <div className="pb-[calc(env(safe-area-inset-bottom)+1rem)]">
         <Button
           onClick={handleNext}
+          disabled={!requiredChecked}
           className={requiredChecked ? "" : "opacity-40"}
         >
           다음

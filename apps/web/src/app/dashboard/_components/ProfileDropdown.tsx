@@ -78,7 +78,7 @@ const MENU_ITEMS: MenuItem[] = [
       {
         type: "link",
         label: "알림 시간 설정",
-        href: "/afterLogin/setAlarmTime",
+        href: "/signup/set-alarm-time",
       },
     ],
   },
@@ -165,7 +165,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
             );
             onNotificationChange(true);
           } else {
-            router.push("/afterLogin/setAlarmTime");
+            router.push("/signup/set-alarm-time");
             onClose();
           }
         }
@@ -272,7 +272,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                   className="w-full flex items-center justify-between px-2 py-3"
                 >
                   <div className="flex items-center gap-2.5">
-                    <img src={item.icon} alt="" className="w-5 h-5 shrink-0" />
+                    <Image src={item.icon} alt="" width={20} height={20} className="shrink-0" />
                     <span
                       className="text-white text-[1rem] tracking-[-0.02em]"
                       style={{ fontWeight: isExpanded ? 500 : 300 }}
@@ -302,11 +302,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                       className="w-full flex items-center justify-between pb-3 border-b border-[#959595]/50"
                     >
                       <div className="flex items-center gap-2.5">
-                        <img
-                          src={item.icon}
-                          alt=""
-                          className="w-5 h-5 shrink-0"
-                        />
+                        <Image src={item.icon} alt="" width={20} height={20} className="shrink-0" />
                         <span className="text-white font-medium text-[1rem] tracking-[-0.02em]">
                           {item.label}
                         </span>

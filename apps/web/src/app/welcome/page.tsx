@@ -8,7 +8,7 @@ export default function WelcomePage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push('/afterLogin/step1');
+      router.push('/signup/tutorial');
     }, 3000);
     return () => clearTimeout(timer);
   }, [router]);

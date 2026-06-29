@@ -5,6 +5,7 @@ import Script from 'next/script';
 import './globals.css';
 import { PHProvider } from './_components/PHProvider';
 import TimezoneProvider from '@/components/TimezoneProvider';
+import SplashReadySignal from './_components/SplashReadySignal';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -63,6 +64,7 @@ export default function RootLayout({
           </>
         )}
         <TimezoneProvider />
+        <SplashReadySignal />
         <PHProvider>{children}</PHProvider>
       </body>
     </html>

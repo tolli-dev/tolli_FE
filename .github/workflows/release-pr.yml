@@ -4,6 +4,11 @@ on:
   pull_request:
     branches: [dev]
     types: [closed]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: read
 
 jobs:
   release-pr:

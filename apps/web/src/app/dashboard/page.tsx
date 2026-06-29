@@ -4,6 +4,7 @@ import DashboardClient from "./_components/DashboardClient";
 import DashboardHeader from "./_components/DashboardHeader";
 import DashboardLayout from "./_components/DashboardLayout";
 import { pool } from "@/lib/db";
+import { getLocalMidnight } from "@/lib/date";
 
 export type TodayVerse = {
   id: number;
@@ -31,8 +32,9 @@ async function getUserId(): Promise<string | null> {
 }
 
 async function fetchDashboardData(userId: string): Promise<DashboardInitialData> {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const cookieStore = await cookies();
+  const tzCookie = cookieStore.get("user-timezone")?.value;
+  const today = getLocalMidnight(tzCookie || "Asia/Seoul");
 
   const [userResult, verseResult] = await Promise.all([
     pool.query<{ nickname: string }>(

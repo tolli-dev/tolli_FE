@@ -3,6 +3,7 @@ import { getMe, getMyCurrentVerse } from "@firebasegen/default-connector";
 import { onAuthStateChanged } from "firebase/auth";
 import { fireAuth } from "@/firebase/fireAuth";
 import { dataConnect } from "@/lib/dataconnect";
+import { getLocalMidnight } from "@/lib/date";
 import { TodayVerse } from "../page";
 
 export type Data = {
@@ -40,8 +41,8 @@ export function useDashboard(initialData?: Data) {
   const fetchData = () => {
     dispatch({ status: "loading" });
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const today = getLocalMidnight(tz);
 
     Promise.all([
       getMe(dataConnect),

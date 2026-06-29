@@ -4,6 +4,7 @@ import { Noto_Sans_KR } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import { PHProvider } from './_components/PHProvider';
+import TimezoneProvider from '@/components/TimezoneProvider';
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -61,6 +62,7 @@ export default function RootLayout({
             </Script>
           </>
         )}
+        <TimezoneProvider />
         <PHProvider>{children}</PHProvider>
       </body>
     </html>

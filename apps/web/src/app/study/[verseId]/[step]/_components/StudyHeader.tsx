@@ -3,19 +3,22 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { playSound } from '@/lib/sound';
+import posthog from 'posthog-js';
 
 const TOTAL_STEPS = 7;
 
 interface StudyHeaderProps {
   currentStep: number;
+  verseId: string;
 }
 
-export default function StudyHeader({ currentStep }: StudyHeaderProps) {
+export default function StudyHeader({ currentStep, verseId }: StudyHeaderProps) {
   const router = useRouter();
   const [showExitModal, setShowExitModal] = useState(false);
 
   // 모달에서 진짜 나가기 (학습 초기화)
   const handleConfirmExit = () => {
+    posthog.capture('study_abandoned', { verse_id: verseId, abandoned_at_step: currentStep });
     playSound('/sounds/step (0-7) x누르고 진짜 나감 (초기화).mp3');
     router.push('/dashboard');
   };

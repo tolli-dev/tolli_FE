@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import IndividualBookmark from "./_components/IndividaulBookmark";
-import { getMyBookmarks } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { useState, useEffect } from 'react';
+import IndividualBookmark from './_components/IndividaulBookmark';
+import { getMyBookmarks } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 interface BookMarks {
   verse: {
@@ -25,7 +25,7 @@ export default function Bookmark({ nickname }: { nickname: string }) {
     setError(false);
     try {
       const { data } = await getMyBookmarks(dataConnect, {
-        fetchPolicy: "SERVER_ONLY",
+        fetchPolicy: 'SERVER_ONLY',
       });
       setLoading(false);
       setBookmarks(data.bookmarks);
@@ -93,16 +93,12 @@ export default function Bookmark({ nickname }: { nickname: string }) {
 
       {bookmarks.length !== 0 && !error && !loading && (
         <main className="w-full flex-1 min-h-0 flex flex-col items-center">
-          <span className="w-full text-right font-semibold text-[clamp(0.75rem,3.5vw,0.875rem)] leading-[1.6] tracking-[-2%] text-[#686868] shrink-0 mb-[3px]">
+          <span className="w-full text-right font-semibold text-[clamp(0.75rem,3.5vw,0.875rem)] leading-[1.6] tracking-[-2%] text-[#686868] shrink-0 mb-0.75">
             {bookmarks.length}/10
           </span>
           <div className="flex flex-col w-full flex-1 min-h-0 gap-[clamp(0.75rem,3.5vw,1rem)] pr-[clamp(0.375rem,2vw,0.5625rem)] pb-[clamp(2.5rem,12vw,4.375rem)] overflow-auto bookmarks">
             {bookmarks.map((value) => (
-              <IndividualBookmark
-                key={value.verse.id}
-                value={value}
-                fetchData={fetchData}
-              />
+              <IndividualBookmark key={value.verse.id} value={value} fetchData={fetchData} />
             ))}
           </div>
 

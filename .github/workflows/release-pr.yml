@@ -1,0 +1,28 @@
+name: Release PR
+
+on:
+  pull_request:
+    branches: [dev]
+    types: [closed]
+
+jobs:
+  release-pr:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create or update release PR
+        run: |
+          gh pr create \
+            --base main \
+            --head dev \
+            --title "chore: release dev to main" \
+            --body "dev 브랜치에 쌓인 변경사항을 main으로 배포합니다.
+
+          > 이 PR은 dev에 PR이 머지될 때마다 자동으로 생성/업데이트됩니다." \
+            --label release \
+          || echo "PR already exists"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

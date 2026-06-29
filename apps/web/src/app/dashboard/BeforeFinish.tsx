@@ -14,7 +14,7 @@ export default function BeforeFinish({ nickname }: { nickname: string }) {
 
   const getTodayMission = () => {
     setNavigating(true);
-    router.push('/study/loading');
+    router.push('/study/study-splash');
   };
 
   return (

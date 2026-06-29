@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import Nickname from "./Nickname";
-import Illustration from "./Illustration";
-import Card from "./Card";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import Nickname from './Nickname';
+import Illustration from './Illustration';
+import Card from './Card';
 
-const src = "/images/onBoarding/hungryTolli_1.webp";
+const src = '/images/onBoarding/hungryTolli_1.webp';
 
 export default function BeforeFinish({ nickname }: { nickname: string }) {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function BeforeFinish({ nickname }: { nickname: string }) {
 
   const getTodayMission = () => {
     setNavigating(true);
-    router.push("/study/loading");
+    router.push('/study/study-splash');
   };
 
   return (
@@ -24,12 +24,8 @@ export default function BeforeFinish({ nickname }: { nickname: string }) {
       <Illustration src={src} />
 
       <Card className="items-center">
-        <p className="relative z-10 text-dashboard-article-p">
-          오늘의 양식이 기다려요
-        </p>
-        <p className="relative z-10 text-dashboard-article-p">
-          말씀으로 하루를 시작해요!
-        </p>
+        <p className="relative z-10 text-dashboard-article-p">오늘의 양식이 기다려요</p>
+        <p className="relative z-10 text-dashboard-article-p">말씀으로 하루를 시작해요!</p>
       </Card>
 
       <button

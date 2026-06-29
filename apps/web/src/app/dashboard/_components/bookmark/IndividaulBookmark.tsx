@@ -1,0 +1,51 @@
+"use client";
+
+import { deleteBookmark } from "@firebasegen/default-connector";
+import { dataConnect } from "@/lib/dataconnect";
+import { useState } from "react";
+import { BookMarks } from "../../_hooks/useBookmark";
+import FilledStarIcon from "@/app/_components/FilledStarIcon";
+
+interface Props {
+  value: BookMarks;
+  onDelete: () => void;
+}
+
+export default function IndividualBookmark({ value, onDelete }: Props) {
+  const [error, setError] = useState(false);
+
+  const handleDeleteBookmark = async () => {
+    setError(false);
+    try {
+      await deleteBookmark(dataConnect, { verseId: value.verse.id });
+      onDelete();
+    } catch {
+      setError(true);
+    }
+  };
+
+  return (
+    <article
+      className={`w-full shrink-0 flex flex-col border bg-[#C8C8C8]/20 rounded-[clamp(1rem,4.5vw,1.25rem)] py-[clamp(1rem,4.5vw,1.375rem)] px-[clamp(1.125rem,5vw,1.5625rem)] transition-colors ${
+        error ? "border-red-400/60" : "border-[#CCB5F0]"
+      }`}
+    >
+      <span className="flex justify-end -mt-1.5 -mb-1.5">
+        <button onClick={handleDeleteBookmark} title="즐겨찾기 삭제">
+          <FilledStarIcon />
+        </button>
+      </span>
+      <h3 className="font-semibold text-[clamp(0.875rem,4vw,1rem)] leading-tight text-[#171717] mb-[clamp(0.5rem,2.5vw,0.6875rem)]">
+        {value.verse.reference}
+      </h3>
+      <p className="font-light text-[clamp(0.8125rem,3.8vw,0.9375rem)] leading-[1.55] tracking-[-2%] text-[#353535] break-keep">
+        {value.verse.fullText}
+      </p>
+      {error && (
+        <p className="text-red-400 text-[clamp(0.6875rem,3vw,0.75rem)] mt-2">
+          삭제에 실패했어요. 별을 눌러 다시 시도해주세요.
+        </p>
+      )}
+    </article>
+  );
+}

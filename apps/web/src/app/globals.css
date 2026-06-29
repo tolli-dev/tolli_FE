@@ -44,7 +44,7 @@ body {
   touch-action: pan-y;
 }
 
-body:has(.afterLogin-greeting) {
+body:has(.signup-greeting) {
   padding-bottom: 0 !important;
 }
 

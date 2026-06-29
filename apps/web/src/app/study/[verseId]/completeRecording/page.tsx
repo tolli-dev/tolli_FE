@@ -33,8 +33,14 @@ export default function CompleteStep() {
   }, []);
 
   useEffect(() => {
-    posthog.capture('study_completed', { verse_id: verseId });
+    posthog.capture("study_completed", { verse_id: verseId });
+    const from = sessionStorage.getItem("studyFrom");
+    if (from === "recall") {
+      posthog.capture("recall_completed", { verse_id: verseId });
+      sessionStorage.removeItem("studyFrom");
+    }
     playSound("/sounds/tolli에게 먹이가 전해졌을때.mp3");
+
     const time = setTimeout(() => {
       setComponent(true);
     }, 3000);
@@ -80,7 +86,7 @@ export default function CompleteStep() {
               priority
               className="
                 object-contain z-10 scale-[1.0]
-                translate-x-[90px]"
+                translate-x-22.5"
             />
           )}
           {component && (
@@ -91,7 +97,7 @@ export default function CompleteStep() {
               priority
               className="
                 object-contain z-10 scale-[1.2]
-                translate-x-[10px]"
+                translate-x-2.5"
             />
           )}
         </div>

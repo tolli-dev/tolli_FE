@@ -1,0 +1,44 @@
+import { KakaoIcon, GoogleIcon, AppleIcon } from "./icons";
+
+const PROVIDER_CONFIG = {
+  kakao: {
+    bgColor: "bg-[#FEE500]",
+    textColor: "text-[#000000]",
+    icon: KakaoIcon,
+    label: "카카오로 로그인",
+  },
+  google: {
+    bgColor: "bg-white",
+    textColor: "text-[#1f1f1f]",
+    icon: GoogleIcon,
+    label: "Sign in with Google",
+  },
+  apple: {
+    bgColor: "bg-black",
+    textColor: "text-white",
+    icon: AppleIcon,
+    label: "Sign in with Apple",
+  },
+} as const;
+
+type Provider = keyof typeof PROVIDER_CONFIG;
+
+interface Props {
+  provider: Provider;
+  onClick: () => void;
+}
+
+export default function ProviderButton({ provider, onClick }: Props) {
+  const { bgColor, textColor, icon: Icon, label } = PROVIDER_CONFIG[provider];
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full h-[clamp(3rem,10vw,3.375rem)] flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] ${bgColor} rounded-[clamp(1rem,5vw,1.25rem)] tracking-[0.25px]`}
+    >
+      <Icon />
+      <span className={`${textColor} text-[clamp(0.8125rem,3.5vw,0.875rem)] font-medium`}>{label}</span>
+    </button>
+  );
+}

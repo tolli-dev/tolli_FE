@@ -1,4 +1,4 @@
-import StudyHeader from '../../_components/StudyHeader';
+import StudyHeader from './_components/StudyHeader';
 
 interface StudyLayoutProps {
   children: React.ReactNode;
@@ -6,11 +6,11 @@ interface StudyLayoutProps {
 }
 
 export default async function StudyLayout({ children, params }: StudyLayoutProps) {
-  const { step } = await params;
+  const { step, verseId } = await params;
 
   return (
     <div className="flex flex-col h-full ">
-      <StudyHeader currentStep={Number(step)} />
+      <StudyHeader currentStep={Number(step)} verseId={verseId} />
       <div className="flex flex-col flex-1 w-full">{children}</div>
     </div>
   );

@@ -67,6 +67,10 @@ export function useDashboard() {
   };
 
   useEffect(() => {
+    if (fireAuth.currentUser) {
+      fetchData();
+      return;
+    }
     const unsubscribe = onAuthStateChanged(fireAuth, (user) => {
       if (!user) return;
       fetchData();

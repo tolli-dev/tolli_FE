@@ -4,12 +4,13 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { getMyCurrentVerse } from '@firebasegen/default-connector';
 import { dataConnect } from '@/lib/dataconnect';
+import { getLocalMidnight } from '@/lib/date';
 import { useRouter } from 'next/navigation';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
 
 async function getTodayVerseId(): Promise<number> {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const today = getLocalMidnight(tz);
 
   const result = await getMyCurrentVerse(dataConnect, { today: today.toISOString() });
   const { lastCompletion } = result.data;

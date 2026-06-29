@@ -8,8 +8,8 @@ export default function DashboardLayout({ children, done }: Props) {
     <section
       className={`
         dashboard-layout
-        flex flex-col w-full flex-1 min-h-0 justify-between items-center
-        px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]
+        flex flex-col w-full flex-1 min-h-0 justify-start items-center
+        px-[2.688rem] py-[clamp(2rem,5svh,5.313rem)]
         ${done ? "is-done" : ""}
       `}
     >

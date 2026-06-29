@@ -2,12 +2,13 @@ export default {
   expo: {
     name: "tolli",
     slug: "tolli",
-    version: "1.0.1",
+    version: "1.0.4",
     orientation: "portrait",
     icon: "./assets/apple-icon.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
     ios: {
+      buildNumber: "1",
       supportsTablet: true,
       bundleIdentifier: "com.company.tolli",
       usesAppleSignIn: true,
@@ -33,6 +34,15 @@ export default {
     },
     scheme: "tolli",
     plugins: [
+      [
+        "expo-splash-screen",
+        {
+          image: "./assets/splash.png",
+          imageWidth: 300,
+          resizeMode: "contain",
+          backgroundColor: "#1B1B1B",
+        },
+      ],
       [
         "@react-native-google-signin/google-signin",
         {

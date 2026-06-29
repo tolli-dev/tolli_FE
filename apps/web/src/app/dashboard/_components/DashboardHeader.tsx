@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { updateNickname, deleteUser } from "@firebasegen/default-connector";
 import { fireAuth } from "@/firebase/fireAuth";
-import { dataConnect } from "@/lib/dataconnect";
+import { dataConnect, terminateDataConnect } from "@/lib/dataconnect";
 import ProfileDropdown from "./ProfileDropdown";
 import standingTolli from "../../../../public/tolli1.webp";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -92,6 +91,8 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
     try {
+      await terminateDataConnect();
+      await fetch("/api/auth/clear-session", { method: "POST" });
       await signOut(fireAuth);
     } catch (error) {
       console.error("로그아웃 에러", error);
@@ -124,6 +125,8 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       JSON.stringify({ type: "CLEAR_ALL_DATA" }),
     );
     try {
+      await terminateDataConnect();
+      await fetch("/api/auth/clear-session", { method: "POST" });
       await signOut(fireAuth);
     } catch (error) {
       console.error("로그아웃 실패", error);
@@ -166,7 +169,6 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
         />
       )}
 
-      {/* 로그아웃 / 회원탈퇴 모달 */}
       {(modal === "logout" || modal === "withdraw") && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/92"
@@ -215,7 +217,6 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
         </div>
       )}
 
-      {/* 이름 변경 모달 */}
       {modal === "rename" && (
         <div
           className="fixed inset-0 z-200 flex items-center justify-center bg-black/60"
@@ -291,27 +292,39 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
 
       <header
         className="
-          relative flex flex-row justify-end items-center w-full
+          absolute inset-0
+          flex flex-row justify-end items-center w-full
           gap-[clamp(1.5rem,7vw,2.5rem)]
-          mb-[clamp(0.5rem,2vw,0.75rem)]
           z-50
         "
       >
-        <Icon
+        <svg
           onClick={handleAccessToStorage}
-          icon="tabler:archive-filled"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
           className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
-        />
+          aria-hidden="true"
+        >
+          <path d="M3 3a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3z" />
+          <path d="M3 9v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3zm7 2h4a1 1 0 1 1 0 2h-4a1 1 0 1 1 0-2z" />
+        </svg>
         <button
           ref={profileBtnRef}
           onClick={() => setIsDropdownOpen((v) => !v)}
           className="relative"
           aria-label="프로필 메뉴"
         >
-          <Icon
-            icon="iconamoon:profile-fill"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
             className="w-[clamp(1.125rem,5vw,1.5rem)] h-[clamp(1.125rem,5vw,1.5rem)]"
-          />
+            aria-hidden="true"
+          >
+            <path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2z" />
+            <path d="M2 20c0-4.418 4.477-8 10-8s10 3.582 10 8H2z" />
+          </svg>
           <ProfileDropdown
             ref={dropdownRef}
             isOpen={isDropdownOpen}

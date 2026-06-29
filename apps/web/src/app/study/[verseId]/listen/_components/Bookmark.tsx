@@ -9,9 +9,9 @@ import { playSound } from "@/lib/sound";
 export default function Bookmark({ verseId }: { verseId: number }) {
   const router = useRouter();
 
-  const handleYes = async () => {
+  const handleYes = () => {
     playSound("/sounds/어디론가 추가되었을때.mp3");
-    await addBookmark(dataConnect, { verseId });
+    addBookmark(dataConnect, { verseId });
     router.push(`/study/${verseId}/completeListening?type=yes`);
   };
 

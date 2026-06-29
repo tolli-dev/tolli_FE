@@ -63,6 +63,11 @@ export default function useLogin() {
         const payload = JSON.parse(atob(idToken.split(".")[1]));
         if (payload.registered) {
           posthog.capture("login_success", { is_new_user: false });
+          await fetch("/api/auth/set-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken }),
+          });
           window.ReactNativeWebView?.postMessage(
             JSON.stringify({ type: "SET_LOGGED_IN" }),
           );

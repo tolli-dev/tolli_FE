@@ -53,17 +53,21 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   };
 
   const handleDeleteBookmark = async (verseId: number) => {
-    await deleteBookmark(dataConnect, { verseId: verseId });
     setBookmark(false);
+    try {
+      await deleteBookmark(dataConnect, { verseId: verseId });
+    } catch {
+      setBookmark(true);
+    }
   };
 
   const handleAddBookmark = async (verseId: number) => {
+    setBookmark(true);
+    playSound("/sounds/어디론가 추가되었을때.mp3");
     try {
       await addBookmark(dataConnect, { verseId: verseId });
-
-      playSound("/sounds/어디론가 추가되었을때.mp3");
-      setBookmark(true);
     } catch (error) {
+      setBookmark(false);
       if (error instanceof DataConnectError) {
         setErrorMessage(extractErrorMessage(error));
       } else {

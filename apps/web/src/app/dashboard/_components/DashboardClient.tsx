@@ -7,6 +7,7 @@ import { useDashboard } from "../_hooks/useDashboard";
 import FetchError from "./FetchError";
 import DashboardNav from "./DashboardNav";
 import DashboardHome from "./home/DashboardHome";
+import DashboardHeader from "./DashboardHeader";
 import { useTab } from "../_hooks/useTab";
 import { DashboardInitialData } from "../page";
 import { fireAuth } from "@/firebase/fireAuth";
@@ -37,6 +38,9 @@ export default function DashboardClient({ initialData, shouldRefreshSession }: P
 
   return (
     <>
+      <div className="relative w-full h-[clamp(1.125rem,5vw,1.5rem)] shrink-0 mb-[clamp(0.5rem,2vw,0.75rem)]">
+        <DashboardHeader nickname={nickname} done={done} />
+      </div>
       {state.status === "loading" && !initialData && <LoadingSpinner />}
       {state.status === "error" && <FetchError onError={onError} />}
       {(state.status === "success" || !!initialData) && (

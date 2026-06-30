@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import admin from "@/firebase/firebaseAdmin";
 import DashboardClient from "./_components/DashboardClient";
-import DashboardHeader from "./_components/DashboardHeader";
 import DashboardLayout from "./_components/DashboardLayout";
 import { pool } from "@/lib/db";
 import { getLocalMidnight } from "@/lib/date";
@@ -64,13 +63,9 @@ export default async function DashBoard() {
   const userId = await getUserId();
   const initialData = userId ? await fetchDashboardData(userId) : null;
   const done = initialData?.done ?? false;
-  const nickname = initialData?.nickname ?? "";
 
   return (
     <DashboardLayout done={done}>
-      <div className="relative w-full h-[clamp(1.125rem,5vw,1.5rem)] shrink-0 mb-[clamp(0.5rem,2vw,0.75rem)]">
-        <DashboardHeader nickname={nickname} done={done} />
-      </div>
       <DashboardClient
         initialData={initialData}
         shouldRefreshSession={!!userId}

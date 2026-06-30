@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 export default {
   expo: {
     name: "tolli",
@@ -83,6 +85,7 @@ export default {
           },
         },
       ],
+      "./plugins/withIosProjectTweaks",
     ],
     extra: {
       googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,

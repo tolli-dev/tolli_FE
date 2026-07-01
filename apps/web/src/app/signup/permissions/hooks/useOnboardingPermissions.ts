@@ -80,6 +80,33 @@ export function useOnboardingPermissions(
     postToNative({ type: 'RECORD_READY' });
   }, [completeAll]);
 
+  const isMicAlreadyGrantedIOS = useCallback(async (): Promise<boolean> => {
+    try {
+      const status = await navigator.permissions.query({
+        name: 'microphone' as PermissionName,
+      });
+      if (status.state === 'granted') return true;
+      if (status.state === 'denied') return false;
+    } catch {
+      // permissions.query 미지원 → getUserMedia로 판별
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((t) => t.stop());
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const advanceToMicIOS = useCallback(async () => {
+    advanceToMic();
+    if (await isMicAlreadyGrantedIOS()) {
+      completeAll();
+    }
+  }, [advanceToMic, isMicAlreadyGrantedIOS, completeAll]);
+
   const initGate = useCallback(() => {
     if (!isNative) {
       completeAll();
@@ -105,8 +132,12 @@ export function useOnboardingPermissions(
 
       if (data.type === 'NOTIFICATION_PERMISSION_RESULT') {
         if (data.granted) {
-          advanceToMic();
-          if (!isIOS()) requestMic();
+          if (isIOS()) {
+            advanceToMicIOS();
+          } else {
+            advanceToMic();
+            requestMic();
+          }
         } else {
           setNeedSettings(true);
         }
@@ -135,9 +166,11 @@ export function useOnboardingPermissions(
           if (!notificationGranted) {
             setStep('notification');
             requestNotification();
+          } else if (isIOS()) {
+            advanceToMicIOS();
           } else {
             advanceToMic();
-            if (!isIOS()) requestMic();
+            requestMic();
           }
         } else if (notificationGranted && stepRef.current !== 'mic') {
           advanceToMic();
@@ -172,7 +205,7 @@ export function useOnboardingPermissions(
       document.removeEventListener('message', handleMessage as EventListener);
       document.removeEventListener('visibilitychange', handleVisibility);
     };
-  }, [isNative, advanceToMic, completeAll, requestNotification, requestMic]);
+  }, [isNative, advanceToMic, advanceToMicIOS, completeAll, requestNotification, requestMic]);
 
   const openAppSettings = useCallback(() => {
     postToNative({ type: 'OPEN_APP_SETTINGS' });

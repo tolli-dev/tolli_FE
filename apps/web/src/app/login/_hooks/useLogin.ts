@@ -68,10 +68,8 @@ export default function useLogin() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ idToken }),
           });
-          window.ReactNativeWebView?.postMessage(
-            JSON.stringify({ type: "SET_LOGGED_IN" }),
-          );
-          router.push("/dashboard");
+          sessionStorage.setItem("permissionsReloginMode", "true");
+          router.push("/signup/permissions");
         } else {
           posthog.capture("login_success", { is_new_user: true });
           router.push("/terms");

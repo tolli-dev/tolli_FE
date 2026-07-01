@@ -6,6 +6,7 @@ import {
   signInWithGoogleToken,
   signInWithKakaoToken,
 } from "@/firebase/fireAuth";
+import { hasAllPermissions } from "@/app/signup/permissions/lib/checkPermissions";
 
 export type Provider = "kakao" | "google" | "apple";
 
@@ -68,8 +69,15 @@ export default function useLogin() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ idToken }),
           });
-          sessionStorage.setItem("permissionsReloginMode", "true");
-          router.push("/signup/permissions");
+          if (await hasAllPermissions()) {
+            window.ReactNativeWebView?.postMessage(
+              JSON.stringify({ type: "SET_LOGGED_IN" }),
+            );
+            router.push("/dashboard");
+          } else {
+            sessionStorage.setItem("permissionsReloginMode", "true");
+            router.push("/signup/permissions");
+          }
         } else {
           posthog.capture("login_success", { is_new_user: true });
           router.push("/terms");

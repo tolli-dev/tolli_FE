@@ -6,6 +6,7 @@ interface UseOnboardingPermissionsResult {
   step: PermissionStep;
   needSettings: boolean;
   blocked: boolean;
+  interactionRequired: boolean;
   isNative: boolean;
   initGate: () => void;
   requestNotification: () => void;
@@ -28,6 +29,7 @@ export function useOnboardingPermissions(
   const [step, setStep] = useState<PermissionStep>('notification');
   const [needSettings, setNeedSettings] = useState(false);
   const [blocked, setBlocked] = useState(false);
+  const [interactionRequired, setInteractionRequired] = useState(false);
 
   const isNative =
     typeof window !== 'undefined' && Boolean(window.ReactNativeWebView);
@@ -104,6 +106,8 @@ export function useOnboardingPermissions(
     advanceToMic();
     if (await isMicAlreadyGrantedIOS()) {
       completeAll();
+    } else {
+      setInteractionRequired(true);
     }
   }, [advanceToMic, isMicAlreadyGrantedIOS, completeAll]);
 
@@ -215,6 +219,7 @@ export function useOnboardingPermissions(
     step,
     needSettings,
     blocked,
+    interactionRequired,
     isNative,
     initGate,
     requestNotification,

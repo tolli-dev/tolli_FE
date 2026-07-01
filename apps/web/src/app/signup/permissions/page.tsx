@@ -50,8 +50,16 @@ export default function OnboardingPermissionsPage() {
     router.replace('/dashboard');
   }, [router]);
 
-  const { step, needSettings, blocked, initGate, requestNotification, requestMic, openAppSettings } =
-    useOnboardingPermissions(handleAllGranted);
+  const {
+    step,
+    needSettings,
+    blocked,
+    interactionRequired,
+    initGate,
+    requestNotification,
+    requestMic,
+    openAppSettings,
+  } = useOnboardingPermissions(handleAllGranted);
 
   const [started, setStarted] = useState(false);
 
@@ -79,6 +87,16 @@ export default function OnboardingPermissionsPage() {
   const micActive = step === 'mic';
 
   const activeIcon = micActive ? 'fluent:mic-28-filled' : 'fluent:alert-28-filled';
+
+  const showGate = interactionRequired || needSettings || blocked;
+
+  if (!showGate) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <>

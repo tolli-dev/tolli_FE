@@ -80,16 +80,14 @@ export default function OnboardingPermissionsPage() {
 
   const activeIcon = micActive ? 'fluent:mic-28-filled' : 'fluent:alert-28-filled';
 
-  if (isCompleting) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
   return (
-    <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] pt-[clamp(2.5rem,8dvh,5rem)] pb-[clamp(2rem,5dvh,5.313rem)]">
+    <>
+      {isCompleting && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/50">
+          <LoadingSpinner />
+        </div>
+      )}
+      <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] pt-[clamp(2.5rem,8dvh,5rem)] pb-[clamp(2rem,5dvh,5.313rem)]">
       <div className="flex flex-col items-center w-full gap-[0.5rem]">
         <h1 className="text-h1 text-primary-50 text-center whitespace-nowrap">거의 다 왔어요!</h1>
         <h2 className="text-h2 text-surface-200 text-center whitespace-nowrap">{guideText}</h2>
@@ -133,8 +131,9 @@ export default function OnboardingPermissionsPage() {
         >
           {showSettings ? '설정으로 이동' : '권한 허용하기'}
         </button>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 }
 

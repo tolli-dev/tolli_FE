@@ -61,6 +61,7 @@ export default function StorageView({ done, nickname }: Props) {
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await signOut(fireAuth);
     } catch (error) {
       console.error("로그아웃 에러", error);
@@ -94,6 +95,7 @@ export default function StorageView({ done, nickname }: Props) {
     );
 
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await signOut(fireAuth);
     } catch (error) {
       console.error("로그아웃 실패", error);

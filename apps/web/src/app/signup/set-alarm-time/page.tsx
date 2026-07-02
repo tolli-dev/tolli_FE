@@ -23,9 +23,13 @@ export default function SetAlarmTimePage() {
   const [minuteIndex, setMinuteIndex] = useState(0);
   const [period, setPeriod] = useState<Period>('오전');
   const [showPermissionModal, setShowPermissionModal] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const pendingAlarm = useRef<{ hour: number; minute: number } | null>(null);
+  const savedTimeLoaded = useRef(false);
 
   useEffect(() => {
+    const fallback = setTimeout(() => setInitialized(true), 500);
+
     const handler = (e: MessageEvent) => {
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
@@ -41,12 +45,26 @@ export default function SetAlarmTimePage() {
             setShowPermissionModal(true);
           }
         }
+        if (data.type === 'ALARM_TIME' && !savedTimeLoaded.current) {
+          savedTimeLoaded.current = true;
+          if (data.hour !== null && data.minute !== null) {
+            const hour24: number = data.hour;
+            const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
+            const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+            setHourIndex(hour12 - 1);
+            setMinuteIndex(data.minute);
+            setPeriod(newPeriod);
+          }
+          setInitialized(true);
+        }
       } catch {}
     };
     window.addEventListener('message', handler);
     document.addEventListener('message', handler as unknown as EventListener);
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'WEB_READY' }));
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GET_ALARM_TIME' }));
     return () => {
+      clearTimeout(fallback);
       window.removeEventListener('message', handler);
       document.removeEventListener('message', handler as unknown as EventListener);
     };
@@ -143,7 +161,7 @@ export default function SetAlarmTimePage() {
         </div>
       </div>
 
-      <div className="relative flex flex-row items-center flex-1 w-full">
+      <div className={`relative flex flex-row items-center flex-1 w-full transition-opacity ${initialized ? 'opacity-100' : 'opacity-0'}`}>
         <div className="relative flex flex-row items-center flex-1">
           <div
             className="absolute pointer-events-none"

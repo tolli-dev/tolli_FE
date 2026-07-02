@@ -1,16 +1,16 @@
-import Image from "next/image";
-import ReadingBookTolli from "../../../../../../public/tolli1.webp";
-import SetBookmarkButton from "./SetBookmarkButton";
-import { useRouter } from "next/navigation";
-import { addBookmark } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
-import { playSound } from "@/lib/sound";
+import Image from 'next/image';
+import ReadingBookTolli from '../../../../../../public/tolli1.webp';
+import SetBookmarkButton from './SetBookmarkButton';
+import { useRouter } from 'next/navigation';
+import { addBookmark } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
+import { playSound } from '@/lib/sound';
 
 export default function Bookmark({ verseId }: { verseId: number }) {
   const router = useRouter();
 
   const handleYes = () => {
-    playSound("/sounds/어디론가 추가되었을때.mp3");
+    playSound('/sounds/어디론가 추가되었을때.mp3');
     addBookmark(dataConnect, { verseId });
     router.push(`/study/${verseId}/completeListening?type=yes`);
   };
@@ -33,8 +33,7 @@ export default function Bookmark({ verseId }: { verseId: number }) {
           />
           <div className="flex flex-col items-center justify-center mb-[clamp(1.125rem,7.25vw,1.8125rem)]">
             <p className="font-normal text-[clamp(0.625rem,3vw,0.75rem)] leading-[clamp(0.875rem,4.5vw,1.125rem)] text-[#949494]">
-              톨리에서는{" "}
-              <span className="text-[#CCB5F0]">무료 버전 최대 10구절</span>까지
+              톨리에서는 <span className="text-[#CCB5F0]">최대 10구절</span>까지
             </p>
             <p className="font-normal text-[clamp(0.625rem,3vw,0.75rem)] leading-[clamp(0.875rem,4.5vw,1.125rem)] text-[#949494]">
               즐겨찾기를 제공하고 있어요. 홈화면에서 얼마든지
@@ -44,16 +43,8 @@ export default function Bookmark({ verseId }: { verseId: number }) {
             </p>
           </div>
           <div className="flex flex-col w-full gap-[clamp(0.375rem,2vw,0.5rem)]">
-            <SetBookmarkButton
-              text="네!"
-              color="#CCB5F0"
-              handleClick={handleYes}
-            />
-            <SetBookmarkButton
-              text="다음에 할게요!"
-              color="#D9D9D9"
-              handleClick={handleNo}
-            />
+            <SetBookmarkButton text="네!" color="#CCB5F0" handleClick={handleYes} />
+            <SetBookmarkButton text="다음에 할게요!" color="#D9D9D9" handleClick={handleNo} />
           </div>
         </div>
       </div>

@@ -91,6 +91,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await terminateDataConnect();
       await fetch("/api/auth/clear-session", { method: "POST" });
       await signOut(fireAuth);
@@ -125,6 +126,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       JSON.stringify({ type: "CLEAR_ALL_DATA" }),
     );
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await terminateDataConnect();
       await fetch("/api/auth/clear-session", { method: "POST" });
       await signOut(fireAuth);

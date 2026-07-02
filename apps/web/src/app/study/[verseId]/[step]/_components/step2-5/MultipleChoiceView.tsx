@@ -22,7 +22,6 @@ export default function MultipleChoiceView({
   const router = useRouter();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [wrongChoice, setWrongChoice] = useState<string | null>(null);
-  const [correctChoice, setCorrectChoice] = useState<string | null>(null);
 
   const answeredCount = Object.keys(answers).length;
   const currentMaskedWordIndex = stepMaskData.maskedIndices[answeredCount];
@@ -34,11 +33,7 @@ export default function MultipleChoiceView({
     if (isCorrect) {
       playSound('/sounds/정답.mp3');
       setWrongChoice(null);
-      setCorrectChoice(choice);
-      setTimeout(() => {
-        setCorrectChoice(null);
-        setAnswers((prev) => ({ ...prev, [currentMaskedWordIndex]: choice }));
-      }, 500);
+      setAnswers((prev) => ({ ...prev, [currentMaskedWordIndex]: choice }));
     } else {
       playSound('/sounds/오답.mp3');
       setWrongChoice(choice);
@@ -89,7 +84,7 @@ export default function MultipleChoiceView({
             <button
               key={choice}
               onClick={() => handleChoiceSelect(choice)}
-              className={`py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em] ring-1 ring-inset ${wrongChoice === choice ? 'ring-[#FF0000]' : correctChoice === choice ? 'ring-[#CCB5F0]' : 'ring-transparent'}`}
+              className={`py-3 rounded-[15px] bg-[#373737] text-[1.0625rem] text-[#CCB5F0] leading-5 tracking-[0.03em] ring-1 ring-inset ${wrongChoice === choice ? 'ring-[#FF0000]' : 'ring-transparent'}`}
             >
               {choice}
             </button>

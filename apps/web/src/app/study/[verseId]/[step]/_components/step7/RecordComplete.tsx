@@ -14,7 +14,7 @@ export default function RecordComplete({
   const router = useRouter();
 
   const stopRecording = () => {
-    router.push(`/study/${verseId}/completeRecording`);
+    router.push(`/study/${verseId}/listen`);
   };
 
   return (

@@ -49,8 +49,9 @@ export default function CompleteStep() {
 
   useEffect(() => {
     if (!component) return;
+    playSound("/sounds/말씀 step 7까지 다 완료.mp3");
     const time = setTimeout(() => {
-      router.push(`/study/${verseId}/listen`);
+      router.push("/dashboard");
     }, 3000);
     return () => clearTimeout(time);
   }, [component, router, verseId]);

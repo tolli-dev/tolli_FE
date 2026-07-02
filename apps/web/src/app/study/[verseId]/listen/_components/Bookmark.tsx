@@ -12,11 +12,11 @@ export default function Bookmark({ verseId }: { verseId: number }) {
   const handleYes = () => {
     playSound('/sounds/어디론가 추가되었을때.mp3');
     addBookmark(dataConnect, { verseId });
-    router.push(`/study/${verseId}/completeListening?type=yes`);
+    router.push(`/study/${verseId}/completeRecording`);
   };
 
   const handleNo = () => {
-    router.push(`/study/${verseId}/completeListening?type=no`);
+    router.push(`/study/${verseId}/completeRecording`);
   };
 
   return (

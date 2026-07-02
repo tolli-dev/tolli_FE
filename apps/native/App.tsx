@@ -19,7 +19,7 @@ import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-w
 import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 
-const IP_URL = 'http://192.168.0.7:3000';
+const IP_URL = 'https://tolli-fe-web.vercel.app/';
 
 // 네이티브 스플래시를 직접 숨길 때까지 유지 (자동 숨김 방지)
 SplashScreen.preventAutoHideAsync();

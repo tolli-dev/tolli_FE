@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "tolli",
     slug: "tolli",
-    version: "1.0.5",
+    version: "1.0.6",
     orientation: "portrait",
     icon: "./assets/apple-icon.png",
     userInterfaceStyle: "light",
@@ -21,7 +21,7 @@ export default {
     },
     android: {
       package: "com.company.tolli",
-      versionCode: 8,
+      versionCode: 9,
       allowBackup: false,
       // FCM(Expo Push) 초기화용. 이 파일이 있어야 FirebaseApp이 자동 초기화된다.
       googleServicesFile: "./google-services.json",

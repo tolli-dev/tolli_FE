@@ -23,11 +23,13 @@ export default {
       package: "com.company.tolli",
       versionCode: 8,
       allowBackup: false,
+      // FCM(Expo Push) 초기화용. 이 파일이 있어야 FirebaseApp이 자동 초기화된다.
+      googleServicesFile: "./google-services.json",
       adaptiveIcon: {
         foregroundImage: "./assets/android-icon.png",
         backgroundColor: "#1B1B1B",
       },
-      permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
+      permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS", "SCHEDULE_EXACT_ALARM"],
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
     },
@@ -50,7 +52,7 @@ export default {
         {
           iosUrlScheme:
             "com.googleusercontent.apps.453019507405-qq1d999d55r3onrsdoednvtmjggfq6vf",
-          googleServicesFile: "./android/app/google-services.json",
+          googleServicesFile: "./google-services.json",
         },
       ],
       [

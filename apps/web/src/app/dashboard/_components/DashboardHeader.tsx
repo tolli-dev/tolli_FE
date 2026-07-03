@@ -29,26 +29,6 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   >(null);
 
   useEffect(() => {
-    const handler = (e: MessageEvent) => {
-      try {
-        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.type === "NOTIFICATION_STATUS") {
-          setNotificationEnabled(data.enabled);
-        }
-      } catch {}
-    };
-    window.addEventListener("message", handler);
-    document.addEventListener("message", handler as unknown as EventListener);
-    return () => {
-      window.removeEventListener("message", handler);
-      document.removeEventListener(
-        "message",
-        handler as unknown as EventListener,
-      );
-    };
-  }, []);
-
-  useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
       if (
         profileBtnRef.current?.contains(e.target as Node) ||

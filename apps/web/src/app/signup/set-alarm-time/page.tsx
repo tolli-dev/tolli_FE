@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import TimeTolly from '../../../../public/images/onBoarding/timeSetTolli.webp';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
+import { getAlarm, saveAlarm } from '@/lib/alarm';
 import WheelPicker from './_components/WheelPicker';
 
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -30,39 +31,42 @@ export default function SetAlarmTimePage() {
   useEffect(() => {
     const fallback = setTimeout(() => setInitialized(true), 500);
 
+    // 알림 권한 결과: 허용되면 서버에 알람 저장 후 대시보드로 이동
     const handler = (e: MessageEvent) => {
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
         if (data.type === 'NOTIFICATION_PERMISSION_RESULT') {
           if (data.granted && pendingAlarm.current) {
-            window.ReactNativeWebView?.postMessage(
-              JSON.stringify({ type: 'SAVE_ALARM_TIME', ...pendingAlarm.current }),
-            );
-            window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
-            router.push('/dashboard');
+            const { hour, minute } = pendingAlarm.current;
+            saveAlarm(hour, minute).finally(() => {
+              window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
+              router.push('/dashboard');
+            });
           } else if (!data.granted) {
             pendingAlarm.current = null;
             setShowPermissionModal(true);
           }
-        }
-        if (data.type === 'ALARM_TIME' && !savedTimeLoaded.current) {
-          savedTimeLoaded.current = true;
-          if (data.hour !== null && data.minute !== null) {
-            const hour24: number = data.hour;
-            const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
-            const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
-            setHourIndex(hour12 - 1);
-            setMinuteIndex(data.minute);
-            setPeriod(newPeriod);
-          }
-          setInitialized(true);
         }
       } catch {}
     };
     window.addEventListener('message', handler);
     document.addEventListener('message', handler as unknown as EventListener);
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'WEB_READY' }));
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'GET_ALARM_TIME' }));
+
+    // 저장된 알람 시간을 서버에서 불러와 피커에 미리 채운다
+    getAlarm().then((alarm) => {
+      if (!savedTimeLoaded.current && alarm && alarm.hour !== null && alarm.minute !== null) {
+        savedTimeLoaded.current = true;
+        const hour24 = alarm.hour;
+        const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
+        const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+        setHourIndex(hour12 - 1);
+        setMinuteIndex(alarm.minute);
+        setPeriod(newPeriod);
+      }
+      setInitialized(true);
+    });
+
     return () => {
       clearTimeout(fallback);
       window.removeEventListener('message', handler);

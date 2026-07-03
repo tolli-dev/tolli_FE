@@ -19,7 +19,7 @@ import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-w
 import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 
-const IP_URL = 'https://tolli-fe-web.vercel.app';
+const IP_URL = 'https://tolli-fe-web.vercel.app/';
 
 // 네이티브 스플래시를 직접 숨길 때까지 유지 (자동 숨김 방지)
 SplashScreen.preventAutoHideAsync();
@@ -133,7 +133,14 @@ export default function App() {
         setInitialUri(`${IP_URL}/onboarding`);
       } else {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-        setInitialUri(isLoggedIn === 'true' ? `${IP_URL}/dashboard` : `${IP_URL}/login`);
+        if (isLoggedIn === 'true') {
+          setInitialUri(`${IP_URL}/dashboard`);
+        } else {
+          const permissionPending = await AsyncStorage.getItem('permissionPending');
+          setInitialUri(
+            permissionPending === 'true' ? `${IP_URL}/signup/permissions` : `${IP_URL}/login`,
+          );
+        }
       }
     })();
   }, []);
@@ -223,10 +230,19 @@ export default function App() {
         await AsyncStorage.setItem('isLoggedIn', 'true');
       }
 
+      if (data.type === 'SET_PERMISSION_PENDING') {
+        await AsyncStorage.setItem('permissionPending', 'true');
+      }
+
+      if (data.type === 'CLEAR_PERMISSION_PENDING') {
+        await AsyncStorage.removeItem('permissionPending');
+      }
+
       if (data.type === 'SET_LOGGED_OUT') {
         await AsyncStorage.removeItem('isLoggedIn');
         await AsyncStorage.removeItem('alarmTime');
         await AsyncStorage.removeItem('alarmEnabled');
+        await AsyncStorage.removeItem('permissionPending');
       }
 
       if (data.type === 'CLEAR_ALL_DATA') {
@@ -234,6 +250,7 @@ export default function App() {
         await AsyncStorage.removeItem('alarmTime');
         await AsyncStorage.removeItem('alarmEnabled');
         await AsyncStorage.removeItem('alarmEnabledMigrated');
+        await AsyncStorage.removeItem('permissionPending');
       }
 
       if (data.type === 'REQUEST_NOTIFICATION_PERMISSION') {
@@ -252,6 +269,23 @@ export default function App() {
           JSON.stringify({
             type: 'NOTIFICATION_STATUS',
             enabled: enabled === 'true',
+          }),
+        );
+      }
+
+      // 온보딩 필수 권한 게이트: 실제 OS 권한 상태를 조회한다.
+      // (재요청 없이 현재 상태만 반환 — 설정앱 복귀 후 재확인에 사용)
+      if (data.type === 'QUERY_PERMISSION_STATUS') {
+        const notificationSettings = await Notifications.getPermissionsAsync();
+        let micGranted = false;
+        if (Platform.OS === 'android') {
+          micGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+        }
+        webviewRef.current?.postMessage(
+          JSON.stringify({
+            type: 'PERMISSION_STATUS',
+            notificationGranted: notificationSettings.status === 'granted',
+            micGranted,
           }),
         );
       }

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Icon } from '@iconify/react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { saveAlarm } from '@/lib/alarm';
 import { useOnboardingPermissions } from './hooks/useOnboardingPermissions';
 
 const ALARM_STORAGE_KEY = 'onboardingAlarm';
@@ -32,16 +33,16 @@ export default function OnboardingPermissionsPage() {
   const hasCompleted = useRef(false);
   const [isCompleting, setIsCompleting] = useState(false);
 
-  const handleAllGranted = useCallback(() => {
+  const handleAllGranted = useCallback(async () => {
     if (hasCompleted.current) return;
     hasCompleted.current = true;
     setIsCompleting(true);
 
+    // 알람은 서버(alarm_settings)에 저장한다. 로컬 알림은 더 이상 쓰지 않으므로
+    // 네이티브 SAVE_ALARM_TIME이 아니라 /api/alarm(saveAlarm)으로 저장해야 한다.
     const alarm = readStoredAlarm();
     if (alarm) {
-      window.ReactNativeWebView?.postMessage(
-        JSON.stringify({ type: 'SAVE_ALARM_TIME', hour: alarm.hour, minute: alarm.minute }),
-      );
+      await saveAlarm(alarm.hour, alarm.minute);
     }
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'CLEAR_PERMISSION_PENDING' }));
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));

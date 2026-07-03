@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import TimeTolly from '../../../../public/images/onBoarding/timeSetTolli.webp';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
-import { getAlarm, saveAlarm } from '@/lib/alarm';
+import { getAlarm } from '@/lib/alarm';
 import WheelPicker from './_components/WheelPicker';
 
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -15,6 +15,8 @@ const SELECTED_HEIGHT = 67;
 const LINE_GAP = 21;
 const SELECTION_ZONE = SELECTED_HEIGHT + LINE_GAP * 2;
 
+const ALARM_STORAGE_KEY = 'onboardingAlarm';
+
 type Period = '오전' | '오후';
 
 export default function SetAlarmTimePage() {
@@ -23,34 +25,12 @@ export default function SetAlarmTimePage() {
   const [hourIndex, setHourIndex] = useState(6);
   const [minuteIndex, setMinuteIndex] = useState(0);
   const [period, setPeriod] = useState<Period>('오전');
-  const [showPermissionModal, setShowPermissionModal] = useState(false);
   const [initialized, setInitialized] = useState(false);
-  const pendingAlarm = useRef<{ hour: number; minute: number } | null>(null);
   const savedTimeLoaded = useRef(false);
 
   useEffect(() => {
     const fallback = setTimeout(() => setInitialized(true), 500);
 
-    // 알림 권한 결과: 허용되면 서버에 알람 저장 후 대시보드로 이동
-    const handler = (e: MessageEvent) => {
-      try {
-        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        if (data.type === 'NOTIFICATION_PERMISSION_RESULT') {
-          if (data.granted && pendingAlarm.current) {
-            const { hour, minute } = pendingAlarm.current;
-            saveAlarm(hour, minute).finally(() => {
-              window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
-              router.push('/dashboard');
-            });
-          } else if (!data.granted) {
-            pendingAlarm.current = null;
-            setShowPermissionModal(true);
-          }
-        }
-      } catch {}
-    };
-    window.addEventListener('message', handler);
-    document.addEventListener('message', handler as unknown as EventListener);
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'WEB_READY' }));
 
     // 저장된 알람 시간을 서버에서 불러와 피커에 미리 채운다
@@ -69,54 +49,34 @@ export default function SetAlarmTimePage() {
 
     return () => {
       clearTimeout(fallback);
-      window.removeEventListener('message', handler);
-      document.removeEventListener('message', handler as unknown as EventListener);
     };
-  }, [router]);
+  }, []);
 
   const handleConfirm = () => {
     const hour12 = hourIndex + 1;
     const hour24 =
       period === '오전' ? (hour12 === 12 ? 0 : hour12) : hour12 === 12 ? 12 : hour12 + 12;
-    pendingAlarm.current = { hour: hour24, minute: minuteIndex };
-    setShowPermissionModal(false);
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: 'REQUEST_NOTIFICATION_PERMISSION' }),
+
+    // 알림 시간을 임시 저장하고 필수 권한 게이트로 이동한다.
+    // 실제 저장(SAVE_ALARM_TIME)과 로그인 확정(SET_LOGGED_IN)은
+    // 권한 2개를 모두 통과한 게이트에서만 수행된다. (자동로그인 우회 방지)
+    sessionStorage.setItem(
+      ALARM_STORAGE_KEY,
+      JSON.stringify({ hour: hour24, minute: minuteIndex }),
     );
+    router.push('/signup/permissions');
   };
 
+  // 커스텀 알림 시간 지정은 선택 사항이다. 시간을 건너뛰어도
+  // 알림 권한 자체는 필수이므로 게이트는 반드시 거친다.
+  // (저장할 시간이 없으므로 sessionStorage에 아무것도 넣지 않는다.)
   const handleSkip = () => {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
-    router.push('/dashboard');
+    sessionStorage.removeItem(ALARM_STORAGE_KEY);
+    router.push('/signup/permissions');
   };
 
   return (
     <div className="relative flex flex-col flex-1 h-full w-full px-[2.688rem] pt-[clamp(1rem,3dvh,1.5rem)] pb-[clamp(2rem,5dvh,5.313rem)]">
-      {showPermissionModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="flex flex-col items-center gap-4 bg-[#1e1e1e] rounded-4xl px-6 pt-8 pb-6 w-[80vw] max-w-80">
-            <p className="text-[#CCB5F0] text-[1rem] font-medium text-center whitespace-nowrap">알림 권한이 필요해요</p>
-            <p className="text-[#949494] text-[0.875rem] text-center whitespace-nowrap">설정에서 알림을 허용해주세요</p>
-            <div className="flex flex-col w-full gap-3">
-              <button
-                onClick={() => {
-                  window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'OPEN_APP_SETTINGS' }));
-                  setShowPermissionModal(false);
-                }}
-                className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0] whitespace-nowrap"
-              >
-                설정으로 이동
-              </button>
-              <button
-                onClick={() => setShowPermissionModal(false)}
-                className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#D9D9D9] whitespace-nowrap"
-              >
-                취소
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       <div
         className="fixed inset-0 pointer-events-none"
         style={{

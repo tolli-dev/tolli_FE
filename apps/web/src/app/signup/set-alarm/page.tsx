@@ -7,16 +7,16 @@ import { useRouter } from 'next/navigation';
 export default function Page() {
   const router = useRouter();
 
+  // 알림 시간 설정으로 이동한다. 실제 권한 요청/로그인 확정은
+  // 이후 필수 권한 게이트(/signup/permissions)에서만 수행된다.
   const requestAlarm = () => {
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: 'REQUEST_NOTIFICATION_PERMISSION' }),
-    );
     router.push('/signup/set-alarm-time');
   };
 
+  // 커스텀 알림 시간 지정은 선택 사항. 건너뛰어도 알림 권한 자체는
+  // 필수이므로 곧장 권한 게이트로 보낸다.
   const skipAlarm = () => {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
-    router.push('/dashboard');
+    router.push('/signup/permissions');
   };
 
   return (

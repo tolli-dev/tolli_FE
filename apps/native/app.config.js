@@ -29,7 +29,12 @@ export default {
         foregroundImage: "./assets/android-icon.png",
         backgroundColor: "#1B1B1B",
       },
-      permissions: ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS", "SCHEDULE_EXACT_ALARM"],
+      permissions: [
+        "RECORD_AUDIO",
+        "MODIFY_AUDIO_SETTINGS",
+        "POST_NOTIFICATIONS",
+        "SCHEDULE_EXACT_ALARM",
+      ],
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
     },

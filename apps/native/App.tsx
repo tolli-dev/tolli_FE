@@ -42,22 +42,10 @@ import NativeOfflineScreen from "./components/NativeOfflineScreen";
 import NetInfo from "@react-native-community/netinfo";
 import NetworkBanner from "./components/NetworkBanner";
 
-// 사용자가 직접 설정한 알람(로컬)만 스케줄한다.
-// 12/18/22시 미완료자 고정 알림은 서버(Expo Push)에서 발송한다.
-async function scheduleAlarmNotifications(hour: number, minute: number) {
+// 사용자 커스텀 알람과 고정 알림 모두 서버(Expo Push)에서 발송한다.
+// 이 앱은 더 이상 로컬 알림을 예약하지 않으며, 구버전에서 남은 로컬 예약만 정리한다.
+async function clearLegacyLocalAlarms() {
   await Notifications.cancelAllScheduledNotificationsAsync();
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "오늘의 말씀 🐘",
-      body: "tolli와 약속한 말씀 암송 시간이에요! 🐘",
-      sound: "default",
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour,
-      minute,
-    },
-  });
 }
 
 // 알람이 도착하면 실행됨
@@ -174,30 +162,9 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      // alarmEnabled 키가 없는 기존 유저 마이그레이션 (최초 1회)
-      const migrated = await AsyncStorage.getItem("alarmEnabledMigrated");
-      if (migrated === null) {
-        const alarmTime = await AsyncStorage.getItem("alarmTime");
-        if (alarmTime !== null) {
-          await AsyncStorage.setItem("alarmEnabled", "true");
-        }
-        await AsyncStorage.setItem("alarmEnabledMigrated", "true");
-      }
-
-      // 로컬 알람 정규화: 사용자 알람 1개만 남긴다.
-      // (구버전에서 등록된 고정 알림 3개 제거 + 사용자 알람 유지)
-      const alarmEnabled = await AsyncStorage.getItem("alarmEnabled");
-      if (alarmEnabled === "true") {
-        const alarmTimeStr = await AsyncStorage.getItem("alarmTime");
-        if (alarmTimeStr) {
-          const scheduled =
-            await Notifications.getAllScheduledNotificationsAsync();
-          if (scheduled.length !== 1) {
-            const { hour, minute } = JSON.parse(alarmTimeStr);
-            await scheduleAlarmNotifications(hour, minute);
-          }
-        }
-      }
+      // 알람은 이제 서버(Expo Push)에서만 발송한다.
+      // 구버전에서 예약된 로컬 알림이 남아 서버 푸시와 중복되지 않도록 모두 정리한다.
+      await clearLegacyLocalAlarms();
 
       const isFirst = await checkFirstLaunch();
       if (isFirst) {
@@ -320,32 +287,8 @@ export default function App() {
         );
       }
 
-      if (data.type === "QUERY_NOTIFICATION_STATUS") {
-        const enabled = await AsyncStorage.getItem("alarmEnabled");
-        webviewRef.current?.postMessage(
-          JSON.stringify({
-            type: "NOTIFICATION_STATUS",
-            enabled: enabled === "true",
-          }),
-        );
-      }
-
-      if (data.type === "CANCEL_NOTIFICATION") {
-        await Notifications.cancelAllScheduledNotificationsAsync();
-        await AsyncStorage.removeItem("alarmEnabled");
-      }
-
       if (data.type === "OPEN_EXTERNAL_URL") {
         await Linking.openURL(data.url);
-      }
-
-      if (data.type === "SAVE_ALARM_TIME") {
-        await AsyncStorage.setItem(
-          "alarmTime",
-          JSON.stringify({ hour: data.hour, minute: data.minute }),
-        );
-        await AsyncStorage.setItem("alarmEnabled", "true");
-        await scheduleAlarmNotifications(data.hour, data.minute);
       }
 
       if (data.type === "STUDY_COMPLETED") {
@@ -353,21 +296,6 @@ export default function App() {
           "studyCompletedDate",
           new Date().toDateString(),
         );
-      }
-
-      if (data.type === "GET_ALARM_TIME") {
-        const stored = await AsyncStorage.getItem("alarmTime");
-        webviewRef.current?.postMessage(
-          JSON.stringify({
-            type: "ALARM_TIME",
-            ...(stored ? JSON.parse(stored) : { hour: null, minute: null }),
-          }),
-        );
-      }
-
-      if (data.type === "SCHEDULE_NOTIFICATION") {
-        await AsyncStorage.setItem("alarmEnabled", "true");
-        await scheduleAlarmNotifications(data.hour, data.minute);
       }
 
       if (data.type === "GET_EXPO_PUSH_TOKEN") {

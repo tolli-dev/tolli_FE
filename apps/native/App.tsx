@@ -305,16 +305,6 @@ export default function App() {
         );
       }
 
-      if (data.type === "QUERY_NOTIFICATION_STATUS") {
-        const enabled = await AsyncStorage.getItem("alarmEnabled");
-        webviewRef.current?.postMessage(
-          JSON.stringify({
-            type: "NOTIFICATION_STATUS",
-            enabled: enabled === "true",
-          }),
-        );
-      }
-
       // 온보딩 필수 권한 게이트: 실제 OS 권한 상태를 조회한다.
       // (재요청 없이 현재 상태만 반환 — 설정앱 복귀 후 재확인에 사용)
       if (data.type === "QUERY_PERMISSION_STATUS") {
@@ -332,11 +322,6 @@ export default function App() {
             micGranted,
           }),
         );
-      }
-
-      if (data.type === "CANCEL_NOTIFICATION") {
-        await Notifications.cancelAllScheduledNotificationsAsync();
-        await AsyncStorage.removeItem("alarmEnabled");
       }
 
       if (data.type === "OPEN_EXTERNAL_URL") {

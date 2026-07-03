@@ -34,6 +34,7 @@ export default function CompleteStep() {
 
   useEffect(() => {
     posthog.capture("study_completed", { verse_id: verseId });
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: "STUDY_COMPLETED" }));
     const from = sessionStorage.getItem("studyFrom");
     if (from === "recall") {
       posthog.capture("recall_completed", { verse_id: verseId });

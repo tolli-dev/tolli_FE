@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import TimeTolly from '../../../../public/images/onBoarding/timeSetTolli.webp';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
+import { getAlarm } from '@/lib/alarm';
 import WheelPicker from './_components/WheelPicker';
 
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -24,9 +25,31 @@ export default function SetAlarmTimePage() {
   const [hourIndex, setHourIndex] = useState(6);
   const [minuteIndex, setMinuteIndex] = useState(0);
   const [period, setPeriod] = useState<Period>('오전');
+  const [initialized, setInitialized] = useState(false);
+  const savedTimeLoaded = useRef(false);
 
   useEffect(() => {
+    const fallback = setTimeout(() => setInitialized(true), 500);
+
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'WEB_READY' }));
+
+    // 저장된 알람 시간을 서버에서 불러와 피커에 미리 채운다
+    getAlarm().then((alarm) => {
+      if (!savedTimeLoaded.current && alarm && alarm.hour !== null && alarm.minute !== null) {
+        savedTimeLoaded.current = true;
+        const hour24 = alarm.hour;
+        const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
+        const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+        setHourIndex(hour12 - 1);
+        setMinuteIndex(alarm.minute);
+        setPeriod(newPeriod);
+      }
+      setInitialized(true);
+    });
+
+    return () => {
+      clearTimeout(fallback);
+    };
   }, []);
 
   const handleConfirm = () => {
@@ -102,7 +125,7 @@ export default function SetAlarmTimePage() {
         </div>
       </div>
 
-      <div className="relative flex flex-row items-center flex-1 w-full">
+      <div className={`relative flex flex-row items-center flex-1 w-full transition-opacity ${initialized ? 'opacity-100' : 'opacity-0'}`}>
         <div className="relative flex flex-row items-center flex-1">
           <div
             className="absolute pointer-events-none"

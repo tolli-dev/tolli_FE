@@ -29,26 +29,6 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
   >(null);
 
   useEffect(() => {
-    const handler = (e: MessageEvent) => {
-      try {
-        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.type === "NOTIFICATION_STATUS") {
-          setNotificationEnabled(data.enabled);
-        }
-      } catch {}
-    };
-    window.addEventListener("message", handler);
-    document.addEventListener("message", handler as unknown as EventListener);
-    return () => {
-      window.removeEventListener("message", handler);
-      document.removeEventListener(
-        "message",
-        handler as unknown as EventListener,
-      );
-    };
-  }, []);
-
-  useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
       if (
         profileBtnRef.current?.contains(e.target as Node) ||
@@ -91,6 +71,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await terminateDataConnect();
       await fetch("/api/auth/clear-session", { method: "POST" });
       await signOut(fireAuth);
@@ -125,6 +106,7 @@ export default function DashboardHeader({ nickname, done = false }: Props) {
       JSON.stringify({ type: "CLEAR_ALL_DATA" }),
     );
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await terminateDataConnect();
       await fetch("/api/auth/clear-session", { method: "POST" });
       await signOut(fireAuth);

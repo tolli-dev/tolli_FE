@@ -11,6 +11,7 @@ import DashboardHeader from "./DashboardHeader";
 import { useTab } from "../_hooks/useTab";
 import { DashboardInitialData } from "../page";
 import { fireAuth } from "@/firebase/fireAuth";
+import { usePushToken } from "../_hooks/usePushToken";
 
 interface Props {
   initialData: DashboardInitialData;
@@ -20,6 +21,8 @@ interface Props {
 export default function DashboardClient({ initialData, shouldRefreshSession }: Props) {
   const { activeIndex, onTabChange } = useTab();
   const { state, onError } = useDashboard(initialData ?? undefined);
+
+  usePushToken(shouldRefreshSession);
 
   useEffect(() => {
     if (!shouldRefreshSession) return;

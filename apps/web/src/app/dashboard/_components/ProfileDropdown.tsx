@@ -3,6 +3,7 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { getAlarm, setAlarmEnabled } from "@/lib/alarm";
 
 const ChevronRight = () => (
   <svg
@@ -145,42 +146,11 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
       setExpandedKey(null);
       return;
     }
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "QUERY_NOTIFICATION_STATUS" }),
-    );
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handler = (e: MessageEvent) => {
-      try {
-        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.type === "ALARM_TIME") {
-          if (data.hour !== null && data.minute !== null) {
-            window.ReactNativeWebView?.postMessage(
-              JSON.stringify({
-                type: "SAVE_ALARM_TIME",
-                hour: data.hour,
-                minute: data.minute,
-              }),
-            );
-            onNotificationChange(true);
-          } else {
-            router.push("/signup/set-alarm-time");
-            onClose();
-          }
-        }
-      } catch {}
-    };
-    window.addEventListener("message", handler);
-    document.addEventListener("message", handler as unknown as EventListener);
-    return () => {
-      window.removeEventListener("message", handler);
-      document.removeEventListener(
-        "message",
-        handler as unknown as EventListener,
-      );
-    };
-  }, [router, onClose, onNotificationChange]);
+    // 드롭다운을 열 때마다 서버에서 현재 알람 on/off 상태를 가져온다
+    getAlarm().then((alarm) => {
+      if (alarm) onNotificationChange(alarm.enabled);
+    });
+  }, [isOpen, onNotificationChange]);
 
   const handleMenuClick = (item: MenuItem) => {
     if (item.key === "feedback") {
@@ -321,24 +291,24 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                               <button
                                 title="알람 설정"
                                 disabled={notificationEnabled === null}
-                                onClick={() => {
+                                onClick={async () => {
                                   if (!notificationEnabled) {
+                                    // OS 알림 권한 요청(푸시 수신에 필요) 후, 서버 알람 켜기
                                     window.ReactNativeWebView?.postMessage(
                                       JSON.stringify({
                                         type: "REQUEST_NOTIFICATION_PERMISSION",
                                       }),
                                     );
-                                    window.ReactNativeWebView?.postMessage(
-                                      JSON.stringify({
-                                        type: "GET_ALARM_TIME",
-                                      }),
-                                    );
+                                    const result = await setAlarmEnabled(true);
+                                    if (result.needsTime) {
+                                      // 저장된 시간이 없으면 시간 설정 화면으로
+                                      router.push("/signup/set-alarm-time");
+                                      onClose();
+                                    } else if (result.ok) {
+                                      onNotificationChange(true);
+                                    }
                                   } else {
-                                    window.ReactNativeWebView?.postMessage(
-                                      JSON.stringify({
-                                        type: "CANCEL_NOTIFICATION",
-                                      }),
-                                    );
+                                    await setAlarmEnabled(false);
                                     onNotificationChange(false);
                                   }
                                 }}

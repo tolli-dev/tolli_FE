@@ -27,9 +27,9 @@ export default function WheelPicker({ items, selectedIndex, onChange }: WheelPic
 
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
+    if (!el || isDragging.current) return;
     el.scrollTop = selectedIndex * SNAP_HEIGHT;
-  }, []);
+  }, [selectedIndex]);
 
   const handleScroll = () => {
     const el = scrollRef.current;

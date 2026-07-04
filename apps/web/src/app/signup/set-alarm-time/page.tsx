@@ -67,8 +67,10 @@ export default function SetAlarmTimePage() {
     setSubmitting(true);
 
     if (await hasAllPermissions()) {
+      // 알람 저장은 대시보드로 넘어간 뒤 백그라운드에서 처리한다.
+      // (저장 실패해도 재설정 가능하므로 사용자를 기다리게 하지 않는다.)
       if (alarm) {
-        await saveAlarm(alarm.hour, alarm.minute);
+        void saveAlarm(alarm.hour, alarm.minute);
       }
       sessionStorage.removeItem(ALARM_STORAGE_KEY);
       window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));

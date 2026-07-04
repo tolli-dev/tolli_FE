@@ -33,26 +33,32 @@ export default function SetAlarmTimePage() {
   const [minuteIndex, setMinuteIndex] = useState(0);
   const [period, setPeriod] = useState<Period>('오전');
   const [submitting, setSubmitting] = useState(false);
+  // 저장된 시간 로드가 끝나기 전에는 피커를 렌더하지 않는다.
+  // 기본값으로 먼저 보였다가 저장값으로 튀는 현상을 막기 위함이다.
+  const [ready, setReady] = useState(false);
   const savedTimeLoaded = useRef(false);
 
   useEffect(() => {
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'WEB_READY' }));
 
-    // 저장된 알람 시간을 서버에서 불러와 피커에 미리 채운다.
-    // 피커는 즉시 렌더되고, 값이 도착하면 WheelPicker가 스크롤 위치를 맞춘다.
+    // 저장된 알람 시간을 서버에서 불러와 피커에 채운 뒤에 렌더한다.
     const controller = { cancelled: false };
-    getAlarm().then((alarm) => {
-      if (controller.cancelled) return;
-      if (!savedTimeLoaded.current && alarm && alarm.hour !== null && alarm.minute !== null) {
-        savedTimeLoaded.current = true;
-        const hour24 = alarm.hour;
-        const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
-        const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
-        setHourIndex(hour12 - 1);
-        setMinuteIndex(alarm.minute);
-        setPeriod(newPeriod);
-      }
-    });
+    getAlarm()
+      .then((alarm) => {
+        if (controller.cancelled) return;
+        if (!savedTimeLoaded.current && alarm && alarm.hour !== null && alarm.minute !== null) {
+          savedTimeLoaded.current = true;
+          const hour24 = alarm.hour;
+          const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
+          const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+          setHourIndex(hour12 - 1);
+          setMinuteIndex(alarm.minute);
+          setPeriod(newPeriod);
+        }
+      })
+      .finally(() => {
+        if (!controller.cancelled) setReady(true);
+      });
 
     return () => {
       controller.cancelled = true;
@@ -152,7 +158,7 @@ export default function SetAlarmTimePage() {
         </div>
       </div>
 
-      <div className="relative flex flex-row items-center flex-1 w-full">
+      <div className={`relative flex flex-row items-center flex-1 w-full transition-opacity duration-200 ${ready ? 'opacity-100' : 'opacity-0'}`}>
         <div className="relative flex flex-row items-center flex-1">
           <div
             className="absolute pointer-events-none"

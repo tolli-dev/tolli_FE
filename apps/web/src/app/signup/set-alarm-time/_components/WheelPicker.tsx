@@ -24,10 +24,24 @@ export default function WheelPicker({ items, selectedIndex, onChange }: WheelPic
   const isDragging = useRef(false);
   const startY = useRef(0);
   const startScrollTop = useRef(0);
+  // 마지막으로 이 컴포넌트가 스크롤로 emit한 인덱스.
+  // 사용자 스크롤로 인한 selectedIndex 변경에는 scrollTop을 덮어쓰지 않아
+  // 관성 스크롤/스냅 애니메이션과 충돌(렉)하지 않게 한다.
+  const lastEmitted = useRef(selectedIndex);
+
+  const emitChange = (index: number) => {
+    const clamped = Math.min(Math.max(index, 0), items.length - 1);
+    lastEmitted.current = clamped;
+    onChange(clamped);
+  };
 
   useEffect(() => {
     const el = scrollRef.current;
     if (!el || isDragging.current) return;
+    // 내가 스크롤로 emit한 값이면 무시한다. 외부(서버 로드 등)에서 값이
+    // 바뀐 경우에만 스크롤 위치를 맞춘다.
+    if (selectedIndex === lastEmitted.current) return;
+    lastEmitted.current = selectedIndex;
     el.scrollTop = selectedIndex * SNAP_HEIGHT;
   }, [selectedIndex]);
 
@@ -35,7 +49,7 @@ export default function WheelPicker({ items, selectedIndex, onChange }: WheelPic
     const el = scrollRef.current;
     if (!el) return;
     const index = Math.round(el.scrollTop / SNAP_HEIGHT);
-    onChange(Math.min(Math.max(index, 0), items.length - 1));
+    emitChange(index);
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -56,7 +70,7 @@ export default function WheelPicker({ items, selectedIndex, onChange }: WheelPic
     if (!el) return;
     const index = Math.round(el.scrollTop / SNAP_HEIGHT);
     el.scrollTo({ top: index * SNAP_HEIGHT, behavior: 'smooth' });
-    onChange(Math.min(Math.max(index, 0), items.length - 1));
+    emitChange(index);
   };
 
   return (

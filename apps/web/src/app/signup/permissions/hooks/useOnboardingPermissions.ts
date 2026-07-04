@@ -7,6 +7,9 @@ interface UseOnboardingPermissionsResult {
   needSettings: boolean;
   blocked: boolean;
   isNative: boolean;
+  // 초기 권한 조회 응답을 받아 게이트 UI를 보여줄 준비가 됐는지 여부.
+  // 권한이 모두 있어 곧바로 통과하는 경우엔 true가 되지 않고 completeAll로 넘어간다.
+  ready: boolean;
   initGate: () => void;
   requestNotification: () => void;
   requestMic: () => void;
@@ -28,6 +31,7 @@ export function useOnboardingPermissions(
   const [step, setStep] = useState<PermissionStep>('notification');
   const [needSettings, setNeedSettings] = useState(false);
   const [blocked, setBlocked] = useState(false);
+  const [ready, setReady] = useState(false);
 
   const isNative =
     typeof window !== 'undefined' && Boolean(window.ReactNativeWebView);
@@ -53,6 +57,7 @@ export function useOnboardingPermissions(
     setStep('granted');
     setNeedSettings(false);
     setBlocked(false);
+    setReady(true);
     onAllGrantedRef.current();
   }, []);
 
@@ -163,6 +168,8 @@ export function useOnboardingPermissions(
         if (notificationGranted && micGranted) {
           completeAll();
         } else if (isInit) {
+          // 초기 조회에서 권한이 부족한 것이 확정됐으므로 게이트 UI를 노출한다.
+          setReady(true);
           if (!notificationGranted) {
             setStep('notification');
             requestNotification();
@@ -216,6 +223,7 @@ export function useOnboardingPermissions(
     needSettings,
     blocked,
     isNative,
+    ready,
     initGate,
     requestNotification,
     requestMic,

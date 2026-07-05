@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-function isBelow(current: string, minVersion: string): boolean {
+function isBelow(current?: string, minVersion?: string): boolean {
+  if (!current || !minVersion) return false;
+
   const splittedCurrent = current.split(".").map(Number);
   const splittedMinVersion = minVersion.split(".").map(Number);
 

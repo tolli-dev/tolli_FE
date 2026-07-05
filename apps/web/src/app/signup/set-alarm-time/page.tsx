@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import TimeTolly from '../../../../public/images/onBoarding/timeSetTolli.webp';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
-import { getAlarm } from '@/lib/alarm';
+import { getAlarm, saveAlarm } from '@/lib/alarm';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { hasAllPermissions } from '../permissions/lib/checkPermissions';
 import WheelPicker from './_components/WheelPicker';
 
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -19,60 +21,91 @@ const ALARM_STORAGE_KEY = 'onboardingAlarm';
 
 type Period = '오전' | '오후';
 
+interface StoredAlarm {
+  hour: number;
+  minute: number;
+}
+
 export default function SetAlarmTimePage() {
   const router = useRouter();
   const cornerRadius = useDeviceCornerRadius();
   const [hourIndex, setHourIndex] = useState(6);
   const [minuteIndex, setMinuteIndex] = useState(0);
   const [period, setPeriod] = useState<Period>('오전');
-  const [initialized, setInitialized] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  // 저장된 시간 로드가 끝나기 전에는 피커를 렌더하지 않는다.
+  // 기본값으로 먼저 보였다가 저장값으로 튀는 현상을 막기 위함이다.
+  const [ready, setReady] = useState(false);
   const savedTimeLoaded = useRef(false);
 
   useEffect(() => {
-    const fallback = setTimeout(() => setInitialized(true), 500);
-
     window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'WEB_READY' }));
 
-    // 저장된 알람 시간을 서버에서 불러와 피커에 미리 채운다
-    getAlarm().then((alarm) => {
-      if (!savedTimeLoaded.current && alarm && alarm.hour !== null && alarm.minute !== null) {
-        savedTimeLoaded.current = true;
-        const hour24 = alarm.hour;
-        const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
-        const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
-        setHourIndex(hour12 - 1);
-        setMinuteIndex(alarm.minute);
-        setPeriod(newPeriod);
-      }
-      setInitialized(true);
-    });
+    // 저장된 알람 시간을 서버에서 불러와 피커에 채운 뒤에 렌더한다.
+    const controller = { cancelled: false };
+    getAlarm()
+      .then((alarm) => {
+        if (controller.cancelled) return;
+        if (!savedTimeLoaded.current && alarm && alarm.hour !== null && alarm.minute !== null) {
+          savedTimeLoaded.current = true;
+          const hour24 = alarm.hour;
+          const newPeriod: Period = hour24 < 12 ? '오전' : '오후';
+          const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+          setHourIndex(hour12 - 1);
+          setMinuteIndex(alarm.minute);
+          setPeriod(newPeriod);
+        }
+      })
+      .finally(() => {
+        if (!controller.cancelled) setReady(true);
+      });
 
     return () => {
-      clearTimeout(fallback);
+      controller.cancelled = true;
     };
   }, []);
+
+  // 권한이 이미 모두 허용돼 있으면 게이트 페이지를 아예 거치지 않고
+  // 곧바로 알람 저장 + 로그인 확정 후 대시보드로 보낸다.
+  // 권한이 하나라도 없을 때만 게이트로 이동한다.
+  const proceed = async (alarm: StoredAlarm | null) => {
+    if (submitting) return;
+    setSubmitting(true);
+
+    if (await hasAllPermissions()) {
+      // 알람 저장은 대시보드로 넘어간 뒤 백그라운드에서 처리한다.
+      // (저장 실패해도 재설정 가능하므로 사용자를 기다리게 하지 않는다.)
+      if (alarm) {
+        void saveAlarm(alarm.hour, alarm.minute);
+      }
+      sessionStorage.removeItem(ALARM_STORAGE_KEY);
+      window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'SET_LOGGED_IN' }));
+      router.replace('/dashboard');
+      return;
+    }
+
+    // 권한이 없으면 게이트로 넘긴다. 실제 저장/로그인 확정은
+    // 권한 2개를 모두 통과한 게이트에서만 수행된다. (자동로그인 우회 방지)
+    if (alarm) {
+      sessionStorage.setItem(ALARM_STORAGE_KEY, JSON.stringify(alarm));
+    } else {
+      sessionStorage.removeItem(ALARM_STORAGE_KEY);
+    }
+    router.push('/signup/permissions');
+  };
 
   const handleConfirm = () => {
     const hour12 = hourIndex + 1;
     const hour24 =
       period === '오전' ? (hour12 === 12 ? 0 : hour12) : hour12 === 12 ? 12 : hour12 + 12;
 
-    // 알림 시간을 임시 저장하고 필수 권한 게이트로 이동한다.
-    // 실제 저장(SAVE_ALARM_TIME)과 로그인 확정(SET_LOGGED_IN)은
-    // 권한 2개를 모두 통과한 게이트에서만 수행된다. (자동로그인 우회 방지)
-    sessionStorage.setItem(
-      ALARM_STORAGE_KEY,
-      JSON.stringify({ hour: hour24, minute: minuteIndex }),
-    );
-    router.push('/signup/permissions');
+    proceed({ hour: hour24, minute: minuteIndex });
   };
 
   // 커스텀 알림 시간 지정은 선택 사항이다. 시간을 건너뛰어도
   // 알림 권한 자체는 필수이므로 게이트는 반드시 거친다.
-  // (저장할 시간이 없으므로 sessionStorage에 아무것도 넣지 않는다.)
   const handleSkip = () => {
-    sessionStorage.removeItem(ALARM_STORAGE_KEY);
-    router.push('/signup/permissions');
+    proceed(null);
   };
 
   return (
@@ -125,7 +158,7 @@ export default function SetAlarmTimePage() {
         </div>
       </div>
 
-      <div className={`relative flex flex-row items-center flex-1 w-full transition-opacity ${initialized ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`relative flex flex-row items-center flex-1 w-full transition-opacity duration-200 ${ready ? 'opacity-100' : 'opacity-0'}`}>
         <div className="relative flex flex-row items-center flex-1">
           <div
             className="absolute pointer-events-none"
@@ -175,18 +208,26 @@ export default function SetAlarmTimePage() {
         <button
           type="button"
           onClick={handleConfirm}
-          className="w-full max-w-[19.688rem] h-12 text-btn-lg text-primary-75 bg-surface-500 rounded-[1.25rem]"
+          disabled={submitting}
+          className="w-full max-w-[19.688rem] h-12 text-btn-lg text-primary-75 bg-surface-500 rounded-[1.25rem] disabled:opacity-60"
         >
           이 시간에 알려주세요
         </button>
         <button
           type="button"
           onClick={handleSkip}
-          className="text-[#9A9A9A] text-no-alarm underline decoration-[#9A9A9A]"
+          disabled={submitting}
+          className="text-[#9A9A9A] text-no-alarm underline decoration-[#9A9A9A] disabled:opacity-60"
         >
           나중에 설정 할게요
         </button>
       </div>
+
+      {submitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <LoadingSpinner />
+        </div>
+      )}
 
       <style>{`
         @property --angle {

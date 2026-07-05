@@ -13,8 +13,13 @@ interface ListenViewProps {
 }
 
 export default function ListenView({ verseId, verseText, reference, todayCount }: ListenViewProps) {
-  const { played, showHome, toggle } = useListenAudio(verseId);
+  const { played, showHome, toggle, stopAll } = useListenAudio(verseId);
   const { submitError, bookmarkModal, handleComplete, clearError } = useStudyComplete(verseId);
+
+  const handleCompleteWithStop = () => {
+    stopAll();
+    handleComplete();
+  };
 
   return (
     <section
@@ -85,7 +90,7 @@ export default function ListenView({ verseId, verseText, reference, todayCount }
 
       <button
         type="button"
-        onClick={handleComplete}
+        onClick={handleCompleteWithStop}
         aria-label="홈으로 이동"
         className={`w-full shrink-0 bg-[#CCB5F0] flex items-center justify-center
           py-[clamp(0.625rem,3.3vw,0.8125rem)] rounded-[clamp(1rem,5vw,1.25rem)]

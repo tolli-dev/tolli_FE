@@ -51,7 +51,7 @@ export default function OnboardingPermissionsPage() {
     router.replace('/dashboard');
   }, [router]);
 
-  const { step, needSettings, blocked, initGate, requestNotification, requestMic, openAppSettings } =
+  const { step, needSettings, blocked, ready, initGate, requestNotification, requestMic, openAppSettings } =
     useOnboardingPermissions(handleAllGranted);
 
   const [started, setStarted] = useState(false);
@@ -81,13 +81,17 @@ export default function OnboardingPermissionsPage() {
 
   const activeIcon = micActive ? 'fluent:mic-28-filled' : 'fluent:alert-28-filled';
 
+  // 초기 권한 조회 응답 전(ready=false)에는 게이트 본문을 렌더하지 않는다.
+  // 권한이 모두 있으면 응답 즉시 completeAll로 대시보드로 넘어가므로,
+  // "거의 다 왔어요" UI가 깜빡이지 않고 스피너만 보인다.
   return (
     <>
-      {isCompleting && (
+      {(isCompleting || !ready) && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/50">
           <LoadingSpinner />
         </div>
       )}
+      {ready && (
       <section className="flex flex-col w-full flex-1 justify-between items-center px-[2.688rem] pt-[clamp(2.5rem,8dvh,5rem)] pb-[clamp(2rem,5dvh,5.313rem)]">
       <div className="flex flex-col items-center w-full gap-[0.5rem]">
         <h1 className="text-h1 text-primary-50 text-center whitespace-nowrap">거의 다 왔어요!</h1>
@@ -134,6 +138,7 @@ export default function OnboardingPermissionsPage() {
         </button>
         </div>
       </section>
+      )}
     </>
   );
 }

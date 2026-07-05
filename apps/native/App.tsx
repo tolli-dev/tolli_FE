@@ -13,7 +13,7 @@ import Constants from "expo-constants";
 import { signInWithGoogle } from "./auth/googleSignIn";
 import { signInWithApple } from "./auth/appleSignIn";
 import { getCornerRadius } from "./modules/corner-radius";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { WebView } from "react-native-webview";
 import type {
   WebView as WebViewType,
@@ -21,6 +21,7 @@ import type {
 } from "react-native-webview";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
+import * as StoreReview from "expo-store-review";
 
 const IP_URL = "https://tolli-fe-web-lilac.vercel.app/";
 // const IP_URL = "http://localhost:3000";
@@ -41,6 +42,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NativeOfflineScreen from "./components/NativeOfflineScreen";
 import NetInfo from "@react-native-community/netinfo";
 import NetworkBanner from "./components/NetworkBanner";
+import UpdateRequireScreen from "./components/UpdateRequireScreen";
 
 // 사용자 커스텀 알람과 고정 알림 모두 서버(Expo Push)에서 발송한다.
 // 이 앱은 더 이상 로컬 알림을 예약하지 않으며, 구버전에서 남은 로컬 예약만 정리한다.
@@ -93,18 +95,69 @@ GoogleSignin.configure({
   iosClientId: Constants.expoConfig?.extra?.googleIosClientId,
 });
 
+function isBelow(current: string, minVersion: string): boolean {
+  const splittedCurrent = current.split(".").map(Number);
+  const splittedMinVersion = minVersion.split(".").map(Number);
+
+  for (let i = 0; i < 3; i++) {
+    if (splittedCurrent[i] < splittedMinVersion[i]) return true;
+    if (splittedCurrent[i] > splittedMinVersion[i]) return false;
+  }
+  return false;
+}
+
+async function checkForceUpdate(): Promise<boolean> {
+  try {
+    const res = await fetch(`${IP_URL}/api/app/config`, {
+      signal: AbortSignal.timeout(3000),
+    });
+    const { minVersion } = await res.json();
+    const current = Constants.expoConfig?.version ?? "1.0.0";
+    return isBelow(current, minVersion[Platform.OS]);
+  } catch {
+    return false;
+  }
+}
+
+async function resolveInitialUri() {
+  const isFirst = await checkFirstLaunch();
+  if (isFirst) return `${IP_URL}/onboarding`;
+  const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+  if (isLoggedIn === "true") return `${IP_URL}/dashboard`;
+  const pending = await AsyncStorage.getItem("permissionPending");
+  return pending === "true"
+    ? `${IP_URL}/signup/permissions`
+    : `${IP_URL}/login`;
+}
+
 export default function App() {
   const webviewRef = useRef<WebViewType>(null);
   const [initialUri, setInitialUri] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [hasLoadError, setHasLoadError] = useState(false);
+  const [needUpdate, setNeedUpdate] = useState(false);
 
   const isExitApp = useRef(false);
   const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const offlineTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
+
+  const bootstrap = useCallback(async () => {
+    setNeedUpdate(false);
+
+    await clearLegacyLocalAlarms();
+    setInitialUri(await resolveInitialUri());
+
+    checkForceUpdate().then((below) => {
+      if (below) setNeedUpdate(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    bootstrap();
+  }, [bootstrap]);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -160,32 +213,6 @@ export default function App() {
     return () => clearTimeout(fallback);
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      // 알람은 이제 서버(Expo Push)에서만 발송한다.
-      // 구버전에서 예약된 로컬 알림이 남아 서버 푸시와 중복되지 않도록 모두 정리한다.
-      await clearLegacyLocalAlarms();
-
-      const isFirst = await checkFirstLaunch();
-      if (isFirst) {
-        setInitialUri(`${IP_URL}/onboarding`);
-      } else {
-        const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-        if (isLoggedIn === "true") {
-          setInitialUri(`${IP_URL}/dashboard`);
-        } else {
-          const permissionPending =
-            await AsyncStorage.getItem("permissionPending");
-          setInitialUri(
-            permissionPending === "true"
-              ? `${IP_URL}/signup/permissions`
-              : `${IP_URL}/login`,
-          );
-        }
-      }
-    })();
-  }, []);
-
   const postToken = (type: string, token: string) => {
     webviewRef.current?.postMessage(JSON.stringify({ type, token }));
   };
@@ -232,6 +259,24 @@ export default function App() {
         const cssRadius = Math.round(radius);
         webviewRef.current?.postMessage(
           JSON.stringify({ type: "DEVICE_CORNER_RADIUS", value: cssRadius }),
+        );
+      }
+
+      if (data.type === "GET_APP_VERSION") {
+        webviewRef.current?.postMessage(
+          JSON.stringify({
+            type: "APP_VERSION",
+            version: Constants.expoConfig?.version,
+            platform: Platform.OS,
+          }),
+        );
+      }
+
+      if (data.type === "OPEN_STORE") {
+        Linking.openURL(
+          Platform.OS === "ios"
+            ? "https://apps.apple.com/kr/app/tolli/id6766518023"
+            : "https://play.google.com/store/apps/details?id=com.company.tolli",
         );
       }
 
@@ -333,6 +378,18 @@ export default function App() {
           "studyCompletedDate",
           new Date().toDateString(),
         );
+
+        // 학습 완료 직후 스토어 리뷰 요청.
+        // 노출 빈도/중복 여부는 OS가 알아서 조절하므로(iOS 연 3회 제한 등)
+        // 매번 호출해도 스팸이 되지 않는다. 미지원 환경(TestFlight/웹/구버전
+        // 안드로이드)에서는 isAvailableAsync가 false를 반환해 조용히 건너뛴다.
+        try {
+          if (await StoreReview.isAvailableAsync()) {
+            await StoreReview.requestReview();
+          }
+        } catch (reviewError) {
+          console.warn("[StoreReview] requestReview failed:", reviewError);
+        }
       }
 
       if (data.type === "GET_EXPO_PUSH_TOKEN") {
@@ -362,6 +419,7 @@ export default function App() {
     }
   };
 
+  if (needUpdate) return <UpdateRequireScreen />;
   if (!initialUri) return null;
 
   return (

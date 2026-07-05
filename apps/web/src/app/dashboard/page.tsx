@@ -30,15 +30,17 @@ async function getUserId(): Promise<string | null> {
   }
 }
 
-async function fetchDashboardData(userId: string): Promise<DashboardInitialData> {
+async function fetchDashboardData(
+  userId: string,
+): Promise<DashboardInitialData> {
   const cookieStore = await cookies();
   const tzCookie = cookieStore.get("user-timezone")?.value;
   const today = getLocalMidnight(tzCookie || "Asia/Seoul");
 
   const [userResult, verseResult] = await Promise.all([
     pool.query<{ nickname: string }>(
-      'SELECT nickname FROM users WHERE id = $1',
-      [userId]
+      "SELECT nickname FROM users WHERE id = $1",
+      [userId],
     ),
     pool.query<{ id: number; reference: string; full_text: string }>(
       `SELECT v.id, v.reference, v.full_text
@@ -46,7 +48,7 @@ async function fetchDashboardData(userId: string): Promise<DashboardInitialData>
        JOIN verses v ON sc.verse_id = v.id
        WHERE sc.user_id = $1 AND sc.completed_at >= $2
        LIMIT 1`,
-      [userId, today.toISOString()]
+      [userId, today.toISOString()],
     ),
   ]);
 

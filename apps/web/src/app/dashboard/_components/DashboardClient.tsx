@@ -13,7 +13,7 @@ import { DashboardInitialData } from "../page";
 import { fireAuth } from "@/firebase/fireAuth";
 import { usePushToken } from "../_hooks/usePushToken";
 import { useCheckAppVersion } from "../_hooks/useCheckAppVersion";
-import UpdateBanner from "./UpdateBanner";
+import UpdateRequiredModal from "./UpdateRequiredModal";
 
 interface Props {
   initialData: DashboardInitialData;
@@ -54,7 +54,7 @@ export default function DashboardClient({
 
   return (
     <>
-      {needUpdate && <UpdateBanner />}
+      {needUpdate && <UpdateRequiredModal />}
       <div className="relative w-full h-[clamp(1.125rem,5vw,1.5rem)] shrink-0 mb-[clamp(0.5rem,2vw,0.75rem)]">
         <DashboardHeader nickname={nickname} done={done} />
       </div>

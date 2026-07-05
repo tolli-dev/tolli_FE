@@ -13,7 +13,7 @@ import Constants from "expo-constants";
 import { signInWithGoogle } from "./auth/googleSignIn";
 import { signInWithApple } from "./auth/appleSignIn";
 import { getCornerRadius } from "./modules/corner-radius";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { WebView } from "react-native-webview";
 import type {
   WebView as WebViewType,
@@ -42,6 +42,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NativeOfflineScreen from "./components/NativeOfflineScreen";
 import NetInfo from "@react-native-community/netinfo";
 import NetworkBanner from "./components/NetworkBanner";
+import UpdateRequireScreen from "./components/UpdateRequireScreen";
 
 // 사용자 커스텀 알람과 고정 알림 모두 서버(Expo Push)에서 발송한다.
 // 이 앱은 더 이상 로컬 알림을 예약하지 않으며, 구버전에서 남은 로컬 예약만 정리한다.
@@ -94,6 +95,41 @@ GoogleSignin.configure({
   iosClientId: Constants.expoConfig?.extra?.googleIosClientId,
 });
 
+function isBelow(current: string, minVersion: string): boolean {
+  const splittedCurrent = current.split(".").map(Number);
+  const splittedMinVersion = minVersion.split(".").map(Number);
+
+  for (let i = 0; i < 3; i++) {
+    if (splittedCurrent[i] < splittedMinVersion[i]) return true;
+    if (splittedCurrent[i] >= splittedMinVersion[i]) return false;
+  }
+  return false;
+}
+
+async function checkForceUpdate(): Promise<boolean> {
+  try {
+    const res = await fetch(`${IP_URL}/api/app/config`, {
+      signal: AbortSignal.timeout(3000),
+    });
+    const { minVersion } = await res.json();
+    const current = Constants.expoConfig?.version ?? "1.0.0";
+    return isBelow(current, minVersion[Platform.OS]);
+  } catch {
+    return false;
+  }
+}
+
+async function resolveInitialUri() {
+  const isFirst = await checkFirstLaunch();
+  if (isFirst) return `${IP_URL}/onboarding`;
+  const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+  if (isLoggedIn === "true") return `${IP_URL}/dashboard`;
+  const pending = await AsyncStorage.getItem("permissionPending");
+  return pending === "true"
+    ? `${IP_URL}/signup/permissions`
+    : `${IP_URL}/login`;
+}
+
 export default function App() {
   const webviewRef = useRef<WebViewType>(null);
   const [initialUri, setInitialUri] = useState<string | null>(null);
@@ -108,41 +144,20 @@ export default function App() {
     undefined,
   );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${IP_URL}/api/app/config`, {
-          signal: AbortSignal.timeout(3000),
-        });
-        const { minVersion } = await res.json();
-        const current = Constants.expoConfig?.version ?? "1.0.0";
-        if (isBelow(current, minVersion[Platform.OS])) {
-          setNeedUpdate(true);
-          return;
-        }
-      } catch (error) {}
-
-      await clearLegacyLocalAlarms();
-
-      const isFirst = await checkFirstLaunch();
-      if (isFirst) {
-        setInitialUri(`${IP_URL}/onboarding`);
-      } else {
-        const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-        if (isLoggedIn === "true") {
-          setInitialUri(`${IP_URL}/dashboard`);
-        } else {
-          const permissionPending =
-            await AsyncStorage.getItem("permissionPending");
-          setInitialUri(
-            permissionPending === "true"
-              ? `${IP_URL}/signup/permissions`
-              : `${IP_URL}/login`,
-          );
-        }
-      }
-    })();
+  const bootstrap = useCallback(async () => {
+    setInitialUri(null);
+    setNeedUpdate(false);
+    if (await checkForceUpdate()) {
+      setNeedUpdate(true);
+      return;
+    }
+    await clearLegacyLocalAlarms();
+    setInitialUri(await resolveInitialUri());
   }, []);
+
+  useEffect(() => {
+    bootstrap();
+  }, [bootstrap]);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -386,6 +401,7 @@ export default function App() {
     }
   };
 
+  if (needUpdate) return <UpdateRequireScreen />;
   if (!initialUri) return null;
 
   return (

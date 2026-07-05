@@ -262,13 +262,21 @@ export default function App() {
         );
       }
 
-      if (data.type === "GET_APP_READY") {
+      if (data.type === "GET_APP_VERSION") {
         webviewRef.current?.postMessage(
           JSON.stringify({
             type: "APP_VERSION",
             version: Constants.expoConfig?.version,
             platfomr: Platform.OS,
           }),
+        );
+      }
+
+      if (data.type === "OPEN_STORE") {
+        Linking.openURL(
+          Platform.OS === "ios"
+            ? "https://apps.apple.com/kr/app/tolli/id6766518023"
+            : "https://play.google.com/store/apps/details?id=com.company.tolli",
         );
       }
 

@@ -24,7 +24,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as StoreReview from "expo-store-review";
 import * as Application from "expo-application";
 
-const IP_URL = "https://tolli-fe-web-lilac.vercel.app";
+const IP_URL = "https://tolli-fe-web.vercel.app/";
 // const IP_URL = "http://localhost:3000";
 
 // 네이티브 스플래시를 직접 숨길 때까지 유지 (자동 숨김 방지)

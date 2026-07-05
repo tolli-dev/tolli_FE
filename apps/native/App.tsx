@@ -101,7 +101,7 @@ function isBelow(current: string, minVersion: string): boolean {
 
   for (let i = 0; i < 3; i++) {
     if (splittedCurrent[i] < splittedMinVersion[i]) return true;
-    if (splittedCurrent[i] >= splittedMinVersion[i]) return false;
+    if (splittedCurrent[i] > splittedMinVersion[i]) return false;
   }
   return false;
 }

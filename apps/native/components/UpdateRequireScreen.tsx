@@ -6,13 +6,16 @@ import {
   StyleSheet,
   Platform,
   StatusBar,
+  Linking,
 } from "react-native";
 
 export default function UpdateRequireScreen() {
   const update = () => {
-    Platform.OS === "ios"
-      ? "https://apps.apple.com/kr/app/tolli/id6766518023"
-      : "https://play.google.com/store/apps/details?id=com.company.tolli";
+    Linking.openURL(
+      Platform.OS === "ios"
+        ? "https://apps.apple.com/kr/app/tolli/id6766518023"
+        : "https://play.google.com/store/apps/details?id=com.company.tolli",
+    );
   };
 
   return (

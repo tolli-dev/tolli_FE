@@ -16,12 +16,15 @@ export function useCheckAppVersion() {
 
   useEffect(() => {
     const handler = async (e: MessageEvent) => {
-      const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-      if (data.type !== "APP_VERSION") return;
-      const { minVersion } = await fetch("/api/app/config").then((r) =>
-        r.json(),
-      );
-      if (isBelow(data.version, minVersion[data.platform])) setNeedUpdate(true);
+      try {
+        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+        if (data.type !== "APP_VERSION") return;
+        const { minVersion } = await fetch("/api/app/config").then((r) =>
+          r.json(),
+        );
+        if (isBelow(data.version, minVersion[data.platform]))
+          setNeedUpdate(true);
+      } catch {}
     };
 
     window.addEventListener("message", handler);

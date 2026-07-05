@@ -22,8 +22,9 @@ import type {
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import * as StoreReview from "expo-store-review";
+import * as Application from "expo-application";
 
-const IP_URL = "https://tolli-fe-web-lilac.vercel.app/";
+const IP_URL = "https://tolli-fe-web-lilac.vercel.app";
 // const IP_URL = "http://localhost:3000";
 
 // 네이티브 스플래시를 직접 숨길 때까지 유지 (자동 숨김 방지)
@@ -95,7 +96,9 @@ GoogleSignin.configure({
   iosClientId: Constants.expoConfig?.extra?.googleIosClientId,
 });
 
-function isBelow(current: string, minVersion: string): boolean {
+function isBelow(current?: string, minVersion?: string): boolean {
+  if (!current || !minVersion) return false;
+
   const splittedCurrent = current.split(".").map(Number);
   const splittedMinVersion = minVersion.split(".").map(Number);
 
@@ -107,15 +110,21 @@ function isBelow(current: string, minVersion: string): boolean {
 }
 
 async function checkForceUpdate(): Promise<boolean> {
+  // AbortSignal.timeout은 RN(Hermes)에서 지원되지 않아 AbortController로 타임아웃 처리
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 3000);
   try {
     const res = await fetch(`${IP_URL}/api/app/config`, {
-      signal: AbortSignal.timeout(3000),
+      signal: controller.signal,
     });
     const { minVersion } = await res.json();
-    const current = Constants.expoConfig?.version ?? "1.0.0";
+    // Constants.expoConfig는 standalone(iOS)에서 null일 수 있어 실제 설치 버전을 읽는다
+    const current = Application.nativeApplicationVersion ?? "1.0.0";
     return isBelow(current, minVersion[Platform.OS]);
   } catch {
     return false;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -266,7 +275,8 @@ export default function App() {
         webviewRef.current?.postMessage(
           JSON.stringify({
             type: "APP_VERSION",
-            version: Constants.expoConfig?.version,
+            // Constants.expoConfig는 standalone(iOS)에서 null일 수 있어 실제 설치 버전을 읽는다
+            version: Application.nativeApplicationVersion ?? "1.0.0",
             platform: Platform.OS,
           }),
         );

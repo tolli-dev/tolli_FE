@@ -262,6 +262,16 @@ export default function App() {
         );
       }
 
+      if (data.type === "GET_APP_READY") {
+        webviewRef.current?.postMessage(
+          JSON.stringify({
+            type: "APP_VERSION",
+            version: Constants.expoConfig?.version,
+            platfomr: Platform.OS,
+          }),
+        );
+      }
+
       if (data.type === "RECORD_READY") {
         if (Platform.OS === "android") {
           const result = await PermissionsAndroid.request(

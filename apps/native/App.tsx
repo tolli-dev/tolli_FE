@@ -145,14 +145,14 @@ export default function App() {
   );
 
   const bootstrap = useCallback(async () => {
-    setInitialUri(null);
     setNeedUpdate(false);
-    if (await checkForceUpdate()) {
-      setNeedUpdate(true);
-      return;
-    }
+
     await clearLegacyLocalAlarms();
     setInitialUri(await resolveInitialUri());
+
+    checkForceUpdate().then((below) => {
+      if (below) setNeedUpdate(true);
+    });
   }, []);
 
   useEffect(() => {

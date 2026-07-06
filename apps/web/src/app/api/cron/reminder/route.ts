@@ -26,6 +26,16 @@ function chunk<T>(arr: T[], size: number): T[][] {
   return out;
 }
 
+// 한국 시간 기준 오늘 날짜(YYYY-MM-DD)
+function getSeoulDateStr(): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
 export async function GET(request: NextRequest) {
   // 인증: Vercel Cron은 Authorization: Bearer ${CRON_SECRET} 헤더를 전송
   const secret = process.env.CRON_SECRET;
@@ -41,6 +51,20 @@ export async function GET(request: NextRequest) {
   const body = MESSAGES[slot];
   if (!body) {
     return NextResponse.json({ error: "invalid slot" }, { status: 400 });
+  }
+
+  // 오늘 이 slot을 원자적으로 "선점"한다. 크론이 재시도되거나 중복 호출돼도
+  // (slot, sent_on) PK 충돌로 두 번째부터는 row가 반환되지 않아 발송을 건너뛴다.
+  const dateStr = getSeoulDateStr();
+  const { rows: claimed } = await pool.query(
+    `INSERT INTO fixed_reminder_log (slot, sent_on)
+     VALUES ($1, $2::date)
+     ON CONFLICT DO NOTHING
+     RETURNING slot`,
+    [slot, dateStr],
+  );
+  if (claimed.length === 0) {
+    return NextResponse.json({ ok: true, sent: 0, skipped: "already sent" });
   }
 
   // 오늘(한국 시간) 말씀을 완료하지 않은 사용자의 토큰만 조회

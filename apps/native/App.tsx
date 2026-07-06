@@ -13,13 +13,16 @@ import Constants from 'expo-constants';
 import { signInWithGoogle } from './auth/googleSignIn';
 import { signInWithApple } from './auth/appleSignIn';
 import { getCornerRadius } from './modules/corner-radius';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
 import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
+import * as StoreReview from 'expo-store-review';
+import * as Application from 'expo-application';
 
 const IP_URL = 'https://tolli-fe-web.vercel.app';
+// const IP_URL = "http://localhost:3000";
 
 // 네이티브 스플래시를 직접 숨길 때까지 유지 (자동 숨김 방지)
 SplashScreen.preventAutoHideAsync();
@@ -34,14 +37,43 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import NativeOfflineScreen from './components/NativeOfflineScreen';
 import NetInfo from '@react-native-community/netinfo';
 import NetworkBanner from './components/NetworkBanner';
+import UpdateRequireScreen from './components/UpdateRequireScreen';
 
+// 사용자 커스텀 알람과 고정 알림 모두 서버(Expo Push)에서 발송한다.
+// 이 앱은 더 이상 로컬 알림을 예약하지 않으며, 구버전에서 남은 로컬 예약만 정리한다.
+async function clearLegacyLocalAlarms() {
+  await Notifications.cancelAllScheduledNotificationsAsync();
+}
+
+// 알람이 도착하면 실행됨
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowBanner: true,
-    shouldShowList: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
+  handleNotification: async (notification) => {
+    // 사용자 설정 알람인지 고정 시간 알람인지 확인
+    // cron/reminder/route.ts에서 확인 가능
+    const isFixedAlarm = notification.request.content.data?.isFixedAlarm === true;
+    /*
+        고정 시간 알림이면 알림을 띄워도 되는지 확인하기 
+        고정 알리이라면, 오늘 말씀을 완료한 날짜를 읽어서 오늘 날짜와 같은지 비교
+        오늘 말씀을 이미 완료했다면 배너/리스트/소리를 전부 false로 만들어 알림 숨기기 
+      */
+    if (isFixedAlarm) {
+      const completedDate = await AsyncStorage.getItem('studyCompletedDate');
+      const completedToday = completedDate === new Date().toDateString();
+      return {
+        shouldShowBanner: !completedToday,
+        shouldShowList: !completedToday,
+        shouldPlaySound: !completedToday,
+        shouldSetBadge: false,
+      };
+    }
+    // 사용자 설정 알림이면 다 보여주기
+    return {
+      shouldShowBanner: true,
+      shouldShowList: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    };
+  },
 });
 
 if (Platform.OS === 'android') {
@@ -57,16 +89,73 @@ GoogleSignin.configure({
   iosClientId: Constants.expoConfig?.extra?.googleIosClientId,
 });
 
+function isBelow(current?: string, minVersion?: string): boolean {
+  if (!current || !minVersion) return false;
+
+  const splittedCurrent = current.split('.').map(Number);
+  const splittedMinVersion = minVersion.split('.').map(Number);
+
+  for (let i = 0; i < 3; i++) {
+    if (splittedCurrent[i] < splittedMinVersion[i]) return true;
+    if (splittedCurrent[i] > splittedMinVersion[i]) return false;
+  }
+  return false;
+}
+
+async function checkForceUpdate(): Promise<boolean> {
+  // AbortSignal.timeout은 RN(Hermes)에서 지원되지 않아 AbortController로 타임아웃 처리
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 3000);
+  try {
+    const res = await fetch(`${IP_URL}/api/app/config`, {
+      signal: controller.signal,
+    });
+    const { minVersion } = await res.json();
+    // Constants.expoConfig는 standalone(iOS)에서 null일 수 있어 실제 설치 버전을 읽는다
+    const current = Application.nativeApplicationVersion ?? '1.0.0';
+    return isBelow(current, minVersion[Platform.OS]);
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function resolveInitialUri() {
+  const isFirst = await checkFirstLaunch();
+  if (isFirst) return `${IP_URL}/onboarding`;
+  const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+  if (isLoggedIn === 'true') return `${IP_URL}/dashboard`;
+  const pending = await AsyncStorage.getItem('permissionPending');
+  return pending === 'true' ? `${IP_URL}/signup/permissions` : `${IP_URL}/login`;
+}
+
 export default function App() {
   const webviewRef = useRef<WebViewType>(null);
   const [initialUri, setInitialUri] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [hasLoadError, setHasLoadError] = useState(false);
+  const [needUpdate, setNeedUpdate] = useState(false);
 
   const isExitApp = useRef(false);
   const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const offlineTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const bootstrap = useCallback(async () => {
+    setNeedUpdate(false);
+
+    await clearLegacyLocalAlarms();
+    setInitialUri(await resolveInitialUri());
+
+    checkForceUpdate().then((below) => {
+      if (below) setNeedUpdate(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    bootstrap();
+  }, [bootstrap]);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -114,28 +203,6 @@ export default function App() {
       SplashScreen.hideAsync();
     }, 3000);
     return () => clearTimeout(fallback);
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      // alarmEnabled 키가 없는 기존 유저 마이그레이션 (최초 1회)
-      const migrated = await AsyncStorage.getItem('alarmEnabledMigrated');
-      if (migrated === null) {
-        const alarmTime = await AsyncStorage.getItem('alarmTime');
-        if (alarmTime !== null) {
-          await AsyncStorage.setItem('alarmEnabled', 'true');
-        }
-        await AsyncStorage.setItem('alarmEnabledMigrated', 'true');
-      }
-
-      const isFirst = await checkFirstLaunch();
-      if (isFirst) {
-        setInitialUri(`${IP_URL}/onboarding`);
-      } else {
-        const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-        setInitialUri(isLoggedIn === 'true' ? `${IP_URL}/dashboard` : `${IP_URL}/login`);
-      }
-    })();
   }, []);
 
   const postToken = (type: string, token: string) => {
@@ -187,6 +254,25 @@ export default function App() {
         );
       }
 
+      if (data.type === 'GET_APP_VERSION') {
+        webviewRef.current?.postMessage(
+          JSON.stringify({
+            type: 'APP_VERSION',
+            // Constants.expoConfig는 standalone(iOS)에서 null일 수 있어 실제 설치 버전을 읽는다
+            version: Application.nativeApplicationVersion ?? '1.0.0',
+            platform: Platform.OS,
+          }),
+        );
+      }
+
+      if (data.type === 'OPEN_STORE') {
+        Linking.openURL(
+          Platform.OS === 'ios'
+            ? 'https://apps.apple.com/kr/app/tolli/id6766518023'
+            : 'https://play.google.com/store/apps/details?id=com.company.tolli',
+        );
+      }
+
       if (data.type === 'RECORD_READY') {
         if (Platform.OS === 'android') {
           const result = await PermissionsAndroid.request(
@@ -223,10 +309,19 @@ export default function App() {
         await AsyncStorage.setItem('isLoggedIn', 'true');
       }
 
+      if (data.type === 'SET_PERMISSION_PENDING') {
+        await AsyncStorage.setItem('permissionPending', 'true');
+      }
+
+      if (data.type === 'CLEAR_PERMISSION_PENDING') {
+        await AsyncStorage.removeItem('permissionPending');
+      }
+
       if (data.type === 'SET_LOGGED_OUT') {
         await AsyncStorage.removeItem('isLoggedIn');
         await AsyncStorage.removeItem('alarmTime');
         await AsyncStorage.removeItem('alarmEnabled');
+        await AsyncStorage.removeItem('permissionPending');
       }
 
       if (data.type === 'CLEAR_ALL_DATA') {
@@ -234,6 +329,7 @@ export default function App() {
         await AsyncStorage.removeItem('alarmTime');
         await AsyncStorage.removeItem('alarmEnabled');
         await AsyncStorage.removeItem('alarmEnabledMigrated');
+        await AsyncStorage.removeItem('permissionPending');
       }
 
       if (data.type === 'REQUEST_NOTIFICATION_PERMISSION') {
@@ -246,71 +342,57 @@ export default function App() {
         );
       }
 
-      if (data.type === 'QUERY_NOTIFICATION_STATUS') {
-        const enabled = await AsyncStorage.getItem('alarmEnabled');
+      // 온보딩 필수 권한 게이트: 실제 OS 권한 상태를 조회한다.
+      // (재요청 없이 현재 상태만 반환 — 설정앱 복귀 후 재확인에 사용)
+      if (data.type === 'QUERY_PERMISSION_STATUS') {
+        const notificationSettings = await Notifications.getPermissionsAsync();
+        let micGranted = false;
+        if (Platform.OS === 'android') {
+          micGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+        }
         webviewRef.current?.postMessage(
           JSON.stringify({
-            type: 'NOTIFICATION_STATUS',
-            enabled: enabled === 'true',
+            type: 'PERMISSION_STATUS',
+            notificationGranted: notificationSettings.status === 'granted',
+            micGranted,
           }),
         );
-      }
-
-      if (data.type === 'CANCEL_NOTIFICATION') {
-        await Notifications.cancelAllScheduledNotificationsAsync();
-        await AsyncStorage.removeItem('alarmEnabled');
       }
 
       if (data.type === 'OPEN_EXTERNAL_URL') {
         await Linking.openURL(data.url);
       }
 
-      if (data.type === 'SAVE_ALARM_TIME') {
-        await AsyncStorage.setItem(
-          'alarmTime',
-          JSON.stringify({ hour: data.hour, minute: data.minute }),
-        );
-        await AsyncStorage.setItem('alarmEnabled', 'true');
-        await Notifications.cancelAllScheduledNotificationsAsync();
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: '오늘의 말씀 🐘',
-            body: '톨리가 오늘의 말씀을 가져왔어요!',
-            sound: 'default',
-          },
-          trigger: {
-            type: Notifications.SchedulableTriggerInputTypes.DAILY,
-            hour: data.hour,
-            minute: data.minute,
-          },
-        });
+      if (data.type === 'STUDY_COMPLETED') {
+        await AsyncStorage.setItem('studyCompletedDate', new Date().toDateString());
+
+        // 학습 완료 직후 스토어 리뷰 요청.
+        // 노출 빈도/중복 여부는 OS가 알아서 조절하므로(iOS 연 3회 제한 등)
+        // 매번 호출해도 스팸이 되지 않는다. 미지원 환경(TestFlight/웹/구버전
+        // 안드로이드)에서는 isAvailableAsync가 false를 반환해 조용히 건너뛴다.
+        try {
+          if (await StoreReview.isAvailableAsync()) {
+            await StoreReview.requestReview();
+          }
+        } catch (reviewError) {
+          console.warn('[StoreReview] requestReview failed:', reviewError);
+        }
       }
 
-      if (data.type === 'GET_ALARM_TIME') {
-        const stored = await AsyncStorage.getItem('alarmTime');
+      if (data.type === 'GET_EXPO_PUSH_TOKEN') {
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status !== 'granted') return;
+        const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+        const tokenData = await Notifications.getExpoPushTokenAsync({
+          projectId,
+        });
         webviewRef.current?.postMessage(
           JSON.stringify({
-            type: 'ALARM_TIME',
-            ...(stored ? JSON.parse(stored) : { hour: null, minute: null }),
+            type: 'EXPO_PUSH_TOKEN',
+            token: tokenData.data,
+            platform: Platform.OS,
           }),
         );
-      }
-
-      if (data.type === 'SCHEDULE_NOTIFICATION') {
-        await AsyncStorage.setItem('alarmEnabled', 'true');
-        await Notifications.cancelAllScheduledNotificationsAsync();
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: '오늘의 말씀 🐘',
-            body: '톨리가 오늘의 말씀을 가져왔어요!',
-            sound: 'default',
-          },
-          trigger: {
-            type: Notifications.SchedulableTriggerInputTypes.DAILY,
-            hour: data.hour,
-            minute: data.minute,
-          },
-        });
       }
     } catch (error: any) {
       if (
@@ -324,6 +406,7 @@ export default function App() {
     }
   };
 
+  if (needUpdate) return <UpdateRequireScreen />;
   if (!initialUri) return null;
 
   return (

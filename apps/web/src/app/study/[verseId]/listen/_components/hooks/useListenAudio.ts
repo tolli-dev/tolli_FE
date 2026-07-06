@@ -5,16 +5,16 @@ import { useState, useEffect, useRef } from 'react';
 export function useListenAudio(verseId: number) {
   const [played, setPlayed] = useState(false);
   const [showHome, setShowHome] = useState(false);
-  const verseAudioRef = useRef<HTMLAudioElement | null>(
-    typeof Audio !== 'undefined' ? new Audio() : null,
-  );
-  const bgmAudioRef = useRef<HTMLAudioElement | null>(
-    typeof Audio !== 'undefined' ? new Audio('/verse-audio/bgm.mp3') : null,
-  );
+  const verseAudioRef = useRef<HTMLAudioElement | null>(null);
+  const bgmAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const bgm = bgmAudioRef.current;
-    if (!bgm) return;
+    if (typeof Audio === 'undefined') return;
+
+    const verse = new Audio();
+    const bgm = new Audio('/verse-audio/bgm.mp3');
+    verseAudioRef.current = verse;
+    bgmAudioRef.current = bgm;
 
     bgm.loop = true;
     bgm.volume = 0.7;
@@ -29,7 +29,9 @@ export function useListenAudio(verseId: number) {
 
     return () => {
       bgm.pause();
-      verseAudioRef.current?.pause();
+      bgm.src = '';
+      verse.pause();
+      verse.src = '';
       delete (window as Window & { __startBGM?: () => void }).__startBGM;
     };
   }, []);
@@ -43,7 +45,7 @@ export function useListenAudio(verseId: number) {
       setPlayed(false);
     } else {
       audio.src = `/verse-audio/verses/${verseId}.mp3`;
-      audio.play();
+      audio.play().catch(() => {});
       setPlayed(true);
       setShowHome(true);
 
@@ -53,5 +55,11 @@ export function useListenAudio(verseId: number) {
     }
   };
 
-  return { played, showHome, toggle };
+  const stopAll = () => {
+    bgmAudioRef.current?.pause();
+    verseAudioRef.current?.pause();
+    setPlayed(false);
+  };
+
+  return { played, showHome, toggle, stopAll };
 }

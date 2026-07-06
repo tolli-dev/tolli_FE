@@ -61,6 +61,7 @@ export default function StorageView({ done, nickname }: Props) {
       JSON.stringify({ type: "SET_LOGGED_OUT" }),
     );
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await signOut(fireAuth);
     } catch (error) {
       console.error("로그아웃 에러", error);
@@ -94,6 +95,7 @@ export default function StorageView({ done, nickname }: Props) {
     );
 
     try {
+      await fetch("/api/push/unregister", { method: "POST" });
       await signOut(fireAuth);
     } catch (error) {
       console.error("로그아웃 실패", error);
@@ -120,26 +122,6 @@ export default function StorageView({ done, nickname }: Props) {
       );
     }
   };
-
-  useEffect(() => {
-    const handler = (e: MessageEvent) => {
-      try {
-        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.type === "NOTIFICATION_STATUS") {
-          setNotificationEnabled(data.enabled);
-        }
-      } catch {}
-    };
-    window.addEventListener("message", handler);
-    document.addEventListener("message", handler as unknown as EventListener);
-    return () => {
-      window.removeEventListener("message", handler);
-      document.removeEventListener(
-        "message",
-        handler as unknown as EventListener,
-      );
-    };
-  }, []);
 
   const openModal = (type: ModalType) => {
     setIsDropdownOpen(false);

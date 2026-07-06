@@ -28,7 +28,7 @@ export default function Record({ verseId, fullText, reference }: RecordProps) {
   const [disabled, setDisabled] = useState(false);
   const { elapsed, start, stop, levels } = useRecord();
 
-  const { needSettings, requestPermission, openAppSettings, triggerNeedSettings, clearNeedSettings } =
+  const { needSettings, openAppSettings, triggerNeedSettings, clearNeedSettings } =
     useRNRecordPermission(beginRecording);
 
   // start()를 통해 녹음 기능을 시작한다.
@@ -49,7 +49,7 @@ export default function Record({ verseId, fullText, reference }: RecordProps) {
 
   const startRecording = () => {
     posthog.capture('recording_started', { verse_id: verseId });
-    requestPermission();
+    beginRecording();
   };
 
   const stopRecording = async () => {

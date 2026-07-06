@@ -1,0 +1,232 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+export type PermissionStep = 'notification' | 'mic' | 'granted';
+
+interface UseOnboardingPermissionsResult {
+  step: PermissionStep;
+  needSettings: boolean;
+  blocked: boolean;
+  isNative: boolean;
+  // 초기 권한 조회 응답을 받아 게이트 UI를 보여줄 준비가 됐는지 여부.
+  // 권한이 모두 있어 곧바로 통과하는 경우엔 true가 되지 않고 completeAll로 넘어간다.
+  ready: boolean;
+  initGate: () => void;
+  requestNotification: () => void;
+  requestMic: () => void;
+  openAppSettings: () => void;
+}
+
+function postToNative(payload: Record<string, unknown>): void {
+  window.ReactNativeWebView?.postMessage(JSON.stringify(payload));
+}
+
+function isIOS(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
+export function useOnboardingPermissions(
+  onAllGranted: () => void,
+): UseOnboardingPermissionsResult {
+  const [step, setStep] = useState<PermissionStep>('notification');
+  const [needSettings, setNeedSettings] = useState(false);
+  const [blocked, setBlocked] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  const isNative =
+    typeof window !== 'undefined' && Boolean(window.ReactNativeWebView);
+
+  const onAllGrantedRef = useRef(onAllGranted);
+  onAllGrantedRef.current = onAllGranted;
+
+  const stepRef = useRef<PermissionStep>(step);
+  stepRef.current = step;
+
+  const needSettingsRef = useRef(needSettings);
+  needSettingsRef.current = needSettings;
+
+  const initRef = useRef(false);
+
+  const advanceToMic = useCallback(() => {
+    setStep('mic');
+    setNeedSettings(false);
+    setBlocked(false);
+  }, []);
+
+  const completeAll = useCallback(() => {
+    setStep('granted');
+    setNeedSettings(false);
+    setBlocked(false);
+    setReady(true);
+    onAllGrantedRef.current();
+  }, []);
+
+  const requestNotification = useCallback(() => {
+    setNeedSettings(false);
+    setBlocked(false);
+    postToNative({ type: 'REQUEST_NOTIFICATION_PERMISSION' });
+  }, []);
+
+  const requestMic = useCallback(async () => {
+    setNeedSettings(false);
+    setBlocked(false);
+
+    if (isIOS()) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach((t) => t.stop());
+        completeAll();
+      } catch {
+        setNeedSettings(true);
+      }
+      return;
+    }
+
+    postToNative({ type: 'RECORD_READY' });
+  }, [completeAll]);
+
+  const isMicAlreadyGrantedIOS = useCallback(async (): Promise<boolean> => {
+    try {
+      const status = await navigator.permissions.query({
+        name: 'microphone' as PermissionName,
+      });
+      if (status.state === 'granted') return true;
+      if (status.state === 'denied') return false;
+    } catch {
+      // permissions.query 미지원 → getUserMedia로 판별
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((t) => t.stop());
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const advanceToMicIOS = useCallback(async () => {
+    advanceToMic();
+    if (await isMicAlreadyGrantedIOS()) {
+      completeAll();
+    }
+  }, [advanceToMic, isMicAlreadyGrantedIOS, completeAll]);
+
+  const initGate = useCallback(() => {
+    if (!isNative) {
+      completeAll();
+      return;
+    }
+    initRef.current = true;
+    postToNative({ type: 'QUERY_PERMISSION_STATUS' });
+  }, [isNative, completeAll]);
+
+  useEffect(() => {
+    if (!isNative) return;
+
+    const handleMessage = (e: MessageEvent | Event) => {
+      const raw = (e as MessageEvent).data;
+      if (typeof raw !== 'string') return;
+
+      let data: { type?: string; [key: string]: unknown };
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        return;
+      }
+
+      if (data.type === 'NOTIFICATION_PERMISSION_RESULT') {
+        if (data.granted) {
+          if (isIOS()) {
+            advanceToMicIOS();
+          } else {
+            advanceToMic();
+            requestMic();
+          }
+        } else {
+          setNeedSettings(true);
+        }
+        return;
+      }
+
+      if (data.type === 'RECORD_PERMISSION') {
+        if (data.status === 'granted') {
+          completeAll();
+        } else {
+          setBlocked(data.status === 'blocked');
+          setNeedSettings(true);
+        }
+        return;
+      }
+
+      if (data.type === 'PERMISSION_STATUS') {
+        const notificationGranted = Boolean(data.notificationGranted);
+        const micGranted = Boolean(data.micGranted);
+        const isInit = initRef.current;
+        initRef.current = false;
+
+        if (notificationGranted && micGranted) {
+          completeAll();
+        } else if (isInit) {
+          // 초기 조회에서 권한이 부족한 것이 확정됐으므로 게이트 UI를 노출한다.
+          setReady(true);
+          if (!notificationGranted) {
+            setStep('notification');
+            requestNotification();
+          } else if (isIOS()) {
+            advanceToMicIOS();
+          } else {
+            advanceToMic();
+            requestMic();
+          }
+        } else if (notificationGranted && stepRef.current !== 'mic') {
+          advanceToMic();
+        } else if (!notificationGranted && stepRef.current === 'mic') {
+          setStep('notification');
+          setNeedSettings(true);
+          setBlocked(false);
+        } else {
+          setNeedSettings(true);
+        }
+        return;
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    document.addEventListener('message', handleMessage as EventListener);
+
+    const handleVisibility = () => {
+      if (
+        document.visibilityState === 'visible' &&
+        stepRef.current !== 'granted' &&
+        needSettingsRef.current
+      ) {
+        initRef.current = true;
+        postToNative({ type: 'QUERY_PERMISSION_STATUS' });
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      document.removeEventListener('message', handleMessage as EventListener);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, [isNative, advanceToMic, advanceToMicIOS, completeAll, requestNotification, requestMic]);
+
+  const openAppSettings = useCallback(() => {
+    postToNative({ type: 'OPEN_APP_SETTINGS' });
+  }, []);
+
+  return {
+    step,
+    needSettings,
+    blocked,
+    isNative,
+    ready,
+    initGate,
+    requestNotification,
+    requestMic,
+    openAppSettings,
+  };
+}

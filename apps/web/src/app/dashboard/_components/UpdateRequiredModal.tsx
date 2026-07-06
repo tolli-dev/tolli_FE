@@ -1,9 +1,13 @@
 import Image from "next/image";
 
-const APP_STORE_URL = "https://apps.apple.com/kr/app/tolli/id6766518023";
-const PLAY_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.company.tolli";
+// 스토어 앱을 직접 여는 네이티브 스킴.
+// react-native-webview 기본 originWhitelist(http/https)에 안 걸려 OS가
+// 스토어 앱으로 연다. (https 링크는 웹뷰 안에서 열려버림)
+const APP_STORE_URL = "itms-apps://apps.apple.com/kr/app/tolli/id6766518023";
+const PLAY_STORE_URL = "market://details?id=com.company.tolli";
 
+// 구버전 네이티브에는 OPEN_STORE 핸들러가 없어 postMessage에 의존할 수 없으므로
+// 웹에서 스토어 스킴으로 바로 연다.
 function openStore() {
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   window.location.href = isIOS ? APP_STORE_URL : PLAY_STORE_URL;

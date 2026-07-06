@@ -17,20 +17,40 @@ export function useCheckAppVersion() {
   const [needUpdate, setNeedUpdate] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !window.ReactNativeWebView) return;
+    if (typeof window === "undefined") return;
+    if (!window.ReactNativeWebView) {
+      const t = setTimeout(() => {
+        /* 재시도 로직 */
+      }, 100);
+      return () => clearTimeout(t);
+    }
 
     let received = false;
 
     const handler = async (e: MessageEvent) => {
       try {
         const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+        alert("DEBUG: 메시지 수신 " + JSON.stringify(data)); // TODO: 디버그 후 제거
         if (data.type !== "APP_VERSION") return;
         received = true;
         const { minVersion } = await fetch("/api/app/config").then((r) =>
           r.json(),
         );
-        setNeedUpdate(isBelow(data.version, minVersion[data.platform]));
-      } catch {}
+        const result = isBelow(data.version, minVersion[data.platform]);
+        alert(
+          "DEBUG: version=" +
+            data.version +
+            " platform=" +
+            data.platform +
+            " min=" +
+            JSON.stringify(minVersion) +
+            " needUpdate=" +
+            result,
+        ); // TODO: 디버그 후 제거
+        setNeedUpdate(result);
+      } catch (err) {
+        alert("DEBUG: handler 예외 " + String(err)); // TODO: 디버그 후 제거
+      }
     };
 
     window.addEventListener("message", handler);
@@ -48,6 +68,7 @@ export function useCheckAppVersion() {
     }, 800);
 
     const decideTimer = setTimeout(() => {
+      alert("DEBUG: 2초 경과, received=" + received); // TODO: 디버그 후 제거
       if (!received) setNeedUpdate(true);
     }, 2000);
 

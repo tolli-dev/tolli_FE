@@ -17,25 +17,43 @@ export function useCheckAppVersion() {
   const [needUpdate, setNeedUpdate] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined" || !window.ReactNativeWebView) return;
+
+    let received = false;
+
     const handler = async (e: MessageEvent) => {
       try {
         const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
         if (data.type !== "APP_VERSION") return;
+        received = true;
         const { minVersion } = await fetch("/api/app/config").then((r) =>
           r.json(),
         );
-        if (isBelow(data.version, minVersion[data.platform]))
-          setNeedUpdate(true);
+        setNeedUpdate(isBelow(data.version, minVersion[data.platform]));
       } catch {}
     };
 
     window.addEventListener("message", handler);
     document.addEventListener("message", handler as unknown as EventListener);
 
-    window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "GET_APP_VERSION" }),
-    );
+    const request = () => {
+      window.ReactNativeWebView?.postMessage(
+        JSON.stringify({ type: "GET_APP_VERSION" }),
+      );
+    };
+
+    request();
+    const retryTimer = setTimeout(() => {
+      if (!received) request();
+    }, 800);
+
+    const decideTimer = setTimeout(() => {
+      if (!received) setNeedUpdate(true);
+    }, 2000);
+
     return () => {
+      clearTimeout(retryTimer);
+      clearTimeout(decideTimer);
       window.removeEventListener("message", handler);
       document.removeEventListener(
         "message",

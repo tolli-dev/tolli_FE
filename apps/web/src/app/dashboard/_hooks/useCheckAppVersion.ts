@@ -18,14 +18,12 @@ export function useCheckAppVersion() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!window.ReactNativeWebView) {
-      const t = setTimeout(() => {
-        /* 재시도 로직 */
-      }, 100);
-      return () => clearTimeout(t);
-    }
 
+    let cancelled = false;
     let received = false;
+    let retryTimer: ReturnType<typeof setTimeout>;
+    let decideTimer: ReturnType<typeof setTimeout>;
+    let pollTimer: ReturnType<typeof setTimeout>;
 
     const handler = async (e: MessageEvent) => {
       try {
@@ -53,26 +51,51 @@ export function useCheckAppVersion() {
       }
     };
 
-    window.addEventListener("message", handler);
-    document.addEventListener("message", handler as unknown as EventListener);
-
-    const request = () => {
-      window.ReactNativeWebView?.postMessage(
-        JSON.stringify({ type: "GET_APP_VERSION" }),
+    const start = () => {
+      window.addEventListener("message", handler);
+      document.addEventListener(
+        "message",
+        handler as unknown as EventListener,
       );
+
+      const request = () => {
+        window.ReactNativeWebView?.postMessage(
+          JSON.stringify({ type: "GET_APP_VERSION" }),
+        );
+      };
+
+      request();
+      retryTimer = setTimeout(() => {
+        if (!received) request();
+      }, 800);
+
+      decideTimer = setTimeout(() => {
+        alert("DEBUG: 2초 경과, received=" + received); // TODO: 디버그 후 제거
+        if (!received) setNeedUpdate(true);
+      }, 2000);
     };
 
-    request();
-    const retryTimer = setTimeout(() => {
-      if (!received) request();
-    }, 800);
+    // window.ReactNativeWebView가 마운트 시점에 아직 주입되지 않았을 수 있어
+    // 100ms 간격으로 최대 2초간 재확인한다.
+    const waitForRNWebView = (attempt: number) => {
+      if (cancelled) return;
+      if (window.ReactNativeWebView) {
+        alert("DEBUG: RNWebView 감지됨 (시도 " + attempt + "회)"); // TODO: 디버그 후 제거
+        start();
+        return;
+      }
+      if (attempt >= 20) {
+        alert("DEBUG: RNWebView 끝내 감지 안 됨 (2초 대기 후 포기)"); // TODO: 디버그 후 제거
+        return;
+      }
+      pollTimer = setTimeout(() => waitForRNWebView(attempt + 1), 100);
+    };
 
-    const decideTimer = setTimeout(() => {
-      alert("DEBUG: 2초 경과, received=" + received); // TODO: 디버그 후 제거
-      if (!received) setNeedUpdate(true);
-    }, 2000);
+    waitForRNWebView(0);
 
     return () => {
+      cancelled = true;
+      clearTimeout(pollTimer);
       clearTimeout(retryTimer);
       clearTimeout(decideTimer);
       window.removeEventListener("message", handler);

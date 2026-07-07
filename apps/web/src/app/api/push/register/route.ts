@@ -23,6 +23,14 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    // 푸시 토큰은 기기(설치) 단위로 유일하다. 한 기기에서 다른 계정으로
+    // 로그인했다 전환하면 옛 계정 밑에 같은 토큰이 남아, 그 계정이 미완료면
+    // 고정 알림이 이 기기로 발송된다(완료했는데 알림 오는 버그).
+    // 등록 시 이 토큰을 현재 유저에게 독점 귀속시켜 유령 계정의 토큰을 정리한다.
+    await pool.query('DELETE FROM push_tokens WHERE token = $1 AND user_id <> $2', [
+      token,
+      userId,
+    ]);
     await pool.query(
       `INSERT INTO push_tokens (user_id, token, platform, updated_at)
        VALUES ($1, $2, $3, now())

@@ -7,12 +7,15 @@ import { dataConnect } from '@/lib/dataconnect';
 import { getLocalMidnight } from '@/lib/date';
 import { useRouter } from 'next/navigation';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
+import { QueryFetchPolicy } from 'firebase/data-connect';
 
 async function getTodayVerseId(): Promise<number> {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const today = getLocalMidnight(tz);
 
-  const result = await getMyCurrentVerse(dataConnect, { today: today.toISOString() });
+  const result = await getMyCurrentVerse(dataConnect, { today: today.toISOString() }, {
+    fetchPolicy: QueryFetchPolicy.SERVER_ONLY,
+  });
   const { lastCompletion } = result.data;
 
   if (lastCompletion.length > 0) return (lastCompletion[0].verse.id % 63) + 1;

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import ReadingBookTolli from '../../../../../../public/tolli1.webp';
+import ReadingBookTolli from '../../../../../public/tolli1.webp';
 import SetBookmarkButton from './SetBookmarkButton';
 import { useRouter } from 'next/navigation';
 import { addBookmark } from '@firebasegen/default-connector';

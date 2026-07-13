@@ -1,0 +1,622 @@
+mutation SeedVersesExtended @auth(level: NO_ACCESS) {
+  verse_insertMany(data: [
+    {
+      id: 31,
+      reference: "고린도전서 16:13",
+      fullText: "깨어 믿음에 굳게 서서 남자답게 강건하여라",
+      words: [
+        { index: 1, text: "깨어", meaning: "영적으로 정신을 차리고 경계하며" },
+        { index: 2, text: "믿음에", meaning: "예수 그리스도를 향한 신앙, 하나님을 향한 신뢰" },
+        { index: 3, text: "굳게", meaning: "흔들리지 않고 확고하게 서서" },
+        { index: 4, text: "서서", meaning: "흔들리지 않고 확고하게 서서" },
+        { index: 5, text: "남자답게", meaning: "용감하게, 담대하게. 헬라어 '안드리조마이(용기를 내라)'의 번역" },
+        { index: 6, text: "강건하여라", meaning: "강하고 굳세어라" }
+      ],
+      maskedStep2: [1, 6],
+      maskedStep3: [1, 3, 6],
+      maskedStep4: [1, 2, 3, 4, 6]
+    },
+    {
+      id: 32,
+      reference: "시편 31:24",
+      fullText: "강하고 담대하라 여호와를 바라는 너희들아",
+      words: [
+        { index: 1, text: "강하고", meaning: "굳세고, 힘있고" },
+        { index: 2, text: "담대하라", meaning: "용기를 내라, 두려워하지 말라" },
+        { index: 3, text: "여호와를", meaning: "하나님의 고유 이름. 히브리어 '야훼(YHWH)'의 음역. '스스로 있는 자'라는 뜻" },
+        { index: 4, text: "바라는", meaning: "소망을 두고 기다리는" },
+        { index: 5, text: "너희들아" }
+      ],
+      maskedStep2: [2],
+      maskedStep3: [1, 2, 4],
+      maskedStep4: [1, 2, 3, 4]
+    },
+    {
+      id: 33,
+      reference: "시편 22:19",
+      fullText: "여호와여 멀리하지 마옵소서 나의 힘이시여 속히 나를 도우소서",
+      words: [
+        { index: 1, text: "여호와여" },
+        { index: 2, text: "멀리하지", meaning: "떠나지 마소서, 곁에 계셔 주소서 (간구의 경어)" },
+        { index: 3, text: "마옵소서", meaning: "떠나지 마소서, 곁에 계셔 주소서 (간구의 경어)" },
+        { index: 4, text: "나의" },
+        { index: 5, text: "힘이시여", meaning: "나를 지탱하시는 능력이시여" },
+        { index: 6, text: "속히", meaning: "빨리, 지체 없이" },
+        { index: 7, text: "나를" },
+        { index: 8, text: "도우소서", meaning: "도와주소서 (간구의 경어)" }
+      ],
+      maskedStep2: [1, 8],
+      maskedStep3: [1, 3, 5, 8],
+      maskedStep4: [1, 2, 3, 5, 6, 8]
+    },
+    {
+      id: 34,
+      reference: "에베소서 6:10",
+      fullText: "종말로 너희가 주 안에서와 그 힘의 능력으로 강건하여지고",
+      words: [
+        { index: 1, text: "종말로", meaning: "끝으로, 마지막으로 (개역한글 표현)" },
+        { index: 2, text: "너희가" },
+        { index: 3, text: "주", meaning: "주님. 높여 부르는 칭호" },
+        { index: 4, text: "안에서와" },
+        { index: 5, text: "그" },
+        { index: 6, text: "힘의", meaning: "하나님의 강한 권능" },
+        { index: 7, text: "능력으로", meaning: "하나님의 강한 권능" },
+        { index: 8, text: "강건하여지고", meaning: "강하고 굳세게 되고" }
+      ],
+      maskedStep2: [1, 8],
+      maskedStep3: [1, 4, 6, 8],
+      maskedStep4: [1, 3, 4, 6, 7, 8]
+    },
+    {
+      id: 35,
+      reference: "빌립보서 4:13",
+      fullText: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라",
+      words: [
+        { index: 1, text: "내게" },
+        { index: 2, text: "능력", meaning: "해낼 수 있는 힘" },
+        { index: 3, text: "주시는", meaning: "능력을 부어 주시는 분" },
+        { index: 4, text: "자", meaning: "능력을 부어 주시는 분" },
+        { index: 5, text: "안에서", meaning: "그분과 연합한 가운데" },
+        { index: 6, text: "내가" },
+        { index: 7, text: "모든" },
+        { index: 8, text: "것을" },
+        { index: 9, text: "할" },
+        { index: 10, text: "수" },
+        { index: 11, text: "있느니라" }
+      ],
+      maskedStep2: [2, 7, 11],
+      maskedStep3: [2, 3, 4, 7, 9, 11],
+      maskedStep4: [2, 3, 4, 7, 8, 9, 10, 11]
+    },
+    {
+      id: 36,
+      reference: "출애굽기 14:14",
+      fullText: "여호와께서 너희를 위하여 싸우시리니 너희는 가만히 있을지니라",
+      words: [
+        { index: 1, text: "여호와께서", meaning: "하나님의 고유 이름. 히브리어 '야훼(YHWH)'의 음역. '스스로 있는 자'라는 뜻" },
+        { index: 2, text: "너희를" },
+        { index: 3, text: "위하여" },
+        { index: 4, text: "싸우시리니", meaning: "대신 전쟁을 치르시리니" },
+        { index: 5, text: "너희는" },
+        { index: 6, text: "가만히", meaning: "잠잠히 신뢰하며 기다리라" },
+        { index: 7, text: "있을지니라", meaning: "잠잠히 신뢰하며 기다리라" }
+      ],
+      maskedStep2: [1, 7],
+      maskedStep3: [1, 4, 6, 7],
+      maskedStep4: [1, 4, 5, 6, 7]
+    },
+    {
+      id: 37,
+      reference: "이사야 40:29",
+      fullText: "피곤한 자에게는 능력을 주시며 무능한 자에게는 힘을 더하시나니",
+      words: [
+        { index: 1, text: "피곤한", meaning: "지치고 기운이 다한 사람" },
+        { index: 2, text: "자에게는", meaning: "지치고 기운이 다한 사람" },
+        { index: 3, text: "능력을", meaning: "해낼 수 있는 힘" },
+        { index: 4, text: "주시며" },
+        { index: 5, text: "무능한", meaning: "힘이 없는 사람, 연약한 사람" },
+        { index: 6, text: "자에게는", meaning: "힘이 없는 사람, 연약한 사람" },
+        { index: 7, text: "힘을" },
+        { index: 8, text: "더하시나니", meaning: "더 부어 주시나니, 보태 주시나니" }
+      ],
+      maskedStep2: [1, 8],
+      maskedStep3: [1, 4, 6, 8],
+      maskedStep4: [1, 2, 3, 4, 6, 8]
+    },
+    {
+      id: 38,
+      reference: "시편 46:1",
+      fullText: "하나님은 우리의 피난처시요 힘이시니 환난 중에 만날 큰 도움이시라",
+      words: [
+        { index: 1, text: "하나님은" },
+        { index: 2, text: "우리의" },
+        { index: 3, text: "피난처시요", meaning: "위험을 피해 숨는 곳. 하나님의 보호하심을 상징" },
+        { index: 4, text: "힘이시니" },
+        { index: 5, text: "환난", meaning: "근심과 재난, 고통스러운 시련" },
+        { index: 6, text: "중에" },
+        { index: 7, text: "만날", meaning: "만나게 되는, 얻게 되는" },
+        { index: 8, text: "큰" },
+        { index: 9, text: "도움이시라", meaning: "구원과 보호" }
+      ],
+      maskedStep2: [1, 9],
+      maskedStep3: [1, 3, 5, 7, 9],
+      maskedStep4: [1, 3, 4, 5, 6, 7, 9]
+    },
+    {
+      id: 39,
+      reference: "시편 34:4",
+      fullText: "내가 여호와께 구하매 내게 응답하시고 내 모든 두려움에서 나를 건지셨도다",
+      words: [
+        { index: 1, text: "내가" },
+        { index: 2, text: "여호와께" },
+        { index: 3, text: "구하매", meaning: "간구하니, 기도하니" },
+        { index: 4, text: "내게" },
+        { index: 5, text: "응답하시고", meaning: "대답하시고, 들어주시고" },
+        { index: 6, text: "내" },
+        { index: 7, text: "모든" },
+        { index: 8, text: "두려움에서", meaning: "무서움, 불안" },
+        { index: 9, text: "나를" },
+        { index: 10, text: "건지셨도다", meaning: "구해내셨도다" }
+      ],
+      maskedStep2: [2, 5, 10],
+      maskedStep3: [2, 3, 5, 7, 10],
+      maskedStep4: [1, 2, 3, 5, 7, 8, 9, 10]
+    },
+    {
+      id: 40,
+      reference: "시편 34:17",
+      fullText: "의인이 외치매 여호와께서 들으시고 저희의 모든 환난에서 건지셨도다",
+      words: [
+        { index: 1, text: "의인이", meaning: "의로운 사람, 하나님 앞에 바른 자" },
+        { index: 2, text: "외치매", meaning: "부르짖으니, 소리 높여 간구하니" },
+        { index: 3, text: "여호와께서" },
+        { index: 4, text: "들으시고" },
+        { index: 5, text: "저희의", meaning: "그들 (개역한글의 3인칭 복수 표현)" },
+        { index: 6, text: "모든" },
+        { index: 7, text: "환난에서", meaning: "근심과 재난, 고통스러운 시련" },
+        { index: 8, text: "건지셨도다", meaning: "구해내셨도다" }
+      ],
+      maskedStep2: [1, 8],
+      maskedStep3: [1, 4, 6, 8],
+      maskedStep4: [1, 2, 3, 4, 6, 8]
+    },
+    {
+      id: 41,
+      reference: "시편 138:3",
+      fullText: "내가 간구하는 날에 주께서 응답하시고 내 영혼을 장려하여 강하게 하셨나이다",
+      words: [
+        { index: 1, text: "내가" },
+        { index: 2, text: "간구하는", meaning: "간절히 구하는, 기도하는" },
+        { index: 3, text: "날에" },
+        { index: 4, text: "주께서" },
+        { index: 5, text: "응답하시고", meaning: "대답하시고, 들어주시고" },
+        { index: 6, text: "내" },
+        { index: 7, text: "영혼을", meaning: "속사람, 마음의 중심" },
+        { index: 8, text: "장려하여", meaning: "북돋우어, 격려하여 (개역한글 표현)" },
+        { index: 9, text: "강하게", meaning: "굳세게 만들어 주셨나이다" },
+        { index: 10, text: "하셨나이다", meaning: "굳세게 만들어 주셨나이다" }
+      ],
+      maskedStep2: [2, 5, 10],
+      maskedStep3: [2, 3, 5, 7, 10],
+      maskedStep4: [2, 3, 4, 5, 7, 8, 9, 10]
+    },
+    {
+      id: 42,
+      reference: "나훔 1:7",
+      fullText: "여호와는 선하시며 환난 날에 산성이시라 그는 자기에게 의뢰하는 자들을 아시느니라",
+      words: [
+        { index: 1, text: "여호와는" },
+        { index: 2, text: "선하시며", meaning: "좋으시며, 인자하시며" },
+        { index: 3, text: "환난", meaning: "근심과 재난, 고통스러운 시련" },
+        { index: 4, text: "날에" },
+        { index: 5, text: "산성이시라", meaning: "산 위에 세운 요새. 적의 공격에서 지켜주는 하나님의 보호를 상징" },
+        { index: 6, text: "그는" },
+        { index: 7, text: "자기에게" },
+        { index: 8, text: "의뢰하는", meaning: "믿고 의지하는, 맡기는" },
+        { index: 9, text: "자들을" },
+        { index: 10, text: "아시느니라", meaning: "돌아보시고 인정하시느니라" }
+      ],
+      maskedStep2: [1, 5, 10],
+      maskedStep3: [1, 3, 5, 8, 10],
+      maskedStep4: [1, 2, 3, 4, 5, 8, 9, 10]
+    },
+    {
+      id: 43,
+      reference: "잠언 18:10",
+      fullText: "여호와의 이름은 견고한 망대라 의인은 그리로 달려가서 안전함을 얻느니라",
+      words: [
+        { index: 1, text: "여호와의" },
+        { index: 2, text: "이름은" },
+        { index: 3, text: "견고한", meaning: "튼튼한, 흔들리지 않는" },
+        { index: 4, text: "망대라", meaning: "높이 세운 감시탑. 피난처와 안전을 상징" },
+        { index: 5, text: "의인은", meaning: "의로운 사람, 하나님 앞에 바른 자" },
+        { index: 6, text: "그리로", meaning: "그곳으로" },
+        { index: 7, text: "달려가서" },
+        { index: 8, text: "안전함을", meaning: "보호받아 평안함" },
+        { index: 9, text: "얻느니라" }
+      ],
+      maskedStep2: [1, 9],
+      maskedStep3: [1, 3, 5, 7, 9],
+      maskedStep4: [1, 2, 3, 4, 5, 7, 9]
+    },
+    {
+      id: 44,
+      reference: "예레미야 31:25",
+      fullText: "이는 내가 그 피곤한 심령을 만족케 하며 무릇 슬픈 심령을 상쾌케 하였음이니라 하시기로",
+      words: [
+        { index: 1, text: "이는" },
+        { index: 2, text: "내가" },
+        { index: 3, text: "그" },
+        { index: 4, text: "피곤한", meaning: "지치고 기운이 다한" },
+        { index: 5, text: "심령을", meaning: "마음과 영혼" },
+        { index: 6, text: "만족케", meaning: "흡족하게 채워지게 (개역한글의 '~케' 표기)" },
+        { index: 7, text: "하며" },
+        { index: 8, text: "무릇", meaning: "대체로 보아서, 모든" },
+        { index: 9, text: "슬픈" },
+        { index: 10, text: "심령을", meaning: "마음과 영혼" },
+        { index: 11, text: "상쾌케", meaning: "시원하고 새롭게" },
+        { index: 12, text: "하였음이니라" },
+        { index: 13, text: "하시기로", meaning: "말씀하셨으므로" }
+      ],
+      maskedStep2: [4, 8, 13],
+      maskedStep3: [4, 5, 6, 7, 8, 10, 13],
+      maskedStep4: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    },
+    {
+      id: 45,
+      reference: "시편 29:11",
+      fullText: "여호와께서 자기 백성에게 힘을 주심이여 여호와께서 자기 백성에게 평강의 복을 주시리로다",
+      words: [
+        { index: 1, text: "여호와께서" },
+        { index: 2, text: "자기" },
+        { index: 3, text: "백성에게", meaning: "하나님께 속한 사람들" },
+        { index: 4, text: "힘을" },
+        { index: 5, text: "주심이여", meaning: "주시는도다 (감탄의 종결)" },
+        { index: 6, text: "여호와께서" },
+        { index: 7, text: "자기" },
+        { index: 8, text: "백성에게", meaning: "하나님께 속한 사람들" },
+        { index: 9, text: "평강의", meaning: "평안과 안녕. 히브리어 '샬롬'" },
+        { index: 10, text: "복을", meaning: "하나님이 내리시는 은혜·행복·번영" },
+        { index: 11, text: "주시리로다" }
+      ],
+      maskedStep2: [1, 6, 11],
+      maskedStep3: [1, 3, 4, 6, 8, 11],
+      maskedStep4: [1, 3, 4, 5, 6, 8, 9, 11]
+    },
+    {
+      id: 46,
+      reference: "데살로니가전서 5:18",
+      fullText: "범사에 감사하라 이는 그리스도 예수 안에서 너희를 향하신 하나님의 뜻이니라",
+      words: [
+        { index: 1, text: "범사에", meaning: "모든 일에, 어떤 상황에서든" },
+        { index: 2, text: "감사하라", meaning: "고마움을 아뢰라" },
+        { index: 3, text: "이는" },
+        { index: 4, text: "그리스도", meaning: "히브리어 '메시아'의 헬라어 번역. 기름부음 받은 구원자 예수님을 가리키는 칭호" },
+        { index: 5, text: "예수" },
+        { index: 6, text: "안에서" },
+        { index: 7, text: "너희를" },
+        { index: 8, text: "향하신", meaning: "~을 위해 정하신" },
+        { index: 9, text: "하나님의" },
+        { index: 10, text: "뜻이니라", meaning: "하나님의 계획과 원하시는 바" }
+      ],
+      maskedStep2: [1, 5, 10],
+      maskedStep3: [1, 2, 5, 8, 10],
+      maskedStep4: [1, 2, 4, 5, 7, 8, 9, 10]
+    },
+    {
+      id: 47,
+      reference: "빌립보서 4:4",
+      fullText: "주 안에서 항상 기뻐하라 내가 다시 말하노니 기뻐하라",
+      words: [
+        { index: 1, text: "주", meaning: "주님과 함께하는 가운데" },
+        { index: 2, text: "안에서", meaning: "주님과 함께하는 가운데" },
+        { index: 3, text: "항상", meaning: "언제나, 끊임없이" },
+        { index: 4, text: "기뻐하라" },
+        { index: 5, text: "내가" },
+        { index: 6, text: "다시" },
+        { index: 7, text: "말하노니", meaning: "말하니 (같은 말을 반복하여 강조함)" },
+        { index: 8, text: "기뻐하라" }
+      ],
+      maskedStep2: [1, 8],
+      maskedStep3: [1, 3, 4, 8],
+      maskedStep4: [1, 3, 4, 6, 7, 8]
+    },
+    {
+      id: 48,
+      reference: "시편 118:24",
+      fullText: "이 날은 여호와의 정하신 것이라 이 날에 우리가 즐거워하고 기뻐하리로다",
+      words: [
+        { index: 1, text: "이" },
+        { index: 2, text: "날은" },
+        { index: 3, text: "여호와의" },
+        { index: 4, text: "정하신", meaning: "만드시고 계획하신 것" },
+        { index: 5, text: "것이라", meaning: "만드시고 계획하신 것" },
+        { index: 6, text: "이" },
+        { index: 7, text: "날에" },
+        { index: 8, text: "우리가" },
+        { index: 9, text: "즐거워하고", meaning: "기뻐 뛰며" },
+        { index: 10, text: "기뻐하리로다", meaning: "기뻐할 것이로다 (다짐의 종결)" }
+      ],
+      maskedStep2: [2, 7, 10],
+      maskedStep3: [2, 3, 4, 7, 10],
+      maskedStep4: [1, 2, 3, 4, 7, 8, 9, 10]
+    },
+    {
+      id: 49,
+      reference: "잠언 3:5",
+      fullText: "너는 마음을 다하여 여호와를 의뢰하고 네 명철을 의지하지 말라",
+      words: [
+        { index: 1, text: "너는" },
+        { index: 2, text: "마음을", meaning: "온 마음으로, 전심으로" },
+        { index: 3, text: "다하여", meaning: "온 마음으로, 전심으로" },
+        { index: 4, text: "여호와를" },
+        { index: 5, text: "의뢰하고", meaning: "믿고 맡기고" },
+        { index: 6, text: "네" },
+        { index: 7, text: "명철을", meaning: "사리를 분별하는 자신의 총명" },
+        { index: 8, text: "의지하지", meaning: "기대지 말라" },
+        { index: 9, text: "말라", meaning: "기대지 말라" }
+      ],
+      maskedStep2: [2, 9],
+      maskedStep3: [2, 3, 5, 7, 9],
+      maskedStep4: [2, 3, 4, 5, 7, 8, 9]
+    },
+    {
+      id: 50,
+      reference: "잠언 3:6",
+      fullText: "너는 범사에 그를 인정하라 그리하면 네 길을 지도하시리라",
+      words: [
+        { index: 1, text: "너는" },
+        { index: 2, text: "범사에", meaning: "모든 일에" },
+        { index: 3, text: "그를" },
+        { index: 4, text: "인정하라", meaning: "그분을 알고 받아들이라, 인식하라" },
+        { index: 5, text: "그리하면" },
+        { index: 6, text: "네" },
+        { index: 7, text: "길을", meaning: "인생의 행로, 삶의 방향" },
+        { index: 8, text: "지도하시리라", meaning: "곧게 인도하시리라" }
+      ],
+      maskedStep2: [2, 8],
+      maskedStep3: [2, 4, 7, 8],
+      maskedStep4: [1, 2, 4, 6, 7, 8]
+    },
+    {
+      id: 51,
+      reference: "잠언 16:3",
+      fullText: "너의 행사를 여호와께 맡기라 그리하면 너의 경영하는 것이 이루리라",
+      words: [
+        { index: 1, text: "너의" },
+        { index: 2, text: "행사를", meaning: "하는 일, 행동" },
+        { index: 3, text: "여호와께" },
+        { index: 4, text: "맡기라", meaning: "위탁하라, 온전히 내어 드리라" },
+        { index: 5, text: "그리하면" },
+        { index: 6, text: "너의" },
+        { index: 7, text: "경영하는", meaning: "계획하고 도모하는 일" },
+        { index: 8, text: "것이", meaning: "계획하고 도모하는 일" },
+        { index: 9, text: "이루리라", meaning: "성취되리라" }
+      ],
+      maskedStep2: [2, 9],
+      maskedStep3: [2, 3, 4, 7, 9],
+      maskedStep4: [1, 2, 3, 4, 7, 8, 9]
+    },
+    {
+      id: 52,
+      reference: "잠언 16:9",
+      fullText: "사람이 마음으로 자기의 길을 계획할지라도 그 걸음을 인도하는 자는 여호와시니라",
+      words: [
+        { index: 1, text: "사람이" },
+        { index: 2, text: "마음으로" },
+        { index: 3, text: "자기의" },
+        { index: 4, text: "길을" },
+        { index: 5, text: "계획할지라도", meaning: "도모하고 궁리할지라도" },
+        { index: 6, text: "그" },
+        { index: 7, text: "걸음을", meaning: "실제 발걸음, 삶의 진행" },
+        { index: 8, text: "인도하는", meaning: "이끄시는, 정하시는" },
+        { index: 9, text: "자는" },
+        { index: 10, text: "여호와시니라" }
+      ],
+      maskedStep2: [1, 5, 10],
+      maskedStep3: [1, 2, 5, 7, 10],
+      maskedStep4: [1, 2, 4, 5, 7, 8, 9, 10]
+    },
+    {
+      id: 53,
+      reference: "시편 56:3",
+      fullText: "내가 두려워하는 날에는 주를 의지하리이다",
+      words: [
+        { index: 1, text: "내가" },
+        { index: 2, text: "두려워하는", meaning: "무섭고 불안한 때" },
+        { index: 3, text: "날에는", meaning: "무섭고 불안한 때" },
+        { index: 4, text: "주를" },
+        { index: 5, text: "의지하리이다", meaning: "믿고 기대리이다 (경어 종결)" }
+      ],
+      maskedStep2: [5],
+      maskedStep3: [2, 3, 5],
+      maskedStep4: [2, 3, 4, 5]
+    },
+    {
+      id: 54,
+      reference: "시편 37:4",
+      fullText: "또 여호와를 기뻐하라 저가 네 마음의 소원을 이루어 주시리로다",
+      words: [
+        { index: 1, text: "또" },
+        { index: 2, text: "여호와를" },
+        { index: 3, text: "기뻐하라", meaning: "즐거움으로 삼으라" },
+        { index: 4, text: "저가", meaning: "그가. 하나님을 가리키는 3인칭 대명사 (개역한글 표현)" },
+        { index: 5, text: "네" },
+        { index: 6, text: "마음의" },
+        { index: 7, text: "소원을", meaning: "마음에 바라는 것" },
+        { index: 8, text: "이루어", meaning: "성취시켜 주실 것이로다" },
+        { index: 9, text: "주시리로다", meaning: "성취시켜 주실 것이로다" }
+      ],
+      maskedStep2: [2, 9],
+      maskedStep3: [2, 3, 6, 7, 9],
+      maskedStep4: [2, 3, 5, 6, 7, 8, 9]
+    },
+    {
+      id: 55,
+      reference: "데살로니가후서 3:3",
+      fullText: "주는 미쁘사 너희를 굳게 하시고 악한 자에게서 지키시리라",
+      words: [
+        { index: 1, text: "주는" },
+        { index: 2, text: "미쁘사", meaning: "신실하시어, 믿을 만하시어 (개역한글 표현)" },
+        { index: 3, text: "너희를" },
+        { index: 4, text: "굳게", meaning: "견고하게 세우시고" },
+        { index: 5, text: "하시고", meaning: "견고하게 세우시고" },
+        { index: 6, text: "악한", meaning: "악을 행하는 자" },
+        { index: 7, text: "자에게서", meaning: "악을 행하는 자" },
+        { index: 8, text: "지키시리라", meaning: "보호하시리라" }
+      ],
+      maskedStep2: [1, 8],
+      maskedStep3: [1, 4, 6, 8],
+      maskedStep4: [1, 2, 4, 6, 7, 8]
+    },
+    {
+      id: 56,
+      reference: "로마서 12:21",
+      fullText: "악에게 지지 말고 선으로 악을 이기라",
+      words: [
+        { index: 1, text: "악에게", meaning: "죄악, 나쁜 것, 악한 세력" },
+        { index: 2, text: "지지", meaning: "굴복하지 말고" },
+        { index: 3, text: "말고", meaning: "굴복하지 말고" },
+        { index: 4, text: "선으로", meaning: "착함, 선한 행동" },
+        { index: 5, text: "악을", meaning: "죄악, 나쁜 것, 악한 세력" },
+        { index: 6, text: "이기라", meaning: "승리하라, 이겨내라" }
+      ],
+      maskedStep2: [1, 6],
+      maskedStep3: [1, 3, 6],
+      maskedStep4: [1, 2, 3, 4, 6]
+    },
+    {
+      id: 57,
+      reference: "고린도전서 16:14",
+      fullText: "너희 모든 일을 사랑으로 행하라",
+      words: [
+        { index: 1, text: "너희" },
+        { index: 2, text: "모든", meaning: "범사, 매사" },
+        { index: 3, text: "일을", meaning: "범사, 매사" },
+        { index: 4, text: "사랑으로", meaning: "하나님이 보이신 조건 없는 헌신적 사랑(아가페)" },
+        { index: 5, text: "행하라", meaning: "실천하라" }
+      ],
+      maskedStep2: [5],
+      maskedStep3: [2, 3, 5],
+      maskedStep4: [2, 3, 4, 5]
+    },
+    {
+      id: 58,
+      reference: "골로새서 3:23",
+      fullText: "무슨 일을 하든지 마음을 다하여 주께 하듯하고 사람에게 하듯하지 말라",
+      words: [
+        { index: 1, text: "무슨" },
+        { index: 2, text: "일을" },
+        { index: 3, text: "하든지" },
+        { index: 4, text: "마음을", meaning: "진심으로, 영혼을 담아" },
+        { index: 5, text: "다하여", meaning: "진심으로, 영혼을 담아" },
+        { index: 6, text: "주께", meaning: "주님을 섬기듯이 하고" },
+        { index: 7, text: "하듯하고", meaning: "주님을 섬기듯이 하고" },
+        { index: 8, text: "사람에게", meaning: "사람의 눈을 의식하여 하지 말라" },
+        { index: 9, text: "하듯하지", meaning: "사람의 눈을 의식하여 하지 말라" },
+        { index: 10, text: "말라", meaning: "사람의 눈을 의식하여 하지 말라" }
+      ],
+      maskedStep2: [1, 5, 10],
+      maskedStep3: [1, 3, 5, 7, 10],
+      maskedStep4: [1, 2, 3, 4, 5, 7, 8, 10]
+    },
+    {
+      id: 59,
+      reference: "잠언 4:23",
+      fullText: "무릇 지킬만한 것보다 더욱 네 마음을 지키라 생명의 근원이 이에서 남이니라",
+      words: [
+        { index: 1, text: "무릇", meaning: "대체로 보아서, 모든" },
+        { index: 2, text: "지킬만한", meaning: "지켜야 할 모든 것" },
+        { index: 3, text: "것보다", meaning: "지켜야 할 모든 것" },
+        { index: 4, text: "더욱" },
+        { index: 5, text: "네" },
+        { index: 6, text: "마음을", meaning: "생각·감정·의지의 중심" },
+        { index: 7, text: "지키라" },
+        { index: 8, text: "생명의" },
+        { index: 9, text: "근원이", meaning: "샘, 원천" },
+        { index: 10, text: "이에서", meaning: "여기에서 나오기 때문이니라" },
+        { index: 11, text: "남이니라", meaning: "여기에서 나오기 때문이니라" }
+      ],
+      maskedStep2: [1, 6, 11],
+      maskedStep3: [1, 2, 3, 6, 8, 11],
+      maskedStep4: [1, 2, 3, 4, 6, 7, 8, 11]
+    },
+    {
+      id: 60,
+      reference: "잠언 17:22",
+      fullText: "마음의 즐거움은 양약이라도 심령의 근심은 뼈로 마르게 하느니라",
+      words: [
+        { index: 1, text: "마음의" },
+        { index: 2, text: "즐거움은", meaning: "기쁨, 유쾌함" },
+        { index: 3, text: "양약이라도", meaning: "좋은 약, 치료하는 약" },
+        { index: 4, text: "심령의", meaning: "마음과 영" },
+        { index: 5, text: "근심은", meaning: "걱정, 상한 마음" },
+        { index: 6, text: "뼈로", meaning: "몸속 깊은 곳까지 쇠약하게" },
+        { index: 7, text: "마르게", meaning: "몸속 깊은 곳까지 쇠약하게" },
+        { index: 8, text: "하느니라" }
+      ],
+      maskedStep2: [1, 8],
+      maskedStep3: [1, 4, 6, 8],
+      maskedStep4: [1, 2, 3, 4, 6, 8]
+    },
+    {
+      id: 61,
+      reference: "잠언 15:1",
+      fullText: "유순한 대답은 분노를 쉬게 하여도 과격한 말은 노를 격동하느니라",
+      words: [
+        { index: 1, text: "유순한", meaning: "부드럽고 온화한" },
+        { index: 2, text: "대답은" },
+        { index: 3, text: "분노를", meaning: "화를 가라앉게" },
+        { index: 4, text: "쉬게", meaning: "화를 가라앉게" },
+        { index: 5, text: "하여도" },
+        { index: 6, text: "과격한", meaning: "거칠고 사나운" },
+        { index: 7, text: "말은" },
+        { index: 8, text: "노를", meaning: "분노 (怒)" },
+        { index: 9, text: "격동하느니라", meaning: "세차게 일으키느니라, 자극하여 돋우느니라" }
+      ],
+      maskedStep2: [1, 9],
+      maskedStep3: [1, 3, 5, 7, 9],
+      maskedStep4: [1, 2, 3, 4, 5, 7, 9]
+    },
+    {
+      id: 62,
+      reference: "시편 119:11",
+      fullText: "내가 주께 범죄치 아니하려 하여 주의 말씀을 내 마음에 두었나이다",
+      words: [
+        { index: 1, text: "내가" },
+        { index: 2, text: "주께" },
+        { index: 3, text: "범죄치", meaning: "죄를 짓지 않으려 (개역한글 표현)" },
+        { index: 4, text: "아니하려", meaning: "죄를 짓지 않으려 (개역한글 표현)" },
+        { index: 5, text: "하여" },
+        { index: 6, text: "주의" },
+        { index: 7, text: "말씀을", meaning: "하나님의 계시, 성경" },
+        { index: 8, text: "내" },
+        { index: 9, text: "마음에", meaning: "마음 깊이 간직하였나이다. 말씀 암송의 근거가 되는 표현" },
+        { index: 10, text: "두었나이다", meaning: "마음 깊이 간직하였나이다. 말씀 암송의 근거가 되는 표현" }
+      ],
+      maskedStep2: [3, 6, 10],
+      maskedStep3: [3, 4, 6, 7, 10],
+      maskedStep4: [1, 3, 4, 6, 7, 8, 9, 10]
+    },
+    {
+      id: 63,
+      reference: "이사야 40:8",
+      fullText: "풀은 마르고 꽃은 시드나 우리 하나님의 말씀은 영영히 서리라 하라",
+      words: [
+        { index: 1, text: "풀은", meaning: "말라 시들고 (덧없이 사라짐을 나타내는 표현)" },
+        { index: 2, text: "마르고", meaning: "말라 시들고 (덧없이 사라짐을 나타내는 표현)" },
+        { index: 3, text: "꽃은" },
+        { index: 4, text: "시드나", meaning: "시들지만" },
+        { index: 5, text: "우리" },
+        { index: 6, text: "하나님의" },
+        { index: 7, text: "말씀은", meaning: "하나님의 계시, 성경" },
+        { index: 8, text: "영영히", meaning: "영원히, 끝없이" },
+        { index: 9, text: "서리라", meaning: "굳게 존속하리라, 변함없이 남으리라" },
+        { index: 10, text: "하라" }
+      ],
+      maskedStep2: [1, 6, 10],
+      maskedStep3: [1, 3, 6, 8, 10],
+      maskedStep4: [1, 2, 3, 4, 6, 7, 8, 10]
+    }
+  ])
+}

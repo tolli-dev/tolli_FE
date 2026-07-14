@@ -32,8 +32,8 @@ export default function BeforeFinish({ nickname }: { nickname: string }) {
         className="
         w-full
         h-[clamp(2.75rem,11vw,3.25rem)]
-        text-dashboard-btn text-primary-75
-              bg-surface-500
+        text-dashboard-btn text-[#1E1E1E]
+              bg-[#CCB5F0]
               rounded-[clamp(2.5rem,15vw,3.75rem)]
               "
         onClick={getTodayMission}

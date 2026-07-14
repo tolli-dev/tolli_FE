@@ -1,6 +1,7 @@
 import { useReducer, useEffect } from "react";
 import { getMe, getMyCurrentVerse } from "@firebasegen/default-connector";
 import { onAuthStateChanged } from "firebase/auth";
+import { QueryFetchPolicy } from "firebase/data-connect";
 import { fireAuth } from "@/firebase/fireAuth";
 import { dataConnect } from "@/lib/dataconnect";
 import { getLocalMidnight } from "@/lib/date";
@@ -45,8 +46,10 @@ export function useDashboard(initialData?: Data) {
     const today = getLocalMidnight(tz);
 
     Promise.all([
-      getMe(dataConnect),
-      getMyCurrentVerse(dataConnect, { today: today.toISOString() }),
+      getMe(dataConnect, { fetchPolicy: QueryFetchPolicy.SERVER_ONLY }),
+      getMyCurrentVerse(dataConnect, { today: today.toISOString() }, {
+        fetchPolicy: QueryFetchPolicy.SERVER_ONLY,
+      }),
     ])
       .then(([meResult, verseResult]) => {
         const verse = verseResult.data.todayCompletion[0]?.verse ?? null;

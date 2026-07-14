@@ -1,9 +1,9 @@
 'use client';
 
 import { Icon } from '@iconify/react';
-import Bookmark from './Bookmark';
+import Bookmark from '../../_components/Bookmark';
 import { useListenAudio } from './hooks/useListenAudio';
-import { useStudyComplete } from './hooks/useStudyComplete';
+import { useStudyComplete } from '../../_hooks/useStudyComplete';
 
 interface ListenViewProps {
   verseId: number;

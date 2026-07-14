@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect } from 'react';
 import Image from 'next/image';
@@ -41,13 +41,14 @@ export default function StudyLoadingPage() {
         className="fixed inset-0 pointer-events-none"
         style={{
           borderRadius: `${Math.round(cornerRadius * 0.95)}px`,
-          padding: '5px',
+          padding: "5px",
           background:
-            'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
-          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          WebkitMaskComposite: 'xor',
-          maskComposite: 'exclude',
-          animation: 'border-spin 6s linear infinite',
+            "conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)",
+          WebkitMask:
+            "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+          animation: "border-spin 6s linear infinite",
         }}
       />
       <p className="text-[clamp(1.125rem,5.5vw,1.5rem)] leading-[clamp(2rem,8.5vw,2.125rem)] font-medium text-[#CCB5F0] text-center">

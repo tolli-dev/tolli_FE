@@ -29,7 +29,7 @@ export default function AfterFinish({
             text-[clamp(0.875rem,4.1vw,1rem)]
             leading-[clamp(1.75rem,8.2vw,2rem)]
             h-[clamp(2.75rem,11vw,3.25rem)]
-          text-[#1E1E1E] bg-[#CCB5F0]
+          text-[#D5CAE6] bg-[#4E4E4E]
             rounded-[clamp(2.5rem,15vw,3.75rem)]"
       >
         오늘의 양식 완료

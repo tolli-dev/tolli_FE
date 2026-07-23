@@ -35,7 +35,7 @@ export default function TabVerse({
   );
 
   const checkAllWordsAreTabbed = tabbedWords.every((value) => value);
-  const checkAllWordsAreRead = watchMeaning.every((value) => value);
+  const checkAnyWordsAreRead = watchMeaning.some((value) => value);
 
   return (
     <section className="flex flex-col flex-1">
@@ -57,14 +57,14 @@ export default function TabVerse({
               블록을 탭해서 말씀을 꺼내보세요.
             </p>
           )}
-          {checkAllWordsAreTabbed && !checkAllWordsAreRead && (
+          {checkAllWordsAreTabbed && !checkAnyWordsAreRead && (
             <p className="text-center mt-[clamp(1rem,4vw,1.25rem)] font-light text-[clamp(0.8rem,3.5vw,0.875rem)] leading-5 tracking-[0.03em] text-[#CCB5F0]">
               밑줄친 단어를 눌러보세요.
             </p>
           )}
         </>
 
-        {checkAllWordsAreTabbed && checkAllWordsAreRead && (
+        {checkAllWordsAreTabbed && checkAnyWordsAreRead && (
           <Link
             href={`/study/${verseId}/step2-intro`}
             className="mt-auto mx-auto"

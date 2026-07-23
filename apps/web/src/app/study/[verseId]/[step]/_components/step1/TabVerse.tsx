@@ -35,7 +35,10 @@ export default function TabVerse({
   );
 
   const checkAllWordsAreTabbed = tabbedWords.every((value) => value);
-  const checkAnyWordsAreRead = watchMeaning.some((value) => value);
+  const hasMeaningWord = meanings.some((word) => word.meaning);
+  const checkAnyWordsAreRead =
+    !hasMeaningWord ||
+    meanings.some((word, index) => word.meaning && watchMeaning[index]);
 
   return (
     <section className="flex flex-col flex-1">

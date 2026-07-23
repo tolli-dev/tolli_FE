@@ -49,7 +49,7 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   const handleRetryStep = () => {
     posthog.capture("recall_clicked", { verse_id: verse.id });
     sessionStorage.setItem("studyFrom", "recall");
-    router.push(`/study/${verse.id}/0`);
+    router.push(`/study/${verse.id}/1`);
   };
 
   const handleDeleteBookmark = async (verseId: number) => {

@@ -5,6 +5,9 @@ import { useState } from "react";
 import Link from "next/link";
 import TabMaskedVerse from "./TabMaskedVerse";
 import { playSound } from "@/lib/sound";
+import { useSoundEffect } from "@/hooks/useSoundEffect";
+import { useEffect } from "react";
+import posthog from "posthog-js";
 
 export default function TabVerse({
   verse,
@@ -15,6 +18,15 @@ export default function TabVerse({
   meanings: WordMeaningData[];
   verseId: string;
 }) {
+  const play = useSoundEffect("/sounds/처음 말씀 pop up 될때 소리.mp3");
+  useEffect(() => {
+    play();
+    posthog.capture("study_started", {
+      verse_id: verseId,
+      reference: verse.reference,
+    });
+  }, [play, verseId, verse.reference]);
+
   const [tabbedWords, setTabbedWords] = useState<boolean[]>(
     Array(meanings.length).fill(false),
   );
@@ -23,7 +35,10 @@ export default function TabVerse({
   );
 
   const checkAllWordsAreTabbed = tabbedWords.every((value) => value);
-  const checkAllWordsAreRead = watchMeaning.every((value) => value);
+  const hasMeaningWord = meanings.some((word) => word.meaning);
+  const checkAnyWordsAreRead =
+    !hasMeaningWord ||
+    meanings.some((word, index) => word.meaning && watchMeaning[index]);
 
   return (
     <section className="flex flex-col flex-1">
@@ -45,15 +60,18 @@ export default function TabVerse({
               블록을 탭해서 말씀을 꺼내보세요.
             </p>
           )}
-          {checkAllWordsAreTabbed && !checkAllWordsAreRead && (
+          {checkAllWordsAreTabbed && !checkAnyWordsAreRead && (
             <p className="text-center mt-[clamp(1rem,4vw,1.25rem)] font-light text-[clamp(0.8rem,3.5vw,0.875rem)] leading-5 tracking-[0.03em] text-[#CCB5F0]">
               밑줄친 단어를 눌러보세요.
             </p>
           )}
         </>
 
-        {checkAllWordsAreTabbed && checkAllWordsAreRead && (
-          <Link href={`/study/${verseId}/step2-intro`} className="mt-auto mx-auto">
+        {checkAllWordsAreTabbed && checkAnyWordsAreRead && (
+          <Link
+            href={`/study/${verseId}/step2-intro`}
+            className="mt-auto mx-auto"
+          >
             <button
               onClick={() => playSound("/sounds/다음탭 이동.mp3")}
               className="mt-auto py-1.75 mx-auto w-32 rounded-[20px] border border-[#CCB5F0] text-[1rem] text-[#FFFFFF] font-bold tracking-[0.03em]"

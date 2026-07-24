@@ -31,7 +31,7 @@ export default function StudyLoadingPage() {
       getTodayVerseId(),
       new Promise<void>((resolve) => setTimeout(resolve, 1500)),
     ]).then(([verseId]) => {
-      router.push(`/study/${verseId}/0`);
+      router.push(`/study/${verseId}/1`);
     });
   }, [router]);
 

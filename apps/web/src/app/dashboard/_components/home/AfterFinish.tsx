@@ -4,7 +4,7 @@ import Illustration from "./Illustration";
 import Card from "./Card";
 import RecommendedTodayVerse from "./RecommendedTodayVerse";
 
-const src = "/images/onBoarding/fullHappyTolli.webp";
+const src = "/images/onBoarding/tolli_happy_loop.webp";
 
 export default function AfterFinish({
   todayVerse,

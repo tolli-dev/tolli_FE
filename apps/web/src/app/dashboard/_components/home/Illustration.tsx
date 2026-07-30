@@ -11,6 +11,7 @@ export default function Illustration({ src }: Props) {
       alt="dashboard_home_image"
       width={288}
       height={288}
+      unoptimized
       className="
             w-[clamp(12rem,55vw,18rem)]
             h-[clamp(12rem,55vw,18rem)]

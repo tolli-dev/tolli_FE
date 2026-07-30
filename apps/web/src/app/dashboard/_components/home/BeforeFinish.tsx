@@ -7,7 +7,7 @@ import Nickname from './Nickname';
 import Illustration from './Illustration';
 import Card from './Card';
 
-const src = '/images/onBoarding/hungryTolli_1.webp';
+const src = '/images/onBoarding/tolli_sad_pingpong.webp';
 
 export default function BeforeFinish({ nickname }: { nickname: string }) {
   const router = useRouter();

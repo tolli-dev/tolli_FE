@@ -8,6 +8,7 @@ import { playSound } from "@/lib/sound";
 import { useSoundEffect } from "@/hooks/useSoundEffect";
 import { useEffect } from "react";
 import posthog from "posthog-js";
+import { EXPERIMENT_KEY, VARIANT_CONTROL } from "@/lib/experiment";
 
 export default function TabVerse({
   verse,
@@ -24,6 +25,9 @@ export default function TabVerse({
     posthog.capture("study_started", {
       verse_id: verseId,
       reference: verse.reference,
+      experiment: EXPERIMENT_KEY,
+      variant: VARIANT_CONTROL,
+      entry_step: 1,
     });
   }, [play, verseId, verse.reference]);
 

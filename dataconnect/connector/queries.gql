@@ -64,6 +64,8 @@ query GetTodayCompletionCount($today: Timestamp!) @auth(level: PUBLIC, insecureR
 
 query GetMe @auth(level: USER) {
   user(id_expr: "auth.uid") {
+    id
     nickname
+    termsAgreedAt
   }
 }

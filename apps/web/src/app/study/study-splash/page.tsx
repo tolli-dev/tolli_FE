@@ -35,8 +35,6 @@ export default function StudyLoadingPage() {
   const variantState = useExperimentVariant();
 
   useEffect(() => {
-    // 그룹이 확정되기 전에 보내면 유저를 잘못된 스텝으로 떨어뜨리게 된다.
-    // 스플래시는 어차피 최소 1.5초 머무르므로 그동안 기다린다.
     if (variantState.status !== 'ready') return;
 
     const { variant } = variantState;
@@ -46,8 +44,6 @@ export default function StudyLoadingPage() {
       getTodayVerseId(),
       new Promise<void>((resolve) => setTimeout(resolve, 1500)),
     ]).then(([verseId]) => {
-      // 실험의 분모. 이 이벤트가 각 그룹이 학습 플로우에 실제로 진입한 횟수이고,
-      // 이후 이탈률, 완주율의 기준이 된다.
       posthog.capture('experiment_exposed', {
         experiment: EXPERIMENT_KEY,
         variant,

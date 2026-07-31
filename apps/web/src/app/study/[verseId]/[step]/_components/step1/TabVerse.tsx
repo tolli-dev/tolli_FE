@@ -25,7 +25,6 @@ export default function TabVerse({
     posthog.capture("study_started", {
       verse_id: verseId,
       reference: verse.reference,
-      // step1에서 학습을 시작하는 건 대조군(A)이다.
       experiment: EXPERIMENT_KEY,
       variant: VARIANT_CONTROL,
       entry_step: 1,

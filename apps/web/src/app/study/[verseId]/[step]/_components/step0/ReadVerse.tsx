@@ -20,17 +20,13 @@ export default function ReadVerse({
     posthog.capture('study_started', {
       verse_id: verseId,
       reference: verse.reference,
-      // step0을 보는 건 실험군(B)뿐이다. 대조군은 step1에서 시작한다.
       experiment: EXPERIMENT_KEY,
       variant: VARIANT_SKIP_STEP1,
       entry_step: 0,
     });
-    // play/verseId/reference는 매 렌더 동일하므로 마운트 시 1회만 실행한다.
-    // 의존성 배열이 없으면 리렌더마다 study_started가 중복 발생한다.
   }, [play, verseId, verse.reference]);
 
   return (
-    // 실험군은 step1(단어 뜻 탭)을 건너뛰고 바로 빈칸 연습으로 넘어간다.
     <Link className="w-full h-dvh flex-1" href={`/study/${verseId}/step2-intro`}>
       <section className="flex flex-col flex-1">
         <div className="flex flex-col mt-[clamp(5rem,20vh,10rem)] justify-center gap-[clamp(2rem,8vw,4.25rem)] px-[clamp(1.5rem,9vw,4.25rem)]" style={{ animation: 'fade-in 0.3s ease forwards' }}>

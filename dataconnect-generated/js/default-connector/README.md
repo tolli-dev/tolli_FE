@@ -355,7 +355,7 @@ export interface GetMyBookmarksData {
       reference: string;
       fullText: string;
     } & Verse_Key;
-    createdAt: TimestampString;
+      createdAt: TimestampString;
   })[];
 }
 ```
@@ -453,7 +453,7 @@ export interface GetMyCompletionsData {
       id: number;
       reference: string;
     } & Verse_Key;
-    completedAt: TimestampString;
+      completedAt: TimestampString;
   } & StudyCompletion_Key)[];
 }
 ```
@@ -657,8 +657,10 @@ The `data` property is an object of type `GetMeData`, which is defined in [defau
 ```typescript
 export interface GetMeData {
   user?: {
+    id: string;
     nickname: string;
-  };
+    termsAgreedAt: TimestampString;
+  } & User_Key;
 }
 ```
 ### Using `GetMe`'s action shortcut function

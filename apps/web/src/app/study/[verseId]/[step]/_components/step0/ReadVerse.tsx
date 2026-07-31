@@ -5,6 +5,7 @@ import { Verse } from "../types";
 import Link from "next/link";
 import { useSoundEffect } from "@/hooks/useSoundEffect";
 import posthog from "posthog-js";
+import { EXPERIMENT_KEY, VARIANT_SKIP_STEP1 } from "@/lib/experiment";
 
 export default function ReadVerse({
   verse,
@@ -16,11 +17,17 @@ export default function ReadVerse({
   const play = useSoundEffect("/sounds/처음 말씀 pop up 될때 소리.mp3");
   useEffect(() => {
     play();
-    posthog.capture('study_started', { verse_id: verseId, reference: verse.reference });
-  });
+    posthog.capture('study_started', {
+      verse_id: verseId,
+      reference: verse.reference,
+      experiment: EXPERIMENT_KEY,
+      variant: VARIANT_SKIP_STEP1,
+      entry_step: 0,
+    });
+  }, [play, verseId, verse.reference]);
 
   return (
-    <Link className="w-full h-dvh flex-1" href={`/study/${verseId}/1`}>
+    <Link className="w-full h-dvh flex-1" href={`/study/${verseId}/step2-intro`}>
       <section className="flex flex-col flex-1">
         <div className="flex flex-col mt-[clamp(5rem,20vh,10rem)] justify-center gap-[clamp(2rem,8vw,4.25rem)] px-[clamp(1.5rem,9vw,4.25rem)]" style={{ animation: 'fade-in 0.3s ease forwards' }}>
           <p className="text-center text-[clamp(1rem,4.5vw,1.25rem)] font-medium leading-6 tracking-[0.03em] text-[#CCB5F0]">

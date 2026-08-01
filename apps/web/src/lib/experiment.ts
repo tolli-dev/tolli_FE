@@ -44,8 +44,14 @@ export function getEntryStep(variant: Variant): number {
   return variant === VARIANT_SKIP_STEP1 ? 0 : 1;
 }
 
-export function registerVariant(posthog: PostHogLike, variant: Variant): void {
-  posthog.register({ [EXPERIMENT_KEY]: variant });
+export const ENROLLED_KEY = "experiment_enrolled";
+
+export function registerVariant(
+  posthog: PostHogLike,
+  variant: Variant,
+  enrolled: boolean,
+): void {
+  posthog.register({ [EXPERIMENT_KEY]: variant, [ENROLLED_KEY]: enrolled });
 }
 
 type PostHogLike = {

@@ -31,3 +31,9 @@ pnpm-debug.log*
 
 # vercel
 .vercel
+
+# firebase
+firebase-debug.log*
+firebase-debug.*.log*
+dataconnect-debug.log*
+.firebase/

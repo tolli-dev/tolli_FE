@@ -8,6 +8,7 @@ import posthog from "posthog-js";
 import { fireAuth } from "@/firebase/fireAuth";
 import { dataConnect } from "@/lib/dataconnect";
 import {
+  ENROLLED_KEY,
   EXPERIMENT_KEY,
   Variant,
   VARIANT_CONTROL,
@@ -34,14 +35,15 @@ export function useExperimentVariant(): VariantState {
         });
         const termsAgreedAt = result.data.user?.termsAgreedAt ?? null;
         const variant = resolveVariant(uid, termsAgreedAt);
+        const enrolled = isInExperiment(termsAgreedAt);
 
         if (uid) {
           posthog.identify(uid, {
             [EXPERIMENT_KEY]: variant,
-            experiment_enrolled: isInExperiment(termsAgreedAt),
+            [ENROLLED_KEY]: enrolled,
             terms_agreed_at: termsAgreedAt,
           });
-          registerVariant(posthog, variant);
+          registerVariant(posthog, variant, enrolled);
         }
 
         if (!cancelled) setState({ status: "ready", variant });

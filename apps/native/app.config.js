@@ -120,7 +120,6 @@ export default {
         },
       ],
       "./plugins/withIosProjectTweaks",
-      "./plugins/withAndroidKeyguard",
     ],
     extra: {
       googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,

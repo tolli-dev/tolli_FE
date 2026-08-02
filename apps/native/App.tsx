@@ -393,6 +393,7 @@ export default function App() {
           "studyCompletedDate",
           new Date().toDateString(),
         );
+        await updateTolliWidget();
 
         // 학습 완료 직후 스토어 리뷰 요청.
         // 노출 빈도/중복 여부는 OS가 알아서 조절하므로(iOS 연 3회 제한 등)

@@ -100,6 +100,24 @@ export default {
           },
         },
       ],
+      [
+        "react-native-android-widget",
+        {
+          widgets: [
+            {
+              name: "AndroidImage",
+              label: "톨리",
+              minWidth: "120dp",
+              minHeight: "120dp",
+              targetCellWidth: 1,
+              targetCellHeight: 1,
+              description: "This is an android image widget",
+              previewImage: "./assets/happyTolli.webp",
+              resizeMode: "horizontal|vertical",
+            },
+          ],
+        },
+      ],
       "./plugins/withIosProjectTweaks",
     ],
     extra: {

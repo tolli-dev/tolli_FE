@@ -1,7 +1,7 @@
 import { isStudyCompletedToday } from "../utils/studyStatus";
 import { requestWidgetUpdate } from "react-native-android-widget";
 import { AndroidImageWidget } from "./AndroidImageWidget";
-import { getTolliImageSize } from "./getTolliWidgetInfo";
+import { getTolliImageSize } from "./getTolliImageSize";
 
 export async function updateTolliWidget() {
   const completed = await isStudyCompletedToday();

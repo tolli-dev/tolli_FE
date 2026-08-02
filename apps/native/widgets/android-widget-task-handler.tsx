@@ -1,7 +1,7 @@
 import type { WidgetTaskHandlerProps } from "react-native-android-widget";
 import { AndroidImageWidget } from "./AndroidImageWidget";
 import { isStudyCompletedToday } from "../utils/studyStatus";
-import { getTolliImageSize } from "./getTolliWidgetInfo";
+import { getTolliImageSize } from "./getTolliImageSize";
 
 const nameToWidget = {
   AndroidImage: AndroidImageWidget,

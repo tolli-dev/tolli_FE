@@ -1,0 +1,54 @@
+name: Check IP_URL
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  check-ip-url:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate IP_URL for target branch
+        run: |
+          FILE="apps/native/App.tsx"
+
+          # 주석(//) 처리되지 않은, 활성화된 IP_URL 값만 추출한다.
+          IP_URL=$(grep -oP '^\s*const\s+IP_URL\s*=\s*"\K[^"]+' "$FILE" | head -n1)
+
+          if [ -z "$IP_URL" ]; then
+            echo "::error file=$FILE::활성화된 IP_URL 상수를 찾을 수 없습니다."
+            exit 1
+          fi
+
+          # 뒤 슬래시 유무로 인한 오탐을 막기 위해 정규화한다.
+          NORMALIZED="${IP_URL%/}"
+
+          BASE="${{ github.base_ref }}"
+          echo "PR 대상 브랜치: $BASE"
+          echo "감지된 IP_URL: $IP_URL"
+
+          case "$BASE" in
+            dev)
+              ALLOWED=("https://tolli-fe-web-lilac.vercel.app" "https://tolli-fe-web.vercel.app")
+              ;;
+            main)
+              ALLOWED=("https://tolli-fe-web.vercel.app")
+              ;;
+            *)
+              echo "dev/main 대상 PR이 아니므로 검사를 건너뜁니다."
+              exit 0
+              ;;
+          esac
+
+          for url in "${ALLOWED[@]}"; do
+            if [ "$NORMALIZED" = "$url" ]; then
+              echo "✅ IP_URL이 '$BASE' 브랜치에 허용된 값입니다: $IP_URL"
+              exit 0
+            fi
+          done
+
+          echo "::error file=$FILE::IP_URL '$IP_URL' 은(는) '$BASE' 대상 PR에서 허용되지 않습니다. 허용값: ${ALLOWED[*]}"
+          exit 1

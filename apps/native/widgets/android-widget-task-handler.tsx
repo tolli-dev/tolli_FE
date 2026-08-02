@@ -1,6 +1,7 @@
 import type { WidgetTaskHandlerProps } from "react-native-android-widget";
 import { AndroidImageWidget } from "./AndroidImageWidget";
 import { isStudyCompletedToday } from "../utils/studyStatus";
+import { getTolliImageSize } from "./getTolliWidgetInfo";
 
 const nameToWidget = {
   AndroidImage: AndroidImageWidget,
@@ -8,9 +9,8 @@ const nameToWidget = {
 
 export async function androidWidgetTaskHandler(props: WidgetTaskHandlerProps) {
   const completed = await isStudyCompletedToday();
-  const widgetInfo = props.widgetInfo;
-  const Widget =
-    nameToWidget[widgetInfo.widgetName as keyof typeof nameToWidget];
+  const { widgetName, width, height } = props.widgetInfo;
+  const Widget = nameToWidget[widgetName as keyof typeof nameToWidget];
 
   if (!Widget) return;
 
@@ -18,7 +18,12 @@ export async function androidWidgetTaskHandler(props: WidgetTaskHandlerProps) {
     case "WIDGET_ADDED":
     case "WIDGET_UPDATE":
     case "WIDGET_RESIZED":
-      props.renderWidget(<Widget completed={completed} />);
+      props.renderWidget(
+        <Widget
+          completed={completed}
+          imageSize={getTolliImageSize(width, height)}
+        />,
+      );
       break;
     case "WIDGET_DELETED":
       break;

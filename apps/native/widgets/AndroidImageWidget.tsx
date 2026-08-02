@@ -1,6 +1,12 @@
 import { FlexWidget, ImageWidget } from "react-native-android-widget";
 
-export function AndroidImageWidget({ completed }: { completed: boolean }) {
+export function AndroidImageWidget({
+  completed,
+  imageSize,
+}: {
+  completed: boolean;
+  imageSize: number;
+}) {
   return (
     <FlexWidget
       style={{
@@ -16,8 +22,8 @@ export function AndroidImageWidget({ completed }: { completed: boolean }) {
             ? require("../assets/happyTolli.webp")
             : require("../assets/hungryTolli.webp")
         }
-        imageWidth={88}
-        imageHeight={88}
+        imageWidth={imageSize}
+        imageHeight={imageSize}
       />
     </FlexWidget>
   );

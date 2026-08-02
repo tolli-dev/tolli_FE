@@ -14,6 +14,7 @@ import { fireAuth } from "@/firebase/fireAuth";
 import { usePushToken } from "../_hooks/usePushToken";
 import { useCheckAppVersion } from "../_hooks/useCheckAppVersion";
 import UpdateRequiredModal from "./UpdateRequiredModal";
+import { useSyncStudyStatus } from "../_hooks/useSyncStudyStatus";
 
 interface Props {
   initialData: DashboardInitialData;
@@ -29,6 +30,7 @@ export default function DashboardClient({
   const { state, onError } = useDashboard(initialData ?? undefined);
 
   usePushToken(shouldRefreshSession);
+  useSyncStudyStatus(state.status === "success" ? state.data.done : null);
 
   useEffect(() => {
     if (!shouldRefreshSession) return;

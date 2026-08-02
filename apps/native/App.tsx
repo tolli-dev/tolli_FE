@@ -44,6 +44,7 @@ import NativeOfflineScreen from "./components/NativeOfflineScreen";
 import NetInfo from "@react-native-community/netinfo";
 import NetworkBanner from "./components/NetworkBanner";
 import UpdateRequireScreen from "./components/UpdateRequireScreen";
+import { updateTolliWidget } from "./widgets/updateTolliWidget";
 
 // 사용자 커스텀 알람과 고정 알림 모두 서버(Expo Push)에서 발송한다.
 // 이 앱은 더 이상 로컬 알림을 예약하지 않으며, 구버전에서 남은 로컬 예약만 정리한다.
@@ -340,6 +341,8 @@ export default function App() {
         await AsyncStorage.removeItem("alarmTime");
         await AsyncStorage.removeItem("alarmEnabled");
         await AsyncStorage.removeItem("permissionPending");
+        await AsyncStorage.removeItem("studyCompletedDate");
+        await updateTolliWidget();
       }
 
       if (data.type === "CLEAR_ALL_DATA") {
@@ -348,6 +351,8 @@ export default function App() {
         await AsyncStorage.removeItem("alarmEnabled");
         await AsyncStorage.removeItem("alarmEnabledMigrated");
         await AsyncStorage.removeItem("permissionPending");
+        await AsyncStorage.removeItem("studyCompletedDate");
+        await updateTolliWidget();
       }
 
       if (data.type === "REQUEST_NOTIFICATION_PERMISSION") {

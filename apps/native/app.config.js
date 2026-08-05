@@ -14,6 +14,7 @@ export default {
       supportsTablet: true,
       bundleIdentifier: "com.company.tolli",
       usesAppleSignIn: true,
+      appleTeamId: "J5F89TP85W",
       infoPlist: {
         NSMicrophoneUsageDescription: "녹음을 위해 마이크를 사용합니다.",
         ITSAppUsesNonExemptEncryption: false,
@@ -100,6 +101,7 @@ export default {
           },
         },
       ],
+      "@bacons/apple-targets",
       "./plugins/withIosProjectTweaks",
     ],
     extra: {

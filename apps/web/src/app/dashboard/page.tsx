@@ -1,9 +1,9 @@
-import { cookies } from "next/headers";
-import admin from "@/firebase/firebaseAdmin";
-import DashboardClient from "./_components/DashboardClient";
-import DashboardLayout from "./_components/DashboardLayout";
-import { pool } from "@/lib/db";
-import { getLocalMidnight } from "@/lib/date";
+import { cookies } from 'next/headers';
+import admin from '@/firebase/firebaseAdmin';
+import DashboardClient from './_components/DashboardClient';
+import DashboardLayout from './_components/DashboardLayout';
+import { pool } from '@/lib/db';
+import { getLocalMidnight } from '@/lib/date';
 
 export type TodayVerse = {
   id: number;
@@ -19,7 +19,7 @@ export type DashboardInitialData = {
 
 async function getUserId(): Promise<string | null> {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("__session")?.value;
+  const sessionCookie = cookieStore.get('__session')?.value;
   if (!sessionCookie) return null;
 
   try {
@@ -34,12 +34,12 @@ async function fetchDashboardData(
   userId: string,
 ): Promise<DashboardInitialData> {
   const cookieStore = await cookies();
-  const tzCookie = cookieStore.get("user-timezone")?.value;
-  const today = getLocalMidnight(tzCookie || "Asia/Seoul");
+  const tzCookie = cookieStore.get('user-timezone')?.value;
+  const today = getLocalMidnight(tzCookie || 'Asia/Seoul');
 
   const [userResult, verseResult] = await Promise.all([
     pool.query<{ nickname: string }>(
-      "SELECT nickname FROM users WHERE id = $1",
+      'SELECT nickname FROM users WHERE id = $1',
       [userId],
     ),
     pool.query<{ id: number; reference: string; full_text: string }>(
@@ -52,7 +52,7 @@ async function fetchDashboardData(
     ),
   ]);
 
-  const nickname = userResult.rows[0]?.nickname ?? "";
+  const nickname = userResult.rows[0]?.nickname ?? '';
   const row = verseResult.rows[0] ?? null;
   const todayVerse = row
     ? { id: row.id, reference: row.reference, fullText: row.full_text }

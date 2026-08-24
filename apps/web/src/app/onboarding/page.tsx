@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import OnboardingActions from "@/app/onboarding/_components/OnboardingActions";
-import StepIndicator from "./_components/StepIndicator";
-import OnboardingSlide from "./_components/OnboardingSlide";
-import SlideWrapper from "./_components/SlideWrapper";
-import { useOnboarding } from "./_hooks/useOnboarding";
+import OnboardingActions from '@/app/onboarding/_components/OnboardingActions';
+import StepIndicator from './_components/StepIndicator';
+import OnboardingSlide from './_components/OnboardingSlide';
+import SlideWrapper from './_components/SlideWrapper';
+import { useOnboarding } from './_hooks/useOnboarding';
 
 export default function OnboardingStepPage() {
   const {

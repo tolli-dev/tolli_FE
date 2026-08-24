@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { WordMeaningData } from "../types";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { playSound } from "@/lib/sound";
+import { WordMeaningData } from '../types';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { playSound } from '@/lib/sound';
 
 interface Props {
   meanings: WordMeaningData[];
@@ -40,7 +40,7 @@ export default function TabMaskedVerse({
   }, [meanings]);
 
   const handleTabWords = (index: number) => {
-    playSound("/sounds/보기 탭.mp3");
+    playSound('/sounds/보기 탭.mp3');
     setTabbedWords((prev) => {
       const updatedWords = [...prev];
       updatedWords[index] = true;
@@ -49,7 +49,7 @@ export default function TabMaskedVerse({
   };
 
   const handleWatchMeaning = (meaning: WordMeaningData, index: number) => {
-    playSound("/sounds/말씀 잠깐 보기 카드 공개_비공개.mp3");
+    playSound('/sounds/말씀 잠깐 보기 카드 공개_비공개.mp3');
     setIsOpen({ meaning, condition: true, closing: false });
     setWatchMeaning((prev) => {
       const updatedMeaning = [...prev];
@@ -59,7 +59,7 @@ export default function TabMaskedVerse({
   };
 
   const handleCloseMeaning = () => {
-    playSound("/sounds/원래 화면 다시 돌아갈때.mp3");
+    playSound('/sounds/원래 화면 다시 돌아갈때.mp3');
     setIsOpen((prev) => ({ ...prev, closing: true }));
     setTimeout(() => {
       setIsOpen({ meaning: null, condition: false, closing: false });
@@ -73,7 +73,7 @@ export default function TabMaskedVerse({
           <span
             key={word.index}
             className="relative px-1 text-[clamp(1.5rem,6vw,2rem)] leading-[clamp(2.5rem,9vw,3.5rem)] select-none"
-            style={{ color: "transparent" }}
+            style={{ color: 'transparent' }}
             onClick={() => handleTabWords(index)}
           >
             {word.text}
@@ -81,20 +81,20 @@ export default function TabMaskedVerse({
               <span
                 className="absolute inset-x-0 rounded-[15px] overflow-hidden flex items-center justify-center"
                 style={{
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  height: "clamp(2rem,7vw,2.5rem)",
-                  backgroundColor: "rgba(217,217,217,0.08)",
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  height: 'clamp(2rem,7vw,2.5rem)',
+                  backgroundColor: 'rgba(217,217,217,0.08)',
                   boxShadow:
-                    "0 4px 4px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 1px rgba(0,0,0,0.2)",
+                    '0 4px 4px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 1px rgba(0,0,0,0.2)',
                 }}
               >
                 <span
                   className="whitespace-nowrap text-[clamp(1.5rem,6vw,2rem)] leading-none"
                   style={{
-                    color: "rgba(204,181,240,0.9)",
-                    filter: "blur(6px)",
-                    textShadow: "0 2px 8px rgba(204,181,240,0.4)",
+                    color: 'rgba(204,181,240,0.9)',
+                    filter: 'blur(6px)',
+                    textShadow: '0 2px 8px rgba(204,181,240,0.4)',
                   }}
                 >
                   {word.text}
@@ -106,8 +106,8 @@ export default function TabMaskedVerse({
                 className="absolute inset-0 flex items-center justify-center"
                 style={{
                   color:
-                    word.meaning && watchMeaning[index] ? "#CCB5F0" : "#D7D2DF",
-                  textDecoration: word.meaning ? "underline" : "none",
+                    word.meaning && watchMeaning[index] ? '#CCB5F0' : '#D7D2DF',
+                  textDecoration: word.meaning ? 'underline' : 'none',
                 }}
                 onClick={() => word.meaning && handleWatchMeaning(word, index)}
               >

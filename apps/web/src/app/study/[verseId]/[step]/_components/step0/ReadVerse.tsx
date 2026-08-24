@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { Verse } from "../types";
-import Link from "next/link";
-import { useSoundEffect } from "@/hooks/useSoundEffect";
-import posthog from "posthog-js";
-import { EXPERIMENT_KEY, VARIANT_SKIP_STEP1 } from "@/lib/experiment";
+import { useEffect } from 'react';
+import { Verse } from '../types';
+import Link from 'next/link';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
+import posthog from 'posthog-js';
+import { EXPERIMENT_KEY, VARIANT_SKIP_STEP1 } from '@/lib/experiment';
 
 export default function ReadVerse({
   verse,
@@ -14,7 +14,7 @@ export default function ReadVerse({
   verse: Verse;
   verseId: string;
 }) {
-  const play = useSoundEffect("/sounds/처음 말씀 pop up 될때 소리.mp3");
+  const play = useSoundEffect('/sounds/처음 말씀 pop up 될때 소리.mp3');
   useEffect(() => {
     play();
     posthog.capture('study_started', {

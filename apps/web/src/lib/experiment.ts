@@ -1,11 +1,11 @@
-export const EXPERIMENT_START_DATE = "2026-08-01";
+export const EXPERIMENT_START_DATE = '2026-08-01';
 
-export const EXPERIMENT_KEY = "onboarding_intro_step";
+export const EXPERIMENT_KEY = 'onboarding_intro_step';
 
-export type Variant = "A" | "B";
+export type Variant = 'A' | 'B';
 
-export const VARIANT_CONTROL: Variant = "A";
-export const VARIANT_SKIP_STEP1: Variant = "B";
+export const VARIANT_CONTROL: Variant = 'A';
+export const VARIANT_SKIP_STEP1: Variant = 'B';
 
 export function getVariant(uid: string): Variant {
   return hashUid(uid) % 2 === 0 ? VARIANT_SKIP_STEP1 : VARIANT_CONTROL;
@@ -44,7 +44,7 @@ export function getEntryStep(variant: Variant): number {
   return variant === VARIANT_SKIP_STEP1 ? 0 : 1;
 }
 
-export const ENROLLED_KEY = "experiment_enrolled";
+export const ENROLLED_KEY = 'experiment_enrolled';
 
 export function registerVariant(
   posthog: PostHogLike,

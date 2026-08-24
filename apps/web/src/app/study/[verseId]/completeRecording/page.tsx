@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import FullTolli from "../../../../../public/images/onBoarding/fullTolli.webp";
-import EatingTolli from "../../../../../public/images/onBoarding/eatingTolli.webp";
-import CircleLoading from "./_components/CircleLoading";
-import Header from "./_components/Header";
-import Star1 from "../../../../../public/images/star1.webp";
-import Star2 from "../../../../../public/images/star2.webp";
-import { useRouter, useParams } from "next/navigation";
-import { playSound } from "@/lib/sound";
-import posthog from "posthog-js";
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import FullTolli from '../../../../../public/images/onBoarding/fullTolli.webp';
+import EatingTolli from '../../../../../public/images/onBoarding/eatingTolli.webp';
+import CircleLoading from './_components/CircleLoading';
+import Header from './_components/Header';
+import Star1 from '../../../../../public/images/star1.webp';
+import Star2 from '../../../../../public/images/star2.webp';
+import { useRouter, useParams } from 'next/navigation';
+import { playSound } from '@/lib/sound';
+import posthog from 'posthog-js';
 
 export default function CompleteStep() {
   const router = useRouter();
@@ -20,9 +20,9 @@ export default function CompleteStep() {
 
   useEffect(() => {
     const preloads = [Star1.src, Star2.src, FullTolli.src].map((src) => {
-      const link = document.createElement("link");
-      link.rel = "preload";
-      link.as = "image";
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
       link.href = src;
       document.head.appendChild(link);
       return link;
@@ -33,14 +33,14 @@ export default function CompleteStep() {
   }, []);
 
   useEffect(() => {
-    posthog.capture("study_completed", { verse_id: verseId });
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: "STUDY_COMPLETED" }));
-    const from = sessionStorage.getItem("studyFrom");
-    if (from === "recall") {
-      posthog.capture("recall_completed", { verse_id: verseId });
-      sessionStorage.removeItem("studyFrom");
+    posthog.capture('study_completed', { verse_id: verseId });
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'STUDY_COMPLETED' }));
+    const from = sessionStorage.getItem('studyFrom');
+    if (from === 'recall') {
+      posthog.capture('recall_completed', { verse_id: verseId });
+      sessionStorage.removeItem('studyFrom');
     }
-    playSound("/sounds/tolli에게 먹이가 전해졌을때.mp3");
+    playSound('/sounds/tolli에게 먹이가 전해졌을때.mp3');
 
     const time = setTimeout(() => {
       setComponent(true);
@@ -50,9 +50,9 @@ export default function CompleteStep() {
 
   useEffect(() => {
     if (!component) return;
-    playSound("/sounds/말씀 step 7까지 다 완료.mp3");
+    playSound('/sounds/말씀 step 7까지 다 완료.mp3');
     const time = setTimeout(() => {
-      router.push("/dashboard");
+      router.push('/dashboard');
     }, 3000);
     return () => clearTimeout(time);
   }, [component, router, verseId]);

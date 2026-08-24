@@ -10,7 +10,7 @@ export default function DashboardLayout({ children, done }: Props) {
         dashboard-layout
         flex flex-col w-full flex-1 min-h-0 justify-start items-center
         px-[2.688rem] py-[clamp(2rem,5svh,5.313rem)]
-        ${done ? "is-done" : ""}
+        ${done ? 'is-done' : ''}
       `}
     >
       {children}

@@ -1,36 +1,36 @@
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
 
-type SlidePhase = "idle" | "exit" | "enter";
+type SlidePhase = 'idle' | 'exit' | 'enter';
 
 export function useSlideAnimation(onExit: (destination: number) => void) {
-  const [phase, setPhase] = useState<SlidePhase>("idle");
+  const [phase, setPhase] = useState<SlidePhase>('idle');
   const nextRef = useRef<number | null>(null);
 
   const startTransition = (dest: number) => {
-    if (phase !== "idle") return;
+    if (phase !== 'idle') return;
     nextRef.current = dest;
-    setPhase("exit");
+    setPhase('exit');
   };
 
   const handleAnimationEnd = () => {
-    if (phase === "exit") {
+    if (phase === 'exit') {
       const destination = nextRef.current;
       nextRef.current = null;
       if (destination !== null) {
         onExit(destination);
-        setPhase("enter");
+        setPhase('enter');
       }
-    } else if (phase === "enter") {
-      setPhase("idle");
+    } else if (phase === 'enter') {
+      setPhase('idle');
     }
   };
 
   const slideClass =
-    phase === "exit"
-      ? "onboarding-slide-exit"
-      : phase === "enter"
-        ? "onboarding-slide-enter"
-        : "";
+    phase === 'exit'
+      ? 'onboarding-slide-exit'
+      : phase === 'enter'
+        ? 'onboarding-slide-enter'
+        : '';
 
   return { startTransition, handleAnimationEnd, slideClass };
 }

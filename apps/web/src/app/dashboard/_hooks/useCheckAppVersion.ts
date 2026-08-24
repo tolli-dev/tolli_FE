@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 function isBelow(current?: string, minVersion?: string): boolean {
   if (!current || !minVersion) return false;
 
-  const splittedCurrent = current.split(".").map(Number);
-  const splittedMinVersion = minVersion.split(".").map(Number);
+  const splittedCurrent = current.split('.').map(Number);
+  const splittedMinVersion = minVersion.split('.').map(Number);
 
   for (let i = 0; i < 3; i++) {
     if (splittedCurrent[i] < splittedMinVersion[i]) return true;
@@ -17,7 +17,7 @@ export function useCheckAppVersion() {
   const [needUpdate, setNeedUpdate] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     let cancelled = false;
     let received = false;
@@ -27,10 +27,10 @@ export function useCheckAppVersion() {
 
     const handler = async (e: MessageEvent) => {
       try {
-        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (data.type !== "APP_VERSION") return;
+        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        if (data.type !== 'APP_VERSION') return;
         received = true;
-        const { minVersion } = await fetch("/api/app/config").then((r) =>
+        const { minVersion } = await fetch('/api/app/config').then((r) =>
           r.json(),
         );
 
@@ -39,12 +39,12 @@ export function useCheckAppVersion() {
     };
 
     const start = () => {
-      window.addEventListener("message", handler);
-      document.addEventListener("message", handler as unknown as EventListener);
+      window.addEventListener('message', handler);
+      document.addEventListener('message', handler as unknown as EventListener);
 
       const request = () => {
         window.ReactNativeWebView?.postMessage(
-          JSON.stringify({ type: "GET_APP_VERSION" }),
+          JSON.stringify({ type: 'GET_APP_VERSION' }),
         );
       };
 
@@ -75,9 +75,9 @@ export function useCheckAppVersion() {
       clearTimeout(pollTimer);
       clearTimeout(retryTimer);
       clearTimeout(decideTimer);
-      window.removeEventListener("message", handler);
+      window.removeEventListener('message', handler);
       document.removeEventListener(
-        "message",
+        'message',
         handler as unknown as EventListener,
       );
     };

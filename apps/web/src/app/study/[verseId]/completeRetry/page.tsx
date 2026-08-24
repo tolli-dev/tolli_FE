@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import ReadingBookTolli from "../../../../../public/images/readingBookTolli.webp";
+import Image from 'next/image';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import ReadingBookTolli from '../../../../../public/images/readingBookTolli.webp';
 
 export default function CompleteRetry() {
   const router = useRouter();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      router.push("/dashboard");
+      router.push('/dashboard');
     }, 1500);
     return () => clearTimeout(timeout);
   }, [router]);

@@ -1,23 +1,23 @@
-import { KakaoIcon, GoogleIcon, AppleIcon } from "./icons";
+import { KakaoIcon, GoogleIcon, AppleIcon } from './icons';
 
 const PROVIDER_CONFIG = {
   kakao: {
-    bgColor: "bg-[#FEE500]",
-    textColor: "text-[#000000]",
+    bgColor: 'bg-[#FEE500]',
+    textColor: 'text-[#000000]',
     icon: KakaoIcon,
-    label: "카카오로 로그인",
+    label: '카카오로 로그인',
   },
   google: {
-    bgColor: "bg-white",
-    textColor: "text-[#1f1f1f]",
+    bgColor: 'bg-white',
+    textColor: 'text-[#1f1f1f]',
     icon: GoogleIcon,
-    label: "Sign in with Google",
+    label: 'Sign in with Google',
   },
   apple: {
-    bgColor: "bg-black",
-    textColor: "text-white",
+    bgColor: 'bg-black',
+    textColor: 'text-white',
     icon: AppleIcon,
-    label: "Sign in with Apple",
+    label: 'Sign in with Apple',
   },
 } as const;
 

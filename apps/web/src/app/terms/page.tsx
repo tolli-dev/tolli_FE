@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Button from "@/components/ui/Button";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Button from '@/components/ui/Button';
 
 function CheckIcon({ checked }: { checked: boolean }) {
   if (checked) {
@@ -38,20 +38,20 @@ function CheckIcon({ checked }: { checked: boolean }) {
 
 const TERMS = [
   {
-    id: "service",
-    label: "(필수) 이용약관 동의",
+    id: 'service',
+    label: '(필수) 이용약관 동의',
     required: true,
-    url: "https://polite-swift-c6b.notion.site/tolli-3724b4ce693880cd8ee8e17d36cd0353",
+    url: 'https://polite-swift-c6b.notion.site/tolli-3724b4ce693880cd8ee8e17d36cd0353',
   },
   {
-    id: "privacy",
-    label: "(필수) 개인정보 처리방침 동의",
+    id: 'privacy',
+    label: '(필수) 개인정보 처리방침 동의',
     required: true,
-    url: "https://polite-swift-c6b.notion.site/tolli-3724b4ce69388037a658f35884348c2a",
+    url: 'https://polite-swift-c6b.notion.site/tolli-3724b4ce69388037a658f35884348c2a',
   },
   {
-    id: "marketing",
-    label: "(선택) tolli 새소식 이메일 수신 동의",
+    id: 'marketing',
+    label: '(선택) tolli 새소식 이메일 수신 동의',
     required: false,
   },
 ];
@@ -80,14 +80,14 @@ export default function TermsPage() {
 
   const handleNext = () => {
     const agreedAt = new Date().toISOString();
-    sessionStorage.setItem("termsAgreedAt", agreedAt);
-    sessionStorage.setItem("privacyAgreedAt", agreedAt);
-    sessionStorage.setItem("emailMarketingAgreed", String(checked.marketing));
+    sessionStorage.setItem('termsAgreedAt', agreedAt);
+    sessionStorage.setItem('privacyAgreedAt', agreedAt);
+    sessionStorage.setItem('emailMarketingAgreed', String(checked.marketing));
     sessionStorage.setItem(
-      "emailMarketingAgreedAt",
-      checked.marketing ? agreedAt : "",
+      'emailMarketingAgreedAt',
+      checked.marketing ? agreedAt : '',
     );
-    router.push("/welcome");
+    router.push('/welcome');
   };
 
   return (
@@ -140,13 +140,13 @@ export default function TermsPage() {
               onClick={() => {
                 if (url) {
                   if (window.ReactNativeWebView) {
-                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: "OPEN_EXTERNAL_URL", url }));
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'OPEN_EXTERNAL_URL', url }));
                   } else {
-                    window.open(url, "_blank");
+                    window.open(url, '_blank');
                   }
                 }
               }}
-              className={`text-[14.5px] font-medium leading-[22.8px] tracking-normal text-[#E0E0E0] text-left ${url ? "underline" : ""}`}
+              className={`text-[14.5px] font-medium leading-[22.8px] tracking-normal text-[#E0E0E0] text-left ${url ? 'underline' : ''}`}
             >
               {label}
             </button>
@@ -162,7 +162,7 @@ export default function TermsPage() {
         <Button
           onClick={handleNext}
           disabled={!requiredChecked}
-          className={requiredChecked ? "" : "opacity-40"}
+          className={requiredChecked ? '' : 'opacity-40'}
         >
           다음
         </Button>

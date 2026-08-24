@@ -37,7 +37,7 @@ export default function LearningSteps() {
           style={{
             left: '12.5%',
             right: '12.5%',
-            background: `linear-gradient(to right, #574F6D, #574F6D 33%, #706189 33%, #706189 66%, #A996C7 66%, #A996C7 100%)`,
+            background: 'linear-gradient(to right, #574F6D, #574F6D 33%, #706189 33%, #706189 66%, #A996C7 66%, #A996C7 100%)',
           }}
         />
         {STEPS.map(({ label, borderColor }) => (

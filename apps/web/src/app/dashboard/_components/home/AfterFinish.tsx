@@ -2,7 +2,6 @@ import { TodayVerse } from "../../page";
 import Nickname from "./Nickname";
 import Illustration from "./Illustration";
 import Card from "./Card";
-import RecommendedTodayVerse from "./RecommendedTodayVerse";
 
 const src = "/images/onBoarding/fullHappyTolli.webp";
 
@@ -19,7 +18,25 @@ export default function AfterFinish({
       <Illustration src={src} />
 
       <Card className="px-[clamp(1.5rem,9vw,2.5rem)] py-[clamp(0.75rem,4vw,1.25rem)]">
-        <RecommendedTodayVerse todayVerse={todayVerse} />
+        <h3
+          className="
+              relative z-10
+              mb-[clamp(1rem,5vw,1.5rem)]
+              text-dashboard-article-h3
+            "
+        >
+          오늘의 말씀
+        </h3>
+
+        <div className="mb-[clamp(0.375rem,2vw,0.625rem)]">
+          <p className="relative z-10 text-dashboard-article-p">{todayVerse?.fullText}</p>
+        </div>
+
+        <div className="relative z-10 w-full flex items-center justify-end">
+          <span className="text-dashboard-article-span whitespace-nowrap">
+            {todayVerse?.reference}
+          </span>
+        </div>
       </Card>
 
       <button

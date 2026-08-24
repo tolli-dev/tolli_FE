@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from 'react';
 
 const BAR_COUNT = 6; // 막대 개수
 const MIN_FREQ = 40; // 목소리 하한 (성인 남성 저음)
@@ -56,10 +56,10 @@ export function useRecord() {
   // 녹음 시작하기
   const start = useCallback(async () => {
     // 마이크 연결되었는지 확인
-    console.log("[useRecord] mediaDevices?", !!navigator.mediaDevices);
-    console.log("[useRecord] before getUserMedia");
+    console.log('[useRecord] mediaDevices?', !!navigator.mediaDevices);
+    console.log('[useRecord] before getUserMedia');
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    console.log("[useRecord] after getUserMedia (granted)");
+    console.log('[useRecord] after getUserMedia (granted)');
     streamRef.current = stream;
 
     // 녹음을 하면 chunks 데이터 채우기

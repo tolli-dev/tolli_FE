@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { deleteBookmark } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
-import { useState } from "react";
-import { BookMarks } from "../../_hooks/useBookmark";
-import FilledStarIcon from "@/app/_components/FilledStarIcon";
+import { deleteBookmark } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
+import { useState } from 'react';
+import { BookMarks } from '../../_hooks/useBookmark';
+import FilledStarIcon from '@/app/_components/FilledStarIcon';
 
 interface Props {
   value: BookMarks;
@@ -27,7 +27,7 @@ export default function IndividualBookmark({ value, onDelete }: Props) {
   return (
     <article
       className={`w-full shrink-0 flex flex-col border bg-[#C8C8C8]/20 rounded-[clamp(1rem,4.5vw,1.25rem)] py-[clamp(1rem,4.5vw,1.375rem)] px-[clamp(1.125rem,5vw,1.5625rem)] transition-colors ${
-        error ? "border-red-400/60" : "border-[#CCB5F0]"
+        error ? 'border-red-400/60' : 'border-[#CCB5F0]'
       }`}
     >
       <span className="flex justify-end -mt-1.5 -mb-1.5">

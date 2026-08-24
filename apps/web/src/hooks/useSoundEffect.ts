@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from 'react';
 
 export function useSoundEffect(src: string) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const audio = new Audio(src);
-    audio.preload = "auto";
+    audio.preload = 'auto';
     audio.load();
     audioRef.current = audio;
     return () => {

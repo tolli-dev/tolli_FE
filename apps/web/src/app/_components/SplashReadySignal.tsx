@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 /**
  * 네이티브 스플래시를 안전하게 숨기기 위한 신호 컴포넌트.
@@ -18,7 +18,7 @@ export default function SplashReadySignal() {
     const outer = requestAnimationFrame(() => {
       inner = requestAnimationFrame(() => {
         window.ReactNativeWebView?.postMessage(
-          JSON.stringify({ type: "SPLASH_READY" }),
+          JSON.stringify({ type: 'SPLASH_READY' }),
         );
       });
     });

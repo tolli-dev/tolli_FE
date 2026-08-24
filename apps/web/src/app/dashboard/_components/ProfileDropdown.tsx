@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { forwardRef, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { getAlarm, setAlarmEnabled } from "@/lib/alarm";
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { getAlarm, setAlarmEnabled } from '@/lib/alarm';
 
 const ChevronRight = () => (
   <svg
@@ -42,19 +42,19 @@ const ChevronDown = () => (
 );
 
 type MenuKey =
-  | "profile"
-  | "notification"
-  | "account"
-  | "feedback"
-  | "terms"
+  | 'profile'
+  | 'notification'
+  | 'account'
+  | 'feedback'
+  | 'terms'
   | null;
 
 type SubItem =
-  | { type: "link"; label: string; href: string }
-  | { type: "toggle"; label: string; key: string }
-  | { type: "external"; label: string; url: string }
-  | { type: "modal"; label: string; modal: "logout" | "withdraw" }
-  | { type: "rename"; label: string };
+  | { type: 'link'; label: string; href: string }
+  | { type: 'toggle'; label: string; key: string }
+  | { type: 'external'; label: string; url: string }
+  | { type: 'modal'; label: string; modal: 'logout' | 'withdraw' }
+  | { type: 'rename'; label: string };
 
 type MenuItem = {
   key: Exclude<MenuKey, null>;
@@ -65,52 +65,52 @@ type MenuItem = {
 
 const MENU_ITEMS: MenuItem[] = [
   {
-    key: "profile",
-    label: "프로필 편집",
-    icon: "/icons/dropdown/profile.svg",
-    subItems: [{ type: "rename", label: "이름 변경" }],
+    key: 'profile',
+    label: '프로필 편집',
+    icon: '/icons/dropdown/profile.svg',
+    subItems: [{ type: 'rename', label: '이름 변경' }],
   },
   {
-    key: "notification",
-    label: "알림설정",
-    icon: "/icons/dropdown/notification.svg",
+    key: 'notification',
+    label: '알림설정',
+    icon: '/icons/dropdown/notification.svg',
     subItems: [
-      { type: "toggle", label: "알림 On/Off", key: "notificationEnabled" },
+      { type: 'toggle', label: '알림 On/Off', key: 'notificationEnabled' },
       {
-        type: "link",
-        label: "알림 시간 설정",
-        href: "/signup/set-alarm-time",
+        type: 'link',
+        label: '알림 시간 설정',
+        href: '/signup/set-alarm-time',
       },
     ],
   },
   {
-    key: "account",
-    label: "계정관리",
-    icon: "/icons/dropdown/account.svg",
+    key: 'account',
+    label: '계정관리',
+    icon: '/icons/dropdown/account.svg',
     subItems: [
-      { type: "modal", label: "로그아웃", modal: "logout" },
-      { type: "modal", label: "회원 탈퇴", modal: "withdraw" },
+      { type: 'modal', label: '로그아웃', modal: 'logout' },
+      { type: 'modal', label: '회원 탈퇴', modal: 'withdraw' },
     ],
   },
   {
-    key: "feedback",
-    label: "피드백 보내기",
-    icon: "/icons/dropdown/feedback.svg",
+    key: 'feedback',
+    label: '피드백 보내기',
+    icon: '/icons/dropdown/feedback.svg',
   },
   {
-    key: "terms",
-    label: "약관",
-    icon: "/icons/dropdown/terms.svg",
+    key: 'terms',
+    label: '약관',
+    icon: '/icons/dropdown/terms.svg',
     subItems: [
       {
-        type: "external",
-        label: "이용약관",
-        url: "https://polite-swift-c6b.notion.site/tolli-3724b4ce693880cd8ee8e17d36cd0353?pvs=143",
+        type: 'external',
+        label: '이용약관',
+        url: 'https://polite-swift-c6b.notion.site/tolli-3724b4ce693880cd8ee8e17d36cd0353?pvs=143',
       },
       {
-        type: "external",
-        label: "개인정보 처리방침",
-        url: "https://polite-swift-c6b.notion.site/tolli-3724b4ce69388037a658f35884348c2a?pvs=143",
+        type: 'external',
+        label: '개인정보 처리방침',
+        url: 'https://polite-swift-c6b.notion.site/tolli-3724b4ce69388037a658f35884348c2a?pvs=143',
       },
     ],
   },
@@ -120,7 +120,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   nickname?: string;
-  onModal?: (type: "logout" | "withdraw") => void;
+  onModal?: (type: 'logout' | 'withdraw') => void;
   onRename?: () => void;
   notificationEnabled: boolean | null;
   onNotificationChange: (enabled: boolean) => void;
@@ -129,7 +129,7 @@ type Props = {
 const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdown({
   isOpen,
   onClose,
-  nickname = "",
+  nickname = '',
   onModal,
   onRename,
   notificationEnabled,
@@ -153,11 +153,11 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
   }, [isOpen, onNotificationChange]);
 
   const handleMenuClick = (item: MenuItem) => {
-    if (item.key === "feedback") {
+    if (item.key === 'feedback') {
       window.ReactNativeWebView?.postMessage(
         JSON.stringify({
-          type: "OPEN_EXTERNAL_URL",
-          url: "https://walla.my/survey/2kZYBBzNVfjI4RYMcFJ3",
+          type: 'OPEN_EXTERNAL_URL',
+          url: 'https://walla.my/survey/2kZYBBzNVfjI4RYMcFJ3',
         }),
       );
       onClose();
@@ -175,17 +175,17 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
   };
 
   const handleSubItemClick = (subItem: SubItem) => {
-    if (subItem.type === "link") {
+    if (subItem.type === 'link') {
       router.push(subItem.href);
       onClose();
-    } else if (subItem.type === "external") {
+    } else if (subItem.type === 'external') {
       window.ReactNativeWebView?.postMessage(
-        JSON.stringify({ type: "OPEN_EXTERNAL_URL", url: subItem.url }),
+        JSON.stringify({ type: 'OPEN_EXTERNAL_URL', url: subItem.url }),
       );
       onClose();
-    } else if (subItem.type === "modal") {
+    } else if (subItem.type === 'modal') {
       onModal?.(subItem.modal);
-    } else if (subItem.type === "rename") {
+    } else if (subItem.type === 'rename') {
       onClose();
       onRename?.();
     }
@@ -203,17 +203,17 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
         className="rounded-4xl px-4 py-3"
         style={{
           animation: 'dropdown-enter 0.2s cubic-bezier(0.4,0,0.2,1) forwards',
-          backgroundColor: "rgba(217,217,217,0.15)",
+          backgroundColor: 'rgba(217,217,217,0.15)',
           boxShadow:
-            "0 4px 24px rgba(0,0,0,0.18), inset 0 1px 1px rgba(255,255,255,0.12), inset 0 -1px 1px rgba(0,0,0,0.15)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
+            '0 4px 24px rgba(0,0,0,0.18), inset 0 1px 1px rgba(255,255,255,0.12), inset 0 -1px 1px rgba(0,0,0,0.15)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
         }}
       >
         <div className="flex items-center gap-3 px-1 py-3">
           <div
             className="w-[2.063rem] h-[2.063rem] rounded-full flex items-center justify-center shrink-0 overflow-hidden"
-            style={{ backgroundColor: "#D9D9D9" }}
+            style={{ backgroundColor: '#D9D9D9' }}
           >
             <Image
               src="/tolli1.webp"
@@ -258,12 +258,12 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                     className="absolute rounded-4xl px-4 z-10"
                     style={{
                       top: subPanelTop,
-                      right: "-1rem",
-                      width: "calc(100% + 4rem)",
-                      paddingTop: "1.4375rem",
-                      paddingBottom: "1.4375rem",
-                      backgroundColor: "rgba(60,60,60,0.85)",
-                      border: "1px solid #CCB5F0",
+                      right: '-1rem',
+                      width: 'calc(100% + 4rem)',
+                      paddingTop: '1.4375rem',
+                      paddingBottom: '1.4375rem',
+                      backgroundColor: 'rgba(60,60,60,0.85)',
+                      border: '1px solid #CCB5F0',
                       animation: 'dropdown-enter 0.2s cubic-bezier(0.4,0,0.2,1) forwards',
                     }}
                   >
@@ -283,7 +283,7 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                     <div className="flex flex-col mt-1">
                       {item.subItems.map((subItem) => (
                         <div key={subItem.label}>
-                          {subItem.type === "toggle" ? (
+                          {subItem.type === 'toggle' ? (
                             <div className="flex items-center justify-between px-1 py-3">
                               <span className="text-white font-light text-[1rem] tracking-[-0.02em]">
                                 {subItem.label}
@@ -296,13 +296,13 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                                     // OS 알림 권한 요청(푸시 수신에 필요) 후, 서버 알람 켜기
                                     window.ReactNativeWebView?.postMessage(
                                       JSON.stringify({
-                                        type: "REQUEST_NOTIFICATION_PERMISSION",
+                                        type: 'REQUEST_NOTIFICATION_PERMISSION',
                                       }),
                                     );
                                     const result = await setAlarmEnabled(true);
                                     if (result.needsTime) {
                                       // 저장된 시간이 없으면 시간 설정 화면으로
-                                      router.push("/signup/set-alarm-time");
+                                      router.push('/signup/set-alarm-time');
                                       onClose();
                                     } else if (result.ok) {
                                       onNotificationChange(true);
@@ -315,12 +315,12 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                                 className="relative w-11 h-6.5 rounded-full transition-colors duration-200"
                                 style={{
                                   backgroundColor: notificationEnabled
-                                    ? "rgba(204,181,240,0.35)"
-                                    : "rgba(217,217,217,0.08)",
+                                    ? 'rgba(204,181,240,0.35)'
+                                    : 'rgba(217,217,217,0.08)',
                                   boxShadow: notificationEnabled
-                                    ? "inset 0 0 0 1px rgba(204,181,240,0.6)"
-                                    : "inset 0 0 0 1px rgba(255,255,255,0.15)",
-                                  backdropFilter: "blur(4px)",
+                                    ? 'inset 0 0 0 1px rgba(204,181,240,0.6)'
+                                    : 'inset 0 0 0 1px rgba(255,255,255,0.15)',
+                                  backdropFilter: 'blur(4px)',
                                   opacity: notificationEnabled === null ? 0.5 : 1,
                                 }}
                               >
@@ -328,12 +328,12 @@ const ProfileDropdown = forwardRef<HTMLDivElement, Props>(function ProfileDropdo
                                   className="absolute top-0.75 w-5 h-5 rounded-full transition-all duration-200"
                                   style={{
                                     backgroundColor: notificationEnabled
-                                      ? "#CCB5F0"
-                                      : "rgba(255,255,255,0.5)",
+                                      ? '#CCB5F0'
+                                      : 'rgba(255,255,255,0.5)',
                                     left: notificationEnabled
-                                      ? "calc(100% - 1.375rem)"
-                                      : "0.125rem",
-                                    boxShadow: "0 1px 4px rgba(0,0,0,0.25)",
+                                      ? 'calc(100% - 1.375rem)'
+                                      : '0.125rem',
+                                    boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
                                   }}
                                 />
                               </button>

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { getMe } from "@firebasegen/default-connector";
-import { QueryFetchPolicy } from "firebase/data-connect";
-import posthog from "posthog-js";
-import { fireAuth } from "@/firebase/fireAuth";
-import { dataConnect } from "@/lib/dataconnect";
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { getMe } from '@firebasegen/default-connector';
+import { QueryFetchPolicy } from 'firebase/data-connect';
+import posthog from 'posthog-js';
+import { fireAuth } from '@/firebase/fireAuth';
+import { dataConnect } from '@/lib/dataconnect';
 import {
   ENROLLED_KEY,
   EXPERIMENT_KEY,
@@ -15,14 +15,14 @@ import {
   isInExperiment,
   registerVariant,
   resolveVariant,
-} from "@/lib/experiment";
+} from '@/lib/experiment';
 
 type VariantState =
-  | { status: "loading" }
-  | { status: "ready"; variant: Variant };
+  | { status: 'loading' }
+  | { status: 'ready'; variant: Variant };
 
 export function useExperimentVariant(): VariantState {
-  const [state, setState] = useState<VariantState>({ status: "loading" });
+  const [state, setState] = useState<VariantState>({ status: 'loading' });
 
   useEffect(() => {
     let cancelled = false;
@@ -46,9 +46,9 @@ export function useExperimentVariant(): VariantState {
           registerVariant(posthog, variant, enrolled);
         }
 
-        if (!cancelled) setState({ status: "ready", variant });
+        if (!cancelled) setState({ status: 'ready', variant });
       } catch {
-        if (!cancelled) setState({ status: "ready", variant: VARIANT_CONTROL });
+        if (!cancelled) setState({ status: 'ready', variant: VARIANT_CONTROL });
       }
     };
 

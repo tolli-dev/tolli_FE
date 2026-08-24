@@ -1,9 +1,9 @@
-import CompleteContainer from "./_components/center/CompleteContainer";
-import DiffHeader from "./_components/header/DiffHeader";
-import RecordButton from "./_components/button/RecordButton";
-import RetryRecordingButton from "./_components/button/RetryRecordingButton";
-import Bookmark from "../../../_components/Bookmark";
-import { useStudyComplete } from "../../../_hooks/useStudyComplete";
+import CompleteContainer from './_components/center/CompleteContainer';
+import DiffHeader from './_components/header/DiffHeader';
+import RecordButton from './_components/button/RecordButton';
+import RetryRecordingButton from './_components/button/RetryRecordingButton';
+import Bookmark from '../../../_components/Bookmark';
+import { useStudyComplete } from '../../../_hooks/useStudyComplete';
 
 export default function RecordComplete({
   retryRecording,

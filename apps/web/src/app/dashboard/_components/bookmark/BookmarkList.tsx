@@ -1,5 +1,5 @@
-import { BookMarks } from "../../_hooks/useBookmark";
-import IndividualBookmark from "./IndividaulBookmark";
+import { BookMarks } from '../../_hooks/useBookmark';
+import IndividualBookmark from './IndividaulBookmark';
 
 interface Props {
   data: BookMarks[];

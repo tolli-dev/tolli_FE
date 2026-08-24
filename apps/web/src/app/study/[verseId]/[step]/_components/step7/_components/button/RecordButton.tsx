@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react";
+import { Icon } from '@iconify/react';
 
 export default function RecordButton({
   icon,
@@ -18,7 +18,7 @@ export default function RecordButton({
         disabled={disabled}
         className={`shrink-0 rounded-[1.25rem] items-center justify-center 
         flex flex-row py-3.25 gap-1.5 mb-6.5 w-full
-        ${disabled ? "bg-[#CECECE]" : "bg-[#CCB5F0]"}
+        ${disabled ? 'bg-[#CECECE]' : 'bg-[#CCB5F0]'}
         `}
       >
         <Icon icon={`${icon}`} className="text-[#000000] size-6" />

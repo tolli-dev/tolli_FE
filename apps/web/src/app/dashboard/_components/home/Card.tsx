@@ -1,5 +1,5 @@
-import NoiseOverlay from "../NoiseOverlay";
-import GrainBorder from "../GrainBorder";
+import NoiseOverlay from '../NoiseOverlay';
+import GrainBorder from '../GrainBorder';
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export default function Card({ children, className }: Props) {
             rounded-[clamp(16px,5vw,22px)]
             bg-dashboard-article-bg/20
             shadow-[0_4px_4px_0_rgba(0,0,0,0.25),0_4px_4px_0_rgba(0,0,0,0.25)]
-            ${className ?? ""}
+            ${className ?? ''}
           `}
     >
       <NoiseOverlay />

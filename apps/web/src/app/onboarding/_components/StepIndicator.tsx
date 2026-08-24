@@ -11,8 +11,8 @@ export default function StepIndicator({ totalSteps, currentStep }: Props) {
           key={i}
           className={`block rounded-full transition-all duration-300 ${
             i === currentStep
-              ? "w-1.75 h-1.75 bg-primary-50"
-              : "w-1.75 h-1.75 bg-surface-100"
+              ? 'w-1.75 h-1.75 bg-primary-50'
+              : 'w-1.75 h-1.75 bg-surface-100'
           }`}
         />
       ))}

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { dataConnect } from "@/lib/dataconnect";
-import posthog from "posthog-js";
-import { deleteBookmark, addBookmark } from "@firebasegen/default-connector";
-import { useState } from "react";
-import { DataConnectError } from "firebase/data-connect";
-import { playSound } from "@/lib/sound";
+import { useRouter } from 'next/navigation';
+import { dataConnect } from '@/lib/dataconnect';
+import posthog from 'posthog-js';
+import { deleteBookmark, addBookmark } from '@firebasegen/default-connector';
+import { useState } from 'react';
+import { DataConnectError } from 'firebase/data-connect';
+import { playSound } from '@/lib/sound';
 
 interface Props {
   verse: {
@@ -18,7 +18,7 @@ interface Props {
 }
 
 function extractErrorMessage(error: DataConnectError): string {
-  const fallback = "북마크 추가에 실패했습니다.";
+  const fallback = '북마크 추가에 실패했습니다.';
   let list: { message?: string }[] | undefined;
 
   const response = (error as { response?: { errors?: { message?: string }[] } })
@@ -33,11 +33,11 @@ function extractErrorMessage(error: DataConnectError): string {
   }
 
   const raw =
-    list?.find((e) => e?.message && e.message !== "(aborted)")?.message ??
+    list?.find((e) => e?.message && e.message !== '(aborted)')?.message ??
     error.message ??
     fallback;
 
-  return raw.replace(/\s*\(aborted\)\s*$/i, "").trim() || fallback;
+  return raw.replace(/\s*\(aborted\)\s*$/i, '').trim() || fallback;
 }
 
 export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
@@ -47,8 +47,8 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleRetryStep = () => {
-    posthog.capture("recall_clicked", { verse_id: verse.id });
-    sessionStorage.setItem("studyFrom", "recall");
+    posthog.capture('recall_clicked', { verse_id: verse.id });
+    sessionStorage.setItem('studyFrom', 'recall');
     router.push(`/study/${verse.id}/1`);
   };
 
@@ -63,7 +63,7 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
 
   const handleAddBookmark = async (verseId: number) => {
     setBookmark(true);
-    playSound("/sounds/어디론가 추가되었을때.mp3");
+    playSound('/sounds/어디론가 추가되었을때.mp3');
     try {
       await addBookmark(dataConnect, { verseId: verseId });
     } catch (error) {
@@ -71,7 +71,7 @@ export default function IndividualStorage({ verse, bookmarkedIds }: Props) {
       if (error instanceof DataConnectError) {
         setErrorMessage(extractErrorMessage(error));
       } else {
-        setErrorMessage("문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        setErrorMessage('문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
       }
     }
   };

@@ -1,10 +1,10 @@
-import { TodayVerse } from "../../page";
-import Nickname from "./Nickname";
-import Illustration from "./Illustration";
-import Card from "./Card";
-import RecommendedTodayVerse from "./RecommendedTodayVerse";
+import { TodayVerse } from '../../page';
+import Nickname from './Nickname';
+import Illustration from './Illustration';
+import Card from './Card';
+import RecommendedTodayVerse from './RecommendedTodayVerse';
 
-const src = "/images/onBoarding/fullHappyTolli.webp";
+const src = '/images/onBoarding/fullHappyTolli.webp';
 
 export default function AfterFinish({
   todayVerse,

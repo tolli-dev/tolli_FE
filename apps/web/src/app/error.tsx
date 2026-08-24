@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import ReadingBookTolli from "../../public/tolli1.webp";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import CircleLoading from "./study/[verseId]/completeRecording/_components/CircleLoading";
-import { useDeviceCornerRadius } from "@/hooks/useDeviceCornerRadius";
+import ReadingBookTolli from '../../public/tolli1.webp';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import CircleLoading from './study/[verseId]/completeRecording/_components/CircleLoading';
+import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
 
 interface Props {
   error: Error;
@@ -40,14 +40,14 @@ export default function Error({ error, reset }: Props) {
         className="fixed inset-0 pointer-events-none z-110"
         style={{
           borderRadius: `${Math.round(cornerRadius * 0.95)}px`,
-          padding: "5px",
+          padding: '5px',
           background:
-            "conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)",
+            'conic-gradient(from var(--angle), #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000, #CCB5F0, #000)',
           WebkitMask:
-            "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-          WebkitMaskComposite: "xor",
-          maskComposite: "exclude",
-          animation: "border-spin 6s linear infinite",
+            'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+          animation: 'border-spin 6s linear infinite',
         }}
       />
       <div className="flex flex-col w-full h-full items-center justify-between">

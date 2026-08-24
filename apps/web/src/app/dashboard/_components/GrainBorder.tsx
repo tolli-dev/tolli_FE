@@ -6,7 +6,7 @@ type Props = {
 };
 
 export default function GrainBorder({
-  color = "#CCB5F0",
+  color = '#CCB5F0',
   radius = 20,
   strokeWidth = 6,
   frequency = 0.9,

@@ -1,4 +1,4 @@
-import SwipeNav from "./SwipeNav";
+import SwipeNav from './SwipeNav';
 
 interface Props {
   activeIndex: number;

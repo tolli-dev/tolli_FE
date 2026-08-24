@@ -1,12 +1,9 @@
 import CompleteContainer from './_components/center/CompleteContainer';
 import DiffHeader from './_components/header/DiffHeader';
 import RecordButton from './_components/button/RecordButton';
-import { useRouter } from 'next/navigation';
 import RetryRecordingButton from './_components/button/RetryRecordingButton';
 import Bookmark from '../../../_components/Bookmark';
 import { useStudyComplete } from '../../../_hooks/useStudyComplete';
-
-const LAST_VERSE_ID_WITH_BGM = 30;
 
 export default function RecordComplete({
   retryRecording,
@@ -15,18 +12,8 @@ export default function RecordComplete({
   retryRecording: () => void;
   verseId: number;
 }) {
-  const router = useRouter();
-  const hasBgm = verseId <= LAST_VERSE_ID_WITH_BGM;
   const { submitError, bookmarkModal, handleComplete, clearError } =
     useStudyComplete(verseId);
-
-  const stopRecording = () => {
-    if (hasBgm) {
-      router.push(`/study/${verseId}/listen`);
-      return;
-    }
-    handleComplete();
-  };
 
   return (
     <section className="flex flex-col w-full h-full overflow-hidden pt-8.75 pb-4 px-10.5">
@@ -53,18 +40,18 @@ export default function RecordComplete({
         <RecordButton
           icon="line-md:square-filled"
           description="녹음 완료"
-          handleRecord={stopRecording}
+          handleRecord={handleComplete}
           disabled={false}
         />
       </footer>
 
-      {!hasBgm && bookmarkModal && (
+      {bookmarkModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 bg-[#000000]/60">
           <Bookmark verseId={verseId} />
         </div>
       )}
 
-      {!hasBgm && submitError && (
+      {submitError && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-60 bg-[#000000]/60 px-[clamp(1.5rem,8vw,2.5rem)]">
           <div className="bg-white w-full rounded-[clamp(1.5rem,8vw,2rem)] p-[clamp(1.5rem,8vw,2rem)] flex flex-col items-center gap-[clamp(1rem,5vw,1.5rem)] shadow-[0px_4px_20px_rgba(0,0,0,0.15)]">
             <div className="flex flex-col items-center gap-[clamp(0.5rem,2vw,0.75rem)]">

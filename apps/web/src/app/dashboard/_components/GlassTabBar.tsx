@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { playSound } from "@/lib/sound";
+import { useRef } from 'react';
+import { playSound } from '@/lib/sound';
 
 type Props = {
   tabs: readonly string[];
@@ -33,10 +33,10 @@ export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
 
     if (moved.current && Math.abs(dx) > SWIPE_THRESHOLD) {
       if (dx < 0 && activeIndex < tabs.length - 1) {
-        playSound("/sounds/네비게이션 오른쪽 스와이프.mp3");
+        playSound('/sounds/네비게이션 오른쪽 스와이프.mp3');
         onTabChange(activeIndex + 1);
       } else if (dx > 0 && activeIndex > 0) {
-        playSound("/sounds/네비게이션 왼쪽 스와이프.mp3");
+        playSound('/sounds/네비게이션 왼쪽 스와이프.mp3');
         onTabChange(activeIndex - 1);
       }
     }
@@ -58,9 +58,9 @@ export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
     if (targetIndex === activeIndex) return;
 
     if (targetIndex > activeIndex) {
-      playSound("/sounds/네비게이션 오른쪽 스와이프.mp3");
+      playSound('/sounds/네비게이션 오른쪽 스와이프.mp3');
     } else {
-      playSound("/sounds/네비게이션 왼쪽 스와이프.mp3");
+      playSound('/sounds/네비게이션 왼쪽 스와이프.mp3');
     }
 
     onTabChange(targetIndex);
@@ -84,7 +84,7 @@ export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
         select-none overflow-hidden
         cursor-pointer
       "
-      style={{ touchAction: "pan-y" }}
+      style={{ touchAction: 'pan-y' }}
     >
       <div
         aria-hidden
@@ -114,7 +114,7 @@ export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
             tracking-[-0.02em]
             transition-colors duration-200
             pointer-events-none
-            ${activeIndex === index ? "text-[#CCB6EF]" : "text-[#C8C0D4]"}
+            ${activeIndex === index ? 'text-[#CCB6EF]' : 'text-[#C8C0D4]'}
           `}
         >
           {label}

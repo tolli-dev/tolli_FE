@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Icon } from "@iconify/react";
-import posthog from "posthog-js";
-import { useRouter } from "next/navigation";
-import IndividualStorage from "./IndividualStorage";
-import { QueryFetchPolicy } from "firebase/data-connect";
-import { dataConnect } from "@/lib/dataconnect";
+import { useState, useEffect } from 'react';
+import { Icon } from '@iconify/react';
+import posthog from 'posthog-js';
+import { useRouter } from 'next/navigation';
+import IndividualStorage from './IndividualStorage';
+import { QueryFetchPolicy } from 'firebase/data-connect';
+import { dataConnect } from '@/lib/dataconnect';
 import {
   getMyBookmarks,
   getMyCompletions,
   getVerse,
-} from "@firebasegen/default-connector";
-import { signOut } from "firebase/auth";
-import { fireAuth } from "@/firebase/fireAuth";
-import { updateNickname, deleteUser } from "@firebasegen/default-connector";
-import standingTolli from "../../../../../public/tolli1.webp";
-import Image from "next/image";
-import ProfileDropdown from "../../_components/ProfileDropdown";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+} from '@firebasegen/default-connector';
+import { signOut } from 'firebase/auth';
+import { fireAuth } from '@/firebase/fireAuth';
+import { updateNickname, deleteUser } from '@firebasegen/default-connector';
+import standingTolli from '../../../../../public/tolli1.webp';
+import Image from 'next/image';
+import ProfileDropdown from '../../_components/ProfileDropdown';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 interface CompletedVerse {
   verse: {
@@ -35,11 +35,11 @@ interface Props {
 
 const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{1,8}$/;
 
-type ModalType = "logout" | "withdraw" | "rename" | null;
+type ModalType = 'logout' | 'withdraw' | 'rename' | null;
 
 export default function StorageView({ done, nickname }: Props) {
   const router = useRouter();
-  const [searchVerse, setSearchVerse] = useState("");
+  const [searchVerse, setSearchVerse] = useState('');
   const [myCompletions, setMyCompletions] = useState<CompletedVerse[]>([]);
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -47,26 +47,26 @@ export default function StorageView({ done, nickname }: Props) {
   const [notificationEnabled, setNotificationEnabled] = useState<
     boolean | null
   >(null);
-  const [renameValue, setRenameValue] = useState(nickname ?? "");
+  const [renameValue, setRenameValue] = useState(nickname ?? '');
   const [renameError, setRenameError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [renameApiError, setRenameApiError] = useState<string | null>(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleLogout = async () => {
     setActionLoading(true);
     window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "SET_LOGGED_OUT" }),
+      JSON.stringify({ type: 'SET_LOGGED_OUT' }),
     );
     try {
-      await fetch("/api/push/unregister", { method: "POST" });
+      await fetch('/api/push/unregister', { method: 'POST' });
       await signOut(fireAuth);
     } catch (error) {
-      console.error("로그아웃 에러", error);
+      console.error('로그아웃 에러', error);
     }
-    router.push("/login");
+    router.push('/login');
   };
 
   const handleWithdraw = async () => {
@@ -77,31 +77,31 @@ export default function StorageView({ done, nickname }: Props) {
     try {
       await deleteUser(dataConnect);
     } catch (error) {
-      console.error("계정 삭제 실패", error);
+      console.error('계정 삭제 실패', error);
       setActionLoading(false);
-      setActionError("탈퇴 중 오류가 발생했어요. 다시 시도해주세요.");
+      setActionError('탈퇴 중 오류가 발생했어요. 다시 시도해주세요.');
       return;
     }
 
     if (idToken) {
-      await fetch("/api/auth/unregister", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      await fetch('/api/auth/unregister', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken }),
       });
     }
     window.ReactNativeWebView?.postMessage(
-      JSON.stringify({ type: "SET_LOGGED_OUT" }),
+      JSON.stringify({ type: 'SET_LOGGED_OUT' }),
     );
 
     try {
-      await fetch("/api/push/unregister", { method: "POST" });
+      await fetch('/api/push/unregister', { method: 'POST' });
       await signOut(fireAuth);
     } catch (error) {
-      console.error("로그아웃 실패", error);
+      console.error('로그아웃 실패', error);
     }
 
-    router.push("/login");
+    router.push('/login');
   };
 
   const handleRenameSave = async () => {
@@ -113,12 +113,12 @@ export default function StorageView({ done, nickname }: Props) {
     setRenameApiError(null);
     try {
       await updateNickname(dataConnect, { nickname: renameValue });
-      window.location.href = "/dashboard";
+      window.location.href = '/dashboard';
     } catch (error) {
-      console.error("닉네임 재설정 에러", error);
+      console.error('닉네임 재설정 에러', error);
       setActionLoading(false);
       setRenameApiError(
-        "닉네임 재설정 중 오류가 발생했어요. 다시 시도해주세요.",
+        '닉네임 재설정 중 오류가 발생했어요. 다시 시도해주세요.',
       );
     }
   };
@@ -130,10 +130,10 @@ export default function StorageView({ done, nickname }: Props) {
 
   const getMyStorage = async () => {
     setLoading(true);
-    setError("");
+    setError('');
     try {
       const { data } = await getMyCompletions(dataConnect, {
-        fetchPolicy: "SERVER_ONLY",
+        fetchPolicy: 'SERVER_ONLY',
       });
       const [verses, { data: bookmarksData }] = await Promise.all([
         Promise.all(
@@ -145,7 +145,7 @@ export default function StorageView({ done, nickname }: Props) {
               verse: {
                 id: verseData.verse?.id ?? value.verse.id,
                 reference: verseData.verse?.reference ?? value.verse.reference,
-                fullText: verseData.verse?.fullText ?? "",
+                fullText: verseData.verse?.fullText ?? '',
               },
             };
           }),
@@ -158,7 +158,7 @@ export default function StorageView({ done, nickname }: Props) {
       setMyCompletions(verses);
     } catch {
       setError(
-        "저장소를 불러오는 중 에러가 발생하였습니다. 다시 시도해주세요.",
+        '저장소를 불러오는 중 에러가 발생하였습니다. 다시 시도해주세요.',
       );
     } finally {
       setLoading(false);
@@ -166,7 +166,7 @@ export default function StorageView({ done, nickname }: Props) {
   };
 
   useEffect(() => {
-    posthog.capture("recall_exposed");
+    posthog.capture('recall_exposed');
     getMyStorage();
   }, []);
 
@@ -191,7 +191,7 @@ export default function StorageView({ done, nickname }: Props) {
         dashboard-layout
         flex flex-col w-full flex-1 min-h-0 justify-between items-center
         px-[2.688rem] py-[clamp(2rem,5dvh,5.313rem)]
-        ${done ? "is-done" : ""}
+        ${done ? 'is-done' : ''}
       `}
     >
       <>
@@ -205,11 +205,11 @@ export default function StorageView({ done, nickname }: Props) {
         )}
 
         {/* 로그아웃 / 회원탈퇴 모달 */}
-        {(modal === "logout" || modal === "withdraw") && (
+        {(modal === 'logout' || modal === 'withdraw') && (
           <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/92">
             <div className="w-[80vw] max-w-88 rounded-4xl overflow-hidden flex flex-col items-center px-6 pt-8 pb-8 gap-4 bg-[#1e1e1e]">
               <h2 className="text-[1.1875rem] leading-7.75 text-[#CCB5F0] whitespace-nowrap">
-                {modal === "logout" ? "로그아웃 할까요?" : "회원 탈퇴 할까요?"}
+                {modal === 'logout' ? '로그아웃 할까요?' : '회원 탈퇴 할까요?'}
               </h2>
               <div className="relative w-32 h-32">
                 <Image
@@ -220,9 +220,9 @@ export default function StorageView({ done, nickname }: Props) {
                 />
               </div>
               <p className="text-[0.875rem] leading-4.5 text-[#949494] text-center whitespace-pre-line">
-                {modal === "logout"
-                  ? "다음에 또 만나요!\n톨리가 기다리고 있을게요!"
-                  : "탈퇴하면 계정 정보는 복구되지 않아요\n정말 탈퇴하시나요?"}
+                {modal === 'logout'
+                  ? '다음에 또 만나요!\n톨리가 기다리고 있을게요!'
+                  : '탈퇴하면 계정 정보는 복구되지 않아요\n정말 탈퇴하시나요?'}
               </p>
               {actionError && (
                 <p className="text-red-400 text-[0.8125rem] text-center -mb-1">
@@ -231,11 +231,11 @@ export default function StorageView({ done, nickname }: Props) {
               )}
               <div className="flex flex-col w-full gap-3 mt-2">
                 <button
-                  onClick={modal === "logout" ? handleLogout : handleWithdraw}
+                  onClick={modal === 'logout' ? handleLogout : handleWithdraw}
                   disabled={actionLoading}
                   className="w-full h-12 rounded-[1.25rem] text-btn-sm text-black bg-[#CCB5F0] disabled:opacity-50"
                 >
-                  {modal === "logout" ? "로그아웃하기" : "탈퇴하기"}
+                  {modal === 'logout' ? '로그아웃하기' : '탈퇴하기'}
                 </button>
                 <button
                   onClick={() => {
@@ -252,7 +252,7 @@ export default function StorageView({ done, nickname }: Props) {
         )}
 
         {/* 이름 변경 모달 */}
-        {modal === "rename" && (
+        {modal === 'rename' && (
           <div
             className="fixed inset-0 z-200 flex items-center justify-center bg-black/60"
             onClick={() => setModal(null)}
@@ -260,10 +260,10 @@ export default function StorageView({ done, nickname }: Props) {
             <div
               className="flex flex-col w-79.5 rounded-4xl gap-4.5 bg-[#373737]"
               style={{
-                paddingTop: "1.0625rem",
-                paddingBottom: "1.0625rem",
-                paddingLeft: "1.438rem",
-                paddingRight: "1.438rem",
+                paddingTop: '1.0625rem',
+                paddingBottom: '1.0625rem',
+                paddingLeft: '1.438rem',
+                paddingRight: '1.438rem',
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -370,9 +370,9 @@ export default function StorageView({ done, nickname }: Props) {
               nickname={nickname}
               onModal={(type) => openModal(type)}
               onRename={() => {
-                setRenameValue(nickname ?? "");
+                setRenameValue(nickname ?? '');
                 setRenameError(false);
-                openModal("rename");
+                openModal('rename');
               }}
               notificationEnabled={notificationEnabled}
               onNotificationChange={setNotificationEnabled}

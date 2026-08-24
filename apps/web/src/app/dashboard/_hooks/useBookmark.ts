@@ -1,6 +1,6 @@
-import { useReducer, useEffect } from "react";
-import { getMyBookmarks } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
+import { useReducer, useEffect } from 'react';
+import { getMyBookmarks } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
 
 export interface BookMarks {
   verse: {
@@ -16,38 +16,38 @@ type Data = {
 };
 
 type State =
-  | { status: "loading" }
-  | { status: "error" }
-  | { status: "success"; data: Data };
+  | { status: 'loading' }
+  | { status: 'error' }
+  | { status: 'success'; data: Data };
 
 type Action = State;
 
 function reducer(_: State, action: Action): State {
   switch (action.status) {
-    case "loading":
-      return { status: "loading" };
-    case "error":
-      return { status: "error" };
-    case "success":
-      return { status: "success", data: action.data };
+    case 'loading':
+      return { status: 'loading' };
+    case 'error':
+      return { status: 'error' };
+    case 'success':
+      return { status: 'success', data: action.data };
   }
 }
 
-const initialState: State = { status: "loading" };
+const initialState: State = { status: 'loading' };
 
 export function useBookmark() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const fetchData = async () => {
-    dispatch({ status: "loading" });
+    dispatch({ status: 'loading' });
 
     try {
       const { data } = await getMyBookmarks(dataConnect, {
-        fetchPolicy: "SERVER_ONLY",
+        fetchPolicy: 'SERVER_ONLY',
       });
-      dispatch({ status: "success", data: { bookmarks: data.bookmarks } });
+      dispatch({ status: 'success', data: { bookmarks: data.bookmarks } });
     } catch {
-      dispatch({ status: "error" });
+      dispatch({ status: 'error' });
     }
   };
 
@@ -56,7 +56,7 @@ export function useBookmark() {
   }, []);
 
   const handleError = () => {
-    dispatch({ status: "loading" });
+    dispatch({ status: 'loading' });
     fetchData();
   };
 

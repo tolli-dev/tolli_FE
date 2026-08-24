@@ -1,11 +1,11 @@
-import { useReducer, useEffect } from "react";
-import { getMe, getMyCurrentVerse } from "@firebasegen/default-connector";
-import { onAuthStateChanged } from "firebase/auth";
-import { QueryFetchPolicy } from "firebase/data-connect";
-import { fireAuth } from "@/firebase/fireAuth";
-import { dataConnect } from "@/lib/dataconnect";
-import { getLocalMidnight } from "@/lib/date";
-import { TodayVerse } from "../page";
+import { useReducer, useEffect } from 'react';
+import { getMe, getMyCurrentVerse } from '@firebasegen/default-connector';
+import { onAuthStateChanged } from 'firebase/auth';
+import { QueryFetchPolicy } from 'firebase/data-connect';
+import { fireAuth } from '@/firebase/fireAuth';
+import { dataConnect } from '@/lib/dataconnect';
+import { getLocalMidnight } from '@/lib/date';
+import { TodayVerse } from '../page';
 
 export type Data = {
   nickname: string;
@@ -14,20 +14,20 @@ export type Data = {
 };
 
 type State =
-  | { status: "loading" }
-  | { status: "error" }
-  | { status: "success"; data: Data };
+  | { status: 'loading' }
+  | { status: 'error' }
+  | { status: 'success'; data: Data };
 
 type Action = State;
 
 function reducer(_: State, action: Action): State {
   switch (action.status) {
-    case "loading":
-      return { status: "loading" };
-    case "error":
-      return { status: "error" };
-    case "success":
-      return { status: "success", data: action.data };
+    case 'loading':
+      return { status: 'loading' };
+    case 'error':
+      return { status: 'error' };
+    case 'success':
+      return { status: 'success', data: action.data };
   }
 }
 
@@ -35,12 +35,12 @@ export function useDashboard(initialData?: Data) {
   const [state, dispatch] = useReducer(
     reducer,
     initialData
-      ? { status: "success" as const, data: initialData }
-      : { status: "loading" as const },
+      ? { status: 'success' as const, data: initialData }
+      : { status: 'loading' as const },
   );
 
   const fetchData = () => {
-    dispatch({ status: "loading" });
+    dispatch({ status: 'loading' });
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const today = getLocalMidnight(tz);
@@ -54,16 +54,16 @@ export function useDashboard(initialData?: Data) {
       .then(([meResult, verseResult]) => {
         const verse = verseResult.data.todayCompletion[0]?.verse ?? null;
         dispatch({
-          status: "success",
+          status: 'success',
           data: {
-            nickname: meResult.data.user?.nickname ?? "",
+            nickname: meResult.data.user?.nickname ?? '',
             todayVerse: verse,
             done: verse !== null,
           },
         });
       })
       .catch(() => {
-        dispatch({ status: "error" });
+        dispatch({ status: 'error' });
       });
   };
 
@@ -81,7 +81,7 @@ export function useDashboard(initialData?: Data) {
   }, []);
 
   const handleError = () => {
-    dispatch({ status: "loading" });
+    dispatch({ status: 'loading' });
     fetchData();
   };
 

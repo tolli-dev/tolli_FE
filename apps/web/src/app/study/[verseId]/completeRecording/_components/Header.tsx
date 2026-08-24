@@ -1,4 +1,4 @@
-import Image, { StaticImageData } from "next/image";
+import Image, { StaticImageData } from 'next/image';
 
 export default function Header({
   comment1,

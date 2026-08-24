@@ -1,12 +1,12 @@
-import { getVerse } from "@firebasegen/default-connector";
-import { dataConnect } from "@/lib/dataconnect";
-import { notFound } from "next/navigation";
-import { Verse, StepMaskData } from "./_components/types";
-import MultipleChoiceView from "./_components/step2-5/MultipleChoiceView";
-import ConsonantTypingView from "./_components/step6/ConsonantTypingView";
-import ReadVerse from "./_components/step0/ReadVerse";
-import TabVerse from "./_components/step1/TabVerse";
-import Record from "./_components/step7/Record";
+import { getVerse } from '@firebasegen/default-connector';
+import { dataConnect } from '@/lib/dataconnect';
+import { notFound } from 'next/navigation';
+import { Verse, StepMaskData } from './_components/types';
+import MultipleChoiceView from './_components/step2-5/MultipleChoiceView';
+import ConsonantTypingView from './_components/step6/ConsonantTypingView';
+import ReadVerse from './_components/step0/ReadVerse';
+import TabVerse from './_components/step1/TabVerse';
+import Record from './_components/step7/Record';
 
 interface StudyPageProps {
   params: Promise<{ verseId: string; step: string }>;
@@ -23,7 +23,7 @@ export default async function StudyPage({ params }: StudyPageProps) {
   const verse: Verse = {
     id: verseData.id,
     reference: verseData.reference,
-    words: verseData.words as Verse["words"],
+    words: verseData.words as Verse['words'],
   };
 
   const allIndices = verse.words.map((w) => w.index);

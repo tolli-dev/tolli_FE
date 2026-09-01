@@ -4,7 +4,7 @@ import { useReducer, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Verse } from '../types';
 import HangulKeyboard from './HangulKeyboard';
-import { playSound } from '@/lib/sound';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
 import {
   isVowel,
   isHangulChar,
@@ -142,6 +142,8 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
 
   const [wrongKey, setWrongKey] = useState<string | null>(null);
 
+  const playTypingSound = useSoundEffect('/sounds/타자소리 타이핑 소리.mp3');
+
   const [state, dispatch] = useReducer(reducer, {
     targetIdx: 0,
     typedChars: [],
@@ -203,7 +205,7 @@ export default function ConsonantTypingView({ verse, verseId }: ConsonantTypingV
         <HangulKeyboard
           wrongKey={wrongKey}
           onKey={(key) => {
-            playSound('/sounds/타자소리 타이핑 소리.mp3');
+            playTypingSound();
             const target = targets[state.targetIdx];
             if (target && isVowel(key)) {
               const expectedChar = target.text[state.typedChars.length] ?? '';

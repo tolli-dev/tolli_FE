@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Verse, StepMaskData } from '../types';
 import MaskedVerse from './MaskedVerse';
-import { playSound } from '@/lib/sound';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
 
 interface MultipleChoiceViewProps {
   step: 2 | 3 | 4 | 5;
@@ -23,6 +23,9 @@ export default function MultipleChoiceView({
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [wrongChoice, setWrongChoice] = useState<string | null>(null);
 
+  const playCorrectSound = useSoundEffect('/sounds/정답.mp3');
+  const playWrongSound = useSoundEffect('/sounds/오답.mp3');
+
   const answeredCount = Object.keys(answers).length;
   const currentMaskedWordIndex = stepMaskData.maskedIndices[answeredCount];
 
@@ -31,11 +34,11 @@ export default function MultipleChoiceView({
     const isCorrect = choice === correctText;
 
     if (isCorrect) {
-      playSound('/sounds/정답.mp3');
+      playCorrectSound();
       setWrongChoice(null);
       setAnswers((prev) => ({ ...prev, [currentMaskedWordIndex]: choice }));
     } else {
-      playSound('/sounds/오답.mp3');
+      playWrongSound();
       setWrongChoice(choice);
       setTimeout(() => setWrongChoice(null), 500);
     }

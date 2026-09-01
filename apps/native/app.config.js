@@ -100,6 +100,7 @@ export default {
           },
         },
       ],
+      "expo-audio",
       "./plugins/withIosProjectTweaks",
     ],
     extra: {

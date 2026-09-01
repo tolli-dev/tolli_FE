@@ -33,16 +33,6 @@ export function useSoundEffect(src: string) {
     const audio = audioRef.current;
     if (!audio) return;
     audio.currentTime = 0;
-
-    const t0 = performance.now();
-    audio.addEventListener(
-      'playing',
-      () => {
-        console.log(`[sound delay] ${src}: ${(performance.now() - t0).toFixed(1)}ms`);
-      },
-      { once: true },
-    );
-
     audio.play().catch(() => {});
   }, [src]);
 

@@ -385,10 +385,6 @@ export default function App() {
 
       if (data.type === "PLAY_SOUND" && typeof data.src === "string") {
         await playSoundBySrc(data.src);
-        // 딜레이 측정용: 네이티브에서 play() 호출 직후 웹에 알려준다.
-        webviewRef.current?.postMessage(
-          JSON.stringify({ type: "SOUND_PLAYED", src: data.src }),
-        );
       }
 
       if (data.type === "OPEN_EXTERNAL_URL") {

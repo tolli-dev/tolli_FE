@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { playSound } from '@/lib/sound';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
 
 type Props = {
   tabs: readonly string[];
@@ -14,6 +14,9 @@ const SWIPE_THRESHOLD = 20;
 export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
   const startX = useRef<number | null>(null);
   const moved = useRef(false);
+
+  const playRight = useSoundEffect('/sounds/네비게이션 오른쪽 스와이프.mp3');
+  const playLeft = useSoundEffect('/sounds/네비게이션 왼쪽 스와이프.mp3');
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     startX.current = e.clientX;
@@ -33,10 +36,10 @@ export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
 
     if (moved.current && Math.abs(dx) > SWIPE_THRESHOLD) {
       if (dx < 0 && activeIndex < tabs.length - 1) {
-        playSound('/sounds/네비게이션 오른쪽 스와이프.mp3');
+        playRight();
         onTabChange(activeIndex + 1);
       } else if (dx > 0 && activeIndex > 0) {
-        playSound('/sounds/네비게이션 왼쪽 스와이프.mp3');
+        playLeft();
         onTabChange(activeIndex - 1);
       }
     }
@@ -58,9 +61,9 @@ export default function GlassTabBar({ tabs, activeIndex, onTabChange }: Props) {
     if (targetIndex === activeIndex) return;
 
     if (targetIndex > activeIndex) {
-      playSound('/sounds/네비게이션 오른쪽 스와이프.mp3');
+      playRight();
     } else {
-      playSound('/sounds/네비게이션 왼쪽 스와이프.mp3');
+      playLeft();
     }
 
     onTabChange(targetIndex);

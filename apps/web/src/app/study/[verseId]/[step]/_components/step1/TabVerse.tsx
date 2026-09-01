@@ -4,7 +4,6 @@ import { Verse, WordMeaningData } from '../types';
 import { useState } from 'react';
 import Link from 'next/link';
 import TabMaskedVerse from './TabMaskedVerse';
-import { playSound } from '@/lib/sound';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useEffect } from 'react';
 import posthog from 'posthog-js';
@@ -20,6 +19,7 @@ export default function TabVerse({
   verseId: string;
 }) {
   const play = useSoundEffect('/sounds/처음 말씀 pop up 될때 소리.mp3');
+  const playNextTabSound = useSoundEffect('/sounds/다음탭 이동.mp3');
   useEffect(() => {
     play();
     posthog.capture('study_started', {
@@ -77,7 +77,7 @@ export default function TabVerse({
             className="mt-auto mx-auto"
           >
             <button
-              onClick={() => playSound('/sounds/다음탭 이동.mp3')}
+              onClick={() => playNextTabSound()}
               className="mt-auto py-1.75 mx-auto w-32 rounded-[20px] border border-[#CCB5F0] text-[1rem] text-[#FFFFFF] font-bold tracking-[0.03em]"
               style={{ marginTop: 0, marginBottom: 'auto' }}
             >

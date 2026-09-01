@@ -2,7 +2,7 @@
 
 import { WordMeaningData } from '../types';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { playSound } from '@/lib/sound';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
 
 interface Props {
   meanings: WordMeaningData[];
@@ -25,6 +25,10 @@ export default function TabMaskedVerse({
     closing: boolean;
   }>({ meaning: null, condition: false, closing: false });
 
+  const playTabSound = useSoundEffect('/sounds/보기 탭.mp3');
+  const playOpenMeaningSound = useSoundEffect('/sounds/말씀 잠깐 보기 카드 공개_비공개.mp3');
+  const playCloseMeaningSound = useSoundEffect('/sounds/원래 화면 다시 돌아갈때.mp3');
+
   useEffect(() => {
     meanings.forEach((word, index) => {
       if (!word.meaning) {
@@ -40,7 +44,7 @@ export default function TabMaskedVerse({
   }, [meanings]);
 
   const handleTabWords = (index: number) => {
-    playSound('/sounds/보기 탭.mp3');
+    playTabSound();
     setTabbedWords((prev) => {
       const updatedWords = [...prev];
       updatedWords[index] = true;
@@ -49,7 +53,7 @@ export default function TabMaskedVerse({
   };
 
   const handleWatchMeaning = (meaning: WordMeaningData, index: number) => {
-    playSound('/sounds/말씀 잠깐 보기 카드 공개_비공개.mp3');
+    playOpenMeaningSound();
     setIsOpen({ meaning, condition: true, closing: false });
     setWatchMeaning((prev) => {
       const updatedMeaning = [...prev];
@@ -59,7 +63,7 @@ export default function TabMaskedVerse({
   };
 
   const handleCloseMeaning = () => {
-    playSound('/sounds/원래 화면 다시 돌아갈때.mp3');
+    playCloseMeaningSound();
     setIsOpen((prev) => ({ ...prev, closing: true }));
     setTimeout(() => {
       setIsOpen({ meaning: null, condition: false, closing: false });

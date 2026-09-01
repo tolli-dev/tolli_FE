@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "tolli",
     slug: "tolli",
-    version: "1.0.6",
+    version: "1.0.7",
     orientation: "portrait",
     icon: "./assets/apple-icon.png",
     userInterfaceStyle: "light",
@@ -100,6 +100,8 @@ export default {
           },
         },
       ],
+      "expo-audio",
+      "./plugins/withBundledSounds",
       "./plugins/withIosProjectTweaks",
     ],
     extra: {

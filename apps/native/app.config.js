@@ -101,6 +101,7 @@ export default {
         },
       ],
       "expo-audio",
+      "./plugins/withBundledSounds",
       "./plugins/withIosProjectTweaks",
     ],
     extra: {

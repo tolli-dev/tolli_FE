@@ -12,6 +12,8 @@ import posthog from 'posthog-js';
 import { useExperimentVariant } from '@/hooks/useExperimentVariant';
 import { EXPERIMENT_KEY, getEntryStep } from '@/lib/experiment';
 
+const TOTAL_VERSES = 112;
+
 async function getTodayVerseId(): Promise<number> {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const today = getLocalMidnight(tz);
@@ -25,7 +27,9 @@ async function getTodayVerseId(): Promise<number> {
   );
   const { lastCompletion } = result.data;
 
-  if (lastCompletion.length > 0) return (lastCompletion[0].verse.id % 63) + 1;
+  if (lastCompletion.length > 0) {
+    return (lastCompletion[0].verse.id % TOTAL_VERSES) + 1;
+  }
   return 1;
 }
 

@@ -8,9 +8,6 @@ import { getLocalMidnight } from '@/lib/date';
 import { useRouter } from 'next/navigation';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
 import { QueryFetchPolicy } from 'firebase/data-connect';
-import posthog from 'posthog-js';
-import { useExperimentVariant } from '@/hooks/useExperimentVariant';
-import { EXPERIMENT_KEY, getEntryStep } from '@/lib/experiment';
 
 const TOTAL_VERSES = 112;
 
@@ -36,27 +33,15 @@ async function getTodayVerseId(): Promise<number> {
 export default function StudyLoadingPage() {
   const router = useRouter();
   const cornerRadius = useDeviceCornerRadius();
-  const variantState = useExperimentVariant();
 
   useEffect(() => {
-    if (variantState.status !== 'ready') return;
-
-    const { variant } = variantState;
-    const entryStep = getEntryStep(variant);
-
     Promise.all([
       getTodayVerseId(),
       new Promise<void>((resolve) => setTimeout(resolve, 1500)),
     ]).then(([verseId]) => {
-      posthog.capture('experiment_exposed', {
-        experiment: EXPERIMENT_KEY,
-        variant,
-        entry_step: entryStep,
-        verse_id: verseId,
-      });
-      router.push(`/study/${verseId}/${entryStep}`);
+      router.push(`/study/${verseId}/1`);
     });
-  }, [router, variantState]);
+  }, [router]);
 
   return (
     <div className="relative flex flex-col flex-1 h-full items-center justify-center gap-11.25">

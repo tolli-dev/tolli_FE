@@ -31,7 +31,14 @@ tolli는 기능을 더하는 대신 덜어냈습니다.
 
 한 구절을 7단계에 걸쳐 조금씩 가려 가며 외웁니다.
 
-<!-- TODO 사진 2: 단계별 화면 4장 (1단계, 2~5단계, 6단계, 7단계) 또는 학습 과정 GIF -->
+<p align="center">
+  <img width="18%" alt="학습 화면 1" src="https://github.com/user-attachments/assets/e9983ffb-26b0-49cb-a62a-bc9ccd6b8955" />
+  <img width="18%" alt="학습 화면 2" src="https://github.com/user-attachments/assets/97bfb254-3fbc-49f2-b66c-6c744bc7416c" />
+  <img width="18%" alt="학습 화면 3" src="https://github.com/user-attachments/assets/0866b1f8-186d-484c-a127-3f31b7b52702" />
+  <img width="18%" alt="학습 화면 4" src="https://github.com/user-attachments/assets/2012ac58-1cd8-4300-bfe8-848da0ef36c0" />
+  <img width="18%" alt="학습 화면 5" src="https://github.com/user-attachments/assets/d5ec57b2-8a0a-4cd0-9447-6ff9c2565318" />
+</p>
+
 
 | 단계 | 하는 일 |
 |:---:|---|

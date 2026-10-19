@@ -122,6 +122,12 @@ export function resolveVowel(inputVowel: string, expectedJung: string): string {
   return inputVowel;
 }
 
+// 정답 글자의 초성과 받침 사이에 사용자가 고른 모음을 끼우는 함수
+export function composeWithAnswer(expectedChar: string, vowel: string) {
+  const [cho, expectedJung, jong] = decomposeHangul(expectedChar);
+  return combineHangul(cho, resolveVowel(vowel, expectedJung), jong);
+}
+
 export function toChosung(text: string): string {
   return text
     .split('')

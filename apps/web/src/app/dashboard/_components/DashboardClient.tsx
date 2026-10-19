@@ -14,6 +14,8 @@ import { fireAuth } from '@/firebase/fireAuth';
 import { usePushToken } from '../_hooks/usePushToken';
 import { useCheckAppVersion } from '../_hooks/useCheckAppVersion';
 import UpdateRequiredModal from './UpdateRequiredModal';
+import NoticeModal from './NoticeModal';
+import { useNotice } from '../_hooks/useNotice';
 
 interface Props {
   initialData: DashboardInitialData;
@@ -25,6 +27,7 @@ export default function DashboardClient({
   shouldRefreshSession,
 }: Props) {
   const needUpdate = useCheckAppVersion();
+  const notice = useNotice();
   const { activeIndex, onTabChange } = useTab();
   const { state, onError } = useDashboard(initialData ?? undefined);
 
@@ -55,6 +58,9 @@ export default function DashboardClient({
   return (
     <>
       {needUpdate && <UpdateRequiredModal />}
+      {!needUpdate && notice.isOpen && (
+        <NoticeModal onClose={notice.close} onHideForever={notice.hideForever} />
+      )}
       <div className="relative w-full h-[clamp(1.125rem,5vw,1.5rem)] shrink-0 mb-[clamp(0.5rem,2vw,0.75rem)]">
         <DashboardHeader nickname={nickname} done={done} />
       </div>

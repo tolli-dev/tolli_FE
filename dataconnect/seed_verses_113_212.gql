@@ -1679,12 +1679,12 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 193
         reference: "고린도전서 13:13"
-        fullText: "그런즉 믿음 소망 사랑 이 세 가지는 항상 있을 것인데 그 중의 제일은 사랑이라"
+        fullText: "그런즉 믿음, 소망, 사랑, 이 세 가지는 항상 있을 것인데 그 중의 제일은 사랑이라"
         words: [
           { index: 1, text: "그런즉" }
-          { index: 2, text: "믿음" }
-          { index: 3, text: "소망" }
-          { index: 4, text: "사랑" }
+          { index: 2, text: "믿음," }
+          { index: 3, text: "소망," }
+          { index: 4, text: "사랑," }
           { index: 5, text: "이" }
           { index: 6, text: "세" }
           { index: 7, text: "가지는" }
@@ -1696,8 +1696,8 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
           { index: 13, text: "제일은" }
           { index: 14, text: "사랑이라" }
         ]
-        maskedStep2: [1, 7, 10, 14]
-        maskedStep3: [1, 2, 3, 7, 10, 13, 14]
+        maskedStep2: [1, 2, 3, 14]
+        maskedStep3: [1, 2, 3, 4, 7, 10, 14]
         maskedStep4: [1, 2, 3, 4, 7, 8, 9, 10, 12, 13, 14]
       }
       {

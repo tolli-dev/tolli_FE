@@ -4,7 +4,7 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 113
         reference: "디모데전서 4:12"
-        fullText: "누구든지 네 연소함을 업신여기지 못하게 하고 오직 말과 행실과 사랑과 믿음과 정절에 대하여 믿는 자에게 본이 되어"
+        fullText: "누구든지 네 연소함을 업신여기지 못하게 하고 오직 말과 행실과 사랑과 믿음과 정절에 있어서 믿는 자에게 본이 되어"
         words: [
           { index: 1, text: "누구든지" }
           { index: 2, text: "네" }
@@ -18,7 +18,7 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
           { index: 10, text: "사랑과" }
           { index: 11, text: "믿음과" }
           { index: 12, text: "정절에", meaning: "깨끗하고 곧은 마음과 몸가짐에" }
-          { index: 13, text: "대하여" }
+          { index: 13, text: "있어서" }
           { index: 14, text: "믿는" }
           { index: 15, text: "자에게" }
           { index: 16, text: "본이" }
@@ -368,19 +368,20 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 130
         reference: "전도서 3:1"
-        fullText: "범사에 기한이 있고 천하만사가 다 때가 있나니"
+        fullText: "범사에 기한이 있고 천하 만사가 다 때가 있나니"
         words: [
           { index: 1, text: "범사에", meaning: "모든 일에" }
           { index: 2, text: "기한이" }
           { index: 3, text: "있고" }
-          { index: 4, text: "천하만사가", meaning: "세상의 온갖 일이" }
-          { index: 5, text: "다" }
-          { index: 6, text: "때가" }
-          { index: 7, text: "있나니" }
+          { index: 4, text: "천하" }
+          { index: 5, text: "만사가", meaning: "온갖 일이" }
+          { index: 6, text: "다" }
+          { index: 7, text: "때가" }
+          { index: 8, text: "있나니" }
         ]
-        maskedStep2: [1, 4]
-        maskedStep3: [1, 2, 4, 7]
-        maskedStep4: [1, 2, 3, 4, 6, 7]
+        maskedStep2: [1, 2]
+        maskedStep3: [1, 2, 5, 8]
+        maskedStep4: [1, 2, 3, 4, 5, 8]
       }
       {
         id: 131
@@ -714,22 +715,22 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 147
         reference: "잠언 4:18"
-        fullText: "의인의 길은 돋는 햇살 같아서 점점 빛나서 한낮의 광명에 이르거니와"
+        fullText: "의인의 길은 돋는 햇살 같아서 크게 빛나 한낮의 광명에 이르거니와"
         words: [
           { index: 1, text: "의인의" }
           { index: 2, text: "길은" }
           { index: 3, text: "돋는" }
           { index: 4, text: "햇살" }
           { index: 5, text: "같아서" }
-          { index: 6, text: "점점" }
-          { index: 7, text: "빛나서" }
+          { index: 6, text: "크게" }
+          { index: 7, text: "빛나" }
           { index: 8, text: "한낮의" }
           { index: 9, text: "광명에" }
           { index: 10, text: "이르거니와" }
         ]
         maskedStep2: [1, 10]
-        maskedStep3: [1, 5, 7, 8, 10]
-        maskedStep4: [1, 2, 3, 5, 7, 8, 9, 10]
+        maskedStep3: [1, 5, 8, 9, 10]
+        maskedStep4: [1, 2, 3, 4, 5, 8, 9, 10]
       }
       {
         id: 148
@@ -755,13 +756,13 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 149
         reference: "야고보서 1:19"
-        fullText: "내 사랑하는 형제들아 너희가 알거니와 사람마다 듣기는 속히 하고 말하기는 더디 하며 성내기도 더디 하라"
+        fullText: "내 사랑하는 형제들아 너희가 알지니 사람마다 듣기는 속히 하고 말하기는 더디 하며 성내기도 더디 하라"
         words: [
           { index: 1, text: "내" }
           { index: 2, text: "사랑하는" }
           { index: 3, text: "형제들아" }
           { index: 4, text: "너희가" }
-          { index: 5, text: "알거니와" }
+          { index: 5, text: "알지니" }
           { index: 6, text: "사람마다" }
           { index: 7, text: "듣기는" }
           { index: 8, text: "속히" }
@@ -773,7 +774,7 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
           { index: 14, text: "더디" }
           { index: 15, text: "하라" }
         ]
-        maskedStep2: [2, 3, 5, 6]
+        maskedStep2: [2, 3, 6, 10]
         maskedStep3: [2, 3, 4, 5, 6, 7, 10, 13]
         maskedStep4: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
       }
@@ -1116,7 +1117,7 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 166
         reference: "빌립보서 4:6"
-        fullText: "아무 것도 염려하지 말고 다만 모든 일에 기도와 간구로 너희 구할 것을 감사함으로 하나님께 아뢰라"
+        fullText: "아무 것도 염려하지 말고 다만 모든 일에 기도와 간구로, 너희 구할 것을 감사함으로 하나님께 아뢰라"
         words: [
           { index: 1, text: "아무" }
           { index: 2, text: "것도" }
@@ -1126,7 +1127,7 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
           { index: 6, text: "모든" }
           { index: 7, text: "일에" }
           { index: 8, text: "기도와" }
-          { index: 9, text: "간구로", meaning: "간절히 구하는 기도로" }
+          { index: 9, text: "간구로,", meaning: "간절히 구하는 기도로" }
           { index: 10, text: "너희" }
           { index: 11, text: "구할" }
           { index: 12, text: "것을" }
@@ -1134,7 +1135,7 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
           { index: 14, text: "하나님께" }
           { index: 15, text: "아뢰라", meaning: "말씀드리라" }
         ]
-        maskedStep2: [3, 8, 13, 14]
+        maskedStep2: [3, 9, 13, 14]
         maskedStep3: [1, 2, 3, 8, 9, 13, 14, 15]
         maskedStep4: [1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15]
       }
@@ -1264,28 +1265,29 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 173
         reference: "이사야 41:13"
-        fullText: "나 여호와 너의 하나님이 네 오른손을 붙들고 네게 이르기를 두려워하지 말라 내가 너를 도우리라 할 것임이니라"
+        fullText: "이는 나 여호와 너의 하나님이 네 오른손을 붙들고 네게 이르기를 두려워하지 말라 내가 너를 도우리라 할 것임이니라"
         words: [
-          { index: 1, text: "나" }
-          { index: 2, text: "여호와", meaning: "하나님의 고유 이름. 히브리어 '야훼(YHWH)'의 음역. '스스로 있는 자'라는 뜻" }
-          { index: 3, text: "너의" }
-          { index: 4, text: "하나님이" }
-          { index: 5, text: "네" }
-          { index: 6, text: "오른손을" }
-          { index: 7, text: "붙들고" }
-          { index: 8, text: "네게" }
-          { index: 9, text: "이르기를" }
-          { index: 10, text: "두려워하지" }
-          { index: 11, text: "말라" }
-          { index: 12, text: "내가" }
-          { index: 13, text: "너를" }
-          { index: 14, text: "도우리라" }
-          { index: 15, text: "할" }
-          { index: 16, text: "것임이니라" }
+          { index: 1, text: "이는" }
+          { index: 2, text: "나" }
+          { index: 3, text: "여호와", meaning: "하나님의 고유 이름. 히브리어 '야훼(YHWH)'의 음역. '스스로 있는 자'라는 뜻" }
+          { index: 4, text: "너의" }
+          { index: 5, text: "하나님이" }
+          { index: 6, text: "네" }
+          { index: 7, text: "오른손을" }
+          { index: 8, text: "붙들고" }
+          { index: 9, text: "네게" }
+          { index: 10, text: "이르기를" }
+          { index: 11, text: "두려워하지" }
+          { index: 12, text: "말라" }
+          { index: 13, text: "내가" }
+          { index: 14, text: "너를" }
+          { index: 15, text: "도우리라" }
+          { index: 16, text: "할" }
+          { index: 17, text: "것임이니라" }
         ]
-        maskedStep2: [4, 6, 10, 16]
-        maskedStep3: [2, 4, 6, 7, 9, 10, 14, 16]
-        maskedStep4: [2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16]
+        maskedStep2: [5, 7, 11, 17]
+        maskedStep3: [3, 5, 7, 8, 10, 11, 15, 17]
+        maskedStep4: [1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17]
       }
       {
         id: 174
@@ -1844,7 +1846,7 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 201
         reference: "데살로니가전서 5:11"
-        fullText: "그러므로 피차 권면하고 서로 덕을 세우기를 너희가 하고 있는 것 같이 하라"
+        fullText: "그러므로 피차 권면하고 서로 덕을 세우기를 너희가 하는 것 같이 하라"
         words: [
           { index: 1, text: "그러므로" }
           { index: 2, text: "피차", meaning: "서로" }
@@ -1853,15 +1855,14 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
           { index: 5, text: "덕을" }
           { index: 6, text: "세우기를" }
           { index: 7, text: "너희가" }
-          { index: 8, text: "하고" }
-          { index: 9, text: "있는" }
-          { index: 10, text: "것" }
-          { index: 11, text: "같이" }
-          { index: 12, text: "하라" }
+          { index: 8, text: "하는" }
+          { index: 9, text: "것" }
+          { index: 10, text: "같이" }
+          { index: 11, text: "하라" }
         ]
         maskedStep2: [1, 3, 6]
         maskedStep3: [1, 2, 3, 4, 6, 7]
-        maskedStep4: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11]
+        maskedStep4: [1, 2, 3, 4, 5, 6, 7, 8, 10]
       }
       {
         id: 202
@@ -1924,38 +1925,37 @@ mutation SeedVersesVer4 @auth(level: NO_ACCESS) {
       {
         id: 205
         reference: "역대상 16:11"
-        fullText: "여호와와 그의 능력을 구할지어다 그의 얼굴을 항상 구할지어다"
+        fullText: "여호와와 그의 능력을 구할지어다 항상 그의 얼굴을 찾을지어다"
         words: [
           { index: 1, text: "여호와와", meaning: "하나님의 고유 이름. 히브리어 '야훼(YHWH)'의 음역. '스스로 있는 자'라는 뜻" }
           { index: 2, text: "그의" }
           { index: 3, text: "능력을" }
           { index: 4, text: "구할지어다" }
-          { index: 5, text: "그의" }
-          { index: 6, text: "얼굴을" }
-          { index: 7, text: "항상" }
-          { index: 8, text: "구할지어다" }
+          { index: 5, text: "항상" }
+          { index: 6, text: "그의" }
+          { index: 7, text: "얼굴을" }
+          { index: 8, text: "찾을지어다" }
         ]
         maskedStep2: [4, 8]
         maskedStep3: [1, 3, 4, 8]
-        maskedStep4: [1, 2, 3, 4, 6, 8]
+        maskedStep4: [1, 2, 3, 4, 7, 8]
       }
       {
         id: 206
         reference: "누가복음 1:37"
-        fullText: "대저 하나님의 모든 말씀은 능력이 없는 것이 없느니라"
+        fullText: "대저 하나님의 모든 말씀은 능하지 못하심이 없느니라"
         words: [
           { index: 1, text: "대저", meaning: "대체로 보아, 무릇" }
           { index: 2, text: "하나님의" }
           { index: 3, text: "모든" }
           { index: 4, text: "말씀은" }
-          { index: 5, text: "능력이" }
-          { index: 6, text: "없는" }
-          { index: 7, text: "것이" }
-          { index: 8, text: "없느니라" }
+          { index: 5, text: "능하지" }
+          { index: 6, text: "못하심이" }
+          { index: 7, text: "없느니라" }
         ]
-        maskedStep2: [2, 8]
-        maskedStep3: [2, 4, 5, 8]
-        maskedStep4: [1, 2, 3, 4, 5, 8]
+        maskedStep2: [2, 6]
+        maskedStep3: [2, 4, 6, 7]
+        maskedStep4: [1, 2, 4, 5, 6, 7]
       }
       {
         id: 207

@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useDeviceCornerRadius } from '@/hooks/useDeviceCornerRadius';
 import { QueryFetchPolicy } from 'firebase/data-connect';
 
-const TOTAL_VERSES = 112;
+const TOTAL_VERSES = 212;
 
 async function getTodayVerseId(): Promise<number> {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;

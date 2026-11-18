@@ -9,6 +9,10 @@
   <a href="https://play.google.com/store/apps/details?id=com.company.tolli">Google Play</a>
 </p>
 
+<p align="center">
+  <strong>Language:</strong> 한국어 | <a href="README.en.md">English</a>
+</p>
+
 <br>
 
 ## 왜 만들었나
